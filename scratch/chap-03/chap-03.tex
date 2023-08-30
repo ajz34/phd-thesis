@@ -1,0 +1,738 @@
+% !TEX root=./chap-03.tex
+\input{marco.tex}
+
+
+\newcommand{\Schrodinger}{Schr\"odinger}
+\newcommand{\alert}[1]{{\color{red}{#1}}}
+
+\usepackage{listings}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+\begin{document}
+
+%---------预定设置区----------
+\title{\textbf{双杂化密度泛函分子能量与性质计算方法的测评与进展\\第三章草稿}}
+\author{祝震予}
+\maketitle
+\vspace{-10pt}
+
+\tableofcontents
+
+%---------正  文  区----------
+
+\section*{未尽事项}
+
+\begin{itemize}
+  \item \alert{标题将换为“双杂化泛函的电性质梯度理论与程序实现”，即增加“电性质”一词。}
+\end{itemize}
+
+\setcounter{section}{2}
+
+\newpage
+
+\section{双杂化泛函的电性质梯度理论与程序实现}
+
+\subsection{引言}
+
+表征技术是实验科学问题的重要分支之一。对于化学而言，经典的红外 (IR, \underline{I}nf\underline{r}ared)、紫外或可见光 (UV-Vis, \underline{U}ltra-\underline{V}iolet and \underline{Vis}able)、拉曼 (Raman)、核磁 (NMR, \underline{N}uclear \underline{M}agnetic \underline{R}esonance) 等表征手段被合称为“四大光谱”\footnote{“四大光谱”的说法并不是正式的。也有将拉曼光谱替换为质谱 (MS, \underline{M}ass \underline{S}pectrometry) 或 X 射线衍射谱 (XRD, \underline{X}-\underline{R}ay \underline{D}iffraction) 等。正文中说道计算化学对谱学问题有所帮助；但并不是所有谱学问题都与电子结构有紧密的关系、基于第一性的计算化学也未必能解决或解释所有谱学问题。例如质谱与分子构型关联度更大、X 射线衍射与晶格本身更有关、通过计算化学难以给出色谱的保留时间等。}，在以有机化学为代表的分支学科中是必要的佐证手段。近年来，扫描隧道显微镜 (STM, \underline{S}canning \underline{T}unneling \underline{M}icroscopy)、原位红外 (\emph{in situ} IR)、表面增强拉曼 (SERS, \underline{S}urface-\underline{E}nhanced \underline{R}aman \underline{S}catting/\underline{S}pectroscopy)、扫描电化学显微镜 (SEM, \underline{S}canning \underline{E}lectron \underline{M}icroscopy) 等众多新兴表征手段兴起。由于其中的许多表征问题可以归结为电子结构或分子振动效应，因此可以或有希望通过第一性的计算化学方法计算得到，从而实验与理论或计算可以相互印证，推动化学学科的发展。
+
+在前几章中已经表明密度泛函方法，特别是双杂化密度泛函近似，在基态能量计算上有较好的表现。我们预期在谱学计算上，双杂化密度泛函方法也能有良好的表现。为此，我们需要发展双杂化泛函的谱学计算方法。由于较多光谱问题 (包括 IR、Raman、NMR 等) 可以归结为偶极电场或磁场 $h \pmb{\mathcal{E}}$ 下平衡态分子的基态能量 $E(h \pmb{\mathcal{E}})$ 扰动问题，其中 $\pmb{\mathcal{E}}$ 为外加场、$h$ 为微扰小量；那么光谱的强度经常取决于导数量
+\begin{equation}
+  \lim_{h \rightarrow 0} \frac{\mathrm{d}^n E(h \pmb{\mathcal{E}})}{\mathrm{d} h^n}
+\end{equation}
+或其它导数量。光谱问题也经常与分子振动有关；若上式的外场 $\pmb{\mathcal{E}}$ 替换为原子坐标移动向量，那么分子振动将化归为 $n = 2$ 即二阶导数问题。对于这类光谱计算问题，为通过计算化学手段进行模拟，我们需要对能量在外场下的梯度理论作研究与程序化。我们也称可以化归为梯度计算的光谱或振动问题为\textsf{梯度性质}问题。
+
+双杂化泛函的梯度性质已经有先驱性的程序实现与测评\cite{Neese-Grimme.JCP.2007, Biczysko-Barone.JCTC.2010, Su-Xu.JCC.2013, Stoychev-Neese.JCTC.2018, Gu-Xu.JCTC.2021, Yan-Xu.JCTC.2022}。这些工作表明，双杂化泛函，特别是 xDH 型泛函，在分子振动、NMR 光谱预测等问题上有优异的表现。但目前的程序在计算双杂化解析梯度问题上，效率还一定提升空间。同时，考虑到双杂化泛函除了 MP2 型相关能外还有其它的杂化可能性；在理论推导与程序化过程中，也应尽量留出空间以容纳其它杂化形式。
+
+在本章工作中，将以电性质外场微扰为前提下，进行双杂化二阶梯度梯度的理论推演与程序化。\ref{sec.3.background} 节将介绍程序化背景并回顾重要的先驱性工作，以确定大体的技术线路。\ref{sec.3.theory} 节将介绍一般双杂化泛函电性质解析梯度理论。MP2 型泛函作为双杂化泛函的其中一个重要的分支，其在 RI 近似下解析静态极化率的 Python 代码实现细节将在 \ref{sec.3.program} 阐述，并作简单的效率测评。
+
+\subsection{背景：记号定义}
+
+\subsubsection{Einstein 求和记号}
+
+出于简化公式表达，后文将对张量缩并大量使用变种的 Einstein 求和记号 (Einstein notation)。一些例子是
+\begin{align}
+  \label{eq.einsum.1}
+  (ia|jb) = \sum_{\mu \nu \kappa \lambda} C_{\mu i} C_{\nu a} (\mu \nu | \kappa \lambda) C_{\kappa j} C_{\lambda b}
+  &\Rightarrow 
+  (ia|jb) = C_{\mu i} C_{\nu a} (\mu \nu | \kappa \lambda) C_{\kappa j} C_{\lambda b} \\
+  \label{eq.einsum.2}
+  E_\textsf{c}^\textsf{MP2} = - \frac{1}{4} \sum_{iajb} \frac{\big| \langle i j || a b \rangle \big|^2}{\varepsilon_i + \varepsilon_j - \varepsilon_a - \varepsilon_b}
+  &\Rightarrow
+  E_\textsf{c}^\textsf{MP2} = - \frac{1}{4} \frac{\big| \langle i j || a b \rangle \big|^2}{\varepsilon_i + \varepsilon_j - \varepsilon_a - \varepsilon_b} \\
+  \label{eq.einsum.3}
+  \rho_g = \sum_{\mu \nu} D_{\mu \nu} \phi_{g \mu} \phi_{g \nu}
+  &\Rightarrow
+  \rho_g = D_{\mu \nu} \phi_{g \mu} \phi_{g \nu} \\
+  \label{eq.einsum.4}
+  L_{ai}^\textsf{PT} = - (\varepsilon_a - \varepsilon_i) D_{ai}^\textsf{PT} - \sum_{bj} A_{ai, bj} D_{bj}^\textsf{PT}
+  &\Rightarrow
+  L_{ai}^\textsf{PT} = - (\varepsilon_a - \varepsilon_i) D_{ai}^\textsf{PT} - A_{ai, bj} D_{bj}^\textsf{PT}
+\end{align}
+需要指出，这里的 Einstein 求和记号与物理中通常使用的记号不同\cite{Einstein-Einstein.AP.1916}。在物理中的 Einstein 求和记号依据对偶空间分上下标；以式 (\ref{eq.einsum.1}) 为例，若记 $g_{ij}^{ab} = (ia|jb)$，则通常物理的 Einstein 求和应写为：
+\begin{equation*}
+  g_{ij}^{ab} = C^\mu_i C^a_\nu g^{\nu \lambda}_{\mu \kappa} C^\kappa_j C^b_\lambda
+\end{equation*}
+物理中的 Einstein 求和，会将等式一侧任何重复出现的角标进行求和；但对于式 (\ref{eq.einsum.3}, \ref{eq.einsum.4})，我们所使用的变种的 Einstein 求和记号的等式右出现重复了两次的角标但并未被求和，而是对角标作元素乘法 (elementwise multiplication)。对于式 (\ref{eq.einsum.3})，角标 $g$ 并不处于 $\mu, \nu$ 所在的对偶空间，因此没有物理中 Einstein 记号的对应写法。对于式 (\ref{eq.einsum.4})，由于我们一般要求自洽场计算是 Canonical 的，即 Fock 矩阵 $F_{pq}$ (或依物理的 Einstein 记号记为 $F_p^q$) 是对角矩阵且其对角元 $\varepsilon_p$ 被称为轨道能；因此式 (\ref{eq.einsum.4}) 在物理的 Einstein 记号下是
+\begin{equation*}
+  (L_a^i){}^\textsf{PT} = - F_a^b (D_b^i){}^\textsf{PT} - F_j^i (D_a^j){}^\textsf{PT} - A_{aj}^{ib} (D_b^j){}^\textsf{PT}
+\end{equation*}
+本文档的公式所使用的变种 Einstein 求和记号，会比较接近于具体程序实现时的情形 (\verb|NumPy.einsum| 或 \verb|opt_einsum.contract|)，并允许打破一些物理记号的限制。
+
+\subsubsection{角标记号}
+
+本工作通常使用下述记号：
+\begin{itemize}[nosep]
+  \item 下标 $\mu, \nu, \kappa, \lambda$：原子轨道 (基轨道)；
+  \item 下标 $i, j, k, l$：占据分子轨道；
+  \item 下标 $a, b, c$：非占分子轨道；
+  \item 下标 $P, Q, R, S$：RI 辅助基轨道；
+  \item 上下标 $\mathbb{A}, \mathbb{B}$：抽象的被求导量；
+  \item 下标或向量 $A, B, M$：原子核；
+  \item 下标 $r, w, t, s$：坐标分量 (指代 $x, y, z$)；
+  \item 下标 $\rho, \gamma$：密度与梯度导出量；
+  \item 上标 $\textsf{n}$：非变分泛函 (相对于自洽场泛函)；
+  \item 上标 $\textsf{S}$：Skeleton 导数；
+  \item 上标 $\sigma, \varsigma$：自旋 (指代 $\alpha$ 或 $\beta$)。
+\end{itemize}
+
+本工作在不作额外说明的情形时，将讨论闭壳层 (closed-shell) 实现；对于开壳层问题，不同自旋下的轨道通过上标横线区分 ($p$ 表示 $\alpha$ 自旋、$\bar p$ 表示 $\beta$ 自旋)，矩阵或张量则将上标具体的自旋。
+
+本工作的全部理论推导与程序实现使用实数。为简化公式表达，我们将不使用复共轭记号。通常使用 $\phi_\mu (\bm{r})$ 表示原子轨道 $\mu$ 在空间坐标 $\bm{r}$ 下的函数表达式。对于 DFT 格点积分，若记坐标在角标 $g$ 下的离散格点为 $\bm{r}_g$，那么也经常用矩阵 $\phi_{g \mu}$ 表示空间格点下的原子轨道函数值 $\phi_\mu (\bm{r}_g)$。
+
+\subsubsection{部分常用表达式}
+
+本工作使用到的电子积分有：
+\begin{itemize}[nosep]
+  \item 重叠积分 $S_{\mu \nu}$ (overlap)：
+        \begin{equation}
+          S_{\mu \nu} = \int \phi_\mu (\bm{r}) \phi_\nu (\bm{r}) \, \mathrm{d} \bm{r}
+        \end{equation}
+  \item 无外场下的外势积分 $V_{\mu \nu}$：
+        \begin{equation}
+          V_{\mu \nu} = \int \phi_\mu (\bm{r}) \frac{- Z_A}{|\bm{r} - \bm{A}|} \phi_\nu (\bm{r}) \, \mathrm{d} \bm{r}
+        \end{equation}
+        上式对原子核角标 $A$ 求和；$Z_A$ 是原子单位下的原子核电荷数。
+  \item 无外场下单电子积分 $h_{\mu \nu}$ (Hamiltonian core)：
+        \begin{equation}
+          h_{\mu \nu} = S_{\mu \nu} + V_{\mu \nu}
+        \end{equation}
+  \item 四中心双电子互斥积分 $(\mu \nu | \kappa \lambda)$ (4c-2e ERI, 4-\underline{c}enter 2-\underline{e}lectron \underline{E}lectron \underline{R}epulsion \underline{I}ntegral)：
+        \begin{equation}
+          (\mu \nu | \kappa \lambda) = \iint \phi_\mu (\bm{r}_1) \phi_\nu (\bm{r}_1) \frac{1}{r_{12}} \phi_\kappa (\bm{r}_2) \phi_\lambda (\bm{r}_2) \, \mathrm{d} \bm{r}_1 \mathrm{d} \bm{r}_2
+        \end{equation}
+        该积分也称传统双电子积分 conventional ERI 或简记为 conv ERI。
+  \item 三中心双电子互斥积分 $(\mu \nu | P)$ (3c-2e ERI)：
+        \begin{equation}
+          (\mu \nu | P) = \iint \phi_\mu (\bm{r}_1) \phi_\nu (\bm{r}_1) \frac{1}{r_{12}} \phi_P (\bm{r}_2) \, \mathrm{d} \bm{r}_1 \mathrm{d} \bm{r}_2
+        \end{equation}
+  \item 双中心双电子互斥积分 $J_{PQ}$ (2c-2e ERI)：
+        \begin{equation}
+          J_{PQ} = \iint \phi_P (\bm{r}_1) \frac{1}{r_{12}} \phi_Q (\bm{r}_2) \, \mathrm{d} \bm{r}_1 \mathrm{d} \bm{r}_2
+        \end{equation}
+\end{itemize}
+
+除了密度矩阵、弛豫张量等情况外，其它的原子轨道基下的张量，转换到分子轨道基时总是乘以轨道系数矩阵 $C_{\mu p}$。以原子与分子轨道混合基下的三中心双电子积分 $(\mu i | P)$ 为例，
+\begin{equation*}
+  (\mu i | P) = (\mu \nu | P) C_{\nu i}
+\end{equation*}
+
+在不引起歧义的情况下，将使用矩阵或张量元素指代矩阵或张量本身，例如用 $D_{\mu \nu}$ 表示完整的密度矩阵 $\mathbf{D}$。
+
+本工作常用到的表达式有
+\begin{itemize}[nosep]
+  \item 闭壳层自洽场密度矩阵 $D_{\mu \nu}$ 与 $D_{pq}$：
+        \begin{alignat}{10}
+          D_{\mu \nu} &= C_{\mu p} D_{pq} C_{\nu q} = 2 C_{\mu i} C_{\nu i} \quad &&\text{(closed-shell)} \\
+          D_{pq} &= 2 \delta_{pq} \delta_{p \in \textsf{occ}} \quad &&\text{(closed-shell)}
+        \end{alignat}
+        上式的 $\delta_{p \in \textsf{occ}}$ 是指当 $p$ 属于占据轨道时取 1、不属于占据轨道时取 0。后文将涉及其它类型的密度 (譬如弛豫密度 $\mathbf{D}^\textsf{n}$)，需要上标类型以作区分；没有额外上标的密度，均视为自洽场密度。
+  \item 开壳层自洽场密度矩阵 $D_{\mu \nu}^\alpha$ 与 $D_{pq}$：
+        \begin{align}
+          D_{\mu \nu}^\alpha &= C_{\mu p} D_{pq} C_{\nu q} = C_{\mu i} C_{\nu i} \\
+          D_{pq} &= \delta_{pq} \delta_{p \in \textsf{occ}}
+        \end{align}
+        对于 $\beta$ 自旋的情形是类似的：
+        \begin{align}
+          D_{\mu \nu}^\beta &= C_{\mu \bar p} D_{\bar p \bar q} C_{\nu \bar q} = C_{\mu \bar i} C_{\nu \bar i} \\
+          D_{\bar p \bar q} &= \delta_{\bar p \bar q} \delta_{\bar p \in \textsf{occ}}
+        \end{align}
+        开壳层自洽场的总密度矩阵记为 $D_{\mu \nu} = D_{\mu \nu}^\alpha + D_{\mu \nu}^\beta$。
+  \item 双杂化泛函总能量 $E_\textsf{tot}$：
+        \begin{equation}
+          \label{eq.def-E-tot}
+          E_\textsf{tot} = E_\textsf{core} [\mathbf{D}] + E_\textsf{ERI} [\mathbf{D}] + E_\textsf{DFA} [\mathbf{D}] + E_\textsf{PT} [\mathbf{C}] + E_\textsf{nuc} \\
+        \end{equation}
+        对于杂化泛函，$E_\textsf{PT} [\mathbf{C}]$ 取零值。每个能量分项的计算将在下面列举。需要指出，上式表述的是目前流行的双杂化泛函的能量表达式，而并非定义式。
+  \item 单电子积分能量 $E_\textsf{core} [\mathbf{D}]$：
+        \begin{equation}
+          E_\textsf{core} [\mathbf{D}] = h_{\mu \nu} D_{\mu \nu}
+        \end{equation}
+  \item 双电子积分能量 $E_\textsf{ERI} [\mathbf{D}]$：
+        \begin{equation}
+          E_\textsf{ERI} [\mathbf{D}] = E_\textsf{J} [\mathbf{D}] + E_\textsf{x}^\textsf{exact} [\mathbf{D}] + E_\textsf{x}^\textsf{LR} [\mathbf{D}]
+        \end{equation}
+        其中，$E_\textsf{J} [\mathbf{D}]$ 是库伦能
+        \begin{equation}
+          E_\textsf{J} [\mathbf{D}] = J[\rho] = \frac{1}{2} D_{\mu \nu} (\mu \nu | \kappa \lambda) D_{\kappa \lambda}
+        \end{equation}
+        其中，$E_\textsf{x}^\textsf{exact} [\mathbf{D}]$ 是严格交换能
+        \begin{equation}
+          E_\textsf{x}^\textsf{exact} [\mathbf{D}] = E_\textsf{x}^\textsf{exact} [\rho] = - \frac{1}{2} D_{\mu \nu}^\sigma (\mu \nu | \kappa \lambda) D_{\kappa \lambda}^\sigma
+        \end{equation}
+        对于闭壳层问题，严格交换能可以写为
+        \begin{equation}
+          E_\textsf{x}^\textsf{exact} [\mathbf{D}] = - \frac{1}{4} D_{\mu \nu} (\mu \nu | \kappa \lambda) D_{\kappa \lambda} \quad \text{(closed-shell)}
+        \end{equation}
+        部分泛函在交换能部分考虑了长短程效应；长程 (LR, \underline{L}ong-\underline{R}ange) 部分能量 $E_\textsf{x}^\textsf{LR}$ 的双电子除了积分算符通常是 $\mathrm{erf} (\mu r_{12}) / r_{12}$\footnote{$\mu$ 是长程矫正的参数，通常小于 1。对于长程矫正作用，使用误差函数 $\mathrm{erf} (\mu r_{12}) / r_{12}$ 是常见且最多程序实现的方法；但除此之外，Yukawa 衰减算符 $\mathrm{exp} (-\mu r_{12}) / r_{12}$\cite{Savin-Flad.IJQC.1995} 与 $\mathrm{terf}$ 函数 $$\mathrm{terf} (r, r_0) = \frac{1}{2} \left( \mathrm{erf} \left(\frac{r - r_0}{\sqrt{2} r_0}\right) + \mathrm{erf} \left(\frac{r + r_0}{\sqrt{2} r_0}\right) \right)$$ 所构成的衰减算符 $\mathrm{terf} (-\mu r_{12}) / r_{12}$\cite{Goldey-Head-Gordon.PCCP.2013}，也是其它可能使用到的长程矫正方案。}，在计算、程序调用、张量分解等具体的程序实现上等同于严格交换能 $E_\textsf{x}^\textsf{exact}$\footnote{需要指出，这只是双电子能量积分的一种表达方法。以 Cammi 等\cite{Cammi-Frisch.TCA.2004}对溶剂化模型下 MP2 二阶梯度理论为例，该文将电子效应诱导的溶剂化能量与双电子积分能量合并处理；而溶剂化能量的计算本身是不具有双电子积分。同时，在以较为抽象的层面上推导二阶梯度问题时，DFA 格点积分能量 $E_\textsf{DFA} [\mathbf{D}]$ 与双电子积分有类似的推演过程；因此从梯度理论的角度来讲，拆分双电子积分能量 $E_\textsf{ERI}$ 与 DFA 格点积分能量 $E_\textsf{DFA}$ 是人为的。在本工作中，我们不涉及溶剂化、基于密度的长程弥散矫正等其它无法简单纳入单电子积分能量的贡献；因此从程序实现方便的角度，拆分了双电子积分能量与 DFA 格点积分能量。}。
+  \item DFA 格点积分能量 $E_\textsf{DFA} [\mathbf{D}]$\footnote{区别于 DFA 近似总能量 $E_\mathrm{tot}$。} 用以处理“Jacob 阶梯”上 1--3 阶 (LDA, GGA, meta-GGA) 型交换相关能；它可以表示为对空间的积分
+        \begin{equation}
+          E_\textsf{DFA} [\mathbf{D}] = \int f[\rho, \gamma, \tau, \nabla^2 \rho, \cdots] \rho \, \mathrm{d} \bm{r}
+        \end{equation}
+        上式的 $f$ 若看作关于电子坐标 $\bm{r}$ 的函数，则其物理意义是在 $\bm{r}$ 处每个电子所具有的能量分布。$f$ 的具体表达式，取决于不同密度泛函所作不同的近似。其中，$\gamma$ 为 GGA 所用到的密度梯度导出量
+        \begin{equation}
+          \gamma = \nabla \rho \cdot \nabla \rho
+        \end{equation}
+        需要指出，动能密度 $\tau$ 导出自 Kohn-Sham 占据轨道 $\phi_i$ 而非密度 $\rho$ 本身，因此 $\tau$ 需要通过密度矩阵 $\mathbf{D}$、而非密度 $\rho$ 导出。因此，为容许 meta-GGA 的程序实现，我们认为 $E_\textsf{DFA}$ 应当视作密度矩阵 $\mathbf{D}$ 的泛函。在程序实现中，空间积分将化为格点积分求和式：
+        \begin{equation}
+          E_\textsf{DFA} = w_g f_g \rho_g
+        \end{equation}
+        其中，$w_g$ 是空间坐标 $\bm{r}_g$ 下的格点积分权重、$f_g$ 与 $\rho_g$ 是能量分布函数与密度在空间坐标 $\bm{r}_g$ 下的数值。
+  \item 微扰能量 $E_\textsf{PT}[\mathbf{C}]$ 是双杂化泛函中的高阶近似部分。由于目前流行的杂化形式是 MP2 型相关能，因此这里统称为微扰能；但它也可以代表 IEPA 型相关能、RPA 型相关能等其它种类能量贡献项。一般来说，微扰能量 $E_\textsf{PT}$ 不纳入自洽场计算中，且并非密度矩阵 $\mathbf{D}$ 而是作为自洽场结果的轨道系数 $\mathbf{C}$ 的泛函。
+  \item 无外场下的原子核能量 $E_\textsf{nuc}$：
+        \begin{equation}
+          E_\textsf{nuc} = \frac{1}{2} \frac{Z_A Z_B}{r_{AB}}
+        \end{equation}
+        其中，距离 $r_{AB}$ 定义为
+        \begin{equation*}
+          r_{AB} =
+          \begin{cases}
+              | \boldsymbol{A} - \boldsymbol{B} | & A \neq B \\
+              + \infty & A = B
+          \end{cases}
+        \end{equation*}
+\end{itemize}
+
+本工作需要用到的重要导出表达式有
+\begin{itemize}[nosep]
+  \item 轨道正交条件
+        \begin{equation}
+          S_{pq} = C_{\mu p} S_{\mu \nu} C_{\nu q} = \delta_{pq}
+        \end{equation}
+  \item Canonical-HF 条件
+        \begin{equation}
+          F_{pq} = \delta_{pq} \varepsilon_p
+        \end{equation}
+\end{itemize}
+
+\subsubsection{自洽场泛函与能量泛函}
+
+xDH 型泛函分别对自洽场与总能量使用两种泛函形式；我们分别称之为\textsf{自洽场泛函}与\textsf{能量泛函}。由于 xDH 型泛函最终的能量并非通过变分得到，我们也称能量泛函为非变分泛函。自洽场是对下述能量求取分子轨道系数 $C_{\mu i}$ 的变分极小得到：
+\begin{equation}
+  E_\textsf{SCF} = E_\textsf{core} [\mathbf{D}] + E_\textsf{ERI} [\mathbf{D}] + E_\textsf{DFA} [\mathbf{D}] + E_\textsf{nuc}
+\end{equation}
+能量泛函部分项使用上标 $\textsf{n}$ 进行区分；将自洽场给出的分子轨道系数 $C_{\mu p}$ 代入下式得到 xDH 能量：
+\begin{equation}
+  E_\textsf{xDH} = E_\textsf{core} [\mathbf{D}] + E_\textsf{ERI}^\textsf{n} [\mathbf{D}] + E_\textsf{DFA}^\textsf{n} [\mathbf{D}] + E_\textsf{PT} [\mathbf{C}] + E_\textsf{nuc}
+\end{equation}
+其中，$E_\textsf{core} [\mathbf{D}]$ 与 $E_\textsf{nuc}$ 对于能量泛函和自洽场泛函没有区别。微扰能 $E_\textsf{PT} [\mathbf{C}]$ 仅在能量泛函出现；出于行文便利，将不对其作 $\textsf{n}$ 的上标区分。
+
+\subsubsection{导数记号与耦合微扰}
+
+对于导数记号，在不引起歧义的情况下，本工作经常使用偏导数记号 $\partial$ 指代全导数 $\mathrm{d}$。$\partial_\mathbb{A}$ 记号是 $\frac{\partial}{\partial \mathbb{A}}$ 的简记。
+
+本工作将依是否存在耦合微扰 (CP, \underline{C}oupled \underline{P}erturbed)，分为 Skeleton 导数 (骨架导数，部分文献也称为 core 导数即核导数) 与一般的全导数。以总能量为例，在外加微扰 $\mathbb{A}$ 与轨道系数 $\mathbf{C}$ 下，其能量记为 $E_\textsf{xDH} (\mathbb{A}, \mathbf{C})$。
+
+对于 xDH 型泛函，轨道系数是通过自洽场泛函得到；该轨道系数是随外加微扰而变化的\footnote{在这一小节之后，默认轨道系数 $\mathbf{C}$ 是耦合微扰下变分极小的分子轨道系数 $\mathbf{C}_\textsf{SCF} (\mathbb{A})$。}：
+\begin{equation*}
+  \mathbf{C}_\textsf{SCF} (\mathbb{A}) = \arg \min_\mathbf{C} E_\textsf{SCF} (\mathbb{A}, \mathbf{C})
+\end{equation*}
+从而，实际的 xDH 能量不仅受外加微扰 $\mathbb{A}$ (作为函数 $E_\textsf{xDH} (\mathbb{A}, \mathbf{C})$ 的变量参数第一项) 而产生变化，同时轨道系数 $\mathbf{C}_\textsf{SCF} (\mathbb{A})$ (作为变量参数的第二项) 也受外加微扰 $\mathbb{A}$ 的耦合扰动；因此准确地来说，xDH 能量应写为 $E_\textsf{xDH} (\mathbb{A}, \mathbf{C}_\textsf{SCF} (\mathbb{A}))$。
+
+为讨论问题的方便，定义 Skeleton 导数为轨道系数未耦合扰动下的导数。以 xDH 能量为例，
+\begin{equation}
+  \partial_\mathbb{A}^\textsf{S} E_\textsf{xDH} = \frac{\partial E_\textsf{xDH} (\mathbb{A}, \mathbf{C}_\textsf{SCF} (0))}{\partial \mathbb{A}}
+\end{equation}
+为与一般的全导数作区分，Skeleton 导数使用记号 $\partial_\mathbb{A}^\textsf{S}$，即上标 $\textsf{S}$。
+
+进而，xDH 能量的全导数，依据求导规则，它等于 Skeleton 导数与对轨道系数导数的和：
+\begin{equation}
+  \partial_\mathbb{A} E_\textsf{xDH} = \partial_\mathbb{A}^\textsf{S} E_\textsf{xDH} + \frac{\partial E_\textsf{xDH} (\mathbb{A}, \mathbf{C})}{\partial \mathbf{C}} \frac{\partial \mathbf{C}_\textsf{SCF} (\mathbb{A})}{\partial \mathbb{A}}
+\end{equation}
+
+上述 Skeleton 导数与全导数的定义对其它标量或矩阵也成立。以分子轨道基下单电子积分矩阵 $h_{pq}$ 导数为例，
+\begin{equation*}
+  h_{pq} = C_{\mu p} h_{\mu \nu} C_{\nu q}
+\end{equation*}
+注意到原子轨道基下 $h_{\mu \nu}$ 没有分子轨道系数的参与，因此 Skeleton 导数是
+\begin{equation*}
+  h_{pq}^\mathbb{A} := \partial_\mathbb{A}^\textsf{S} h_{pq} = C_{\mu p} \frac{\partial h_{\mu \nu}}{\partial \mathbb{A}} C_{\nu q}
+\end{equation*}
+全导数为
+\begin{align*}
+  \partial_\mathbb{A} h_{pq}
+  &= \frac{\partial C_{\mu p}}{\partial \mathbb{A}} h_{\mu \nu} C_{\nu q} + C_{\mu p} \frac{\partial h_{\mu \nu}}{\partial \mathbb{A}} C_{\nu q} + C_{\mu p} h_{\mu \nu} \frac{\partial C_{\nu q}}{\partial \mathbb{A}} \\
+  &= \frac{\partial C_{\mu p}}{\partial \mathbb{A}} \frac{\partial h_{pq}}{\partial C_{\mu p}} + h_{pq}^\mathbb{A} + \frac{\partial h_{pq}}{\partial C_{\nu q}} \frac{\partial C_{\nu q}}{\partial \mathbb{A}}
+\end{align*}
+
+
+\subsection{背景：程序化与先驱工作}
+\label{sec.3.background}
+
+\subsubsection{Python 相关背景}
+
+本工作的程序实现化完全使用 Python 实现。
+
+第一性计算化学的程序化问题，通常涉及到大量的浮点运算与内存调用，对程序性能的效率要求相当高。因此，目前计算化学程序通常使用效率较高的编译语言。计算化学尽管存在商业化前景，但受益的受众较小、并非民生或娱乐所必须；因此程序开发对化学工作者之外的人才吸引力有限。计算化学软件的开发由于专业性要求高、公式较复杂、模块化较困难，因此存在程序开发与管理上的难度。这些特性使得曾经与当前的计算化学程序开发周期较长，因此现在流行的计算化学软件通常都使用 1960 年代发展至今的 Fortran 语言 (包括但不限于 Gaussian、ORCA、VASP、NWChem、CP2K、Quantum ESPRESSO、GAMESS-US、TurboMole、Molpro、CFOUR、MRCC、FHI-Aims、BDF)。
+
+早期发展的 Fortran 与 C 等编译语言，其程序可读性与可复用性、安全性、可扩展性通常较差。为解决这些困难，计算机工作者开发了众多新型的编译语言，譬如 C++ 或 Rust。基于这类新的编译语言，Q-Chem (Fortran、C、C++ 混合)、Psi4 (C++、Python 混合)、ABACUS (C++)、REST (Rust) 得以开发。这类编译语言尽管运行耗时通常较低，但通常有编译与调试耗时较长；同时语言的学习成本较高。类如 Java、C\# 等语言通过引入虚拟机而有较低的编译耗时；但这类语言的设计初衷大多并非科学计算、而更着重窗体设计与并发，因此这些语言的科学计算生态不太完整。
+
+以 Python、Julia 为代表的语言与传统的编译或基于虚拟机的语言有许多不同。这类语言作为脚本或类脚本的语言，程序在编写时就能运行得到结果，这可以大幅加快程序开发周期；同时不需要严格的类型推断，因此这类语言从设计上就是泛型的，且便于对于复杂多变的条件判断或程序流程设计；但这经常以牺牲代码安全性为代价。对于 Python，尽管它不具有函数重载 (overload) 等功能，但具有绝大多数现代程序设计的要素，譬如类、继承与虚函数、文件模块化、属性、修饰等；因此可以很好地应对绝大多数业务逻辑。同时，由于 Python 在语言发展的早期搭建了 PyPI (\underline{Py}thon \underline{P}ackage \underline{I}ndex)，有良好的程序生态与开源社群，帮助众多程序设计者借用其它人的工作，快速搭建程序。
+
+Python 在性能上的缺陷，特别是 for 循环的效率问题，是众所周知的。这意味着仅使用 Python 语言特性本身，无法实现高性能运算。但 Python 允许使用封装 C、C++、Fortran 等其它语言所编译得到的程序库。以 NumPy、SciPy、Numba、PyTorch、Jax 为代表的高性能数学库是基于 C++ 底层实现编写而来；如果一些计算特性难以通过通用数学库实现，Python 也允许用户自行编写并编译 C、C++、Fortran 库函数，使用 ctypes、pybind11、f2py 等库调用这些库。Psi4NumPy 等程序作为雏形软件与教程，有效地将 Python 高计算效率与开发效率引入到计算化学中。PySCF 作为计算化学软件，在程序的业务逻辑上完全以 Python 实现；但在具体的计算密集问题上，在性能损耗不严重的情形下使用纯 Python，而性能关键的代码则用 NumPy、SciPy 或 C 程序结合 ctypes 调用。在合理的算法支持下，基于 Python 的程序仍然可以达到相当高的计算效率。
+
+第一性计算化学，特别是 post-HF 方法和梯度性质计算问题，经常可以化归为多步张量缩并 (tensor contraction) 问题。张量缩并本身经常也可以化归为张量转置合并矩阵计算问题。尽管已经有高效率的库函数用以实现张量转置 (以 HPTT 为代表) 与矩阵乘法 (以 BLAS 为基础的各数学库)，但一方面这种拆分会将程序逻辑复杂化，降低开发效率；另一方面张量转置本身是访存密集型问题从而难以有高并行效率与高速缓存利用率、且不产生有效的浮点运算 (FLOPs, \underline{Fl}oating-point \underline{Op}eration\underline{s})，因此张量缩并分解为转置与乘法的方法不一定能发挥最高的浮点运算效率 (FLOPS, \underline{Fl}oating-point \underline{O}perations \underline{P}er \underline{S}econd)。因此，以 TBLIS、opt\_einsum 为代表的众多工作直接实现张量缩并，避免转置对 FLOPS 的浪费，且实现了简单易用的函数签名。这些程序在以四中心双电子的积分转换为代表的访存计算混合型问题中
+\begin{equation*}
+  (ia|jb) = \sum_{\mu \nu \kappa \lambda} C_{\mu i} C_{\nu a} (\mu \nu | \kappa \lambda) C_{\kappa j} C_{\lambda b}
+\end{equation*}
+有良好的表现；但这类程序作为通用张量缩并的优化，对特化的缩并问题不一定能提供最高的优化效率。PySCF 中，不需要额外调用转置的乘法问题将使用 NumPy 的矩阵乘法、复杂的张量缩并调用 TBLIS 实现、访存密集的问题使用 \verb|numpy.einsum| 实现。在我们当前对双杂化泛函的梯度实现中，为编写程序上的便利，将大量使用 PySCF 封装的 TLIBS 接口。
+
+\subsubsection{RI 近似、RI-JK 与 RI-MP2 程序化与效率测试}
+\label{sec.rijk-rimp2-efficiency}
+
+这一节将引入 RI 近似；并通过简单的程序实现与效率测试，表明仅使用 Python 编写程序，充分利用现有的 Python 库函数，在内存充足的单节点 CPU 前提下，至少对于 RI-MP2 的相关能 $E_\textsf{c}^\textsf{MP2}$ 计算，其程序效率可以不亚于流行的计算化学软件。
+
+不论是 Hartree-Fock、密度泛函或 post-HF 方法，都需要在计算中使用双电子互斥算符 $1 / r_{12} = 1 / |\bm{r}_1 - \bm{r}_2|$。在原子轨道表示下，通常使用传统双电子积分 4c-2e ERI $(\mu \nu | \kappa \lambda)$ 展开该算符。由于 Hartree-Fock 或密度泛函的自洽场计算中，涉及 ERI 的部分相当耗时，且为 $O(n_\textsf{basis}^4)$ 计算复杂度。
+
+为降低电子积分部分的计算量，基于 Friesner 的伪谱法对电子积分的尝试\cite{Friesner-Friesner.CPL.1985, Friesner-Friesner.JCP.1987}，Vahtras、Alml\"of、Feyereisn 等人具体地提出了分解 4c-2e ERI 到 3c-2e ERI 与 2c-2e ERI 或双中心重叠积分的三种策略 (SVS, S, V)\cite{Vahtras-Feyereisen.CPL.1993}。目前广为使用的策略是 V 策略，也称为 RI-V (\underline{R}esolution-of-\underline{I}dentity V)：
+\begin{equation}
+  (\mu \nu | \kappa \lambda) = (\mu \nu | P) (\mathbf{J}^{-1})_{PQ} (\kappa \lambda | Q) \quad \text{(RI-V)}
+\end{equation}
+后文所有 RI 均默认是 RI-V 模式。
+
+以 RI 近似计算自洽场的方法称为 RI-JK。该方法确实有效地降低了电子积分的复杂度到 $O(n_\textsf{basis}^3)$，且将不含严格交换能 $E_\textsf{x}^\textsf{exact}$ 的密度泛函计算量降至 $O(n_\textsf{basis}^2 n_\textsf{aux}) + O(n_\textsf{aux}^3)$ 计算量；具体来说，密度矩阵 $\mathbf{D}$ 下的库伦能 $E_\textsf{J} [\mathbf{D}]$：
+\begin{align*}
+  \mathcal{J}_P &= D_{\mu \nu} (\mu \nu | P) \\
+  E_\textsf{J} [\mathbf{D}] &= \frac{1}{2} D_{\mu \nu} (\mu \nu | \kappa \lambda) D_{\kappa \lambda} \simeq \mathcal{J}_P (\mathbf{J}^{-1})_{PQ} \mathcal{J}_Q
+\end{align*}
+其中，中间张量 $\mathcal{J}_P$ 的计算复杂度是 $O(n_\textsf{basis}^2 n_\textsf{aux})$。$(\mathbf{J}^{-1})_{PQ}$ 的求逆计算复杂度是 $O(n_\textsf{aux}^3)$；求逆运算可以通过 Cholesky 分解与线性方程求解加速，但该加速不改变计算复杂度\footnote{目前对自洽场或 ERI 的近似手段有许多种；上述的 RI 是其中一种策略。所有近似方法都是利用了 ERI 积分的某种稀疏性。以 Schwarz pre-screening 为代表的策略利用了 ERI 张量的零值稀疏性\cite{Horn-Ahlrichs.JCC.1991}；以 RI 为代表的策略利用了 ERI 张量在数值结构上的稀疏性\cite{Vahtras-Feyereisen.CPL.1993}；以 COSX (\underline{C}hain-\underline{O}f-\underline{S}phere e\underline{X}change) 为代表策略利用了 ERI 张量在空间上的稀疏性\cite{Neese-Becker.CP.2009}。在本文档使用 PySCF 计算的部分中，能量与梯度计算使用 RI 近似、但仅在参考态能量自洽场计算中使用 PySCF 默认的 Schwarz pre-screening。}。因此，总体而言，库伦能的计算量是体系的三次方。
+
+但需要指出，含有严格交换能 $E_\textsf{x}^\textsf{exact}$ 的 Hartree-Fock 或杂化密度泛函，计算量仍然是四次方级别的 $O(n_\textsf{occ} n_\textsf{basis}^2 n_\textsf{aux}) + O(n_\textsf{aux}^3)$；以闭壳层情形为例，这是因为下述生成 $\mathcal{K}_{ij, P}$ 所需要的 $O(n_\textsf{occ} n_\textsf{basis}^2 n_\textsf{aux})$ 复杂度的积分转换，对于严格交换能计算仍然是不可避免的：
+\begin{align*}
+  \mathcal{K}_{ij, P} &= C_{\mu i} C_{\nu j} (\mu \nu | P) \\
+  E_\textsf{x}^\textsf{exact} [\mathbf{D}] &= - \frac{1}{4} D_{\mu \kappa} (\mu \nu | \kappa \lambda) D_{\nu \lambda} \simeq - \frac{1}{4} \mathcal{K}_{ij, P} (\mathbf{J}^{-1})_{PQ} \mathcal{K}_{ji, Q}
+\end{align*}
+但一方面，若基组较大，则一般会有 $n_\textsf{occ} n_\textsf{aux} > n_\textsf{basis}^2$；因此 RI-JK 的 FLOPs 计算量仍然可能少于 conv ERI。另一方面，若从内存与计算量最大开销的步骤来看，conv ERI 或者需要大量的 $O(n_\textsf{occ} n_\textsf{basis}^3)$ 内存消耗、或者需要开销较大且难以优化的 $O(n_\textsf{basis}^4)$ 电子积分计算；而 RI-JK 需要的是较小的 $O(n_\textsf{basis}^2 n_\textsf{aux})$ 内存以及开销较小的 $O(n_\textsf{occ} n_\textsf{basis}^2 n_\textsf{aux})$ 随机内存访问与乘积累加运算 (FMA, \underline{F}used-\underline{M}ultiply-\underline{A}dd)。因此，RI-JK 的程序效率经常比基于 conv ERI 程序的效率高。
+
+RI-JK 是通过张量分解降低 4c-2e ERI 的计算量、将占用空间少的 3c-2e ERI 置于内存，从而达到加速的目的。但对于 MP2 计算而言，其积分转换的耗时最大，计算复杂度为 $O(n_\textsf{occ} n_\textsf{basis}^4)$ 且需要占用 $O(n_\textsf{occ} n_\textsf{basis}^3)$ 内存或硬盘空间：
+\begin{equation}
+  (ia|jb) = C_{\mu i} C_{\nu a} (\mu \nu | \kappa \lambda) C_{\kappa j} C_{\lambda b}
+\end{equation}
+相比之下 4c-2e ERI 积分 $(\mu \nu | \kappa \lambda)$ 的计算耗时反而并不关键。但是，借由 RI 近似具有张量分解的特性，MP2 相关能计算得以大幅加速；这种 MP2 计算模式称为 RI-MP2\cite{Feyereisen-Komornicki.CPL.1993, 10.1016/S0009-2614(98)00862-8}。以闭壳层 RI-MP2 相关能计算为例，
+\begin{subequations}
+\begin{alignat}{10}
+  (\mu \nu | P) & && \quad \text{(3c-2e ERI)} \\
+  (ia|P) &= (\mu \nu | P) C_{\mu i} C_{\nu a} && \quad \text{(integral transformation)} \\
+  \mathbf{L} &= \mathrm{Cholesky} (\mathbf{J}) && \quad \text{(Cholesky decomposition)} \\
+  Y_{ia, P} &= (ia|Q) (\mathbf{L}^{-1})_{QP} && \quad \text{(Cholesky decomposed ERI)} \\
+  (ia|jb) &= Y_{ia, P} Y_{jb, P} && \quad \text{(4c-2e ERI generation)} \\
+  D_{ij}^{ab} &= \varepsilon_i + \varepsilon_j - \varepsilon_a - \varepsilon_b \\
+  t_{ij}^{ab} &= \frac{(ia|jb)}{D_{ij}^{ab}} \\
+  E_\textsf{c}^\textsf{MP2} &= t_{ij}^{ab} \big(2 (ia|jb) - (ib|ja) \big) && \quad \text{(energy accumulation)}
+\end{alignat}
+\end{subequations}
+关于 RI-MP2 相关能计算的讨论与实现细节是
+\begin{itemize}[nosep]
+  \item 在 PySCF 中，3c-2e ERI 可以利用对称性 $(\mu \nu | P) = (\nu \mu | P)$ 以节省大约一半内存与计算消耗；计算复杂度是开销较大的 $O(n_\textsf{basis}^2 n_\textsf{aux})$；该步骤通过调用 PySCF 封装的 libcint 积分库接口实现；
+  \item 分子轨道积分转换步骤计算复杂度是 $O(n_\textsf{occ} n_\textsf{basis}^2 n_\textsf{aux})$；该步骤通过 PySCF 库中封装的 C 程序实现；
+  \item 2c-2e ERI 的 Cholesky 分解是开销小的 $O(n_\textsf{aux}^3)$；实际运行时，这部分耗时通常占比非常少；
+  \item Cholesky 分解积分 $Y_{ia, P}$ 计算复杂度是 $O(n_\textsf{occ} n_\textsf{vir} n_\textsf{aux}^2)$；该步骤通过 SciPy 库函数实现；
+  \item 分子轨道基下的 4c-2e ERI 的生成过程计算复杂度是 $O(n_\textsf{occ}^2 n_\textsf{vir}^2 n_\textsf{aux})$，是整个 RI-MP2 相关能计算中计算复杂度最高的步骤；该步骤化归为矩阵乘法问题，并通过 NumPy 库函数实现；
+  \item 能量累加步骤的计算复杂度是 $O(n_\textsf{occ}^2 n_\textsf{vir}^2)$；但该步骤涉及大量数乘，是访存密集型问题，其访存开销也是 $O(n_\textsf{occ}^2 n_\textsf{vir}^2)$；该步骤通过 Numba 的即时编译 (JIT, \underline{J}ust-\underline{I}n-\underline{T}ime) 实现。
+\end{itemize}
+其中，分子轨道基下的 4c-2e ERI 的生成与能量累加步骤可以利用分子轨道表示下 $(ia|jb) = (jb|ia)$ 的对称性，以节省大约两倍的计算时间。
+
+在附录 \ref{sec.python-ri-mp2} 小节中，展示了通过纯 Python 语言实现了 RI-MP2 相关能的计算代码。在图 \ref{fig.timing-rimp2-implemented} 展示的测评中，可以看到 \ref{sec.python-ri-mp2} 小节的程序相比于其它现成的程序有更高的效率。使用 RI 近似的算法相比于 conv ERI 的效率有明显的提升。对于 conv ERI 的情形，6 碳以上体系的 MP2 相关能的计算耗时比 HF 更大；但对于 RI 近似算法，即使是效率最高的 Psi4 RI-JK，在 14 碳体系 (约 2000 基函数) 的耗时仍然比 RI-MP2 大。这意味着，对于效率测评所涉及的体系，若使用 RI 算法计算 MP2 型相关能，那么高阶的 MP2 型双杂化泛函计算耗时并不明显大于低阶的杂化泛函。而同时，\alert{在绪论中}展示了双杂化泛函在反应能数据集上的测评表现相较于杂化泛函有明显的进步；因此，双杂化泛函在能量计算问题上有良好的性价比。我们期望，在最理想的情况下，通过合适的算法与程序实现，双杂化泛函的梯度性质的计算量不会明显地大于杂化泛函，从而在梯度性质上也有良好的性价比；但目前既有程序耗时仍然较大。本章的其中一个重要目标，即是向着高效实现双杂化泛函的梯度性质迈进。
+
+\begin{figure}
+  \centering
+  \caption{HF 与 MP2 程序效率测评}
+  \label{fig.timing-rimp2-implemented}
+  \includegraphics[width=0.8\textwidth]{assets/timing-rimp2-implemented.pdf}
+
+  \raggedright
+  \begin{itemize}[nosep]
+    \item 测评体系是链状烷烃 \ce{C_n H_{2n+2}}，基组 def2-QZVPPD。计算设备为 Intel Xeon Gold 6150 (36 cores, 72 threads, 2 NUMA nodes)；所有计算任务使用 36 线程 (PySCF, Psi4, Gaussian) 或进程 (ORCA) 并行。
+    \item 图中 Implemented (蓝色线) 是通过与附录 \ref{sec.python-ri-mp2} 相似的纯 Python 程序的测评结果。
+    \item 除 PySCF conv-HF 或 conv-MP2 限制使用 32 GB 内存空间外，其余情形提供 300 GB 的充足内存以保证所有 3c-2e 积分可置于内存中，并使用默认的算法进行计算。
+    \item 不同程序的自洽场收敛判据不同、迭代步数不同。3 碳以上所有测评涉及程序的迭代步数一般在 9--11 步。
+  \end{itemize}
+\end{figure}
+
+\subsubsection{偶极矩与静态极化率：偶极电场下的能量与梯度}
+
+这一小节将引入偶极电场下的梯度量：偶极矩 (dipole) 与静态极化率 (static polarizability)\footnote{需要指出，极化率作为二阶梯度量，与 M\o{}ller-Plesset 二阶微扰 (MP2) 一样，可以通过 Rayleigh-Schr\"odinger 微扰理论导出。在该理论下，还可以得出一定频率下外加偶极电场扰动下能量的变化；此情形下的极化率称为动态极化率 (dynamic polarizability)。动态极化率在以化学增强 SERS 为代表的问题中有重要的意义\cite{Perez-Jimenez-Ren.CS.2020, Li-Xu.C.2022}；但在本工作中，我们将不考察动态极化率问题。}。
+
+在偶极电场 $\pmb{\mathcal{E}}$ 的微扰下，哈密顿算符的形式\alert{在绪论中}已经阐明。令无外场下的哈密顿算符为 $\hat H^{(0)}$、外场下微扰算符为 $\hat H^{(1)}$；微扰算符是由单电子算符与常数项所构成：
+\begin{equation}
+  \label{eq.electric-perturbed-hamiltonian}
+  \hat H^{(1)} = - \sum_i^{n_\mathrm{elec}} \pmb{\mathcal{E}}^\dagger \bm{r}_i + \sum_{A}^{n_\mathrm{atom}} Z_A \pmb{\mathcal{E}}^\dagger \bm{A} \quad \text{(not Einstein notation)}
+\end{equation}
+作为三维向量的偶极矩 $\bm{\mu}$ 与作为三维矩阵的极化率 $\bm{\alpha}$ 分别定义为分子基态能量受偶极电场扰动的一阶导数与二阶导数量\cite{Atkins-Friedman.Oxford.2011}：
+\begin{align}
+  E(\pmb{\mathcal{E}}) &= E(\bm{0}) + \pmb{\mathcal{E}}^\dagger \cdot \bm{\mu} - \pmb{\mathcal{E}} \cdot \bm{\alpha} \cdot \pmb{\mathcal{E}} + o(|\pmb{\mathcal{E}}|^3) \notag\\
+  &= E(\bm{0}) + \mathcal{E}_t \mu_t - \mathcal{E}_t \alpha_{ts} \mathcal{E}_s + o(|\pmb{\mathcal{E}}|^3)
+\end{align}
+上式的 $t, s$ 指代坐标分量 $x, y, z$。偶极矩 $\bm{\mu}$ 与极化率 $\bm{\alpha}$ 也可以通过下式定义：
+\begin{equation}
+  \bm{\mu} = \left. \frac{\partial E}{\partial \pmb{\mathcal{E}}} \right|_{\pmb{\mathcal{E}} = \bm{0}}, \quad
+  \bm{\alpha} = \left. \frac{\partial^2 E}{\partial \pmb{\mathcal{E}}^2} \right|_{\pmb{\mathcal{E}} = \bm{0}}
+\end{equation}
+分量的数值定义为
+\begin{equation}
+  \mu_t = \left. \frac{\partial E}{\partial \mathcal{E}_t} \right|_{\pmb{\mathcal{E}} = \bm{0}}, \quad
+  \alpha_{ts} = \left. \frac{\partial^2 E}{\partial \mathcal{E}_t \partial \mathcal{E}_s} \right|_{\pmb{\mathcal{E}} = \bm{0}}
+\end{equation}
+
+在计算化学程序中，定义微扰下的单电子积分
+\begin{align}
+  h_{\mu \nu}^{t} &= \int \phi_\mu (\bm{r}) t \phi_\nu (\bm{r}) \, \mathrm{d} \bm{r} \\
+  h_{\mu \nu} (\pmb{\mathcal{E}}) &= h_{\mu \nu} (\bm{0}) + \mathcal{E}_t h_{\mu \nu}^t
+\end{align}
+以及微扰下的原子核能量
+\begin{equation}
+  E_\textsf{nuc} (\pmb{\mathcal{E}}) = \frac{1}{2} \frac{Z_A Z_B}{r_{AB}} + Z_A \mathcal{E}_t A_t
+\end{equation}
+可以求得偶极电场 $\pmb{\mathcal{E}}$ 下的分子能量。因此，偶极矩 $\bm{\mu}$ 与极化率 $\bm{\alpha}$ 可以通过对 $E_\textsf{tot} (\pmb{\mathcal{E}})$ 作数值差分或解析导数得到。
+
+\begin{figure}
+  \centering
+  \caption{能量在外场下的变化情况 $E(\pmb{\mathcal{E}})$。图中的体系是键长 0.9914 \AA、键角 116.10$^\circ$ 的 \ce{NH_3} 体系；$C_3$ 旋转轴与 $z$ 轴重合；计算模型为 HF/6-31G；外场沿 $z$ 轴即外场强度向量 $\pmb{\mathcal{E}}^\dagger = (0, 0, \mathcal{E}_z)$。蓝色曲线绘制了 $E(\pmb{\mathcal{E}})$ 关于 $\mathcal{E}_z$ 的函数。橙色曲线绘制了 $\mathcal{E}_z = 0$ 时 $\partial_{\mathcal{E}_z} E$ 的导数值；该导数值等于偶极矩在 $z$ 轴上的分量 $\mu_z$。}
+  \label{fig.NumDipole-z}
+  \includegraphics[width=0.5\textwidth]{assets/NumDipole-z.pdf}
+\end{figure}
+
+需要指出，式 (\ref{eq.electric-perturbed-hamiltonian}) 所述的 $- \pmb{\mathcal{E}}^\dagger \bm{r}$ 形式的偶极电场仅仅是外加电场其中一种可能性。若外加电场是 $- \pmb{\mathcal{E}}^\dagger \bm{Q} \pmb{\mathcal{E}}$ 的形式，其中
+\begin{equation*}
+  \bm{Q} =
+  \begin{pmatrix}
+    x^2 & xy & xz \\
+    yx & y^2 & yz \\
+    zx & zy & z^2
+  \end{pmatrix}
+\end{equation*}
+那么在该类型的外加电场下，一阶梯度将给出四极矩 (quadrupole)。电场的其它多级展开还将给出八极矩 (octupole)、十六极矩 (hexadecapole) 等等。所有类型的外加电场，在计算化学程序中都表现为对单电子积分与原子核能量的微扰，而对双电子积分、DFA 格点积分能量、原子轨道等部分不产生微扰。本工作着重于极化率，即 $- \pmb{\mathcal{E}}^\dagger \bm{r}$ 形式的偶极电场下的一阶与二阶梯度，即偶极矩与静态极化率的推导与程序实现；但该推导能比较容易地拓展到其它形式的外加电场一阶与二阶梯度。
+
+\subsubsection{重要的解析梯度先驱性工作}
+
+本工作的目标之一是高效率实现 RI 近似下 MP2 型 xDH 双杂化泛函的电性质二阶梯度；其理论推导与实现基于大量先驱性工作。其中，不完全的、具有代表性的或对本工作有一定影响的文献列举如下：
+\begin{itemize}[nosep]
+  \item Gerratt 与 Mills 在 1968 年发展了 Hartree-Fock 方法二阶梯度理论，并提出耦合微扰方程 (CPHF, \underline{C}oupled \underline{P}erturbed \underline{H}artree-\underline{F}ock)\cite{Gerratt-Mills.JCP.1968, Gerratt-Mills.JCP.1968a}；
+  \item Pople 等在 1979 年发展了 MP2 方法的一阶梯度理论\cite{Pople-Binkley.IJQC.1979}；
+  \item Dykstra 与 Jasien 在 1984 年发展了 Hartree-Fock 方法任意阶梯度理论，并提出了高阶轨道系数导数计算方法、与梯度理论的 $2n+1$ 规则\cite{Dykstra-Jasien.CPL.1984}；
+  \item Handy 与 Schaefer III 在 1984 年发展了 CISD 方法四阶梯度理论，提出了 Z-Vector 方法，并指出 Z-Vector 方法在 MP2 等微扰方法下的应用前景\cite{Handy-Schaefer.JCP.1984}；
+  \item Handy 在 1985 年针对轨道系数梯度矩阵中可能存在的奇点的问题，提出数值上更稳定的梯度计算方法\cite{Handy-Simandiras.CPL.1985}；
+  \item Frisch、Head-Gordon、Pople 在 1990 年基于 Gaussian 程序实现了 Hartree-Fock 方法的二阶梯度与 MP2 方法的一阶梯度\cite{Frisch-Pople.CP.1990, Frisch-Pople.CPL.1990, Frisch-Pople.CPL.1990a}；
+  \item Bartlett、Gauss 与 Stanton 在 1992 年基于 ACES II 程序 (后期发展为 CFOUR) 实现了 MP2 方法的二阶梯度\cite{Gauss-Bartlett.JCP.1992, Stanton-Bartlett.CPL.1992}；
+  \item Johnson 与 Frisch 在 1993 年基于 Gaussian 程序实现了 GGA 泛函的二阶梯度\cite{Johnson-Frisch.CPL.1993}；
+  \item Head-Gordon 与 Head-Gordon 在 1994 年基于 Gaussian 程序实现了 MP2 方法的二阶梯度\cite{Head-Gordon-Head-Gordon.CPL.1994}；
+  \item Yamaguchi、Goddard、Osamura 与 Schaefer III 在 1994 年对变分方法下的梯度理论作全面的总结\cite{Yamaguchi-Schaefer.Oxford.1994}；
+  \item Weigend 与 H\"aser 在 1997 年发展并基于 TURBOMOLE 程序实现了 RI-MP2 方法的一阶梯度\cite{Weigend-Haeser.TCA.1997}；
+  \item Gordon 课题组 Aikens 等在 2004 年发展并基于 GAMESS US 程序实现了冻结轨道的 MP2 方法一阶梯度\cite{Aikens-Gordon.TCA.2003}；
+  \item Cammi 等在 2004 年发展并基于 Gaussian 程序实现了溶剂化 MP2 方法二阶梯度\cite{Cammi-Frisch.TCA.2004}；
+  \item Head-Gordon 课题组 Distasio, Jr.\ 等在 2007 年基于 Q-Chem 程序实现了 RI-MP2 方法的一阶梯度\cite{Distasio-Head-Gordon.JCC.2007}；
+  \item Neese、Schwabe 与 Grimme 在 2007 年发展并基于 ORCA 程序实现了 MP2 型 bDH 双杂化泛函的一阶梯度\cite{Neese-Grimme.JCP.2007}；
+  \item Biczysko 等在 2010 年发展并基于 Gaussian 程序实现了 MP2 型 bDH 双杂化泛函二阶梯度\cite{Biczysko-Barone.JCTC.2010}；
+  \item 苏乃强、张颖、徐昕在 2013 年发展并基于 NWChem 程序实现了 MP2 型 xDH 双杂化泛函一阶梯度\cite{Su-Xu.JCC.2013}；
+  \item Jung 课题组 Ji 等在 2013 年发展并基于 Q-Chem 程序实现了 Laplace-Transform 近似 ($1/x$ 的指数函数展开近似) OS-MP2 型 xDH 双杂化泛函一阶梯度\cite{Ji-Jung.JCTC.2013}；
+  \item Neese 课题组 Bykov 等与 Valeev 合作在 2015 年发展并基于 ORCA 程序实现了 RIJ-COSX 近似下的二阶梯度，并高效实现了 RI 近似下自洽场的二阶梯度\cite{Bykov-Neese.MP.2015}；
+  \item Stoychev、Auer 与 Neese 在 2018 年发展并基于 ORCA 程序实现了 RI-MP2 以及 RI 近似下 MP2 型 bDH 双杂化泛函电性质和磁性质二阶梯度\cite{Stoychev-Neese.JCTC.2018}；
+  \item 谷永浩、祝震予、徐昕在 2021 年发展并基于 Gaussian 程序实现了 MP2 型 xDH 双杂化泛函振动频率与极化率二阶梯度\cite{Gu-Xu.JCTC.2021}。
+  \item 颜文杰、徐昕在 2022 年发展并基于 Gaussian 程序实现了 MP2 型 xDH 双杂化泛函磁化率与核磁矩二阶梯度\cite{Yan-Xu.JCTC.2022}。
+\end{itemize}
+
+\subsection{双杂化泛函电性质解析梯度}
+\label{sec.3.theory}
+
+本节将在 xDH 框架下，讨论抽象的电性质导数问题；被求导的性质将以 $\mathbb{A}, \mathbb{B}$ 表示。除非特别指明，一般讨论的是闭壳层情形。
+
+\subsubsection{一阶梯度：轨道系数随外场的变化}
+
+自洽场与能量泛函的运算共用同一轨道系数 $C_{\mu i}$。定义轨道系数在外场微扰下的变化为 U 矩阵 $U_{pq}^\mathbb{A}$：
+\begin{empheq}[box=\fbox]{equation}
+  \partial_\mathbb{A} C_{\mu q} = C_{\mu p} U_{pq}^\mathbb{A}
+\end{empheq}
+需要指出，对于一般的 Canonical SCF 过程，这里对 $U_{pq}^\mathbb{A}$ 的定义将会遇到奇点问题。因此，为数值稳定地计算二阶梯度，后续将重新定义 U 矩阵 $U_{pq}^\mathbb{A}$。
+
+轨道系数 $C_{\mu p}$ 是在自洽场泛函能量 $E_\textsf{SCF}$ 下定义的，因此 U 矩阵也仅决定于自洽场泛函。注意到自洽场所给出的轨道系数可以由轨道正交条件与分子轨道基下 Fock 矩阵分块对角化条件决定：
+\begin{alignat}{10}
+  \label{eq.condition-ortho}
+  S_{pq} &= C_{\mu p} S_{\mu \nu} C_{\nu q} = \delta_{pq} &&\quad \text{(orthogonalization condition)} \\
+  \label{eq.condition-Fai}
+  F_{ai} &= C_{\mu a} F_{\mu \nu} C_{\nu i} = 0 &&\quad \text{(block-diagonal condition of Fock matrix)}
+\end{alignat}
+其中，Fock 矩阵定义为自洽场能量对密度矩阵的导数：
+\begin{equation}
+  F_{\mu \nu} = \frac{\partial E_\textsf{SCF}}{\partial D_{\mu \nu}}
+\end{equation}
+
+首先确定 U 矩阵在占据-非占部分 $U_{ai}^\mathbb{A}$ 的表达式。我们对正交条件 (\ref{eq.condition-ortho}) 作性质 $\mathbb{A}$ 的导数：
+\begin{align}
+  \label{eq.condition-ortho-conclusion}
+  \partial_{\mathbb{A}} S_{pq} &= \partial_\mathbb{A} C_{\mu p} S_{\mu \nu} C_{\nu q} + C_{\mu p} \partial_\mathbb{A} S_{\mu \nu} C_{\nu q} + C_{\mu p} S_{\mu \nu} \partial_\mathbb{A} C_{\nu q} \notag\\
+  &= S_{mq} U_{mp}^\mathbb{A} + S_{pm} U_{mq}^\mathbb{A} \notag\\
+  &= U_{pq}^\mathbb{A} + U_{qp}^\mathbb{A} = 0
+\end{align}
+其中，$\partial_\mathbb{A} S_{pq}$ 推导过程中利用到电性质微扰下基轨道没有变化，因此 $\partial_\mathbb{A} S_{\mu \nu} = 0$。上述结论表明，U 矩阵在电性质导数下是反对称的。
+
+在对 Fock 分块对角化条件 (\ref{eq.condition-Fai}) 作性质 $\mathbb{A}$ 的导数前，我们需要先定义 Fock 矩阵关于密度矩阵的二阶梯度量：
+\begin{equation}
+  \label{eq.def-Auvkl}
+  A_{\mu \nu, \kappa \lambda} = 4 \frac{\partial^2 E_\textsf{SCF}}{\partial D_{\mu \nu} \partial D_{\kappa \lambda}}
+\end{equation}
+在后文中，将称其为 A 张量或 Fock 响应张量；作为二阶导数相关量，分子轨道基下的 A 张量也称为分子轨道 Hessian (MO Hessian)。其中，上式的 4 倍是闭壳层实轨道 $C_{\mu p}^* = C_{\mu p}$ 下乘积因子；该因子将使得原子轨道基下 Fock 矩阵的导数具有 $\partial_\mathbb{A} F_{\mu \nu} = F_{\mu \nu}^\mathbb{A} + A_{\mu \nu, mi} U_{mi}^\mathbb{A}$ 的表达形式：
+\begin{align}
+  \label{eq.deduct-pd-Fuv}
+  \partial_\mathbb{A} F_{\mu \nu} &= F_{\mu \nu}^\mathbb{A} + \frac{\partial F_{\mu \nu}}{\partial D_{\kappa \lambda}} \left( \frac{\partial D_{\kappa \lambda}}{\partial C_{\kappa i}} \frac{\partial C_{\kappa i}}{\partial \mathbb{A}} + \frac{\partial D_{\kappa \lambda}}{\partial C_{\lambda i}} \frac{\partial C_{\lambda i}}{\partial \mathbb{A}} \right) \notag\\
+  &= F_{\mu \nu}^\mathbb{A} + \frac{1}{4} A_{\mu \nu, \kappa \lambda} \left( 2 C_{\lambda i} U_{\kappa m} U_{mi}^\mathbb{A} + 2 C_{\kappa i} U_{\lambda m} U_{mi}^\mathbb{A} \right) \notag\\
+  &= F_{\mu \nu}^\mathbb{A} + \frac{1}{2} \left( A_{\mu \nu, im} + A_{\mu \nu, mi} \right) U_{mi}^\mathbb{A} \notag\\
+  &= F_{\mu \nu}^\mathbb{A} + A_{\mu \nu, mi} U_{mi}^\mathbb{A} = 0
+\end{align}
+其中，$F_{\mu \nu}^\mathbb{A}$ 定义为不受密度矩阵扰动、而仅受外场扰动而会产生变化的 Skeleton 导数部分。作为特例，对于外加偶极电场而言，仅有单电子算符部分产生贡献：
+\begin{align}
+  F_{\mu \nu}^{\mathcal{E}_t} &:= \partial_{\mathcal{E}_t} h_{\mu \nu} = \langle \mu | t | \nu \rangle \\
+  F_{pq}^{\mathcal{E}_t} &:= C_{\mu p} F_{\mu \nu}^{\mathcal{E}_t} C_{\nu q}
+\end{align}
+同时，在 (\ref{eq.deduct-pd-Fuv}) 推导的最后一步，我们利用了 $A_{\mu \nu, pq}$ 张量对 $p, q$ 角标的对称性。该对称性的来源是 (\ref{eq.def-Auvkl}) 定义式中，作为被求导的矩阵，$D_{\kappa \lambda}$ 是对称矩阵；将角标 $\kappa, \lambda$ 转换到分子轨道基下，对称性仍然保持。
+
+对 Fock 分块对角化条件 (\ref{eq.condition-Fai}) 等式两边作性质 $\mathbb{A}$ 的导数，得到
+\begin{align}
+  \label{eq.intermediate-pd-Fai-0}
+  \partial_\mathbb{A} F_{ai} &= F_{mi} U_{ma}^\mathbb{A} + F_{am} U_{mi}^\mathbb{A} + C_{\mu a} \partial_\mathbb{A} F_{\mu \nu} C_{\nu i} \notag\\
+  &= F_{mi} U_{ma}^\mathbb{A} + F_{am} U_{mi}^\mathbb{A} + F_{ai}^\mathbb{A} + A_{ai, mj} U_{mj}^\mathbb{A}
+\end{align}
+若引入 Canonical SCF 限制条件，即 Fock 矩阵是对角化的：
+\begin{equation}
+  F_{pq} = \varepsilon_p \delta_{pq} \quad \text{(canonical condition)}
+\end{equation}
+那么，式 (\ref{eq.intermediate-pd-Fai-0}) 可以写为
+\begin{equation}
+  \label{eq.intermediate-pd-Fai-1}
+  \partial_\mathbb{A} F_{ai} = \varepsilon_i U_{ia}^\mathbb{A} + \varepsilon_a U_{ai}^\mathbb{A} + F_{ai}^\mathbb{A} + A_{ai, mj} U_{mj}^\mathbb{A} = 0
+\end{equation}
+该式还可以简化。利用 U 矩阵的反对称性和 A 张量的对称性，$A_{ai, mj} U_{mj}^\mathbb{A}$ 中 $m$ 仅对占据轨道求和时，
+\begin{align*}
+  \partial_\mathbb{A} F_{ai} \leftarrow A_{ai, kj} U_{kj}^\mathbb{A} = \frac{1}{2} \left( A_{ai, kj} U_{kj}^\mathbb{A} + A_{ai, jk} U_{kj}^\mathbb{A} \right) = \frac{1}{2} \left( A_{ai, kj} U_{kj}^\mathbb{A} + A_{ai, kj} U_{jk}^\mathbb{A} \right) = 0
+\end{align*}
+上式的 $\leftarrow$ 是指右侧表达式对左侧表达式产生贡献。因此，式 (\ref{eq.intermediate-pd-Fai-1}) 的 $A_{ai, mj} U_{mj}^\mathbb{A}$ 中 $m$ 仅有非占轨道求和的贡献。从而，式 (\ref{eq.intermediate-pd-Fai-1}) 简化为
+\begin{empheq}[box=\fbox]{align}
+  \label{eq.CP-SCF}
+  F_{ai}^\mathbb{A} &= - (\varepsilon_a - \varepsilon_i) U_{ai}^\mathbb{A} - A_{ai, bj} U_{bj}^\mathbb{A} \notag\\
+  &= - \left( (\varepsilon_a - \varepsilon_i) \delta_{ai, bj} + A_{ai, bj} \right) U_{bj}^\mathbb{A} = 0
+\end{empheq}
+该式是电性质导数下的 CP-SCF (\underline{C}oupled-\underline{P}erturbed \underline{SCF}) 方程；通过该方程可以求得 U 矩阵的非占-占据部分 $U_{ai}^\mathbb{A}$。其耦合微扰的意义是，不仅哈密顿算符受外场扰动、自洽场波函数也因哈密顿算符的微扰而随之产生变化；CP-SCF 方程所给出的 U 矩阵确定了波函数是如何随外场发生扰动的。
+
+\subsubsection{一阶梯度：U 矩阵占据-占据和非占-非占部分}
+
+对于自洽场方法，轨道正交条件 $S_{pq} = 0$ 与 Fock 矩阵分块对角化 $F_{ai} = 0$ 是必须满足的条件；但 Canonical SCF 条件 $F_{pq} = \varepsilon_p \delta_{pq}$ 仅仅是出于公式推导的便利与程序实现的方便，而引入的可选条件。这意味着在微扰下，只有占据与非占轨道相互之间的变化情况是非平凡的，即 $U_{ai}^\mathbb{A}$ 与 $U_{ia}^\mathbb{A} = - U_{ai}^\mathbb{A}$ 的数值是非平凡的；占据-占据的 $U_{ij}^\mathbb{A}$ 与非占-非占的 $U_{ab}^\mathbb{A}$ 的数值并非是关键的。因此，只要 $U_{ij}^\mathbb{A}$ 与 $U_{ab}^\mathbb{A}$ 满足式 (\ref{eq.condition-ortho-conclusion}) 给出的轨道正交条件的结论即可。对于电性质导数而言，最简单的定义方式是置零：
+\begin{empheq}[box=\fbox]{equation}
+  \label{eq.Uij-Uab-zero}
+  U_{ij}^\mathbb{A} = U_{ab}^\mathbb{A} = 0 \quad \text{(definition of program implementation)}
+\end{empheq}
+
+在程序实现中，我们将依照式 (\ref{eq.Uij-Uab-zero}) 所给出的定义实现 U 矩阵的占据-占据与非占-非占部分。该式将使得 Fock 矩阵的导数在非对角元上未必为零：
+\begin{equation}
+  \label{eq.pd-Fpq-not-diagonal}
+  \partial_\mathbb{A} F_{pq} \not \equiv 0 \quad (p \neq q, \text{(\ref{eq.Uij-Uab-zero}) satisfied})
+\end{equation}
+但 Fock 矩阵在外场为零的情形下仍然可以是对角化的，即 $F_{pq} = \varepsilon_p \delta_{pq}$；但外场不为零时，Fock 矩阵不再是对角化的；这不同于正交条件与 Fock 矩阵分块对角化条件。
+
+下面我们将讨论式 (\ref{eq.pd-Fpq-not-diagonal}) 占据-占据部分情形。利用 Fock 矩阵为对角阵、以及 U 矩阵反对称性质，
+\begin{align}
+  \partial_\mathbb{A} F_{ij} &= F_{im} U_{mj}^\mathbb{A} + F_{mj} U_{mi}^\mathbb{A} + F_{ij}^\mathbb{A} + A_{ij, mk} U_{mk}^\mathbb{A} \notag\\
+  &= (\varepsilon_i - \varepsilon_j) U_{ij}^\mathbb{A} + F_{ij}^\mathbb{A} + A_{ij, bk} U_{bk}^\mathbb{A}
+\end{align}
+在上式的推导中，角标 $m$ 作为占据轨道 $l$ 时的贡献项 $\partial_\mathbb{A} F_{ij} \leftarrow A_{ij, lk} U_{lk}^\mathbb{A}$ 由于 $A_{ij, lk}$ 与 $U_{lk}^\mathbb{A}$ 关于 $l, k$ 角标分别对称与反对称，因此该贡献项为零。故而，仅有角标 $m$ 取非占轨道 $b$ 时，$\partial_\mathbb{A} F_{ij} \leftarrow A_{ij, bk} U_{bk}^\mathbb{A}$ 是非平凡的贡献项。通过 CP-SCF 方程，我们已经可以求得 $U_{bj}^\mathbb{A}$；从而，通过上式可以求得
+\begin{equation}
+  U_{ij}^\mathbb{A} = 
+  \begin{cases}
+    \displaystyle
+    - \frac{F_{ij}^\mathbb{A} + A_{ij, bk} U_{bk}^\mathbb{A} - \partial_\mathbb{A} F_{ij}}{\varepsilon_i - \varepsilon_j} & (i \neq j) \\
+    0 & (i = j)
+  \end{cases}
+\end{equation}
+其中，$U_{ii}^\mathbb{A} = 0$ 直接由轨道正交条件 (\ref{eq.condition-ortho-conclusion}) 所导出。
+
+若 Fock 矩阵导数也满足 Canonical SCF 条件，即 $\partial_\mathbb{A} F_{ij} = \delta_{ij} \partial_\mathbb{A} \varepsilon_i$，那么
+\begin{equation}
+  U_{ij}^\mathbb{A} = - \frac{F_{ij}^\mathbb{A} + A_{ij, bk} U_{bk}^\mathbb{A}}{\varepsilon_i - \varepsilon_j} \quad \left( i \neq j, \, \partial_\mathbb{A} F_{ij} = 0 \right)
+\end{equation}
+上式的分子一般非零，而分母 $\varepsilon_i - \varepsilon_j$ 则有可能接近于零；举例而言，甲烷分子的最高能级占据轨道为 $T_d$ 不可约表示，即三重简并，因此存在 $i \neq j$ 且 $\varepsilon_i - \varepsilon_j = 0$ 的情形，从而将 $U_{ij}^\mathbb{A}$ 推向无穷大，导致严重的数值误差。因此，为在程序实现中避免这类数值误差，那么 $\partial_\mathbb{A} F_{ij}$ 不适合在 $i \neq j$ 时设为零。
+
+方才分析的是 Fock 矩阵导数占据-占据部分 $\partial_\mathbb{A} F_{ij}$；对于非占-非占部分 $\partial_\mathbb{A} F_{ab}$ 也有类似的结论。
+
+需要指出，尽管令 $\partial_\mathbb{A} F_{pq}$ 为非对角矩阵尽管可以避免数值误差，但同时也有可能增加计算量。对于后续将定义的 MP2 型相关激发张量 $t_{ij}^{ab}$ 的导数，
+\begin{equation*}
+  \partial_\mathbb{A} t_{ij}^{ab} \leftarrow - \partial_\mathbb{A} F_{ca} t_{ij}^{cb}
+\end{equation*}
+若 $\partial_\mathbb{A} F_{ca}$ 不是对角矩阵，那么上述贡献项的计算复杂度将是 $O(n_\textsf{prop} n_\textsf{occ}^2 n_\textsf{vir}^3)$，即随体系增大而呈五次复杂度 (作为电性质，偶极外场的 $n_\textsf{prop} = 3$ 即三个坐标分量方向)；但若 $\partial_\mathbb{A} F_{ca}$ 是对角矩阵，则尽管有更低的 $O(n_\textsf{prop} n_\textsf{occ}^2 n_\textsf{vir}^2)$ 即四次复杂度，但仍然是内存密集型运算且存在潜在严重数值误差的可能性。一种可能的解决方案是，对于简并或近简并的一部分轨道，定义非对角的 $\partial_\mathbb{A} F_{pq}$；而剩余下来不存在简并情况的轨道，它们构成的 $\partial_\mathbb{A} F_{pq}$ 仍然是对角的。在这种方案下由于三维空间的最大不可约表示是三维，因此 FLOPs 不会超过 9 倍于 $n_\textsf{prop} n_\textsf{occ}^2 n_\textsf{vir}^2$ 的乘积累加运算\cite{Stoychev-Neese.JCTC.2018}。但这种方案并非简单的张量乘积，程序实现上会引入一定的复杂性；在我们目前的程序实现中，没有将其纳入考虑。
+
+\subsubsection{一阶梯度：能量泛函导数与弛豫密度}
+
+这一小节讨论能量泛函 $E_\textsf{xDH}$ 在性质 $\mathbb{A}$ 微扰下的导数。
+
+首先，对于电性质，Skeleton 导数仅有单电子算符和原子核互斥能随外加微扰所产生的贡献；因此，
+\begin{equation}
+  \partial_\mathbb{A}^\textsf{S} E_\textsf{xDH} = \partial_\mathbb{A}^\textsf{S} E_\textsf{core} + \partial_\mathbb{A}^\textsf{S} E_\textsf{nuc} = h_{\mu \nu}^\mathbb{A} D_{\mu \nu} + \partial_\mathbb{A} E_\textsf{nuc}
+\end{equation}
+其中，$h_{\mu \nu}^\mathbb{A} = \partial_\mathbb{A} h_{\mu \nu}$。xDH 总能量的全导数则为
+\begin{equation}
+  \partial_\mathbb{A} E_\textsf{xDH} = \partial_\mathbb{A}^\textsf{S} E_\textsf{xDH} + \frac{\partial E_\textsf{xDH}}{\partial C_{\mu p}} \frac{\partial C_{\mu p}}{\partial \mathbb{A}}
+\end{equation}
+故而对于电性质导数而言，大多数推演上的困难来源于能量对系数的梯度。
+
+
+
+\subsection{MP2 型双杂化泛函解析静态极化率程序化}
+\label{sec.3.program}
+
+\subsubsection{MP2 型双杂化泛函弛豫密度实现}
+
+\subsubsection{MP2 型电性质解析静态极化率实现}
+
+\subsubsection{效率测评}
+
+\newpage
+
+\subsection{附录}
+
+\subsubsection{闭壳层实分子轨道 RI-MP2 相关能的 Python 代码实现}
+\label{sec.python-ri-mp2}
+
+下述程序是正文 \ref{sec.rijk-rimp2-efficiency} 小节对 RI-MP2 相关能的 Python 实现代码。
+
+\begin{lstlisting}[language=Python]
+  from pyscf import lib, df
+  from pyscf.ao2mo._ao2mo import nr_e2
+  import numba
+  import scipy
+  import numpy as np
+  
+  
+  def get_cderi_uov(mol, mo_coeff, mo_occ, auxbasis=None):
+      """ Obtain cholesky decomposed ERI Y_{ia,P} """
+      mask = mo_occ > 0
+      nocc = mask.sum()
+      nmo = mask.size
+      nvir = nmo - nocc
+      auxmol = df.make_auxmol(mol, auxbasis=df.make_auxbasis(mol, mp2fit=True)).build()
+      naux = auxmol.nao
+      
+      int3c2e = df.incore.aux_e2(mol, auxmol, aosym="s2ij").T
+      int3c2e = nr_e2(int3c2e, mo_coeff, (0, nocc, nocc, nmo), aosym="s2", mosym="s1")
+      int3c2e = int3c2e.reshape(naux, nocc, nvir)
+      int2c2e = auxmol.intor("int2c2e")
+      int2c2e_cd = np.linalg.cholesky(int2c2e)
+      int3c2e = scipy.linalg.solve_triangular(int2c2e_cd, int3c2e.reshape(naux, -1), lower=True)
+      int3c2e = int3c2e.reshape(naux, nocc, nvir)
+      return int3c2e
+  
+  
+  @numba.jit("UniTuple(f8, 2)(f8[:,:,:,::1], f8[:,::1], f8[:,::1])", parallel=True, nopython=True)
+  def accumulate_eng_rmp2(eri_ab, d_ia, d_jb):
+      """ Accumulate energy by 4c-2e ERI and molecular orbital energy. """
+      ni, na, nj, nb = eri_ab.shape
+      eng_bi1, eng_bi2 = 0, 0
+      for ij in numba.prange(ni * nj):
+          i, j = ij // nj, ij % nj
+          d_ab = d_ia[i].reshape(-1, 1) + d_jb[j].reshape(1, -1)
+          e_ab = eri_ab[i, :, j]
+          t_ab = e_ab / d_ab
+          eng_bi1 += (e_ab   * t_ab).sum()
+          eng_bi2 += (e_ab.T * t_ab).sum()
+      eng_os = eng_bi1
+      eng_ss = eng_bi1 - eng_bi2
+      return eng_os, eng_ss
+  
+  
+  def eng_rmp2(cderi_uov, mo_energy, batch=12):
+      """ Restricted MP2 energy.
+      cderi_uov : cholesky decomposed ERI in molecular basis (P|ia)
+      mo_energy : molecular orbital energies
+      batch     : number of occupied orbitals evaluated in a batch when energy accumulation
+      """
+      naux, nocc, nvir = cderi_uov.shape
+      eng_mp2 = eng_os = eng_ss = 0
+      mo_energy_dev = mo_energy[:nocc, None] - mo_energy[None, nocc:]
+      batched_pair = list(lib.prange(0, nocc, batch))
+      
+      def load_cderi_Pia(i_pair):
+          si = slice(*i_pair)
+          return cderi_uov[:, si].reshape(naux, -1)
+  
+      for i_pair, cderi_Pia in zip(batched_pair, lib.map_with_prefetch(load_cderi_Pia, batched_pair)):
+          j_pair_list = [j_pair for j_pair in batched_pair if j_pair[0] <= i_pair[0]]
+          for j_pair, cderi_Pjb in zip(batched_pair, lib.map_with_prefetch(load_cderi_Pia, j_pair_list)):
+              len_i = i_pair[1] - i_pair[0]
+              len_j = j_pair[1] - j_pair[0]
+              factor = 2 if i_pair[1] != j_pair[1] else 1
+  
+              eri_ab = (cderi_Pia.T @ cderi_Pjb).reshape(len_i, nvir, len_j, nvir)
+              d_ia = mo_energy_dev[slice(*i_pair)]
+              d_jb = mo_energy_dev[slice(*j_pair)]
+  
+              e_os, e_ss = accumulate_eng_rmp2(eri_ab, d_ia, d_jb)
+              eng_os += factor * e_os
+              eng_ss += factor * e_ss
+              eng_mp2 += factor * (e_os + e_ss)
+      
+      return eng_mp2, eng_os, eng_ss
+  
+  
+  if __name__ == "__main__":
+      from pyscf import gto, scf
+      mol = gto.Mole(atom="O; H 1 0.94; H 1 0.94 2 104.5", basis="6-31G").build()
+      mf = scf.RHF(mol).density_fit().run()
+      cderi_uov = get_cderi_uov(mol, mf.mo_coeff, mf.mo_occ)
+      res = eng_rmp2(cderi_uov, mf.mo_energy)
+      print(res)  
+\end{lstlisting}
+
+\newpage
+
+\bibliographystyle{achemso}
+\bibliography{chap-03.bib}
+
+\end{document}
+
+
+
+后文中，用于实现双杂化电性质梯度的程序是 dh (ver 80ca9e)。该程序仅在计算复杂度上有合理的表现；但出于实现便利与快速开发的目的，该程序并没有通过张量对称性、JIT 等策略加速程序。从图 \ref{fig.timing-rimp2-implemented} 中的表现来看，对于 RI-MP2 能量计算，dh 程序并未能发挥最高的效能。因此，我们预期未来
+
+
+
+

@@ -57,13 +57,13 @@
 \end{equation}
 其中，$Z_A$ 是原子 $A$ 的核电荷数、$\bm{R}_A$ 是原子 $A$ 的核坐标、$n_\mathrm{atom}$ 是分子的原子数。
 
-本论文的工作涉及到外加偶极电场对分子体系的作用。对于电中性体系，该电场对分子的影响是规范不变的；我们始终规定规范原点 (gauge origin) 为原点。在此情形下，$\hat T$ 与 $\hat V_\mathrm{ee}$ 没有发生变化。在强度为 $\pmb{\mathcal{E}}^\dagger = (\varepsilon_x, \varepsilon_y, \varepsilon_z)$ 的偶极电场下 \cite{Atkins-Friedman.Oxford.2011}，
+本论文的工作涉及到偶极电场对分子体系的作用。对于电中性体系，该电场对分子的影响是规范不变的；我们始终规定规范原点 (gauge origin) 为原点。在此情形下，$\hat T$ 与 $\hat V_\mathrm{ee}$ 没有发生变化。在强度为 $\pmb{\mathcal{E}}^\dagger = (\varepsilon_x, \varepsilon_y, \varepsilon_z)$ 的偶极电场下 \cite{Atkins-Friedman.Oxford.2011}，
 \begin{align}
   v (\bm{r}) &= - \sum_{A}^{n_\mathrm{atom}} \frac{Z_A}{| \bm{r} - \bm{R}_A |} - \pmb{\mathcal{E}}^\dagger \bm{r} \quad \text{(偶极电场外势)} \\
   \hat V_\text{non-elec} &= \frac{1}{2} \sum_{A \neq B}^{n_\mathrm{atom}} \frac{Z_A Z_B}{| \bm{R}_A  - \bm{R}_B |} + \sum_{A}^{n_\mathrm{atom}} Z_A \pmb{\mathcal{E}}^\dagger \boldsymbol{R}_A \quad \text{(偶极电场外势)}
 \end{align}
 
-定态 \Schrodinger 方程求解的困难至少来自于两方面。一者，从应用的角度，对计算化学的精度要求非常高。以化学反应为例，若速率方程满足 Arrhenius 公式 $k = A \exp (- \frac{E_\mathrm{a}}{R T})$，又自由能 $E_a$ 计算若存在 1 kcal/mol 的误差，那么在 298 K 下速率就会有约 5 倍的误差。而目前密度泛函近似方法声称的最佳精度在 1.2 -- 2.0 kcal/mol \cite{Zhang-Xu.JPCL.2021, Santra-Martin.JPCL.2021}，还有可以提升的空间。二者，从表达式来看，由于库伦排斥算符 $\hat V_\mathrm{ee}$ 的存在，无法通过变量分离等技巧快速求解 \Schrodinger 方程。最近的研究表明，如果将定态 \Schrodinger 方程看作 $k$-local Hamiltonian 问题 ($k \geq 2$)，那么该方程的求解是困难的 QMA (Quantum Merlin Arthur) 问题：即不论是经典计算还是量子计算，对基组大小为 $n > n_\mathrm{elec}$ 的算符 $\hat H$，无法在多项式时间 $\mathrm{poly}(n)$ 内、以较大的正确概率判断基态能量 $\min \langle \hat H \rangle$ 是否小于给定数值 \cite{Kempe-Regev.SJC.2006}。
+定态 \Schrodinger 方程求解的困难至少来自于两方面。一者，从应用的角度，对计算化学的精度要求非常高。以化学反应为例，若速率方程满足 Arrhenius 公式 $k = A \exp (- \frac{E_\mathrm{a}}{R T})$，又自由能 $E_a$ 计算若存在 1 kcal/mol 的误差，那么在 298 K 下速率就会有约 5 倍的误差。而目前密度泛函近似方法 (DFA, \underline{D}ensity \underline{F}unctional \underline{A}pproximation) 声称的最佳精度在 1.2 -- 2.0 kcal/mol \cite{Zhang-Xu.JPCL.2021, Santra-Martin.JPCL.2021}，还有可以提升的空间。二者，从表达式来看，由于库伦排斥算符 $\hat V_\mathrm{ee}$ 的存在，无法通过变量分离等技巧快速求解 \Schrodinger 方程。最近的研究表明，如果将定态 \Schrodinger 方程看作 $k$-local Hamiltonian 问题 ($k \geq 2$)，那么该方程的求解是困难的 QMA (Quantum Merlin Arthur) 问题：即不论是经典计算还是量子计算，对基组大小为 $n > n_\mathrm{elec}$ 的算符 $\hat H$，无法在多项式时间 $\mathrm{poly}(n)$ 内、以较大的正确概率判断基态能量 $\min \langle \hat H \rangle$ 是否小于给定数值 \cite{Kempe-Regev.SJC.2006}。
 
 为了在保证一定精度的同时，更快地求解化学所关心的体系，对定态 \Schrodinger 方程的近似方法、以及为近似方法所设计的框架就有重要的价值。
 
@@ -78,7 +78,7 @@
     \label{eq.true-system-variation}
     E[v] = \min_\Psi \langle \Psi | \hat H | \Psi \rangle
   \end{equation}
-  而又由于外势 $v(\bm{r})$ 与基态电子密度 $\rho(\bm{r})$ 有一一对应关系，因此可以基态能量是关于基态电子密度 $\rho(\bm{r})$ 的泛函 $E[\rho]$。该理论也得名为密度泛函理论。
+  而又由于外势 $v(\bm{r})$ 与基态电子密度 $\rho(\bm{r})$ 有一一对应关系，因此可以基态能量是关于基态电子密度 $\rho(\bm{r})$ 的泛函 $E[\rho]$。该理论也得名为密度泛函理论 (DFT, \underline{D}ensity \underline{F}unctional \underline{T}heory)。
   
   \item 对于特定外势 $v(\bm{r})$ 下的体系，若令其波函数为 $\Psi_0$，那么能量泛函可以写为四部分：
   \begin{align*}
@@ -146,7 +146,7 @@ Hohenberg-Kohn 定理的提出，标志着密度泛函理论成为了一个原�
 
 上述过程表明，对于任意的外势 $v(\bm{r})$，总存在一个无电子相互作用 (noninteracting) 的体系，其密度 $\rho(\bm{r})$ 是泛函 $E_v[\rho]$ 变分取最小值时的密度，即真实基态密度。这个无相互作用体系的电子轨道 $\{\phi_i\}$ 可以通过 Kohn-Sham 方程 (\ref{eq.ks}) 导出。它与 Hartree-Fock 方程尽管具有完全不同的意义；但表达式非常相似、都可以用自洽场过程求解。这也就意味着，如果泛函 $F[\rho]$ 的形式是已知的，那么基态能量可以通过已知的数值方法求解。
 
-\subsubsection{Kohn-Sham 框架与“Jacob 天梯”}
+\subsubsection{Kohn-Sham 框架与“Jacob 阶梯”}
 
 尽管 Kohn-Sham 方程解决了在给定 $F[\rho]$ 的情况下，如何求解基态密度与能量的具体自洽场方法；但它尚没有解决如何构建 $F[\rho]$ 的问题。Kohn 与 Sham 提出 \cite{Kohn-Sham.PR.1965}，$F[\rho]$ 中，很大一部分贡献项可以准确地给出。定义无相互作用体系动能为
 \begin{equation}
@@ -162,7 +162,7 @@ Hohenberg-Kohn 定理的提出，标志着密度泛函理论成为了一个原�
 \end{equation}
 相对于完整的普适泛函 $F[\rho]$ 而言，交换相关能 $E_\mathrm{xc}[\rho]$ 数值要小得多。
 
-在 Kohn-Sham 框架下，如何对 $E_\mathrm{xc}[\rho]$ 作精确的近似，是将密度泛函理论应用于数值计算的核心问题。Perdew 与 Schmidt 在 2001 年阶段性地对近似方法提出总结与展望 \cite{Perdew-Schmidt.ACP.2001}。他们指出，密度泛函近似的精度与表达式的复杂程度是正相关的。依照表达式的复杂程度，密度泛函近似可以分为若干等级；这个等级表被称为“Jacob 天梯”，象征着密度泛函近似从基本的理论一步一步走向化学精度的“天堂”。发展一个良好的近似方法不仅要引入高等级的表达式，也要注意到低等级表达式作为基石的重要性。这个展望至今仍然深刻地影响着密度泛函理论与近似的发展。
+在 Kohn-Sham 框架下，如何对 $E_\mathrm{xc}[\rho]$ 作精确的近似，是将密度泛函理论应用于数值计算的核心问题。Perdew 与 Schmidt 在 2001 年阶段性地对近似方法提出总结与展望 \cite{Perdew-Schmidt.ACP.2001}。他们指出，密度泛函近似的精度与表达式的复杂程度是正相关的。依照表达式的复杂程度，密度泛函近似可以分为若干等级；这个等级表被称为“Jacob 阶梯”，象征着密度泛函近似从基本的理论一步一步走向化学精度的“天堂”。发展一个良好的近似方法不仅要引入高等级的表达式，也要注意到低等级表达式作为基石的重要性。这个展望至今仍然深刻地影响着密度泛函理论与近似的发展。
 
 “Jacob 阶梯”提出的理论背景与 Kohn-Sham 方程有关。由于无相互作用体系构造出的波函数 $\Phi_0$ 就是下述 Hamilton 算符能量期望下变分极小的波函数 (若不考虑非电子效应的常数项)：
 \begin{align}
@@ -205,7 +205,7 @@ Hohenberg-Kohn 定理的提出，标志着密度泛函理论成为了一个原�
   
   由于杂化泛函的计算量相对可接受、计算表现优异，第四阶 Jacob 阶梯到现在还有大量的发展。为了解决一般密度泛函长短程相互作用上不正确的性质、进一减少自相互作用误差、更精确地计算电荷转移与激发态等等问题，长短程分离 (range-separate) 杂化泛函\cite{Iikura-Hirao.JCP.2001}以及局域混合 (local hybrid) 泛函\cite{Jaramillo-Ernzerhof.JCP.2003}的概念应运而生，并衍生出类如 $\omega$B97X-V\cite{Mardirossian-Head-Gordon.PCCP.2014}、MN15\cite{Yu-Truhlar.CS.2016}、DM21\cite{Kirkpatrick-Cohen.S.2021} 等被广泛使用或有良好测评结果的泛函。
 
-  \item 显式地引入 Kohn-Sham 非占轨道的泛函。这是“Jacob 天梯”最接近化学精度“天堂”的一阶。这类泛函相比于杂化泛函，在反应势垒、弱相互作用等问题上有明显的提升；在各种测评计算上，这类泛函表现通常最为优异。由于它杂糅了严格交换能之外的部分严格相关效应，这类泛函也称为双杂化泛函 (Doubly Hybrid, DH)。这类泛函的典型是 B2PLYP\cite{Grimme-Grimme.JCP.2006}、XYG3\cite{Zhang-Goddard.PNAS.2009}、$\omega$B97M(2)\cite{Mardirossian-Head-Gordon.JCP.2018} 等。
+  \item 显式地引入 Kohn-Sham 非占轨道的泛函。这是“Jacob 阶梯”最接近化学精度“天堂”的一阶。这类泛函相比于杂化泛函，在反应势垒、弱相互作用等问题上有明显的提升；在各种测评计算上，这类泛函表现通常最为优异。由于它杂糅了严格交换能之外的部分严格相关效应，这类泛函也称为双杂化泛函 (Doubly Hybrid, DH)。这类泛函的典型是 B2PLYP\cite{Grimme-Grimme.JCP.2006}、XYG3\cite{Zhang-Goddard.PNAS.2009}、$\omega$B97M(2)\cite{Mardirossian-Head-Gordon.JCP.2018} 等。
 \end{enumerate}
 
 双杂化泛函作为目前最高阶的泛函类别，其精度的上限更高、更大程度上能接近真实的交换相关泛函 $E_\mathrm{xc}[\rho]$。对双杂化泛函的更多物理认知、计算方法与高效实现、拓展双杂化泛函的应用领域，对密度泛函理论和近似的发展都有重要的价值和意义。
@@ -214,7 +214,7 @@ Hohenberg-Kohn 定理的提出，标志着密度泛函理论成为了一个原�
 
 自第一个双杂化泛函泛函在 2004 年提出起\cite{Zhao-Truhlar.JPCA.2004}，双杂化泛函经历大约 20 年的发展，已然成为庞大的密度泛函近似谱系的一个重要且粗壮的分支。这里对双杂化泛函的发展历程与大致分类作说明。
 
-作为“Jacob 天梯”的第五阶泛函，双杂化密度泛函在相关能引入部分严格相关能。非占轨道的引入方式可以有多种策略，且经常是 post-SCF 近似应用于 Kohn-Sham 轨道的结果。依照引入能量的计算方式的不同，双杂化泛函大体分为两类。第一类是在 G\"{o}rling-Levy 微扰框架\cite{Goerling-Levy.PRB.1993, Goerling-Levy.PRA.1994}下引入 MP2 型相关能；这类泛函目前已经广泛应用于具体的计算化学应用、以及机器学习。这类泛函的典型是 B2PLYP\cite{Grimme-Grimme.JCP.2006}、XYG3\cite{Zhang-Goddard.PNAS.2009}、$\omega$B97M(2)\cite{Mardirossian-Head-Gordon.JCP.2018} 等。另一类泛函在绝热路径上的涨落耗散框架\cite{Langreth-Perdew.SSC.1975, Langreth-Perdew.PRB.1977, Goerling-Goerling.PRB.2019}下引入 RPA 型相关能；这类泛函的典型是 dRPA75\cite{Mezei-Kallay.JCTC.2015}、scsRPA\cite{Zhang-Xu.JPCL.2019}、$\sigma$-functional\cite{Trushin-Goerling.JCP.2021}等。在本工作中，我们仅考察与测评以 G\"{o}rling-Levy 微扰为框架的泛函；我们也称其为 MP2 型泛函。MP2 型相关能表达式如下：
+作为“Jacob 阶梯”的第五阶泛函，双杂化密度泛函在相关能引入部分严格相关能。非占轨道的引入方式可以有多种策略，且经常是 post-SCF 近似应用于 Kohn-Sham 轨道的结果。依照引入能量的计算方式的不同，双杂化泛函大体分为两类。第一类是在 G\"{o}rling-Levy 微扰框架\cite{Goerling-Levy.PRB.1993, Goerling-Levy.PRA.1994}下引入 MP2 型相关能；这类泛函目前已经广泛应用于具体的计算化学应用、以及机器学习。这类泛函的典型是 B2PLYP\cite{Grimme-Grimme.JCP.2006}、XYG3\cite{Zhang-Goddard.PNAS.2009}、$\omega$B97M(2)\cite{Mardirossian-Head-Gordon.JCP.2018} 等。另一类泛函在绝热路径上的涨落耗散框架\cite{Langreth-Perdew.SSC.1975, Langreth-Perdew.PRB.1977, Goerling-Goerling.PRB.2019}下引入 RPA 型相关能；这类泛函的典型是 dRPA75\cite{Mezei-Kallay.JCTC.2015}、scsRPA\cite{Zhang-Xu.JPCL.2019}、$\sigma$-functional\cite{Trushin-Goerling.JCP.2021}等。在本工作中，我们仅考察与测评以 G\"{o}rling-Levy 微扰为框架的泛函；我们也称其为 MP2 型泛函。MP2 型相关能表达式如下：
 \begin{equation}
   E_\mathrm{c}^\mathrm{MP2} = \frac{1}{4} \sum_{ijab} \frac{\big| \langle ij \Vert ab \rangle \big|^2}{\varepsilon_i + \varepsilon_j - \varepsilon_a - \varepsilon_b}
 \end{equation}
@@ -267,7 +267,7 @@ xDH 型泛函的能量泛函是第五阶泛函，相比于杂化泛函包含更�
 
 关于 MP2 型双杂化泛函的测评，目前已有大量的文献作了详细的阐述，并为研究工作者提供了有价值的参考意见。近年 xDH 型双杂化泛函发展了一阶梯度、二阶梯度、周期性计算的理论，几何结构、电子云密度、周期性体系、振动频率与偶极矩等性质的计算得以实现并测评。本工作的主要研究对象是 xDH 型泛函，为此我们先对这类型泛函已有的测评情况作说明，以对该类型泛函有直观的认识。这一段的讨论同时参见论文\cite{Gu.Thesis.2020, Yan.Thesis.2022}。
 
-\textbf{分子能量测评表现}。目前反应能测评集中，最普遍与流行的测评集之一是 GMTKN55 数据集\cite{Goerigk-Grimme.PCCP.2017}。该数据集囊括了 1505 个反应的相对能量数据；这些反应包含主族化学的热力学、动力学与非共价相互作用。具体来说，该数据集分为五个子数据集，分别是基本性质与小体系反应能 (Sub1)、大体系反应能与异构能 (Sub2)、反应势垒 (Sub3)、分子间非共价相互作用 (Sub4)、分子内非共价相互作用 (Sub5)。由于 GMTKN55 的反应种类较为全面、数据量相对于双杂化参数量非常大，该数据集也经常用于新泛函开发、或系统性地测评与比较各种密度泛函近似或波函数方法。GMTKN55 所使用的测评标准是一种加权平均绝对值的误差 (WTMAD-2，单位 kcal/mol)，以公允地对不同类型、大小的体系进行误差表现评价。张颖等对以 B3LYP 为参考态的 xDH 型密度泛函进行了系统性的测评\cite{Zhang-Xu.JPCL.2021}。从图 \ref{fig.xdh-b3lyp-wtmad} 可以看到，在爬升“Jacob 天梯”时，作为第 5 阶的各 bDH 型与 xDH 型泛函在各个数据集上的表现都显著地优于作为第 4 阶的 B3LYP。早期的双杂化泛函，如 B2PLYP、XYG3、DSD-BLYP-D3 等并非在 GMTKN55 数据集上进行优化；因此，进一步地在 GMTKN55 上优化的 XYG7 与 xrevDSD-PBEB86-D4 泛函，在 GMTKN55 测评表现上普遍优于早期的双杂化泛函。即使对泛函可优化参数施加较强的限制，在 GMTKN55 重新优化下的 revXYG3 仍然能达到 2.5 kcal/mol 的精度。总地来说，XYG7、$\omega$B97M(2)xrevDSD-PBEB86-D4 等泛函在 GMTKN55 下测评精度达到 2.2 kcal/mol 左右，是现在主族反应表现最佳的一类泛函。
+\textbf{分子能量测评表现}。目前反应能测评集中，最普遍与流行的测评集之一是 GMTKN55 数据集\cite{Goerigk-Grimme.PCCP.2017}。该数据集囊括了 1505 个反应的相对能量数据；这些反应包含主族化学的热力学、动力学与非共价相互作用。具体来说，该数据集分为五个子数据集，分别是基本性质与小体系反应能 (Sub1)、大体系反应能与异构能 (Sub2)、反应势垒 (Sub3)、分子间非共价相互作用 (Sub4)、分子内非共价相互作用 (Sub5)。由于 GMTKN55 的反应种类较为全面、数据量相对于双杂化参数量非常大，该数据集也经常用于新泛函开发、或系统性地测评与比较各种密度泛函近似或波函数方法。GMTKN55 所使用的测评标准是一种加权平均绝对值的误差 (WTMAD-2，单位 kcal/mol)，以公允地对不同类型、大小的体系进行误差表现评价。张颖等对以 B3LYP 为参考态的 xDH 型密度泛函进行了系统性的测评\cite{Zhang-Xu.JPCL.2021}。从图 \ref{fig.xdh-b3lyp-wtmad} 可以看到，在爬升“Jacob 阶梯”时，作为第 5 阶的各 bDH 型与 xDH 型泛函在各个数据集上的表现都显著地优于作为第 4 阶的 B3LYP。早期的双杂化泛函，如 B2PLYP、XYG3、DSD-BLYP-D3 等并非在 GMTKN55 数据集上进行优化；因此，进一步地在 GMTKN55 上优化的 XYG7 与 xrevDSD-PBEB86-D4 泛函，在 GMTKN55 测评表现上普遍优于早期的双杂化泛函。即使对泛函可优化参数施加较强的限制，在 GMTKN55 重新优化下的 revXYG3 仍然能达到 2.5 kcal/mol 的精度。总地来说，XYG7、$\omega$B97M(2)xrevDSD-PBEB86-D4 等泛函在 GMTKN55 下测评精度达到 2.2 kcal/mol 左右，是现在主族反应表现最佳的一类泛函。
 
 \begin{figure}[h]
   \centering
@@ -285,7 +285,7 @@ xDH 型泛函的能量泛函是第五阶泛函，相比于杂化泛函包含更�
   \includegraphics[width=0.4\textwidth]{assets/xdh-solid.jpeg}
 \end{figure}
 
-\textbf{分子几何结构}。图 \ref{fig.xdh-pbe0-bond} 中，苏乃强等对包括 xDH 型双杂化泛函的部分杂化、双杂化泛函作分子几何结构的测评\cite{Su-Xu.SCC.2013}。为了方便比较测评结果，选取了缩放的 s-MAD (即以 XYG3 为单位测评结果作为 1 进行缩放的平均绝对值误差) 作为测评依据。其中，Cov 测试集包括 63 种共价分子与离子体系、NBI 测试集选用了 6 种小分子的二聚体结构用于测评非共价相互作用下的键长表现、TS 测试集收录了 12 个过渡态结构信息。可以看到，作为“Jacob 天梯”第 5 阶的双杂化泛函的总体表现明显由于第 4 阶的 B3LYP 与 PBE0。除了 xDH-PBE0 在非键作用体系有待改进外，xDH 型泛函在各个数据集上的表现也明显优于 B2PLYP 或 MP2。
+\textbf{分子几何结构}。图 \ref{fig.xdh-pbe0-bond} 中，苏乃强等对包括 xDH 型双杂化泛函的部分杂化、双杂化泛函作分子几何结构的测评\cite{Su-Xu.SCC.2013}。为了方便比较测评结果，选取了缩放的 s-MAD (即以 XYG3 为单位测评结果作为 1 进行缩放的平均绝对值误差) 作为测评依据。其中，Cov 测试集包括 63 种共价分子与离子体系、NBI 测试集选用了 6 种小分子的二聚体结构用于测评非共价相互作用下的键长表现、TS 测试集收录了 12 个过渡态结构信息。可以看到，作为“Jacob 阶梯”第 5 阶的双杂化泛函的总体表现明显由于第 4 阶的 B3LYP 与 PBE0。除了 xDH-PBE0 在非键作用体系有待改进外，xDH 型泛函在各个数据集上的表现也明显优于 B2PLYP 或 MP2。
 
 \begin{figure}[h]
   \centering
@@ -294,7 +294,7 @@ xDH 型泛函的能量泛函是第五阶泛函，相比于杂化泛函包含更�
   \includegraphics[width=0.7\textwidth]{assets/xdh-pbe0-bond.jpg}
 \end{figure}
 
-\textbf{振动频率}。表 \ref{tab.xdh-freq-bench} 中，谷永浩等对部分泛函的谐振频率作测评\cite{Gu-Xu.JCTC.2021}。测试集 F38 包含 38 个小分子的高精度谐振频率实验测量结果 (除 \ce{NH3} 的伞式振动参考值为 CCSD(T)/cc-pVQZ 计算结果)。XYGJ-OS、B2PLYP、xDH-PBE0 的测评表现较好，与实验结果的误差平均不超过 30 $\text{cm}^{-1}$。与此同时，XYGJ-OS 的误差分布较窄，产生较大误差的分子很少。对比 xDH 中表现较好的泛函 XYGJ-OS 与 xDH-PBE0、与其基底泛函 B3LYP 与 PBE0，可以认为在频率计算问题中，泛函的精度仍然沿着“Jacob 天梯”的爬升稳步提高。
+\textbf{振动频率}。表 \ref{tab.xdh-freq-bench} 中，谷永浩等对部分泛函的谐振频率作测评\cite{Gu-Xu.JCTC.2021}。测试集 F38 包含 38 个小分子的高精度谐振频率实验测量结果 (除 \ce{NH3} 的伞式振动参考值为 CCSD(T)/cc-pVQZ 计算结果)。XYGJ-OS、B2PLYP、xDH-PBE0 的测评表现较好，与实验结果的误差平均不超过 30 $\text{cm}^{-1}$。与此同时，XYGJ-OS 的误差分布较窄，产生较大误差的分子很少。对比 xDH 中表现较好的泛函 XYGJ-OS 与 xDH-PBE0、与其基底泛函 B3LYP 与 PBE0，可以认为在频率计算问题中，泛函的精度仍然沿着“Jacob 阶梯”的爬升稳步提高。
 
 \begin{table}[h]
   \centering
@@ -321,7 +321,7 @@ xDH 型泛函的能量泛函是第五阶泛函，相比于杂化泛函包含更�
 
 \subsection{本文研究思路与主要工作}
 
-xDH 型泛函构造的理论框架搭建在绝热路径与 G\"{o}rling-Levy 微扰之上，使用较好的单电子轨道作为基础，并在能量计算中追求“Jacob 天梯”上更高、更精确的阶梯，有着良好的理论基础。xDH 型双杂化泛函在分子能量与性质计算上，其精度水平代表了目前密度泛函方法的最高水准。对于类如 MP2 与 RPA 等相近计算量或计算标度的 post-SCF 方法而言，双杂化泛函的精度通常也更为优异。近年来发展的 xDH 泛函在主族化学反应的能量的表现，已经在切实地逼近 1 kcal/mol 的化学精度；而其它性质的测评工作也表明，xDH 型泛函不仅在能量，还在分子几何结构、振动频率、核磁屏蔽常数等问题上有令人鼓舞的表现。而这些良好的数值结果，也印证了 xDH 型泛函良好的理论框架的重要性。但也需要指出，目前发展的大多数 xDH 型泛函近似的具体实现，依赖于 MP2 型相关能；而 MP2 型相关能本身存在的问题，也可能会反映到双杂化泛函中。
+xDH 型泛函构造的理论框架搭建在绝热路径与 G\"{o}rling-Levy 微扰之上，使用较好的单电子轨道作为基础，并在能量计算中追求“Jacob 阶梯”上更高、更精确的阶梯，有着良好的理论基础。xDH 型双杂化泛函在分子能量与性质计算上，其精度水平代表了目前密度泛函方法的最高水准。对于类如 MP2 与 RPA 等相近计算量或计算标度的 post-SCF 方法而言，双杂化泛函的精度通常也更为优异。近年来发展的 xDH 泛函在主族化学反应的能量的表现，已经在切实地逼近 1 kcal/mol 的化学精度；而其它性质的测评工作也表明，xDH 型泛函不仅在能量，还在分子几何结构、振动频率、核磁屏蔽常数等问题上有令人鼓舞的表现。而这些良好的数值结果，也印证了 xDH 型泛函良好的理论框架的重要性。但也需要指出，目前发展的大多数 xDH 型泛函近似的具体实现，依赖于 MP2 型相关能；而 MP2 型相关能本身存在的问题，也可能会反映到双杂化泛函中。
 
 除了精度上双杂化泛函仍然有发展空间外，其在应用的推广也是重要的课题。在双杂化泛函刚提出的 2004--2010 年代，由于大多数计算化学软件在处理 MP2 型相关能时的计算量很大；即使测评结果较好，也难以推广到实际的应用中。随着一系列针对相关能以及双电子积分计算近似方法、算法与程序的发展，在处理 20 原子以下的分子体系时，MP2 相关能的计算耗时经常少于自洽场的计算耗时，使得双杂化泛函在能量计算问题上不再有严重的效率瓶颈。而对于更大的计算体系，ONIOM 或 XO 等组合化学方法通常可以有效地拆分问题而不严重影响计算精度\cite{Guo-Xu.JCC.2012, Chen-Xu.JCTC.2020, Chen-Xu.NC.2023}。因此，在可见的未来内，在分子体系的计算问题上，双杂化密度泛函的主要应用会集中在数个到数十个原子左右尺度的问题上。
 
@@ -335,7 +335,7 @@ xDH 型泛函构造的理论框架搭建在绝热路径与 G\"{o}rling-Levy 微�
   
   \alert{待总结工作}
   
-  \item \textbf{双杂化泛函原子体系电子云密度与能量测评}。Medvedev 等指出，在非常基本的原子体系能量与密度计算问题上，密度泛函近似并没有随着提出的年代愈近有更好的表现\cite{Medvedev-Lyssenko.S.2017}；这让该文章作者产生了“密度泛函是否偏离了逼近真实泛函的道路上”的疑问。他们同时指出，表现欠佳的泛函的共性是含有重度的参数拟合、以及没有建立在合理的理论模型之上或泛函近似在“Jacob 天梯”的阶数较低。本工作在 Medvedev 等人的测评基础上，对诸多双杂化泛函进行原子能量与密度的计算测评。我们将探究以 xDH 型泛函为代表的双杂化泛函，作为少或无拟合参数、且不专门针对原子体系进行优化的泛函，是否有着相当良好的测评表现；以及随着密度泛函近似的“Jacob 天梯”的提升，密度泛函是否在原子体系问题下精度有精度的改善。
+  \item \textbf{双杂化泛函原子体系电子云密度与能量测评}。Medvedev 等指出，在非常基本的原子体系能量与密度计算问题上，密度泛函近似并没有随着提出的年代愈近有更好的表现\cite{Medvedev-Lyssenko.S.2017}；这让该文章作者产生了“密度泛函是否偏离了逼近真实泛函的道路上”的疑问。他们同时指出，表现欠佳的泛函的共性是含有重度的参数拟合、以及没有建立在合理的理论模型之上或泛函近似在“Jacob 阶梯”的阶数较低。本工作在 Medvedev 等人的测评基础上，对诸多双杂化泛函进行原子能量与密度的计算测评。我们将探究以 xDH 型泛函为代表的双杂化泛函，作为少或无拟合参数、且不专门针对原子体系进行优化的泛函，是否有着相当良好的测评表现；以及随着密度泛函近似的“Jacob 阶梯”的提升，密度泛函是否在原子体系问题下精度有精度的改善。
   
   \item \textbf{高精度基组外推方法在 CCSD(T) 静态极化率计算上的应用}。该部分工作是第六章测评双杂化泛函静态极化率的前置工作。静态极化率是光学性质与分子间相互作用等问题的重要组成部分。一般来说，静态极化率的实验精度为 0.5\% 左右；但目前大多数测评数据集的参考值在计算方法或基组上，都与该精度级别有一定差距。有赖于当前高效率的双杂化型泛函的极化率程序，大基组的 MP2 极化率对计算资源的消耗已比较小；但可以作为极化率参考值计算方法的 CCSD(T) 计算消耗仍然巨大。FPA 方法是一种波函数理论的组合方法；在我们的工作中，它将大基组的 MP2 计算结果与中等基组大小的 CCSD(T) 相关能结果结合起来，从而以较低的计算代价实现高精度的极化率计算。本工作将系统地测评了各级别 FPA 方法的误差，并将 FPA 方法应用到现有的极化率数据集，以提升数据集精度。
   
