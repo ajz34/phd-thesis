@@ -23,7 +23,7 @@
 
 \subsubsection{\Schrodinger 方程}
 
-从第一性的角度 (\emph{ab initio}) 出发，在 Born-Oppenheimer 近似下，非相对论的分子体系化学问题在数学形式上可以化归为对含时 \Schrodinger 方程求解关于电子自旋坐标 $\{\bm{x}_i\}$ ($i = 1, 2, \cdots, n_\mathrm{elec}$，其中 $n_\mathrm{elec}$ 表示电子数、$\bm{x}_i = (\bm{r}_i, \sigma_i)$ 代表电子的三维空间坐标与自旋) 与时间 $t$ 的波函数 $\Psi(\{\bm{x}_i\}, t)$：
+从第一性的角度 (\emph{ab initio}) 出发，对于分子体系的微观状态描述，在 Born-Oppenheimer 近似下\cite{Born-Oppenheimer.AP.1927}，原子核运动对电子运动的影响可以忽略。非相对论的分子中电子运动问题在数学形式上，可以化归为对含时 \Schrodinger 方程\cite{Schroedinger-Schroedinger.PR.1926}求解关于电子自旋坐标 $\{\bm{x}_i\}$ ($i = 1, 2, \cdots, n_\mathrm{elec}$，其中 $n_\mathrm{elec}$ 表示电子数、$\bm{x}_i = (\bm{r}_i, \sigma_i)$ 代表电子的三维空间坐标与自旋) 与时间 $t$ 的波函数 $\Psi(\{\bm{x}_i\}, t)$：
 \begin{equation}
   i \frac{\partial \Psi(\{\bm{x}_i\}, t)}{\partial t} = \hat H \Psi(\{\bm{x}_i\}, t)
 \end{equation}
@@ -462,7 +462,7 @@ xDH 型泛函构造的理论框架搭建在绝热路径与 G\"{o}rling-Levy 微�
 尽管结论很简单也很直观，但推导过程并不真的非常轻松。上述结论意味着，电子确实一定会倾向于占据低能级的轨道。因此，在能级没有简并的前提下，电子一定会要么满占据、要么空占据 Kohn-Sham 轨道。由此，我们由 Kohn-Sham 方程\textsf{推导}出了无相互作用体系，而不是\textsf{基于}无相互作用体系给出了 Kohn-Sham 方程。
 
 \bibliographystyle{achemso}
-\bibliography{chap-01.bib}
+\bibliography{../thesis.bib}
 
 \end{document}
 
