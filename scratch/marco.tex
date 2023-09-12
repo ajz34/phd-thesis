@@ -4,22 +4,21 @@
 \fntsize=11pt
 
 %-----全局定义-----
-\documentclass[11pt,a4paper,onecolumn]{article}
+\documentclass[11pt,a4paper,onecolumn]{ctexart}
 \usepackage[top=15mm,left=18mm,right=18mm,bottom=20mm]{geometry}
 \columnsep=20pt
-\usepackage[space]{ctex}
-\usepackage{fontspec,xltxtra,xunicode}
+\ctexset{space=true}
 
 %-----字体设置-----
 %黑体、楷体使用Adobe系列，宋体、仿宋使用知网华光系列
-\setCJKmainfont[BoldFont=AdobeHeitiStd-Regular, ItalicFont=AdobeKaitiStd-Regular]{STSong}
-\setCJKsansfont{AdobeHeitiStd-Regular}
+\setCJKmainfont[BoldFont=FandolHei-Regular, ItalicFont=FandolKai-Regular]{FandolSong-Regular}
+\setCJKsansfont{FandolHei-Regular}
 %\setmainfont{Minion Pro}
-\setCJKfamilyfont{zhhei}{AdobeHeitiStd-Regular}
+% \setCJKfamilyfont{zhhei}{AdobeHeitiStd-Regular}
 \providecommand*{\heiti}{\CJKfamily{zhhei}}
-\setCJKfamilyfont{zhfs}{FangSong}
+% \setCJKfamilyfont{zhfs}{FangSong}
 \providecommand*{\fangsong}{\CJKfamily{FangSong}}
-\setCJKfamilyfont{zhkai}{AdobeKaitiStd-Regular}
+% \setCJKfamilyfont{zhkai}{AdobeKaitiStd-Regular}
 \providecommand*{\kaiti}{\CJKfamily{zhkai}}
 %\setsansfont[BoldFont=HelveticaNeueLTPro-Md]{HelveticaNeueLTPro-Md}
 
@@ -39,6 +38,10 @@
 %-----颜色设置-----
 \PassOptionsToPackage{svgnames}{xcolor}
 \usepackage{xcolor}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
 
 %-----书签与引用设置-----
 \usepackage[CJKbookmarks]{hyperref}
@@ -71,6 +74,7 @@
 \captionsetup{labelfont=bf, textfont=kaiti}
 \renewcommand{\figurename}{图}
 \newcommand{\reffig}[1]{图~\ref{#1}}
+\usepackage{longtable}
 \usepackage{subcaption}
 \usepackage{float}
 %http://stackoverflow.com/questions/3275622/
@@ -80,18 +84,19 @@
 %-----引用设置-----
 %参考文献的麻烦的底层修改
 %http://blog.sina.com.cn/s/blog_5e16f1770100l3kc.html
-\usepackage[square,numbers,super]{natbib}
+\usepackage[square,numbers,super,sort,compress]{natbib}
 % \usepackage{natbib}
 % \addtolength{\bibsep}{-0.5 em} % 缩小参考文献间的垂直间距
 % \renewcommand\bibnumfmt[1]{#1.}  %去掉文末文献列表的[]（数字或上标模式）
 % \newcommand{\bibnumfont}[1]{\textit{#1}}
 
 %-----关于数学记号的说明与宏包-----
+\usepackage{siunitx}
 \usepackage{amsmath}
 %公式标号
 \numberwithin{equation}{section}
 %允许分页显示公式
-%\allowdisplaybreaks[1]
+\allowdisplaybreaks[1]
 %环路积分
 \usepackage{esint}
 %向量与矩阵
@@ -146,8 +151,45 @@
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{quantikz}
 
+%-----代码演示-----
+\usepackage{listings}
+
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{backcolour},   
+  commentstyle=\color{codegreen},
+  keywordstyle=\color{magenta},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\ttfamily\footnotesize,
+  breakatwhitespace=false,         
+  breaklines=true,                 
+  captionpos=b,                    
+  keepspaces=true,                 
+  numbers=left,                    
+  numbersep=5pt,                  
+  showspaces=false,                
+  showstringspaces=false,
+  showtabs=false,                  
+  tabsize=2
+}
+\lstset{style=mystyle}
+
 %-----其它排版-----
 \setlength{\columnsep}{-1.5cm}
 \usepackage{multicol}
+\usepackage{makecell}
+\usepackage{arydshln}
+\setlength\dashlinedash{0.5pt}
+\setlength\dashlinegap{1.5pt}
+\setlength\arrayrulewidth{0.5pt}
+\usepackage{rotating}
+\usepackage{dcolumn}
+\newcolumntype{d}[1]{D{.}{.}{#1}}
+\newcommand{\tabnote}[1]{\textsuperscript{\emph{#1}}}
+\usepackage{makecell}
+
+%-----其它定义-----
+\newcommand{\Schrodinger}{Schr\"odinger}
+\newcommand{\alert}[1]{{\color{red}{#1}}}
 
 %---------设定区结束----------

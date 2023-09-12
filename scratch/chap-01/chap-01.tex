@@ -1,9 +1,5 @@
 % !TEX root=./chap-01.tex
-\input{marco.tex}
-\usepackage{makecell}
-
-\newcommand{\Schrodinger}{Schr\"odinger}
-\newcommand{\alert}[1]{{\color{red}{#1}}}
+\input{../marco.tex}
 
 \begin{document}
 
@@ -57,7 +53,7 @@
 \end{equation}
 其中，$Z_A$ 是原子 $A$ 的核电荷数、$\bm{R}_A$ 是原子 $A$ 的核坐标、$n_\mathrm{atom}$ 是分子的原子数。
 
-本论文的工作涉及到偶极电场对分子体系的作用。对于电中性体系，该电场对分子的影响是规范不变的；我们始终规定规范原点 (gauge origin) 为原点。在此情形下，$\hat T$ 与 $\hat V_\mathrm{ee}$ 没有发生变化。在强度为 $\pmb{\mathcal{E}}^\dagger = (\varepsilon_x, \varepsilon_y, \varepsilon_z)$ 的偶极电场下 \cite{Atkins-Friedman.Oxford.2011}，
+本论文的工作涉及到偶极电场对分子体系的作用。对于电中性体系，该电场对分子的影响是规范不变的；我们始终规定规范原点 (gauge origin) 为原点。在此情形下，$\hat T$ 与 $\hat V_\mathrm{ee}$ 没有发生变化。在强度为 $\pmb{\mathcal{E}}^\dagger = (\varepsilon_x, \varepsilon_y, \varepsilon_z)$ 的偶极电场下 \cite{Atkins-Friedman.Oxford.2011}\footnote{事实上，电场是依频率而随时间变化的场；本工作中，不考虑含频率情形。}，
 \begin{align}
   v (\bm{r}) &= - \sum_{A}^{n_\mathrm{atom}} \frac{Z_A}{| \bm{r} - \bm{R}_A |} - \pmb{\mathcal{E}}^\dagger \bm{r} \quad \text{(偶极电场外势)} \\
   \hat V_\text{non-elec} &= \frac{1}{2} \sum_{A \neq B}^{n_\mathrm{atom}} \frac{Z_A Z_B}{| \bm{R}_A  - \bm{R}_B |} + \sum_{A}^{n_\mathrm{atom}} Z_A \pmb{\mathcal{E}}^\dagger \boldsymbol{R}_A \quad \text{(偶极电场外势)}

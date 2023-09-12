@@ -1,36 +1,5 @@
 % !TEX root=./chap-03.tex
-\input{marco.tex}
-
-
-\newcommand{\Schrodinger}{Schr\"odinger}
-\newcommand{\alert}[1]{{\color{red}{#1}}}
-
-\usepackage{listings}
-
-\definecolor{codegreen}{rgb}{0,0.6,0}
-\definecolor{codegray}{rgb}{0.5,0.5,0.5}
-\definecolor{codepurple}{rgb}{0.58,0,0.82}
-\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
-
-\lstdefinestyle{mystyle}{
-    backgroundcolor=\color{backcolour},   
-    commentstyle=\color{codegreen},
-    keywordstyle=\color{magenta},
-    numberstyle=\tiny\color{codegray},
-    stringstyle=\color{codepurple},
-    basicstyle=\ttfamily\footnotesize,
-    breakatwhitespace=false,         
-    breaklines=true,                 
-    captionpos=b,                    
-    keepspaces=true,                 
-    numbers=left,                    
-    numbersep=5pt,                  
-    showspaces=false,                
-    showstringspaces=false,
-    showtabs=false,                  
-    tabsize=2
-}
-\lstset{style=mystyle}
+\input{../marco.tex}
 
 \begin{document}
 
@@ -117,6 +86,7 @@
   \item 下标 $\rho, \gamma$：密度与梯度导出量；
   \item 上标 $\mathrm{n}$：非变分泛函 (\underline{N}on-variational，相对于自洽场泛函)；
   \item 上标 $\mathrm{S}$：\underline{S}keleton 导数；
+  \item 上标 $\mathrm{U}$：轨道旋转导数 (涉及 \underline{U} 矩阵的导数)；
   \item 上标 $\sigma, \varsigma$：自旋 (指代 $\alpha$ 或 $\beta$)。
 \end{itemize}
 
@@ -170,7 +140,7 @@
           D_{\mu \nu} &= C_{\mu p} D_{pq} C_{\nu q} = 2 C_{\mu i} C_{\nu i} \quad &&\text{(closed-shell)} \\
           D_{pq} &= 2 \delta_{pq} \delta_{p \in \mathrm{occ}} \quad &&\text{(closed-shell)}
         \end{alignat}
-        上式的 $\delta_{p \in \mathrm{occ}}$ 是指当 $p$ 属于占据轨道时取 1、不属于占据轨道时取 0。后文将涉及其它类型的密度 (譬如弛豫密度 $\mathbf{D}^\mathrm{n}$)，需要上标类型以作区分；没有额外上标的密度，均视为自洽场密度。
+        上式的 $\delta_{p \in \mathrm{occ}}$ 是指当 $p$ 属于占据轨道时取 1、不属于占据轨道时取 0。后文将涉及其它类型的密度 (譬如 xDH 约化密度 $D_{pq}^{\textsf{xDH}, \textsf{RDM}}$ 与弛豫密度 $D_{pq}^{\textsf{xDH}}$)，需要上标类型以作区分；没有额外上标的密度，均视为自洽场密度。
   \item 开壳层自洽场密度矩阵 $D_{\mu \nu}^\alpha$ 与 $D_{pq}$：
         \begin{align}
           D_{\mu \nu}^\alpha &= C_{\mu p} D_{pq} C_{\nu q} = C_{\mu i} C_{\nu i} \\
@@ -255,13 +225,13 @@ xDH 型泛函分别对自洽场与总能量使用两种泛函形式；我们分�
 
 对于导数记号，在不引起歧义的情况下，本工作经常使用偏导数记号 $\partial$ 指代全导数 $\mathrm{d}$。$\partial_\mathbb{A}$ 记号是 $\frac{\partial}{\partial \mathbb{A}}$ 的简记。
 
-本工作将依是否存在耦合微扰 (CP, \underline{C}oupled \underline{P}erturbed)，分为 Skeleton 导数 (骨架导数，部分文献也称为 core 导数即核导数) 与一般的全导数。以总能量为例，在外加微扰 $\mathbb{A}$ 与轨道系数 $\mathbf{C}$ 下，其能量记为 $E^\textsf{xDH} (\mathbb{A}, \mathbf{C})$。
+本工作将依是否存在耦合微扰 (CP, \underline{C}oupled \underline{P}erturbed)，分为 Skeleton 导数 (骨架导数，部分文献也称为 core 导数即核导数)、轨道旋转导数、与一般的全导数。
 
-对于 xDH 型泛函，轨道系数是通过自洽场泛函得到；该轨道系数是随外加微扰而变化的\footnote{在这一小节之后，默认轨道系数 $\mathbf{C}$ 是耦合微扰下变分极小的分子轨道系数 $\mathbf{C}^\textsf{SCF} (\mathbb{A})$。}：
+以总能量为例，在\textsf{特定的}外加微扰 $\mathbb{A}$ 与轨道系数 $\mathbf{C}$ 下，其能量记为 $E^\textsf{xDH} (\mathbb{A}, \mathbf{C})$。对于 xDH 型泛函，轨道系数是通过自洽场泛函得到；该轨道系数是随外加微扰而变化的\footnote{在这一小节之后，默认轨道系数 $\mathbf{C}$ 是耦合微扰下变分极小的分子轨道系数 $\mathbf{C}^\textsf{SCF} (\mathbb{A})$。}：
 \begin{equation*}
   \mathbf{C}^\textsf{SCF} (\mathbb{A}) = \arg \min_\mathbf{C} E^\textsf{SCF} (\mathbb{A}, \mathbf{C})
 \end{equation*}
-从而，实际的 xDH 能量不仅受外加微扰 $\mathbb{A}$ (作为函数 $E^\textsf{xDH} (\mathbb{A}, \mathbf{C})$ 的变量参数第一项) 而产生变化，同时轨道系数 $\mathbf{C}^\textsf{SCF} (\mathbb{A})$ (作为变量参数的第二项) 也受外加微扰 $\mathbb{A}$ 的耦合扰动；因此准确地来说，xDH 能量应写为 $E^\textsf{xDH} (\mathbb{A}, \mathbf{C}^\textsf{SCF} (\mathbb{A}))$。
+从而，实际的 xDH 能量不仅受外加微扰 $\mathbb{A}$ (作为函数 $E^\textsf{xDH} (\mathbb{A}, \mathbf{C})$ 的变量参数第一项) 而产生变化，同时轨道系数 $\mathbf{C}^\textsf{SCF} (\mathbb{A})$ (作为变量参数的第二项) 也受外加微扰 $\mathbb{A}$ 的耦合扰动；因此准确地来说，xDH \textsf{基态能量}应写为 $E^\textsf{xDH} (\mathbb{A}, \mathbf{C}^\textsf{SCF} (\mathbb{A}))$。
 
 为讨论问题的方便，定义 Skeleton 导数为轨道系数未耦合扰动下的导数。以 xDH 能量为例，
 \begin{equation}
