@@ -37,22 +37,23 @@
 
 双杂化泛函的梯度性质已经有先驱性的程序实现与测评\cite{Neese-Grimme.JCP.2007, Biczysko-Barone.JCTC.2010, Su-Xu.JCC.2013, Stoychev-Neese.JCTC.2018, Gu-Xu.JCTC.2021, Yan-Xu.JCTC.2022}。这些工作表明，双杂化泛函，特别是 xDH 型泛函，在分子振动、NMR 光谱预测等问题上有优异的表现。但目前的程序在计算双杂化解析梯度问题上，效率还一定提升空间。同时，考虑到双杂化泛函除了 MP2 型相关能外还有其它的杂化可能性；在理论推导与程序化过程中，也应尽量留出空间以容纳其它杂化形式。
 
-在本章工作中，基于前人的工作\cite{Gerratt-Mills.JCP.1968, Gerratt-Mills.JCP.1968a, Pople-Binkley.IJQC.1979, Dykstra-Jasien.CPL.1984, Handy-Schaefer.JCP.1984, Handy-Simandiras.CPL.1985, Pulay-Saeboe.TCA.1986, Trucks-Bartlett.CPL.1988, Frisch-Pople.CP.1990, Frisch-Pople.CPL.1990, Frisch-Pople.CPL.1990a, Gauss-Bartlett.JCP.1992, Stanton-Bartlett.CPL.1992, Johnson-Frisch.CPL.1993, Head-Gordon-Head-Gordon.CPL.1994, Yamaguchi-Schaefer.Oxford.1994, Weigend-Haeser.TCA.1997, Aikens-Gordon.TCA.2003, Cammi-Frisch.TCA.2004, Distasio-Head-Gordon.JCC.2007, Neese-Grimme.JCP.2007, Biczysko-Barone.JCTC.2010, Su-Xu.JCC.2013, Ji-Jung.JCTC.2013, Bykov-Neese.MP.2015, Stoychev-Neese.JCTC.2018, Gu-Xu.JCTC.2021, Yan-Xu.JCTC.2022}，将以电性质外场微扰为前提下，进行双杂化二阶梯度梯度的理论推演与程序化。\ref{sec.3.background} 节将介绍物理问题背景与程序化背景，以确定大体的技术线路。\ref{sec.3.theory} 节将介绍一般双杂化泛函电性质解析梯度理论。MP2 型泛函作为双杂化泛函的其中一个重要的分支，其在 RI 近似下解析静态极化率的 Python 代码实现细节将在 \ref{sec.3.program} 阐述，并作简单的效率测评。
+在本章工作中，基于前人的工作\cite{Gerratt-Mills.JCP.1968, Gerratt-Mills.JCP.1968a, Pople-Binkley.IJQC.1979, Dykstra-Jasien.CPL.1984, Handy-Schaefer.JCP.1984, Handy-Simandiras.CPL.1985, Pulay-Saeboe.TCA.1986, Trucks-Bartlett.CPL.1988, Frisch-Pople.CP.1990, Frisch-Pople.CPL.1990, Frisch-Pople.CPL.1990a, Gauss-Bartlett.JCP.1992, Stanton-Bartlett.CPL.1992, Johnson-Frisch.CPL.1993, Head-Gordon-Head-Gordon.CPL.1994, Yamaguchi-Schaefer.Oxford.1994, Weigend-Haeser.TCA.1997, Aikens-Gordon.TCA.2003, Cammi-Frisch.TCA.2004, Distasio-Head-Gordon.JCC.2007, Neese-Grimme.JCP.2007, Biczysko-Barone.JCTC.2010, Su-Xu.JCC.2013, Ji-Jung.JCTC.2013, Bykov-Neese.MP.2015, Stoychev-Neese.JCTC.2018, Gu-Xu.JCTC.2021, Yan-Xu.JCTC.2022}，将以电性质外场微扰为前提下，进行双杂化二阶梯度梯度的理论推演、与基于原子轨道基的程序化。\ref{sec.3.background} 节将介绍物理问题背景与程序化背景，以确定大体的技术线路。\ref{sec.3.theory} 节将介绍一般双杂化泛函电性质解析梯度理论。MP2 型泛函作为双杂化泛函的其中一个重要的分支，其在 RI 近似下解析静态极化率的 Python 代码实现细节将在 \ref{sec.3.program} 阐述，并作简单的效率测评。
 
 \subsection{背景：记号定义}
 
 \subsubsection{Einstein 求和记号}
 
 出于简化公式表达，后文将对张量缩并大量使用变种的 Einstein 求和记号 (Einstein notation)。一些例子是
+\begin{subequations}
 \begin{align}
   \label{eq.einsum.1}
   (ia|jb) = \sum_{\mu \nu \kappa \lambda} C_{\mu i} C_{\nu a} (\mu \nu | \kappa \lambda) C_{\kappa j} C_{\lambda b}
   &\Rightarrow 
   (ia|jb) = C_{\mu i} C_{\nu a} (\mu \nu | \kappa \lambda) C_{\kappa j} C_{\lambda b} \\
   \label{eq.einsum.2}
-  E_\mathrm{c}^\textsf{MP2} = - \frac{1}{4} \sum_{iajb} \frac{\big| \langle i j || a b \rangle \big|^2}{\varepsilon_i + \varepsilon_j - \varepsilon_a - \varepsilon_b}
+  E_\mathrm{c}^\textsf{(2)} = - \frac{1}{4} \sum_{iajb} \frac{\big| \langle i j || a b \rangle \big|^2}{\varepsilon_i + \varepsilon_j - \varepsilon_a - \varepsilon_b}
   &\Rightarrow
-  E_\mathrm{c}^\textsf{MP2} = - \frac{1}{4} \frac{\big| \langle i j || a b \rangle \big|^2}{\varepsilon_i + \varepsilon_j - \varepsilon_a - \varepsilon_b} \\
+  E_\mathrm{c}^\textsf{(2)} = - \frac{1}{4} \frac{\big| \langle i j || a b \rangle \big|^2}{\varepsilon_i + \varepsilon_j - \varepsilon_a - \varepsilon_b} \\
   \label{eq.einsum.3}
   \rho_g = \sum_{\mu \nu} D_{\mu \nu} \phi_{g \mu} \phi_{g \nu}
   &\Rightarrow
@@ -62,13 +63,14 @@
   &\Rightarrow
   L_{ai}^\textsf{xDH} = - (\varepsilon_a - \varepsilon_i) Z_{ai}^\textsf{xDH} - A_{ai, bj} Z_{bj}^\textsf{xDH}
 \end{align}
+\end{subequations}
 需要指出，这里的 Einstein 求和记号与物理中通常使用的记号不同\cite{Einstein-Einstein.AP.1916}。在物理中的 Einstein 求和记号依据对偶空间分上下标；以式 (\ref{eq.einsum.1}) 为例，若记 $g_{ij}^{ab} = (ia|jb)$，则通常物理的 Einstein 求和应写为：
 \begin{equation*}
   g_{ij}^{ab} = C^\mu_i C^a_\nu g^{\nu \lambda}_{\mu \kappa} C^\kappa_j C^b_\lambda
 \end{equation*}
 物理中的 Einstein 求和，会将等式一侧任何重复出现的角标进行求和；但对于式 (\ref{eq.einsum.3}, \ref{eq.einsum.4})，我们所使用的变种的 Einstein 求和记号的等式右出现重复了两次的角标但并未被求和，而是对角标作元素乘法 (elementwise multiplication)。对于式 (\ref{eq.einsum.3})，角标 $g$ 并不处于 $\mu, \nu$ 所在的对偶空间，因此没有物理中 Einstein 记号的对应写法。对于式 (\ref{eq.einsum.4})，由于我们一般要求自洽场计算是正则的 (canonical)，即 Fock 矩阵 $F_{pq}$ (或依物理的 Einstein 记号记为 $F_p^q$) 是对角矩阵且其对角元 $\varepsilon_p$ 被称为轨道能；因此式 (\ref{eq.einsum.4}) 在物理的 Einstein 记号下是
 \begin{equation*}
-  (L_a^i){}^\textsf{MP2} = - F_a^b (D_b^i){}^\textsf{MP2} - F_j^i (D_a^j){}^\textsf{MP2} - A_{aj}^{ib} (D_b^j){}^\textsf{MP2}
+  (L_a^i){}^\textsf{(2)} = - F_a^b (D_b^i){}^\textsf{(2)} - F_j^i (D_a^j){}^\textsf{(2)} - A_{aj}^{ib} (D_b^j){}^\textsf{(2)}
 \end{equation*}
 本文档的公式所使用的变种 Einstein 求和记号，会比较接近于具体程序实现时的情形 (\verb|NumPy.einsum| 或 \verb|opt_einsum.contract|)，并允许打破一些物理记号的限制。
 
@@ -76,23 +78,24 @@
 
 本工作通常使用下述记号：
 \begin{itemize}[nosep]
-  \item 下标 $\mu, \nu, \kappa, \lambda$：原子轨道 (基轨道)；
+  \item 下标 $\mu, \nu, \kappa, \lambda, \eta$：原子轨道 (基轨道)；
   \item 下标 $i, j, k, l$：占据分子轨道；
   \item 下标 $a, b, c$：非占分子轨道；
+  \item 下标 $p, q, r, s, m$：任意分子轨道；
   \item 下标 $P, Q, R, S$：RI 辅助基轨道；
-  \item 上下标 $\mathbb{A}, \mathbb{B}$：抽象的被求导量；
+  \item 上下标 $\mathbb{A}, \mathbb{B}$：外场微扰量、被求导量；
   \item 下标或向量 $A, B, M$：原子核；
-  \item 下标 $r, w, t, s$：坐标分量 (指代 $x, y, z$)；
+  \item 下标 $w, t$：坐标分量 (用于指代 $x, y, z$)；
   \item 下标 $\rho, \gamma$：密度与梯度导出量；
   \item 上标 $\mathrm{n}$：非变分泛函 (\underline{N}on-variational，相对于自洽场泛函)；
   \item 上标 $\mathrm{S}$：\underline{S}keleton 导数；
-  \item 上标 $\mathrm{U}$：轨道旋转导数 (涉及 \underline{U} 矩阵的导数)；
+  \item 上标 $\mathrm{U}$：轨道旋转导数 (\underline{U}nitary Transformation，涉及 U 矩阵 (\ref{eq.def.U}) 的导数)；
   \item 上标 $\sigma, \varsigma$：自旋 (指代 $\alpha$ 或 $\beta$)。
 \end{itemize}
 
 本工作在不作额外说明的情形时，将讨论闭壳层 (closed-shell) 实现；对于开壳层问题，不同自旋下的轨道通过上标横线区分 ($p$ 表示 $\alpha$ 自旋、$\bar p$ 表示 $\beta$ 自旋)，矩阵或张量则将上标具体的自旋。
 
-本工作的全部理论推导与程序实现使用实数。为简化公式表达，我们将不使用复共轭记号。通常使用 $\phi_\mu (\bm{r})$ 表示原子轨道 $\mu$ 在空间坐标 $\bm{r}$ 下的函数表达式。对于 DFT 格点积分，若记坐标在角标 $g$ 下的离散格点为 $\bm{r}_g$，那么也经常用矩阵 $\phi_{g \mu}$ 表示空间格点下的原子轨道函数值 $\phi_\mu (\bm{r}_g)$。
+本工作的全部理论推导与程序实现使用实数。为简化公式表达，大多数情形将不使用复共轭记号 (上标星号 $*$)。通常使用 $\phi_\mu (\bm{r})$ 表示原子轨道 $\mu$ 在空间坐标 $\bm{r}$ 下的函数表达式。对于 DFT 格点积分，若记坐标在角标 $g$ 下的离散格点为 $\bm{r}_g$，那么也经常用 $\phi_{g \mu}$ 作为二阶张量表示空间格点下的原子轨道函数值 $\phi_\mu (\bm{r}_g)$。
 
 \subsubsection{部分常用表达式}
 
@@ -126,21 +129,22 @@
         \end{equation}
 \end{itemize}
 
-除了密度矩阵、弛豫张量等情况外，其它的原子轨道基下的张量，转换到分子轨道基时总是乘以轨道系数矩阵 $C_{\mu p}$。以原子与分子轨道混合基下的三中心双电子积分 $(\mu i | P)$ 为例，
+除了密度矩阵、弛豫张量等情形外，其它的原子轨道基下的张量，转换到分子轨道基时总是乘以轨道系数矩阵 $C_{\mu p}$。以原子与分子轨道混合基下的三中心双电子积分 $(\mu i | P)$ 为例，
 \begin{equation*}
   (\mu i | P) = (\mu \nu | P) C_{\nu i}
 \end{equation*}
 
-在不引起歧义的情况下，将使用矩阵或张量元素指代矩阵或张量本身，例如用 $D_{\mu \nu}$ 表示完整的密度矩阵 $\mathbf{D}$。
+在不引起歧义的情况下，将使用矩阵或张量元素指代矩阵或张量本身，例如用 $D_{\mu \nu}$ 表示完整的自洽场密度矩阵 $\mathbf{D}$。
 
 本工作常用到的表达式有
 \begin{itemize}[nosep]
   \item 闭壳层自洽场密度矩阵 $D_{\mu \nu}$ 与 $D_{pq}$：
         \begin{alignat}{10}
+          \label{eq.def.dm-scf-closed}
           D_{\mu \nu} &= C_{\mu p} D_{pq} C_{\nu q} = 2 C_{\mu i} C_{\nu i} \quad &&\text{(closed-shell)} \\
           D_{pq} &= 2 \delta_{pq} \delta_{p \in \mathrm{occ}} \quad &&\text{(closed-shell)}
         \end{alignat}
-        上式的 $\delta_{p \in \mathrm{occ}}$ 是指当 $p$ 属于占据轨道时取 1、不属于占据轨道时取 0。后文将涉及其它类型的密度 (譬如 xDH 约化密度 $D_{pq}^{\textsf{xDH}, \textsf{RDM}}$ 与弛豫密度 $D_{pq}^{\textsf{xDH}}$)，需要上标类型以作区分；没有额外上标的密度，均视为自洽场密度。
+        上式的 $\delta_{p \in \mathrm{occ}}$ 是指当 $p$ 属于占据轨道时取 1、不属于占据轨道时取 0。后文将涉及其它类型的密度 (譬如 xDH 约化密度 $D_{pq}^{\textsf{xDH}, \textsf{RDM}}$ 与弛豫密度 $D_{pq}^{\textsf{xDH}}$)，需要上标类型以作区分；除自旋记号、没有额外上标的密度，均视为自洽场密度。
   \item 开壳层自洽场密度矩阵 $D_{\mu \nu}^\alpha$ 与 $D_{pq}$：
         \begin{align}
           D_{\mu \nu}^\alpha &= C_{\mu p} D_{pq} C_{\nu q} = C_{\mu i} C_{\nu i} \\
@@ -155,7 +159,7 @@
   \item 双杂化泛函总能量 $E^\textsf{tot}$：
         \begin{equation}
           \label{eq.def-E-tot}
-          E^\textsf{tot} = E^\textsf{core} [\mathbf{D}] + E^\textsf{ERI} [\mathbf{D}] + E^\textsf{DFA} [\mathbf{D}] + E^\textsf{PT} [\mathbf{C}] + E^\textsf{nuc} \\
+          E^\textsf{tot} = E^\textsf{core} [\mathbf{D}] + E^\textsf{ERI} [\mathbf{D}] + E^\textsf{DFA} [\mathbf{D}] + E^\textsf{PT} [\mathbf{C}] + E^\textsf{non-elec} \\
         \end{equation}
         对于杂化泛函，$E^\textsf{PT} [\mathbf{C}]$ 取零值。每个能量分项的计算将在下面列举。需要指出，上式表述的是目前流行的双杂化泛函的能量表达式，而并非定义式。
   \item 单电子积分能量 $E^\textsf{core} [\mathbf{D}]$：
@@ -164,13 +168,14 @@
         \end{equation}
   \item 双电子积分能量 $E^\textsf{ERI} [\mathbf{D}]$：
         \begin{equation}
-          E^\textsf{ERI} [\mathbf{D}] = E^\textsf{J} [\mathbf{D}] + E_\mathrm{x}^\textsf{exact} [\mathbf{D}] + E_\mathrm{x}^\textsf{LR} [\mathbf{D}]
+          E^\textsf{ERI} [\mathbf{D}] = E^\textsf{J} [\mathbf{D}] + c_\mathrm{x} E_\mathrm{x}^\textsf{exact} [\mathbf{D}] + E_\mathrm{x}^\textsf{LR} [\mathbf{D}]
         \end{equation}
-        其中，$E^\textsf{J} [\mathbf{D}]$ 是库伦能
+        其中，$E^\textsf{J} [\mathbf{D}]$ 是库伦能\footnote{事实上，尽管本工作对双电子积分 $(\mu \nu | \kappa \lambda)$ 作近似；但该近似是 \ref{sec.rijk-rimp2-efficiency} 小节 RI 近似，它使用了计算复杂度为 $O(n_\mathrm{AO}^2 n_\mathrm{aux}) \sim O(N^3)$ 的三中心双电子积分 $(\mu \nu | P)$，因而在实际程序中仍然使用密度矩阵 $\mathbf{D}$ 描述库伦能。库伦能在程序实现上，确实可以通过密度格点 $\rho$ 而非具有更多细节的密度矩阵 $\mathbf{D}$ 计算实现、且计算复杂度为更小的 $O(N^2)$\cite{Toivanen-Sundholm.PCCP.2015}；但我们的主要研究对象是双杂化泛函，在交换能 $E_\mathrm{x}^\textsf{exact}$ 与微扰能 $E^\textsf{PT}$ 难以使用密度格点 $\rho$ 进行计算的情况下，在程序实现中使用密度矩阵 $\mathbf{D}$ 以描述库伦能相信是可以接受的。}
         \begin{equation}
+          \label{eq.def.ej}
           E^\textsf{J} [\mathbf{D}] = J[\rho] = \frac{1}{2} D_{\mu \nu} (\mu \nu | \kappa \lambda) D_{\kappa \lambda}
         \end{equation}
-        其中，$E_\mathrm{x}^\textsf{exact} [\mathbf{D}]$ 是严格交换能
+        $c_\mathrm{x}$ 特指严格交换系数 (区别于其它 DFA 交换系数)，$E_\mathrm{x}^\textsf{exact} [\mathbf{D}]$ 是严格交换能
         \begin{equation}
           E_\mathrm{x}^\textsf{exact} [\mathbf{D}] = E_\mathrm{x}^\textsf{exact} [\rho] = - \frac{1}{2} D_{\mu \nu}^\sigma (\mu \nu | \kappa \lambda) D_{\kappa \lambda}^\sigma
         \end{equation}
@@ -178,8 +183,8 @@
         \begin{equation}
           E_\mathrm{x}^\textsf{exact} [\mathbf{D}] = - \frac{1}{4} D_{\mu \nu} (\mu \nu | \kappa \lambda) D_{\kappa \lambda} \quad \text{(closed-shell)}
         \end{equation}
-        部分泛函在交换能部分考虑了长短程效应；长程 (LR, \underline{L}ong-\underline{R}ange) 部分能量 $E_\mathrm{x}^\textsf{LR}$ 的双电子除了积分算符通常是 $\mathrm{erf} (\mu r_{12}) / r_{12}$\footnote{$\mu$ 是长程矫正的参数，通常小于 1。对于长程矫正作用，使用误差函数 $\mathrm{erf} (\mu r_{12}) / r_{12}$ 是常见且最多程序实现的方法；但除此之外，Yukawa 衰减算符 $\mathrm{exp} (-\mu r_{12}) / r_{12}$\cite{Savin-Flad.IJQC.1995} 与 $\mathrm{terf}$ 函数 $$\mathrm{terf} (r, r_0) = \frac{1}{2} \left( \mathrm{erf} \left(\frac{r - r_0}{\sqrt{2} r_0}\right) + \mathrm{erf} \left(\frac{r + r_0}{\sqrt{2} r_0}\right) \right)$$ 所构成的衰减算符 $\mathrm{terf} (-\mu r_{12}) / r_{12}$\cite{Goldey-Head-Gordon.PCCP.2013}，也是其它可能使用到的长程矫正方案。}，在计算、程序调用、张量分解等具体的程序实现上等同于严格交换能 $E_\mathrm{x}^\textsf{exact}$\footnote{需要指出，这只是双电子能量积分的一种表达方法。以 Cammi 等\cite{Cammi-Frisch.TCA.2004}对溶剂化模型下 MP2 二阶梯度理论为例，该文将电子效应诱导的溶剂化能量与双电子积分能量合并处理；而溶剂化能量的计算本身是不具有双电子积分。同时，在以较为抽象的层面上推导二阶梯度问题时，DFA 格点积分能量 $E^\textsf{DFA} [\mathbf{D}]$ 与双电子积分有类似的推演过程；因此从梯度理论的角度来讲，拆分双电子积分能量 $E^\textsf{ERI}$ 与 DFA 格点积分能量 $E^\textsf{DFA}$ 是人为的。在本工作中，我们不涉及溶剂化、基于密度的长程弥散矫正等其它无法简单纳入单电子积分能量的贡献；因此从程序实现方便的角度，拆分了双电子积分能量与 DFA 格点积分能量。}。
-  \item DFA 格点积分能量 $E^\textsf{DFA} [\mathbf{D}]$\footnote{区别于 DFA 近似总能量 $E_\mathrm{tot}$。} 用以处理“Jacob 阶梯”上 1--3 阶 (LDA, GGA, meta-GGA) 型交换相关能；它可以表示为对空间的积分
+        部分泛函在交换能部分考虑了长短程效应；长程 (LR, \underline{L}ong-\underline{R}ange) 部分能量 $E_\mathrm{x}^\textsf{LR}$ 的双电子除了积分算符通常是 $\mathrm{erf} (\mu r_{12}) / r_{12}$\footnote{$\mu$ 是长程矫正的参数，通常小于 1。对于长程矫正作用，使用误差函数 $\mathrm{erf} (\mu r_{12}) / r_{12}$ 是常见且最多程序实现的方法；但除此之外，Yukawa 衰减算符 $\mathrm{exp} (-\mu r_{12}) / r_{12}$\cite{Savin-Flad.IJQC.1995} 与 $\mathrm{terf}$ 函数 $$\mathrm{terf} (r, r_0) = \frac{1}{2} \left( \mathrm{erf} \left(\frac{r - r_0}{\sqrt{2} r_0}\right) + \mathrm{erf} \left(\frac{r + r_0}{\sqrt{2} r_0}\right) \right)$$ 所构成的衰减算符 $\mathrm{terf} (-\mu r_{12}) / r_{12}$\cite{Goldey-Head-Gordon.PCCP.2013}，也是其它可能使用到的长程矫正方案。}，在计算、程序调用、张量分解等具体的程序实现上等同于严格交换能 $E_\mathrm{x}^\textsf{exact}$\footnote{需要指出，这只是双电子能量积分的一种表达方法。以 Cammi 等\cite{Cammi-Frisch.TCA.2004}对溶剂化模型下 MP2 二阶梯度理论为例，该文将电子效应诱导的溶剂化能量与双电子积分能量合并处理；而溶剂化能量的计算本身是不具有双电子积分。同时，在以较为抽象的层面上推导二阶梯度问题时，DFA 格点积分能量 $E^\textsf{DFA} [\mathbf{D}]$ 与双电子积分有类似的推演过程；因此从梯度理论的角度来讲，拆分双电子积分能量 $E^\textsf{ERI}$ 与 DFA 格点积分能量 $E^\textsf{DFA}$ 是人为的。在本工作中，我们不涉及溶剂化、基于密度的长程弥散矫正等其它无法简单纳入单电子积分能量的贡献；因此从程序实现方便、或计算量差异的角度，拆分了双电子积分能量与 DFA 格点积分能量。}。
+  \item DFA 格点积分能量 $E^\textsf{DFA} [\mathbf{D}]$\footnote{区别于 DFA 近似总能量 $E_\mathrm{tot}$。} 用以处理“Jacob 阶梯”上 1--3 阶 (LDA, GGA, meta-GGA) 交换相关能；它可以表示为对空间的积分
         \begin{equation}
           E^\textsf{DFA} [\mathbf{D}] = \int f[\rho, \gamma, \tau, \nabla^2 \rho, \cdots] \rho \, \mathrm{d} \bm{r}
         \end{equation}
@@ -187,15 +192,15 @@
         \begin{equation}
           \gamma = \nabla \rho \cdot \nabla \rho
         \end{equation}
-        需要指出，动能密度 $\tau$ 导出自 Kohn-Sham 占据轨道 $\phi_i$ 而非密度 $\rho$ 本身，因此 $\tau$ 需要通过密度矩阵 $\mathbf{D}$、而非密度 $\rho$ 导出。因此，为容许 meta-GGA 的程序实现，我们认为 $E^\textsf{DFA}$ 应当视作密度矩阵 $\mathbf{D}$ 的泛函。在程序实现中，空间积分将化为格点积分求和式：
+        需要指出，动能密度 $\tau$ 导出自 Kohn-Sham 占据轨道 $\phi_i$ 而非密度 $\rho$ 本身，从而 $\tau$ \alert{引用第一章公式} 需要通过密度矩阵 $\mathbf{D}$、而非密度 $\rho$ 导出\footnote{对于 GGA 与 LDA，其能量或高阶导数确实是通过密度格点 $\rho$ 本身导出。以密度矩阵 $\mathbf{D}$ 作为参数不影响后文讨论；见库伦能定义式 (\ref{eq.def.ej}) 的脚注。}。因此在本工作中，为容许 meta-GGA 的程序实现，我们将 $E^\textsf{DFA}$ 视作密度矩阵 $\mathbf{D}$ 的泛函。在程序实现中，空间积分将化为格点积分求和式：
         \begin{equation}
           E^\textsf{DFA} = w_g f_g \rho_g
         \end{equation}
-        其中，$w_g$ 是空间坐标 $\bm{r}_g$ 下的格点积分权重、$f_g$ 与 $\rho_g$ 是能量分布函数与密度在空间坐标 $\bm{r}_g$ 下的数值。
+        其中，$w_g$ 是空间坐标 $\bm{r}_g$ 下的格点积分权重、$f_g$ 与 $\rho_g$ 是能量分布函数与电子云密度在空间坐标 $\bm{r}_g$ 下的数值。
   \item 微扰能量 $E^\textsf{PT}[\mathbf{C}]$ 是双杂化泛函中的高阶近似部分。由于目前流行的杂化形式是 MP2 型相关能，因此这里统称为微扰能；但它也可以代表 IEPA 型相关能、RPA 型相关能等其它种类能量贡献项。一般来说，微扰能量 $E^\textsf{PT}$ 不纳入自洽场计算中，且并非密度矩阵 $\mathbf{D}$ 而是作为自洽场结果的轨道系数 $\mathbf{C}$ 的泛函。
-  \item 无外场下的原子核能量 $E^\textsf{nuc}$：
+  \item 无外场下的非电子效应能量 $E^\textsf{non-elec}$：
         \begin{equation}
-          E^\textsf{nuc} = \frac{1}{2} \frac{Z_A Z_B}{r_{AB}}
+          E^\textsf{non-elec} = \frac{1}{2} \frac{Z_A Z_B}{r_{AB}}
         \end{equation}
         其中，距离 $r_{AB}$ 定义为
         \begin{equation*}
@@ -211,41 +216,50 @@
 
 xDH 型泛函分别对自洽场与总能量使用两种泛函形式；我们分别称之为\textsf{自洽场泛函}与\textsf{能量泛函}。由于 xDH 型泛函最终的能量并非通过变分得到，我们也称能量泛函为非变分泛函。自洽场是对下述能量求取分子轨道系数 $C_{\mu i}$ 的变分极小得到：
 \begin{equation}
-  E^\textsf{SCF} = E^\textsf{core} [\mathbf{D}] + E^\textsf{ERI} [\mathbf{D}] + E^\textsf{DFA} [\mathbf{D}] + E^\textsf{nuc}
+  \label{eq.def.eng-SCF}
+  E^\textsf{SCF} = E^\textsf{core} [\mathbf{D}] + E^\textsf{ERI} [\mathbf{D}] + E^\textsf{DFA} [\mathbf{D}] + E^\textsf{non-elec}
 \end{equation}
 能量泛函部分项使用上标 $\mathrm{n}$ 进行区分；将自洽场给出的分子轨道系数 $C_{\mu p}$ 代入下式得到 xDH 能量：
 \begin{equation}
-  E^\textsf{xDH} = E^\textsf{core} [\mathbf{D}] + E^{\mathrm{n}, \textsf{ERI}} [\mathbf{D}] + E^{\mathrm{n}, \textsf{DFA}} [\mathbf{D}] + E^\textsf{PT} [\mathbf{C}] + E^\textsf{nuc}
+  \label{eq.def.eng-xDH}
+  E^\textsf{xDH} = E^\textsf{core} [\mathbf{D}] + E^{\mathrm{n}, \textsf{ERI}} [\mathbf{D}] + E^{\mathrm{n}, \textsf{DFA}} [\mathbf{D}] + E^\textsf{PT} [\mathbf{C}] + E^\textsf{non-elec}
 \end{equation}
-其中，$E^\textsf{core} [\mathbf{D}]$ 与 $E^\textsf{nuc}$ 对于能量泛函和自洽场泛函没有区别。微扰能 $E^\textsf{PT} [\mathbf{C}]$ 仅在能量泛函出现；出于行文便利，将不对其作 $\mathrm{n}$ 的上标区分。
+其中，$E^\textsf{core} [\mathbf{D}]$ 与 $E^\textsf{non-elec}$ 对于能量泛函和自洽场泛函没有区别。微扰能 $E^\textsf{PT} [\mathbf{C}]$ 仅在能量泛函出现；出于行文便利，将不对其作 $\mathrm{n}$ 的上标区分。
 
 需要补充的是，bDH 型泛函是当 xDH 型泛函的 $E^{\mathrm{n}, \textsf{ERI}} = E^\textsf{ERI}$、$E^{\mathrm{n}, \textsf{DFA}} = E^\textsf{DFA}$ 时的退化版本。bDH 型泛函由于仍然存有 $E^\textsf{PT} [\mathbf{C}]$ 一项，因此总能量泛函与 xDH 同样都是通过非变分途径计算得来。
 
 \subsubsection{导数记号与耦合微扰}
 
-对于导数记号，在不引起歧义的情况下，本工作经常使用偏导数记号 $\partial$ 指代全导数 $\mathrm{d}$。$\partial_\mathbb{A}$ 记号是 $\frac{\partial}{\partial \mathbb{A}}$ 的简记。
+本工作将依是否存在耦合微扰 (CP, \underline{C}oupled \underline{P}erturbed)，分为 Skeleton 导数 (骨架导数，部分文献也称为 core 导数即核导数)、轨道旋转导数、与一般的全导数。对于导数记号，在不引起歧义的情况下，
+\begin{itemize}[nosep]
+  \item 以分数形式描述的导数，$\frac{\mathrm{d}}{\mathrm{d} \mathbb{A}}$ 表示全导数，$\frac{\partial}{\partial \mathbb{A}}$ 表示偏导数；
+  \item 以简写形式描述的导数，$\partial_\mathbb{A}$ 记号是\textsf{全导数} $\frac{\mathrm{d}}{\mathrm{d} \mathbb{A}}$ 的简记 (并非偏导数的含义，这是为了字母 $\mathrm{d}$ 被认为是变量)；对性质量 $\mathbb{A}$ 的偏导数称为 Skeleton 导数并记为 $\partial_\mathbb{A}^\mathrm{S}$；涉及轨道系数的导数记为 $\partial_\mathbb{A}^\mathrm{U}$。$\partial_\mathbb{A}^\mathrm{S}$ 与 $\partial_\mathbb{A}^\mathrm{U}$ 将在这一小节的后文定义。
+\end{itemize}
 
-本工作将依是否存在耦合微扰 (CP, \underline{C}oupled \underline{P}erturbed)，分为 Skeleton 导数 (骨架导数，部分文献也称为 core 导数即核导数)、轨道旋转导数、与一般的全导数。
+以总能量为例，在\textsf{特定的}外加微扰 $\mathbb{A}$ 与轨道系数 $\mathbf{C}$ 下，其能量记为 $E^\textsf{xDH} (\mathbb{A}, \mathbf{C})$。对于 xDH 型泛函，轨道系数是通过自洽场泛函得到；该轨道系数是随外加微扰而变化的\footnote{在本工作中，我们假定轨道系数随外加微扰是可以变化的，进而定义 U 矩阵 (\ref{eq.def.U}) 以描述轨道扰动情况\cite{Handy-Schaefer.JCP.1984}。尽管这一小节明确分别定义了对微扰外场与对分子轨道的偏导数，但当能量项的计算比较复杂时、或导数阶数高时，分子轨道系数对微扰外场的依赖性会增加推导难度。
 
-以总能量为例，在\textsf{特定的}外加微扰 $\mathbb{A}$ 与轨道系数 $\mathbf{C}$ 下，其能量记为 $E^\textsf{xDH} (\mathbb{A}, \mathbf{C})$。对于 xDH 型泛函，轨道系数是通过自洽场泛函得到；该轨道系数是随外加微扰而变化的\footnote{在这一小节之后，默认轨道系数 $\mathbf{C}$ 是耦合微扰下变分极小的分子轨道系数 $\mathbf{C}^\textsf{SCF} (\mathbb{A})$。}：
+另一类做法是完全避免使用 U 矩阵，而将轨道系数 $C_{\mu p}$、自洽场方程 (\ref{eq.SCF-working-equation}) 的 Lagrange 乘子 $\varepsilon_{pq}$、弛豫密度矩阵 $D_{pq}^\textsf{xDH}$ 作为自洽场方程 (\ref{eq.SCF-working-equation}) 的 Lagrange 乘子、加权密度矩阵 $W_{pq}^\textsf{xDH}$ 作为正交条件 (\ref{eq.constraint.ortho}) 的 Lagrange 乘子，这些变量都作为新构造的 Lagrangian 的参数；从而对该 Lagrangian 作梯度推演\cite{Helgaker-Joergensen.TCA.1989, Burow-Eshuis.JCTC.2014}。通过这个大量利用 Lagrange 乘子的方法，弛豫密度与能量加权密度矩阵都是自然定义的，而不需要像本工作以 Skeleton 梯度 (\ref{eq.collary.rdm-definition}) 定义 (难以通过波函数确定的、非变分方法的) 约化密度、以 Z-Vector 方程 (\ref{eq.Z-vector}) 进一步定义弛豫密度这样绕弯子的做法。同时，该推导途径也不需要特意引入作为数学技巧的 Z-Vector 方法 (\ref{eq.Z-vector-contrib-to-eng-deriv}) 与交换定理 (\ref{eq.interchange-theorem})；且不需要考虑因轨道能级简并，而产生在强的正则自洽场条件 (\ref{eq.constraint.canonical-SCF}) 下，U 矩阵部分矩阵元数值不稳定的情形 (\ref{eq.unstable-Uij})。但该推导途径在目前大量涉及 MP2 型相关能的二阶梯度推演与计算中不是主流，且不会因其推演方式不同而给出更简洁或更高效的公式与程序；因此我们的工作仍然依主流的方法，使用 U 矩阵。\label{footnote.full-lagrangian}}：
 \begin{equation*}
-  \mathbf{C}^\textsf{SCF} (\mathbb{A}) = \arg \min_\mathbf{C} E^\textsf{SCF} (\mathbb{A}, \mathbf{C})
+  \mathbf{C}^\textsf{SCF} (\mathbb{A}) = \arg \min_\mathbf{C} E^\textsf{SCF} (\mathbb{A}, \mathbf{C}) \quad \text{(with eq (\ref{eq.constraint.ortho}) satisfied)}
 \end{equation*}
-从而，实际的 xDH 能量不仅受外加微扰 $\mathbb{A}$ (作为函数 $E^\textsf{xDH} (\mathbb{A}, \mathbf{C})$ 的变量参数第一项) 而产生变化，同时轨道系数 $\mathbf{C}^\textsf{SCF} (\mathbb{A})$ (作为变量参数的第二项) 也受外加微扰 $\mathbb{A}$ 的耦合扰动；因此准确地来说，xDH \textsf{基态能量}应写为 $E^\textsf{xDH} (\mathbb{A}, \mathbf{C}^\textsf{SCF} (\mathbb{A}))$。
+从而，实际的 xDH 能量不仅受外加微扰 $\mathbb{A}$ (作为函数 $E^\textsf{xDH} (\mathbb{A}, \mathbf{C})$ 的变量参数第一项) 而产生变化，同时轨道系数 $\mathbf{C}^\textsf{SCF} (\mathbb{A})$ (作为变量参数的第二项) 也受外加微扰 $\mathbb{A}$ 的耦合扰动；因此准确地来说，xDH \textsf{基态能量}应写为 $E^\textsf{xDH} (\mathbb{A}, \mathbf{C}^\textsf{SCF} (\mathbb{A}))$。由于我们总是处理基态的能量与梯度计算问题，因此后文默认轨道系数 $\mathbf{C}$ 是自洽场变分极小的 $\mathbf{C}^\textsf{SCF}$。
 
 为讨论问题的方便，定义 Skeleton 导数为轨道系数未耦合扰动下的导数。以 xDH 能量为例，
 \begin{equation}
-  \partial_\mathbb{A}^\mathrm{S} E^\textsf{xDH} = \frac{\partial E^\textsf{xDH} (\mathbb{A}, \mathbf{C}^\textsf{SCF} (0))}{\partial \mathbb{A}}
+  \partial_\mathbb{A}^\mathrm{S} E^\textsf{xDH} = \frac{\partial E^\textsf{xDH} (\mathbb{A}, \mathbf{C} (0))}{\partial \mathbb{A}}
 \end{equation}
-为与一般的全导数作区分，Skeleton 导数使用记号 $\partial_\mathbb{A}^\mathrm{S}$，即上标 $\mathrm{S}$。
+为与一般的全导数作区分，Skeleton 导数使用记号 $\partial_\mathbb{A}^\mathrm{S}$，即上标 $\mathrm{S}$。同时，我们定义轨道旋转导数
+\begin{equation}
+  \partial_\mathbb{A}^\mathrm{U} E^\textsf{xDH} = \frac{\partial E^\textsf{xDH} (\mathbb{A}, \mathbf{C})}{\partial \mathbf{C}} \frac{\partial \mathbf{C} (\mathbb{A})}{\partial \mathbb{A}}
+\end{equation}
+我们使用 $\partial_\mathbb{A}^\mathrm{U}$，即上标 $\mathrm{U}$，表示轨道旋转导数。
 
 进而，xDH 能量的全导数，依据求导规则，它等于 Skeleton 导数与对轨道系数导数的和：
 \begin{equation}
-  \partial_\mathbb{A} E^\textsf{xDH} = \partial_\mathbb{A}^\mathrm{S} E^\textsf{xDH} + \frac{\partial E^\textsf{xDH} (\mathbb{A}, \mathbf{C})}{\partial \mathbf{C}} \frac{\partial \mathbf{C}^\textsf{SCF} (\mathbb{A})}{\partial \mathbb{A}}
+  \partial_\mathbb{A} E^\textsf{xDH} = \partial_\mathbb{A}^\mathrm{S} E^\textsf{xDH} + \partial_\mathbb{A}^\mathrm{U} E^\textsf{xDH}
 \end{equation}
-后文除明确指明的情况外，轨道系数 $\mathbf{C}$ 总是指自洽场系数 $\mathbf{C}^\textsf{SCF}$。
 
-上述 Skeleton 导数与全导数的定义对其它标量或矩阵也成立。以分子轨道基下单电子积分矩阵 $h_{pq}$ 导数为例，
+除能量外，上述导数记号对其它标量或张量也成立。以分子轨道基下单电子积分矩阵 $h_{pq}$ 导数为例，
 \begin{equation*}
   h_{pq} = C_{\mu p} h_{\mu \nu} C_{\nu q}
 \end{equation*}
@@ -253,9 +267,13 @@ xDH 型泛函分别对自洽场与总能量使用两种泛函形式；我们分�
 \begin{equation*}
   h_{pq}^\mathbb{A} := \partial_\mathbb{A}^\mathrm{S} h_{pq} = C_{\mu p} \frac{\partial h_{\mu \nu}}{\partial \mathbb{A}} C_{\nu q}
 \end{equation*}
-全导数为
+而轨道系数导数为
+\begin{equation*}
+  \partial_\mathbb{A}^\mathrm{U} h_{pq} = \frac{\partial C_{\mu p}}{\partial \mathbb{A}} h_{\mu \nu} C_{\nu q} + C_{\mu p} h_{\mu \nu} \frac{\partial C_{\nu q}}{\partial \mathbb{A}}
+\end{equation*}
+全导数为上述三项之和：
 \begin{align*}
-  \partial_\mathbb{A} h_{pq}
+  \partial_\mathbb{A} h_{pq} &= \partial_\mathbb{A}^\mathrm{S} h_{pq} + \partial_\mathbb{A}^\mathrm{U} h_{pq} \\
   &= \frac{\partial C_{\mu p}}{\partial \mathbb{A}} h_{\mu \nu} C_{\nu q} + C_{\mu p} \frac{\partial h_{\mu \nu}}{\partial \mathbb{A}} C_{\nu q} + C_{\mu p} h_{\mu \nu} \frac{\partial C_{\nu q}}{\partial \mathbb{A}} \\
   &= \frac{\partial C_{\mu p}}{\partial \mathbb{A}} \frac{\partial h_{pq}}{\partial C_{\mu p}} + h_{pq}^\mathbb{A} + \frac{\partial h_{pq}}{\partial C_{\nu q}} \frac{\partial C_{\nu q}}{\partial \mathbb{A}}
 \end{align*}
@@ -285,7 +303,7 @@ Python 在性能上的缺陷，特别是 for 循环的效率问题，是众所�
 \subsubsection{RI 近似、RI-JK 与 RI-MP2 程序化与效率测试}
 \label{sec.rijk-rimp2-efficiency}
 
-这一节将引入 RI 近似；并通过简单的程序实现与效率测试，表明仅使用 Python 编写程序，充分利用现有的 Python 库函数，在内存充足的单节点 CPU 前提下，至少对于 RI-MP2 的相关能 $E_\mathrm{c}^\textsf{MP2}$ 计算，其程序效率可以不亚于流行的计算化学软件。
+这一节将引入 RI (\underline{R}esolution of \underline{I}dentity 或 Density Fitting) 近似；并通过简单的程序实现与效率测试，表明仅使用 Python 编写程序，充分利用现有的 Python 库函数，在内存充足的单节点 CPU 前提下，至少对于 RI-MP2 的相关能 $E_\mathrm{c}^\textsf{(2)}$ 计算，其程序效率可以不亚于流行的计算化学软件。
 
 不论是 Hartree-Fock、密度泛函或 post-HF 方法，都需要在计算中使用双电子互斥算符 $1 / r_{12} = 1 / |\bm{r}_1 - \bm{r}_2|$。在原子轨道表示下，通常使用传统双电子积分 4c-2e ERI $(\mu \nu | \kappa \lambda)$ 展开该算符。由于 Hartree-Fock 或密度泛函的自洽场计算中，涉及 ERI 的部分相当耗时，且为 $O(n_\mathrm{basis}^4)$ 计算复杂度。
 
@@ -300,7 +318,7 @@ Python 在性能上的缺陷，特别是 for 循环的效率问题，是众所�
   \mathcal{J}_P &= D_{\mu \nu} (\mu \nu | P) \\
   E^\textsf{J} [\mathbf{D}] &= \frac{1}{2} D_{\mu \nu} (\mu \nu | \kappa \lambda) D_{\kappa \lambda} \simeq \mathcal{J}_P (\mathbf{J}^{-1})_{PQ} \mathcal{J}_Q
 \end{align*}
-其中，中间张量 $\mathcal{J}_P$ 的计算复杂度是 $O(n_\mathrm{basis}^2 n_\mathrm{aux})$。$(\mathbf{J}^{-1})_{PQ}$ 的求逆计算复杂度是 $O(n_\mathrm{aux}^3)$；求逆运算可以通过 Cholesky 分解与线性方程求解加速，但该加速不改变计算复杂度\footnote{目前对自洽场或 ERI 的近似手段有许多种；上述的 RI 是其中一种策略。所有近似方法都是利用了 ERI 积分的某种稀疏性。以 Schwarz pre-screening 为代表的策略利用了 ERI 张量的零值稀疏性\cite{Horn-Ahlrichs.JCC.1991}；以 RI 为代表的策略利用了 ERI 张量在数值结构上的稀疏性\cite{Vahtras-Feyereisen.CPL.1993}；以 COSX (\underline{C}hain-\underline{O}f-\underline{S}phere e\underline{X}change) 为代表策略利用了 ERI 张量在空间上的稀疏性\cite{Neese-Becker.CP.2009}。在本文档使用 PySCF 计算的部分中，能量与梯度计算仅使用 RI 近似；但在自洽场给出参考态的轨道系数中，额外使用 PySCF 默认的 Schwarz pre-screening。}。因此，总体而言，库伦能的计算量是体系的三次方。
+其中，中间张量 $\mathcal{J}_P$ 的计算复杂度是 $O(n_\mathrm{basis}^2 n_\mathrm{aux})$。$(\mathbf{J}^{-1})_{PQ}$ 的求逆计算复杂度是 $O(n_\mathrm{aux}^3)$；求逆运算可以通过 Cholesky 分解与线性方程求解加速，但该加速不改变计算复杂度\footnote{目前对自洽场或 ERI 的近似手段有许多种；上述的 RI 是其中一种策略。所有近似方法都是利用了 ERI 积分的某种稀疏性。举例而言，以 Schwarz pre-screening 为代表的策略利用了 ERI 张量的零值稀疏性\cite{Horn-Ahlrichs.JCC.1991}；以 RI 为代表的策略利用了 ERI 张量在数值结构上的稀疏性\cite{Vahtras-Feyereisen.CPL.1993}；以 COSX (\underline{C}hain-\underline{O}f-\underline{S}phere e\underline{X}change) 为代表策略利用了 ERI 张量在空间上的稀疏性\cite{Neese-Becker.CP.2009}。在本文档使用 PySCF 计算的部分中，能量与梯度计算仅使用 RI 近似；但在自洽场给出参考态的轨道系数中，额外使用 PySCF 默认的 Schwarz pre-screening。}。因此，总体而言，库伦能的计算量是体系的三次方。
 
 但需要指出，含有严格交换能 $E_\mathrm{x}^\textsf{exact}$ 的 Hartree-Fock 或杂化密度泛函，计算量仍然是四次方级别的 $O(n_\mathrm{occ} n_\mathrm{basis}^2 n_\mathrm{aux}) + O(n_\mathrm{aux}^3)$；以闭壳层情形为例，这是因为下述生成 $\mathcal{K}_{ij, P}$ 所需要的 $O(n_\mathrm{occ} n_\mathrm{basis}^2 n_\mathrm{aux})$ 复杂度的积分转换，对于严格交换能计算仍然是不可避免的：
 \begin{align*}
@@ -325,7 +343,7 @@ RI-JK 是通过张量分解降低 4c-2e ERI 的计算量、将占用空间少的
   \label{eq.def.D-ijab}
   D_{ij}^{ab} &= \varepsilon_i + \varepsilon_j - \varepsilon_a - \varepsilon_b \\
   t_{ij}^{ab} &= \frac{(ia|jb)}{D_{ij}^{ab}} \\
-  E_\mathrm{c}^\textsf{MP2} &= t_{ij}^{ab} \big(2 (ia|jb) - (ib|ja) \big) && \quad \text{(energy accumulation)}
+  E_\mathrm{c}^\textsf{(2)} &= t_{ij}^{ab} \big(2 (ia|jb) - (ib|ja) \big) && \quad \text{(energy accumulation)}
 \end{alignat}
 \end{subequations}
 关于 RI-MP2 相关能计算的讨论与实现细节是
@@ -341,7 +359,7 @@ RI-JK 是通过张量分解降低 4c-2e ERI 的计算量、将占用空间少的
 
 在附录 \ref{sec.python-ri-mp2} 小节中，展示了通过纯 Python 语言实现了 RI-MP2 相关能的计算代码。在图 \ref{fig.timing-rimp2-implemented} 展示的测评中，可以看到 \ref{sec.python-ri-mp2} 小节的程序相比于其它现成的程序有更高的效率。使用 RI 近似的算法相比于 conv ERI 的效率有明显的提升。对于 conv ERI 的情形，6 碳以上体系的 MP2 相关能的计算耗时比 HF 更大；但对于 RI 近似算法，即使是效率最高的 Psi4 RI-JK，在 14 碳体系 (约 2000 基函数) 的耗时仍然比 RI-MP2 大。这意味着，对于效率测评所涉及的体系，若使用 RI 算法计算 MP2 型相关能，那么高阶的 MP2 型双杂化泛函计算耗时并不明显大于低阶的杂化泛函。而同时，\alert{在绪论中}展示了双杂化泛函在反应能数据集上的测评表现相较于杂化泛函有明显的进步；因此，双杂化泛函在能量计算问题上有良好的性价比。我们期望，在最理想的情况下，通过合适的算法与程序实现，双杂化泛函的梯度性质的计算量不会明显地大于杂化泛函，从而在梯度性质上也有良好的性价比；但目前既有程序耗时仍然较大。本章的其中一个重要目标，即是向着高效实现双杂化泛函的梯度性质迈进。
 
-\begin{figure}
+\begin{figure}[b!]
   \centering
   \caption{HF 与 MP2 程序效率测评}
   \label{fig.timing-rimp2-implemented}
@@ -372,13 +390,13 @@ RI-JK 是通过张量分解降低 4c-2e ERI 的计算量、将占用空间少的
 \end{align}
 上式的 $t, s$ 指代坐标分量 $x, y, z$。偶极矩 $\bm{\mu}$ 与极化率 $\bm{\alpha}$ 也可以通过下式定义：
 \begin{equation}
-  \bm{\mu} = \left. \frac{\partial E}{\partial \pmb{\mathcal{E}}} \right|_{\pmb{\mathcal{E}} = \bm{0}}, \quad
-  \bm{\alpha} = \left. \frac{\partial^2 E}{\partial \pmb{\mathcal{E}}^2} \right|_{\pmb{\mathcal{E}} = \bm{0}}
+  \bm{\mu} = \left. \frac{\mathrm{d} E}{\mathrm{d} \pmb{\mathcal{E}}} \right|_{\pmb{\mathcal{E}} = \bm{0}}, \quad
+  \bm{\alpha} = \left. \frac{\mathrm{d}^2 E}{\mathrm{d} \pmb{\mathcal{E}}^2} \right|_{\pmb{\mathcal{E}} = \bm{0}}
 \end{equation}
 分量的数值定义为
 \begin{equation}
-  \mu_t = \left. \frac{\partial E}{\partial \mathcal{E}_t} \right|_{\pmb{\mathcal{E}} = \bm{0}}, \quad
-  \alpha_{ts} = \left. \frac{\partial^2 E}{\partial \mathcal{E}_t \partial \mathcal{E}_s} \right|_{\pmb{\mathcal{E}} = \bm{0}}
+  \mu_t = \left. \frac{\mathrm{d} E}{\mathrm{d} \mathcal{E}_t} \right|_{\pmb{\mathcal{E}} = \bm{0}}, \quad
+  \alpha_{ts} = \left. \frac{\mathrm{d}^2 E}{\mathrm{d} \mathcal{E}_t \mathrm{d} \mathcal{E}_s} \right|_{\pmb{\mathcal{E}} = \bm{0}}
 \end{equation}
 
 在计算化学程序中，定义微扰下的单电子积分
@@ -389,7 +407,7 @@ RI-JK 是通过张量分解降低 4c-2e ERI 的计算量、将占用空间少的
 \end{align}
 以及微扰下的原子核能量
 \begin{equation}
-  E^\textsf{nuc} (\pmb{\mathcal{E}}) = \frac{1}{2} \frac{Z_A Z_B}{r_{AB}} + Z_A \mathcal{E}_t A_t
+  E^\textsf{non-elec} (\pmb{\mathcal{E}}) = \frac{1}{2} \frac{Z_A Z_B}{r_{AB}} + Z_A \mathcal{E}_t A_t
 \end{equation}
 可以求得偶极电场 $\pmb{\mathcal{E}}$ 下的分子能量。因此，偶极矩 $\bm{\mu}$ 与极化率 $\bm{\alpha}$ 可以通过对 $E^\textsf{tot} (\pmb{\mathcal{E}})$ 作数值差分或解析导数得到。
 
@@ -416,79 +434,117 @@ RI-JK 是通过张量分解降低 4c-2e ERI 的计算量、将占用空间少的
 
 本节将在 xDH 框架下，讨论电性质导数问题；被求导的性质将以 $\mathbb{A}, \mathbb{B}$ 表示。除非特别指明，一般讨论的是闭壳层情形。不同于分子坐标导数或 GIAO 轨道导数，许多 Skeleton 导数对于电性质是零值；因此，这里的讨论不适合推广到所有的梯度问题中。
 
-\subsubsection{一阶梯度：轨道系数随外场的变化}
+\subsubsection{正交条件、自洽场条件与自洽场泛函对密度矩阵的依赖关系}
 
-自洽场与能量泛函的运算共用同一轨道系数 $C_{\mu i}$。定义轨道系数在外场微扰下的变化为 U 矩阵 $U_{pq}^\mathbb{A}$：
+在开始梯度理论推演前，先对式 (\ref{eq.def.eng-SCF}) 所给出的自洽场计算过程与结果作必要的回顾。这一小节不考虑外场效应。
+
+作为低阶泛函，闭壳层自洽场能量 $E^\textsf{SCF}$ 仅决定于依式 (\ref{eq.def.dm-scf-closed}) 所定义的双占据的密度矩阵 $D_{\mu \nu}$。密度矩阵 $D_{\mu \nu}$ 由分子轨道系数 $C_{\mu i}$ 构成；分子轨道正交归一条件 (后文简称为\textsf{正交条件}) 具体表达为
 \begin{empheq}[box=\fbox]{equation}
-  \label{eq.def-U}
-  \partial_\mathbb{A} C_{\mu q} = C_{\mu p} U_{pq}^\mathbb{A}
+  \label{eq.constraint.ortho}
+  S_{pq} = C_{\mu p} S_{\mu \nu} C_{\nu q} = \delta_{pq} \quad \text{(orthogonalization constraint)}
 \end{empheq}
-需要指出，对于一般的正则 SCF 过程，这里对 $U_{pq}^\mathbb{A}$ 的定义将会遇到奇点问题。因此，为数值稳定地计算二阶梯度，后续将重新定义 U 矩阵 $U_{pq}^\mathbb{A}$。
-
-轨道系数 $C_{\mu p}$ 是在自洽场泛函能量 $E^\textsf{SCF}$ 下定义的，因此 U 矩阵也仅决定于自洽场泛函。注意到自洽场所给出的轨道系数可以由轨道正交条件与分子轨道基下 Fock 矩阵分块对角化条件决定\footnote{若自洽场是 Hartree-Fock 方法，那么 $F_{ai} = 0$ 是 Hartree-Fock 方法区别与其它方法特有的特征，它等价于波函数单 Slater 行列式近似；因此我们有时也称其为 SCF 条件。容易验证，当正交条件用作 Lagrange 乘子，对式 (\ref{eq.def.fock-ao}) 作关于占据轨道系数 $C_{\mu i}$ 的条件极值优化，立即可以得到 Hartree-Fock-Roothaan 方程\cite{Roothaan-Roothaan.RMP.1951} (或对应的 Kohn-Sham 方程\cite{Kohn-Sham.PR.1965})
-$$
-F_{\mu \nu} C_{\mu i} = S_{\mu \nu} C_{\mu j} \varepsilon_{ji}
-$$
-进一步地，如果对上式作正交变换使得 $\bm{\varepsilon}$ 是对称矩阵，则得到正则 SCF 条件 (\ref{eq.condition-canonical-SCF})。因此可以说，自洽场计算完全由正交条件与自洽场条件所决定。因此，在导数推导中，也将着重讨论这两个条件所引出的推论。}：
-\begin{alignat}{10}
-  \label{eq.condition-ortho}
-  S_{pq} &= C_{\mu p} S_{\mu \nu} C_{\nu q} = \delta_{pq} &&\quad \text{(orthogonalization condition)} \\
-  \label{eq.condition-Fai}
-  F_{ai} &= C_{\mu a} F_{\mu \nu} C_{\nu i} = 0 &&\quad \text{(SCF condition)}
-\end{alignat}
-其中，原子轨道基的 Fock 矩阵定义为自洽场能量对密度矩阵的导数：
+原子轨道基的 Fock 矩阵定义为自洽场能量对密度矩阵的导数：
 \begin{equation}
   \label{eq.def.fock-ao}
   F_{\mu \nu} = \frac{\partial E^\textsf{SCF}}{\partial D_{\mu \nu}}
 \end{equation}
-通过基变换，分子轨道基的 Fock 矩阵为 $F_{pq} = C_{\mu p} F_{\mu \nu} C_{\nu q}$。两种轨道基下的 Fock 矩阵都是对称的。为与后文的广义 Fock 矩阵作区别，我们有时也称该 Fock 矩阵为自洽场 Fock 矩阵。
-
-首先确定 U 矩阵在占据-非占部分 $U_{ai}^\mathbb{A}$ 的表达式。我们对正交条件 (\ref{eq.condition-ortho}) 作性质 $\mathbb{A}$ 的导数：
+它是自洽场作为变分方法的重要中间量。自洽场能量 $E^\textsf{SCF}$ 对占据轨道 $C_{\mu i}$ 的导数为
 \begin{align}
-  \label{eq.condition-ortho-conclusion}
-  \partial_{\mathbb{A}} S_{pq} &= \partial_\mathbb{A} C_{\mu p} S_{\mu \nu} C_{\nu q} + C_{\mu p} \partial_\mathbb{A} S_{\mu \nu} C_{\nu q} + C_{\mu p} S_{\mu \nu} \partial_\mathbb{A} C_{\nu q} \notag\\
-  &= S_{mq} U_{mp}^\mathbb{A} + S_{pm} U_{mq}^\mathbb{A} \notag\\
-  &= U_{pq}^\mathbb{A} + U_{qp}^\mathbb{A} = 0 \quad \text{(corollary of orthogonalization condition)}
+  \label{eq.eng-deriv-wrt-coeff}
+  \frac{\partial E^\textsf{SCF}}{\partial C_{\mu i}} &= \frac{\partial E^\textsf{SCF}}{\partial D_{\kappa \lambda}} \frac{\partial D_{\kappa \lambda}}{\partial C_{\mu i}}
+  = F_{\kappa \lambda} \left( 2 \delta_{\kappa \mu} C_{\lambda i} + 2 \delta_{\lambda \mu} C_{\kappa i} \right) = 4 F_{\mu \nu} C_{\nu i}
 \end{align}
-其中，$\partial_\mathbb{A} S_{pq}$ 推导过程中利用到电性质微扰下基轨道没有变化，因此 $\partial_\mathbb{A} S_{\mu \nu} = 0$。上述结论表明，U 矩阵在电性质导数下是反对称的。
-
-在对 Fock 分块对角化条件 (\ref{eq.condition-Fai}) 作性质 $\mathbb{A}$ 的导数前，我们需要先定义 Fock 矩阵关于密度矩阵的二阶梯度量：
+占据轨道系数 $C_{\mu i}$ 是通过引入正交条件 (\ref{eq.constraint.ortho}) 对 $E^\textsf{SCF}$ 作条件极小值计算得到。定义对称的 Lagrange 乘子矩阵为 $\varepsilon_{jk}$；下式作为变分方程，对指标 $\nu, j, k$ 求和：
 \begin{equation}
-  \label{eq.def-Auvkl}
+  \label{eq.hartree-fock-roothaan}
+  \frac{\partial}{\partial C_{\mu i}} \big( E^\textsf{SCF} - 2 \varepsilon_{jk} (S_{jk} - \delta_{jk}) \big) = 4 \big( F_{\mu \nu} C_{\nu i} - S_{\mu \nu} C_{\nu j} \varepsilon_{ji} \big) = 0
+\end{equation}
+若自洽场泛函是 Hartree-Fock，那么上式即 Hartree-Fock-Roothaan 方程\cite{Roothaan-Roothaan.RMP.1951}。
+
+$F_{\mu \nu}$ 作为原子轨道基下的矩阵，秩 $n_\mathrm{MO}$ 明显大于占据轨道数 $n_\mathrm{nocc}$；在程序实现中，一般将求取 $n_\mathrm{MO}$ 个分子轨道的系数 $C_{\mu p}$：
+\begin{equation}
+  \label{eq.SCF-working-equation}
+  F_{\mu \nu} C_{\nu p} = S_{\mu \nu} C_{\nu q} \varepsilon_{qp} \quad \text{(SCF working equation)}
+\end{equation}
+但需要注意到，只有占据轨道对自洽场能量产生贡献。关于自洽场对占据布局的限制条件，可以通过对式 (\ref{eq.hartree-fock-roothaan}) 等式两边乘以非占轨道系数 $C_{\mu a}$、并对原子轨道指标 $\mu, \nu$ 求和结果所体现：
+\begin{equation*}
+  4 (C_{\mu a} F_{\mu \nu} C_{\nu i} - C_{\mu a} S_{\mu \nu} C_{\nu j} \varepsilon_{ji}) = 4 (F_{ai} - S_{aj} \varepsilon_{ji}) = 0
+\end{equation*}
+或更简洁地，Fock 矩阵在分子轨道基下是分块对角化的：
+\begin{empheq}[box=\fbox]{equation}
+  \label{eq.constraint.SCF}
+  F_{ai} = 0 \quad \text{(SCF constraint)}
+\end{empheq}
+上式在后文称为\textsf{自洽场条件}；推演过程利用了正交条件 (\ref{eq.constraint.ortho}) 所给出的 $S_{aj} = 0$ (占据轨道与非占轨道角标不可能一致)。
+
+正交条件与自洽场条件是梯度推演中，所有必要的额外限制条件。
+
+最后，为了后面推导的便利，这里引入 A 张量 $A_{\mu \nu, \kappa \lambda}$ (Fock 轨道响应张量) 作为 Fock 矩阵对密度矩阵的导数量：
+\begin{equation}
+  \label{eq.def.Auvkl}
   A_{\mu \nu, \kappa \lambda} = 4 \frac{\partial^2 E^\textsf{SCF}}{\partial D_{\mu \nu} \partial D_{\kappa \lambda}} = 4 \frac{\partial F_{\mu \nu}}{\partial D_{\kappa \lambda}}
 \end{equation}
-在后文中，将称其为 A 张量或 Fock 响应张量；该张量具有与 ERI 张量 $(\mu \nu | \kappa \lambda)$ 相同的 8 重对称性。其中，上式的 4 倍是闭壳层实轨道 $C_{\mu p}^* = C_{\mu p}$ 下乘积因子；该因子将使得原子轨道基下 Fock 矩阵的导数具有 $\partial_\mathbb{A} F_{\mu \nu} = F_{\mu \nu}^\mathbb{A} + A_{\mu \nu, mi} U_{mi}^\mathbb{A}$ 的表达形式：
-\begin{align}
-  \label{eq.deduct-pd-Fuv}
-  \partial_\mathbb{A} F_{\mu \nu} &= F_{\mu \nu}^\mathbb{A} + \frac{\partial F_{\mu \nu}}{\partial D_{\kappa \lambda}} \left( \frac{\partial D_{\kappa \lambda}}{\partial C_{\kappa i}} \frac{\partial C_{\kappa i}}{\partial \mathbb{A}} + \frac{\partial D_{\kappa \lambda}}{\partial C_{\lambda i}} \frac{\partial C_{\lambda i}}{\partial \mathbb{A}} \right) \notag\\
-  &= F_{\mu \nu}^\mathbb{A} + \frac{1}{4} A_{\mu \nu, \kappa \lambda} \left( 2 C_{\lambda i} U_{\kappa m} U_{mi}^\mathbb{A} + 2 C_{\kappa i} U_{\lambda m} U_{mi}^\mathbb{A} \right) \notag\\
-  &= F_{\mu \nu}^\mathbb{A} + \frac{1}{2} \left( A_{\mu \nu, im} + A_{\mu \nu, mi} \right) U_{mi}^\mathbb{A} \notag\\
-  &= F_{\mu \nu}^\mathbb{A} + A_{\mu \nu, mi} U_{mi}^\mathbb{A}
-\end{align}
-其中，$F_{\mu \nu}^\mathbb{A}$ 定义为不受密度矩阵扰动、而仅受外场扰动而会产生变化的 Skeleton 导数部分。作为特例，对于外加偶极电场而言，从式 (\ref{eq.def.huv-with-perturb}) 附近的讨论出发，仅有单电子算符部分产生贡献：
+该张量具有与 ERI 张量 $(\mu \nu | \kappa \lambda)$ 相同的 8 重对称性；其对称性的来源是被求导量 $D_{\mu \nu}$ 与 $D_{\kappa \lambda}$ 作为密度矩阵本身的对称性、以及两次偏导数可交换的对称性。上式的 4 倍是闭壳层实轨道 $C_{\mu p}^* = C_{\mu p}$ 下乘积因子；该因子将使得原子轨道基下 Fock 矩阵对分子轨道系数的导数具有比较简单的形式：
+\begin{equation}
+  \frac{\partial F_{\mu \nu}}{\partial C_{\kappa i}} = \frac{\partial F_{\mu \nu}}{\partial D_{\eta \lambda}} \frac{\partial D_{\eta \lambda}}{\partial C_{\kappa i}} = 4 \frac{\partial F_{\mu \nu}}{\partial D_{\kappa \lambda}} C_{\lambda i} = A_{\mu \nu, \kappa \lambda} C_{\lambda i} = A_{\mu \nu, \kappa i}
+\end{equation}
+
+
+\subsubsection{一阶梯度：轨道系数随外场的变化}
+
+自洽场泛函 $E^\textsf{SCF}$ 与能量泛函 $E^\textsf{xDH}$ 的运算共用同一轨道系数 $C_{\mu i}$。这一小节进一步讨论正交条件、自洽场条件在外场微扰 $\mathbb{A}$ 下的响应，并籍此给出描述轨道系数在外场微扰下变化的 U 矩阵 $U_{pq}^\mathbb{A}$\footnote{式 (\ref{eq.def.U}) 中 U 矩阵的定义并非在等式左边。利用正交条件 (\ref{eq.constraint.ortho})，可知
+\begin{equation*}
+  U_{pq}^\mathbb{A} = C_{\mu p} S_{\mu \nu} \partial_\mathbb{A} C_{\nu q}
+\end{equation*}
+该式与定义式 (\ref{eq.def.U}) 是等价的。出于推演方便，我们仅使用定义式 (\ref{eq.def.U})。}：
+\begin{empheq}[box=\fbox]{equation}
+  \label{eq.def.U}
+  \partial_\mathbb{A} C_{\mu q} = C_{\mu p} U_{pq}^\mathbb{A}
+\end{empheq}
+这一小节首先确定 U 矩阵在占据-非占部分 $U_{ai}^\mathbb{A}$ 的表达式。其余部分在后一小节详细描述。
+
+对正交条件 (\ref{eq.constraint.ortho}) 作性质 $\mathbb{A}$ 的导数：
+\begin{align*}
+  \partial_{\mathbb{A}} S_{pq} &= \partial_\mathbb{A} C_{\mu p} S_{\mu \nu} C_{\nu q} + C_{\mu p} \partial_\mathbb{A} S_{\mu \nu} C_{\nu q} + C_{\mu p} S_{\mu \nu} \partial_\mathbb{A} C_{\nu q} \notag\\
+  &= S_{mq} U_{mp}^\mathbb{A} + S_{pm} U_{mq}^\mathbb{A} = U_{pq}^\mathbb{A} + U_{qp}^\mathbb{A} = 0
+\end{align*}
+或更简洁地，
+\begin{empheq}[box=\fbox]{equation}
+  \label{eq.collary.ortho}
+  U_{pq}^\mathbb{A} + U_{qp}^\mathbb{A} = 0 \quad \text{(corollary of orthogonalization constraint)}
+\end{empheq}
+其中，$\partial_\mathbb{A} S_{pq}$ 推导过程中利用到电性质微扰下基轨道没有变化，因此 $\partial_\mathbb{A} S_{\mu \nu} = 0$。上述结论表明，U 矩阵在电性质导数下是反对称的\footnote{需要指出，对于其它性质梯度，由于 $\partial_\mathbb{A} S_{\mu \nu}$ 未必是零，因此 U 矩阵一般来说未必是反对称或反厄米的。后文将有许多结论只能用于电性质微扰，而无法简单地扩展到所有情形。在本工作中，不会一一列举所有情形。}。
+
+进而将对自洽场条件 (\ref{eq.constraint.SCF}) 的等式两边作性质 $\mathbb{A}$ 的导数。但在考虑 $\partial_\mathbb{A} F_{ai}$ 前，我们先考虑更一般的原子轨道基下 Fock 矩阵的导数：
+\begin{equation}
+  \label{eq.deduct.pd-Fuv}
+  \partial_\mathbb{A} F_{\mu \nu} = \partial_\mathbb{A}^\mathrm{S} F_{\mu \nu} + \partial_\mathbb{A}^\mathrm{U} F_{\mu \nu}
+  = F_{\mu \nu}^\mathbb{A} + \frac{\partial F_{\mu \nu}}{\partial C_{\kappa i}} \partial_\mathbb{A} C_{\mu i}= F_{\mu \nu}^\mathbb{A} + A_{\mu \nu, mi} U_{mi}^\mathbb{A}
+\end{equation}
+其中，$F_{\mu \nu}^\mathbb{A} := \partial_\mathbb{A}^\mathrm{S} F_{\mu \nu}$ 定义为不受密度矩阵扰动、而仅受外场扰动产生变化的 Skeleton 导数部分。作为特例，对于外加偶极电场而言，从式 (\ref{eq.def.huv-with-perturb}) 附近的讨论出发，仅有单电子算符部分产生贡献：
 \begin{align}
   \label{eq.def.sleketon-huv}
-  F_{\mu \nu}^{\mathcal{E}_t} = h_{\mu \nu}^{\mathcal{E}_t} &:= \partial_{\mathcal{E}_t} h_{\mu \nu} \\
+  F_{\mu \nu}^{\mathcal{E}_t} = h_{\mu \nu}^{\mathcal{E}_t} &:= \partial_{\mathcal{E}_t} h_{\mu \nu} = h_{\mu \nu}^t \\
   F_{pq}^{\mathcal{E}_t} = h_{pq}^{\mathcal{E}_t} &:= C_{\mu p} F_{\mu \nu}^{\mathcal{E}_t} C_{\nu q}
 \end{align}
-对于多级展开的外电场也是类似的；我们将在所有电性质导数问题中，假定 $F_{\mu \nu}^\mathbb{A} = h_{\mu \nu}^\mathbb{A}$ 与 $F_{pq}^\mathbb{A} = h_{pq}^\mathbb{A}$。同时，在 (\ref{eq.deduct-pd-Fuv}) 推导的最后一步，我们利用了 $A_{\mu \nu, pq}$ 张量对 $p, q$ 角标的对称性。该对称性的来源是定义式 (\ref{eq.def-Auvkl}) 中，作为被求导的矩阵，$D_{\kappa \lambda}$ 是对称矩阵；将角标 $\kappa, \lambda$ 转换到分子轨道基下，对称性仍然保持。
+对于多级展开的外电场也是类似的；我们将在所有电性质导数问题中，假定 $F_{\mu \nu}^\mathbb{A} = h_{\mu \nu}^\mathbb{A}$ 与 $F_{pq}^\mathbb{A} = h_{pq}^\mathbb{A}$。
 
 在得到原子轨道基 Fock 矩阵导数 $\partial_\mathbb{A} F_{\mu \nu}$ 后，分子轨道下的导数可以顺势得到：
-\begin{empheq}[box=\fbox]{align}
+\begin{align}
   \label{eq.pd-Fpq-0}
   \partial_\mathbb{A} F_{pq} &= F_{mq} U_{mp}^\mathbb{A} + F_{pm} U_{mq}^\mathbb{A} + C_{\mu p} \partial_\mathbb{A} F_{\mu \nu} C_{\nu q} \notag\\
   &= F_{mq} U_{mp}^\mathbb{A} + F_{pm} U_{mq}^\mathbb{A} + F_{pq}^\mathbb{A} + A_{pq, mj} U_{mj}^\mathbb{A}
-\end{empheq}
-上式在二阶梯度求取、以及 MP2 的激发张量导数计算上经常用到；但在这里我们只对其非占-占据部分感兴趣。对 Fock 分块对角化条件 (\ref{eq.condition-Fai}) 的两边求导，得到
+\end{align}
+上式在二阶梯度求取、以及 MP2 的激发张量导数计算上经常用到；但在这一小节，我们只对其非占-占据部分感兴趣。对自洽场条件 (\ref{eq.constraint.SCF}) 的两边求导，得到
 \begin{align}
   \label{eq.pd-Fai-0}
   \partial_\mathbb{A} F_{ai} &= F_{mi} U_{ma}^\mathbb{A} + F_{am} U_{mi}^\mathbb{A} + F_{ai}^\mathbb{A} + A_{ai, mj} U_{mj}^\mathbb{A} = 0
-  \quad \text{(corollary of SCF condition)}
+  \quad \text{(corollary of SCF constraint)}
 \end{align}
-若引入正则 SCF 限制条件，即 Fock 矩阵是对角化的：
+若引入\textsf{正则自洽场条件}，即 Fock 矩阵是对角化的：
 \begin{equation}
-  \label{eq.condition-canonical-SCF}
-  F_{pq} = \varepsilon_p \delta_{pq} \quad \text{(canonical SCF condition)}
+  \label{eq.constraint.canonical-SCF}
+  F_{pq} = \varepsilon_p \delta_{pq} \quad \text{(canonical SCF constraint)}
 \end{equation}
 那么，式 (\ref{eq.pd-Fai-0}) 可以写为
 \begin{equation}
@@ -503,14 +559,14 @@ $$
 \begin{empheq}[box=\fbox]{align}
   \label{eq.CP-SCF}
   F_{ai}^\mathbb{A} &= - (\varepsilon_a - \varepsilon_i) U_{ai}^\mathbb{A} - A_{ai, bj} U_{bj}^\mathbb{A} \notag\\
-  &= - \left( (\varepsilon_a - \varepsilon_i) \delta_{ai, bj} + A_{ai, bj} \right) U_{bj}^\mathbb{A}
+  &= - \left( (\varepsilon_a - \varepsilon_i) \delta_{ai, bj} + A_{ai, bj} \right) U_{bj}^\mathbb{A} \quad \text{(CP-SCF)}
 \end{empheq}
 该式是电性质导数下的 CP-SCF (\underline{C}oupled-\underline{P}erturbed \underline{SCF}) 方程；通过该方程可以求得 U 矩阵的非占-占据部分 $U_{ai}^\mathbb{A}$。其耦合微扰的意义是，不仅 Hamilton 算符受外场扰动、自洽场波函数也因 Hamilton 算符的微扰而随之产生变化；CP-SCF 方程所给出的 U 矩阵确定了轨道系数 (作为描述自洽场波函数的参数) 是如何随外场发生扰动的。
 
 \subsubsection{一阶梯度：U 矩阵占据-占据和非占-非占部分}
 \label{sec.3.Uia-Uai}
 
-对于自洽场方法，轨道正交条件 $S_{pq} = 0$ 与 Fock 矩阵分块对角化 $F_{ai} = 0$ 是必须满足的条件；但正则 SCF 条件 $F_{pq} = \varepsilon_p \delta_{pq}$ 仅仅是出于公式推导的便利与程序实现的方便，而引入的可选条件。这意味着在微扰下，只有占据与非占轨道相互之间的变化情况是非平凡的，即 $U_{ai}^\mathbb{A}$ 与 $U_{ia}^\mathbb{A} = - U_{ai}^\mathbb{A}$ 的数值是非平凡的；占据-占据的 $U_{ij}^\mathbb{A}$ 与非占-非占的 $U_{ab}^\mathbb{A}$ 的数值并非是关键的。因此，只要 $U_{ij}^\mathbb{A}$ 与 $U_{ab}^\mathbb{A}$ 满足式 (\ref{eq.condition-ortho-conclusion}) 给出的轨道正交条件的结论即可。对于电性质导数而言，最简单的定义方式是置零：
+对于自洽场方法，轨道正交条件 $S_{pq} = 0$ 与自洽场条件 $F_{ai} = 0$ 是必须满足的条件；但正则自洽场条件 $F_{pq} = \varepsilon_p \delta_{pq}$ 仅仅是出于公式推导的便利与程序实现的方便，而引入的可选条件。这意味着在微扰下，只有占据与非占轨道相互之间的变化情况是非平凡的，即 $U_{ai}^\mathbb{A}$ 与 $U_{ia}^\mathbb{A} = - U_{ai}^\mathbb{A}$ 的数值是非平凡的；占据-占据的 $U_{ij}^\mathbb{A}$ 与非占-非占的 $U_{ab}^\mathbb{A}$ 的数值并非是关键的。因此，只要 $U_{ij}^\mathbb{A}$ 与 $U_{ab}^\mathbb{A}$ 满足式 (\ref{eq.collary.ortho}) 给出的轨道正交条件的结论即可。对于电性质导数而言，最简单的定义方式是置零：
 \begin{empheq}[box=\fbox]{equation}
   \label{eq.Uij-Uab-zero}
   U_{ij}^\mathbb{A} = U_{ab}^\mathbb{A} = 0 \quad \text{(definition of program implementation)}
@@ -521,14 +577,14 @@ $$
   \label{eq.pd-Fpq-not-diagonal}
   \partial_\mathbb{A} F_{pq} \not \equiv 0 \quad (p \neq q, \text{(\ref{eq.Uij-Uab-zero}) satisfied})
 \end{equation}
-但 Fock 矩阵在外场为零的情形下仍然可以是对角化的，即 $F_{pq} = \varepsilon_p \delta_{pq}$；但外场不为零时，Fock 矩阵不再是对角化的；这不同于正交条件与 Fock 矩阵分块对角化条件。
+这意味着，Fock 矩阵在外场为零的情形下仍然可以是对角化的，即满足 $F_{pq} |_{\mathbb{A} = 0} = \varepsilon_p \delta_{pq}$；但外场不为零时，Fock 矩阵不再是对角化的；这不同于正交条件与自洽场条件\footnote{许多微扰能形式，譬如 MP2、IEPA、MP2/cr、RPA，在计算时需要引入自洽场轨道能 $\varepsilon_p$；但若 Fock 矩阵 $F_{pq}$ 并非对角的，那么轨道能就无法准确地定义。如果某一方法可以由 Fock 矩阵定义，且无论 Fock 矩阵是否对角、能量结果都是一致的，那么该方法一般来说是正交变换不变的 (Unitary Invariance)。MP2、RPA 方法是正交不变的，但 IEPA、MP2/cr 方法则并非正交不变。这一小节涉及到的推演，特别是式 (\ref{eq.Uij-Uab-zero}) 的定义，应仅对正交不变方法是合理的。}。
 
 下面我们将讨论式 (\ref{eq.pd-Fpq-not-diagonal}) 占据-占据部分情形。利用 Fock 矩阵为对角阵、以及 U 矩阵反对称性质，
 \begin{align}
   \partial_\mathbb{A} F_{ij} &= F_{im} U_{mj}^\mathbb{A} + F_{mj} U_{mi}^\mathbb{A} + F_{ij}^\mathbb{A} + A_{ij, mk} U_{mk}^\mathbb{A} \notag\\
   &= (\varepsilon_i - \varepsilon_j) U_{ij}^\mathbb{A} + F_{ij}^\mathbb{A} + A_{ij, bk} U_{bk}^\mathbb{A}
 \end{align}
-在上式的推导中，角标 $m$ 作为占据轨道 $l$ 时的贡献项 $\partial_\mathbb{A} F_{ij} \leftarrow A_{ij, lk} U_{lk}^\mathbb{A}$ 由于 $A_{ij, lk}$ 与 $U_{lk}^\mathbb{A}$ 关于 $l, k$ 角标分别对称与反对称，因此该贡献项为零。故而，仅有角标 $m$ 取非占轨道 $b$ 时，$\partial_\mathbb{A} F_{ij} \leftarrow A_{ij, bk} U_{bk}^\mathbb{A}$ 是非平凡的贡献项。通过 CP-SCF 方程，我们已经可以求得 $U_{bj}^\mathbb{A}$；从而，通过上式可以求得
+在上式的推导中，当角标 $m$ 作为占据轨道 $l$ 时，贡献项 $\partial_\mathbb{A} F_{ij} \leftarrow A_{ij, lk} U_{lk}^\mathbb{A}$ 由于 $A_{ij, lk}$ 与 $U_{lk}^\mathbb{A}$ 关于 $l, k$ 角标分别对称与反对称，因此该项为零。故而，仅有角标 $m$ 取非占轨道 $b$ 时，$\partial_\mathbb{A} F_{ij} \leftarrow A_{ij, bk} U_{bk}^\mathbb{A}$ 是非平凡的贡献项。通过 CP-SCF 方程，我们已经可以求得 $U_{bj}^\mathbb{A}$；从而，通过上式可以求得
 \begin{equation}
   U_{ij}^\mathbb{A} = 
   \begin{cases}
@@ -537,10 +593,11 @@ $$
     0 & (i = j)
   \end{cases}
 \end{equation}
-其中，$U_{ii}^\mathbb{A} = 0$ 直接由轨道正交条件 (\ref{eq.condition-ortho-conclusion}) 所导出。
+其中，$U_{ii}^\mathbb{A} = 0$ 直接由轨道正交条件 (\ref{eq.collary.ortho}) 所导出。
 
-若 Fock 矩阵导数也满足正则 SCF 条件，即 $\partial_\mathbb{A} F_{ij} = \delta_{ij} \partial_\mathbb{A} \varepsilon_i$，那么
+假使，Fock 矩阵导数也满足正则自洽场条件，即 $\partial_\mathbb{A} F_{ij} = \delta_{ij} \partial_\mathbb{A} \varepsilon_i$，那么
 \begin{equation}
+  \label{eq.unstable-Uij}
   U_{ij}^\mathbb{A} = - \frac{F_{ij}^\mathbb{A} + A_{ij, bk} U_{bk}^\mathbb{A}}{\varepsilon_i - \varepsilon_j} \quad \left( i \neq j, \, \partial_\mathbb{A} F_{ij} = 0 \right)
 \end{equation}
 上式的分子一般非零，而分母 $\varepsilon_i - \varepsilon_j$ 则有可能接近于零；举例而言，甲烷分子的最高能级占据轨道为 $T_d$ 不可约表示，即三重简并，因此存在 $i \neq j$ 且 $\varepsilon_i - \varepsilon_j = 0$ 的情形，从而将 $U_{ij}^\mathbb{A}$ 推向无穷大，导致严重的数值误差。因此，为在程序实现中避免这类数值误差，那么 $\partial_\mathbb{A} F_{ij}$ 不适合在 $i \neq j$ 时设为零。
@@ -560,7 +617,7 @@ $$
 xDH 总能量的全导数可以分为 Skeleton 部分与对轨道系数的导数两部分：
 \begin{equation}
   \label{eq.def.pdA-xDH-0}
-  \partial_\mathbb{A} E^\textsf{xDH} = \partial_\mathbb{A}^\mathrm{S} E^\textsf{xDH} + \frac{\partial E^\textsf{xDH}}{\partial C_{\mu q}} \frac{\partial C_{\mu q}}{\partial \mathbb{A}}
+  \partial_\mathbb{A} E^\textsf{xDH} = \partial_\mathbb{A}^\mathrm{S} E^\textsf{xDH} + \frac{\partial E^\textsf{xDH}}{\partial C_{\mu q}} \partial_\mathbb{A} C_{\mu q}
 \end{equation}
 对于轨道系数导数部分，我们作更多讨论。定义 xDH 的广义 Fock 矩阵 (generalized Fock matrix) 为
 \begin{equation}
@@ -605,15 +662,15 @@ CI 的 (一阶) 约化密度 (RDM, \underline{R}educed \underline{D}ensity \unde
 \begin{equation*}
   \langle \hat o \rangle = \frac{\langle \Psi^\textsf{CI} | \hat o | \Psi^\textsf{CI} \rangle}{\langle \Psi^\textsf{CI} | \Psi^\textsf{CI} \rangle} = o_{pq} D_{qp}^{\textsf{CI},\textsf{RDM}}
 \end{equation*}
-注意到 $(a_p^\dagger a_q)^\dagger = a_q^\dagger a_p$，因此 $D_{qp}^{\textsf{CI},\textsf{RDM}}$ 是复共轭的。由于本工作仅考虑实数范围内的问题，因此可以认为约化密度是对称的。
+注意到 $(a_p^\dagger a_q)^\dagger = a_q^\dagger a_p$，因此 $D_{qp}^{\textsf{CI},\textsf{RDM}}$ 是复共轭的。由于本工作仅考虑实数范围内的问题，因此可以认为约化密度矩阵是对称的。
 
-现在考虑 CI 波函数的电性质 Skeleton 导数问题。对于 Hamilton 算符 $\hat H$，若不考虑原子核互斥能，电性质仅对单电子算符 $\hat h = \hat T + \hat V_\mathrm{ext}$ 中的外势 $\hat V_\mathrm{ext}$ 有微扰贡献：
+现在考虑 CI 波函数的电性质 Skeleton 导数问题。对于 Hamilton 算符 $\hat H$，电子所引起的能量效应中，电性质仅对单电子算符 $\hat h = \hat T + \hat V_\mathrm{ext}$ 中的外势 $\hat V_\mathrm{ext}$ 有微扰贡献：
 \begin{equation}
-  \partial_\mathbb{A}^\mathrm{S} \hat H = \partial_\mathbb{A}^\mathrm{S} \hat h = h_{pq}^\mathbb{A} a_p^\dagger a_q
+  \partial_\mathbb{A}^\mathrm{S} \hat H = \partial_\mathbb{A}^\mathrm{S} \hat h + \partial_\mathbb{A} \hat V_\textsf{non-elec} = h_{pq}^\mathbb{A} a_p^\dagger a_q + \partial_\mathbb{A} \hat V_\textsf{non-elec}
 \end{equation}
 依 Hellmann-Feynman 定理，算符期望的 Skeleton 导数等于 Skeleton 导数下算符的期望：
 \begin{equation}
-  \partial_\mathbb{A}^\mathrm{S} E^\textsf{CI} = \partial_\mathbb{A}^\mathrm{S} \langle \hat H \rangle = \langle \partial_\mathbb{A}^\mathrm{S} \hat H \rangle = \langle \partial_\mathbb{A}^\mathrm{S} \hat h \rangle = h_{pq}^\mathbb{A} D_{pq}^{\textsf{CI}, \textsf{RDM}}
+  \partial_\mathbb{A}^\mathrm{S} E^\textsf{CI} = \partial_\mathbb{A}^\mathrm{S} \langle \hat H \rangle = \langle \partial_\mathbb{A}^\mathrm{S} \hat H \rangle = \langle \partial_\mathbb{A}^\mathrm{S} \hat h \rangle + \partial_\mathbb{A} E^\textsf{non-elec} = h_{pq}^\mathbb{A} D_{pq}^{\textsf{CI}, \textsf{RDM}} + \partial_\mathbb{A} E^\textsf{non-elec}
 \end{equation}
 
 但作为常见的 xDH 型泛函能量贡献项，MP2 相关能或其它形式的相关能，在定义约化密度的问题上存在一些困难。MP2 方法的波函数并非是对 $\hat H$ 变分极小的，因此 Hellmann-Feynman 定理失效，从而 MP2 方法的约化密度矩阵不能通过与 CI 相同的方式 (\ref{eq.def.rdm-ci}) 所定义\footnote{
@@ -625,14 +682,14 @@ CI 的 (一阶) 约化密度 (RDM, \underline{R}educed \underline{D}ensity \unde
   \begin{equation*}
     D_{pq}^{\textsf{(2)},\textsf{RDM}} = - \langle \Psi^\textsf{(1)} | a_p^\dagger a_q | \Psi^\textsf{(1)} \rangle
   \end{equation*}
-  上述推导是基于自旋轨道下的；应当可以验证，在开壳层或闭壳层的限制下，通过 $\partial_\mathbb{A}^\mathrm{S} E = h_{pq}^\mathbb{A} D_{pq}^\textsf{RDM}$ 给出的约化密度矩阵，与通过二次量子化算符下给出的约化密度矩阵是一致的。
-}。但我们注意到，若能量的电性质 Skeleton 导数可以写为下述矩阵乘积：
+  上述推导是基于自旋轨道下的；应当可以验证，在开壳层或闭壳层的限制下，通过 $\partial_\mathbb{A}^\mathrm{S} E \leftarrow h_{pq}^\mathbb{A} D_{pq}^\textsf{RDM}$ 给出的约化密度矩阵，与通过二次量子化算符下给出的约化密度矩阵是一致的。
+}。但我们注意到，若能量的电性质 Skeleton 导数的电子效应部分可以写为下述矩阵乘积与非电子效应导数之和：
 \begin{empheq}[box=\fbox]{equation}
   \label{eq.collary.rdm-definition}
-  \partial_\mathbb{A}^\mathrm{S} E = h_{pq}^\mathbb{A} D_{pq}^\textsf{RDM} \quad \text{(electric property)}
+  \partial_\mathbb{A}^\mathrm{S} E = h_{pq}^\mathbb{A} D_{pq}^\textsf{RDM} + \partial_\mathbb{A} E^\textsf{non-elec} \quad \text{(electric property)}
 \end{empheq}
 那么就可以从 Skeleton 导数 $\partial_\mathbb{A}^\mathrm{S} E$ 推出约化密度矩阵 $D_{pq}^\textsf{RDM}$\footnote{
-  但注意到，若是其它性质，譬如原子核导数问题，Skeleton 导数对基组本身产生扰动，因而式 (\ref{eq.def-E-tot}) 所定义的能量项的每一项都有 Skeleton 导数的贡献；这将导致表达式较为复杂，即单电子 Skeleton 导数 $\partial_\mathbb{A}^\mathrm{S} E \leftarrow h_{pq}^\mathbb{A} D_{pq}^\textsf{RDM}$ 只是原子核导数问题的其中一个贡献项。因此，通过 Skeleton 导数给出约化密度，只能在电性质梯度下、或其它仅对单电子算符产生微扰的性质下，方能成立。
+  但注意到，若是其它性质，譬如原子核导数问题，Skeleton 导数对基组本身产生扰动，因而式 (\ref{eq.def-E-tot}) 所定义的能量项的每一项都有 Skeleton 导数的贡献；这将导致表达式较为复杂，即单电子 Skeleton 导数 $\partial_\mathbb{A}^\mathrm{S} E \leftarrow h_{pq}^\mathbb{A} D_{pq}^\textsf{RDM}$ 只是原子核导数问题的其中一个电子效应贡献项。因此，通过 Skeleton 导数给出约化密度，只能在电性质梯度下、或其它仅对单电子算符产生微扰的性质下，方能成立。
 }。该约化密度矩阵的定义不仅适用于 MP2 等非变分的后自洽场方法，也适用于 xDH 型泛函。我们记 xDH 型泛函的约化密度为 $D_{pq}^{\textsf{xDH}, \textsf{RDM}}$。
 
 \subsubsection{一阶梯度：Z-Vector 方法与弛豫密度}
@@ -646,7 +703,7 @@ Handy 与 Schaefer III 指出\cite{Handy-Schaefer.JCP.1984}，对于一阶梯度
   \label{eq.Z-vector}
   - (\varepsilon_a - \varepsilon_i) Z_{ai} - A_{ai, bj} Z_{bj} = L_{ai}
 \end{empheq}
-那么 Lagrangian 对能量的贡献可以化为
+在本工作中，该方程称为 Z-Vector 方程。那么 Lagrangian 对能量的贡献可以化为
 \begin{empheq}[box=\fbox]{equation}
   \label{eq.Z-vector-contrib-to-eng-deriv}
   \partial_\mathbb{A} E \leftarrow L_{ai} U_{ai}^\mathbb{A} = Z_{ai} F_{ai}^\mathbb{A}
@@ -657,7 +714,7 @@ Handy 与 Schaefer III 指出\cite{Handy-Schaefer.JCP.1984}，对于一阶梯度
   \label{eq.def.scrA}
   \mathscr{A}_{ai,bj} = - \left( (\varepsilon_a - \varepsilon_i) \delta_{ai, bj} + A_{ai, bj} \right)
 \end{equation}
-现在将角标 $ai$ 和 $bj$ 看作联合角标 (即将 $Z_{ai}$ 视作关于角标 $ai$ 的一维向量 $\mathbf{Z}$、将 $\mathscr{A}_{ai, bj}$ 视作关于角标 $ai$、$bj$ 的二维矩阵 $\pmb{\mathscr{A}}$)。那么，CP-SCF 方程 (\ref{eq.CP-SCF}) 与 Z-Vector 方法方程 (\ref{eq.Z-vector}) 分别写为
+现在将角标 $ai$ 和 $bj$ 看作联合角标 (即将 $Z_{ai}$ 视作关于角标 $ai$ 的一维向量 $\mathbf{Z}$、将 $\mathscr{A}_{ai, bj}$ 视作关于角标 $ai$、$bj$ 的二维矩阵 $\pmb{\mathscr{A}}$)。那么，CP-SCF 方程 (\ref{eq.CP-SCF}) 与 Z-Vector 方程 (\ref{eq.Z-vector}) 分别写为
 \begin{align}
   \label{eq.CP-SCF-matrix-form}
   \pmb{\mathscr{A}} \mathbf{U}^\mathbb{A} &= \mathbf{F}^\mathbb{A} \\
@@ -670,12 +727,12 @@ Handy 与 Schaefer III 指出\cite{Handy-Schaefer.JCP.1984}，对于一阶梯度
 \end{equation}
 这就证明了式 (\ref{eq.Z-vector-contrib-to-eng-deriv})。该推导也适用于 xDH 型泛函；我们记 xDH 型泛函的 Z 矩阵为 $Z_{ai}^\textsf{xDH}$。
 
-最后，我们引入弛豫密度矩阵 (Response/Relax/Lagragian Density Matrix)。注意到对于 xDH 型泛函，电性质的 Skeleton 导数对总梯度的贡献是 $\partial_\mathbb{A} E^\textsf{xDH} \leftarrow \partial_\mathbb{A}^\mathrm{S} E^\textsf{xDH} = D_{pq}^{\textsf{xDH}, \textsf{RDM}} F_{pq}^\mathbb{A}$，轨道导数对总梯度的贡献是 $\partial_\mathbb{A} E^\textsf{xDH} \leftarrow L_{ai}^\textsf{xDH} U_{ai}^\mathbb{A} = Z_{ai}^\textsf{xDH} F_{ai}^\mathbb{A}$；两者都可以写为矩阵与 $F_{pq}^\mathbb{A}$ 的乘积之和。那么就令 xDH 弛豫密度 $D_{pq}^\textsf{xDH}$ 为 xDH 约化密度与 Z 矩阵之和；弛豫密度与 Fock 矩阵 Skeleton 导数的乘积和就是 xDH 型泛函的电性质梯度：
+最后，我们引入弛豫密度矩阵 (Response/Relax/Lagragian Density Matrix)。注意到对于 xDH 型泛函，由式 (\ref{eq.collary.rdm-definition}) 给出的电性质的 Skeleton 导数对总梯度的贡献是 $\partial_\mathbb{A} E^\textsf{xDH} \leftarrow \partial_\mathbb{A}^\mathrm{S} E^\textsf{xDH} = D_{pq}^{\textsf{xDH}, \textsf{RDM}} F_{pq}^\mathbb{A} + \partial_\mathbb{A} E^\textsf{non-elec}$，轨道导数对总梯度的贡献是 $\partial_\mathbb{A} E^\textsf{xDH} \leftarrow L_{ai}^\textsf{xDH} U_{ai}^\mathbb{A} = Z_{ai}^\textsf{xDH} F_{ai}^\mathbb{A}$；两者都可以写为矩阵与 $F_{pq}^\mathbb{A}$ 的乘积之和。那么就令 xDH 弛豫密度 $D_{pq}^\textsf{xDH}$ 为 xDH 约化密度与 Z 矩阵之和；弛豫密度与 Fock 矩阵 Skeleton 导数的乘积和就是 xDH 型泛函电子效应的电性质梯度：
 \begin{empheq}[box=\fbox]{align}
   \label{eq.def.xdh-resp-dm}
   D_{pq}^\textsf{xDH} &= D_{pq}^{\textsf{xDH}, \textsf{RDM}} + Z_{ai}^{\textsf{xDH}} \delta_{ap} \delta_{qi} \\
   \label{eq.collary.deriv-xdh-1st-order}
-  \partial_\mathbb{A} E^\textsf{xDH} &= D_{pq}^\textsf{xDH} F_{pq}^\mathbb{A}
+  \partial_\mathbb{A} E^\textsf{xDH} &= D_{pq}^\textsf{xDH} F_{pq}^\mathbb{A} + \partial_\mathbb{A} E^\textsf{non-elec}
 \end{empheq}
 
 \subsubsection{二阶梯度：二阶能量泛函导数}
@@ -683,7 +740,7 @@ Handy 与 Schaefer III 指出\cite{Handy-Schaefer.JCP.1984}，对于一阶梯度
 从式 (\ref{eq.collary.deriv-xdh-1st-order})，利用链式法则，立即可以导出 xDH 能量泛函的电性质二阶导数：
 \begin{empheq}[box=\fbox]{equation}
   \label{eq.def.second-deriv-xdh-eng}
-  \partial_\mathbb{A} \partial_\mathbb{B} E^\textsf{xDH} = D_{pq}^\textsf{xDH} \partial_\mathbb{B} F_{pq}^\mathbb{A} + \partial_\mathbb{B} D_{pq}^{\textsf{xDH}, \textsf{RDM}} F_{pq}^\mathbb{A} + \partial_\mathbb{B} Z_{ai}^\textsf{xDH} F_{ai}^\mathbb{A}
+  \partial_\mathbb{A} \partial_\mathbb{B} E^\textsf{xDH} = D_{pq}^\textsf{xDH} \partial_\mathbb{B} F_{pq}^\mathbb{A} + \partial_\mathbb{B} D_{pq}^{\textsf{xDH}, \textsf{RDM}} F_{pq}^\mathbb{A} + \partial_\mathbb{B} Z_{ai}^\textsf{xDH} F_{ai}^\mathbb{A} + \partial_\mathbb{A} \partial_\mathbb{B} E^\textsf{non-elec}
 \end{empheq}
 
 式 (\ref{eq.def.second-deriv-xdh-eng}) 的第一项比较容易求取：
@@ -691,7 +748,7 @@ Handy 与 Schaefer III 指出\cite{Handy-Schaefer.JCP.1984}，对于一阶梯度
   \label{eq.second-deriv-xdh-eng-term1}
   \partial_\mathbb{B} F_{pq}^\mathbb{A} = U_{mp}^\mathbb{B} F_{mq}^\mathbb{A} + U_{mq}^\mathbb{B} F_{mp}^\mathbb{A} + F_{pq}^\mathbb{AB}
 \end{equation}
-特别地，对于外加偶极电场而言，由于式 (\ref{eq.def.huv-with-perturb}) 所给出的 $h_{\mu\nu} (\pmb{\mathcal{E}})$ 关于外场 $\pmb{\mathcal{E}}$ 的微扰只有一阶项，因此二阶导数为零即当 $\mathbb{A}, \mathbb{B}$ 指代电场微扰量 $\pmb{\mathcal{E}}$ 时，$F_{pq}^\mathbb{AB} = 0$。
+特别地，对于外加偶极电场而言，由于式 (\ref{eq.def.huv-with-perturb}) 所给出的 $h_{\mu\nu} (\pmb{\mathcal{E}})$ 关于外场 $\pmb{\mathcal{E}}$ 的微扰只有一阶项，因此二阶导数为零即当 $\mathbb{A}, \mathbb{B}$ 指代电场微扰量 $\pmb{\mathcal{E}}$ 时，$F_{pq}^\mathbb{AB} = 0$。非电子效应项出于同样的理由，也有 $\partial_\mathbb{A} \partial_\mathbb{B} E^\textsf{non-elec} = 0$。
 
 式 (\ref{eq.def.second-deriv-xdh-eng}) 的第二项需要求取 xDH 的约化密度梯度；对于不同的泛函而言，其具体表达式不同，我们将在后一节中对 MP2 型 xDH 泛函的具体实现作更多说明。
 
@@ -715,7 +772,8 @@ Handy 与 Schaefer III 指出\cite{Handy-Schaefer.JCP.1984}，对于一阶梯度
 \end{equation*}
 或依矩阵元素的定义
 \begin{equation}
-  \mathscr{R}_{ai}^\mathbb{B} = \partial_\mathbb{B} L_{ai} - \partial_\mathbb{B} A_{ai, bj} Z_{bj}
+  \label{eq.def.Rai-B}
+  \mathscr{R}_{ai}^\mathbb{B} = \partial_\mathbb{B} L_{ai} - \partial_\mathbb{B} \mathscr{A}_{ai, bj} Z_{bj}
 \end{equation}
 于是可整理得到
 \begin{equation}
@@ -727,36 +785,71 @@ Handy 与 Schaefer III 指出\cite{Handy-Schaefer.JCP.1984}，对于一阶梯度
 \end{equation*}
 或者写为矩阵元素乘积和的形式：
 \begin{empheq}[box=\fbox]{equation}
+  \label{eq.interchange-theorem}
   \partial_\mathbb{A} \partial_\mathbb{B} E \leftarrow \mathscr{R}_{ai}^\mathbb{B} U_{ai}^\mathbb{A}
 \end{empheq}
 该过程也被称为交换定理 (interchange theorem)\cite{Cammi-Frisch.TCA.2004}。
 
-Z 矩阵导数对总能量二阶梯度的贡献，其求取难度在于如何给出 $\partial_\mathbb{B} L_{ai}$ 与 $\partial_\mathbb{B} \mathscr{A}_{ai, bj}$。其中，式 $\partial_\mathbb{B} \mathscr{A}_{ai, bj}$ 在这里可以进一步展开讨论。注意到式 (\ref{eq.def.scrA}) 对 $\mathscr{A}_{ai, bj}$ 的定义中，存在轨道能 $\varepsilon_p$；但在 \ref{sec.3.Uia-Uai} 小节中的讨论中，表明由于轨道能的导数本身只在正则 SCF 条件下成立、而这将会使得 U 矩阵的占据-占据与非占-非占部分 $U_{ij}^\mathbb{A}, U_{ab}^\mathbb{A}$ 出现数值问题。由于二阶梯度 (\ref{eq.def.second-deriv-xdh-eng}) 的其它项计算中确实需要使用到 $U_{ij}^\mathbb{A}, U_{ab}^\mathbb{A}$，因而我们不能简单地对轨道能导数 $\partial_\mathbb{B} \varepsilon_p$ 直接作计算。为此，我们回顾式 (\ref{eq.pd-Fai-0})，并注意到 Fock 矩阵分块对角化条件 (\ref{eq.condition-Fai}) 与 U 矩阵反对称性 (\ref{eq.condition-ortho-conclusion})，在允许非正则 SCF 的情形下对 $\mathscr{A}_{ai, bj}$ 作重新定义：
+Z 矩阵导数对总能量二阶梯度的贡献，其求取难度在于如何给出 $\partial_\mathbb{B} L_{ai}$ 与 $\partial_\mathbb{B} \mathscr{A}_{ai, bj}$。其中，式 $\partial_\mathbb{B} \mathscr{A}_{ai, bj}$ 在这里可以进一步展开讨论。注意到式 (\ref{eq.def.scrA}) 对 $\mathscr{A}_{ai, bj}$ 的定义中，存在轨道能 $\varepsilon_p$；但在 \ref{sec.3.Uia-Uai} 小节中的讨论中，表明由于轨道能的导数本身只在正则自洽场条件下成立、而这将会使得 U 矩阵的占据-占据与非占-非占部分 $U_{ij}^\mathbb{A}, U_{ab}^\mathbb{A}$ 出现数值问题。由于二阶梯度 (\ref{eq.def.second-deriv-xdh-eng}) 的其它项计算中确实需要使用到 $U_{ij}^\mathbb{A}, U_{ab}^\mathbb{A}$，因而我们不能简单地对轨道能导数 $\partial_\mathbb{B} \varepsilon_p$ 直接作计算。为此，我们回顾式 (\ref{eq.pd-Fai-0})，并注意到自洽场条件 (\ref{eq.constraint.SCF}) 与 U 矩阵反对称性 (\ref{eq.collary.ortho})，在允许非正则 SCF 的情形下对 $\mathscr{A}_{ai, bj}$ 作重新定义：
 \begin{equation}
   \mathscr{A}_{ai, bj} = F_{ij} \delta_{ab} - F_{ab} \delta_{ij} - A_{ai, bj}
 \end{equation}
 其全导数的项目很多，但都可以利用基本的链式法则给出。
 
-\subsubsection{二阶梯度：表达式整理}
-
 \subsubsection{总结}
 
-至此，我们推演了 xDH 框架下双杂化泛函的电性质一阶与二阶梯度。目前为止的推演没有引入具体的能量计算表达式，因此该推导预期应可用于任何基于 SCF 所给出的分子轨道 $C_{\mu p}$、进行能量 $E^\textsf{xDH}$ 计算的方法；这种计算方法可以是类如 B2PLYP 的能量泛函中低阶部分与自洽场相同的 bDH 泛函、可以是类如 XYGJ-OS 的 OS-MP2 型泛函、也应可以是 dRPA75 的 RPA 型泛函。为具体地实现该框架下的二阶梯度程序化，需要做的是细化框架的表达式。
+至此，我们推演了 xDH 框架下双杂化泛函的电性质一阶与二阶梯度。目前为止的推演没有引入具体的能量计算表达式，因此该推导预期应可用于任何基于 SCF 所给出的分子轨道 $C_{\mu p}$、进行非变分能量 $E^\textsf{xDH}$ 计算的方法；这种计算方法可以是类如 B2PLYP 的能量泛函中低阶部分与自洽场相同的 bDH 泛函、可以是类如 XYGJ-OS 的 OS-MP2 型泛函、也应预期可以是 dRPA75 的 RPA 型泛函。为具体地实现该框架下的二阶梯度程序化，需要做的是细化框架的表达式。
 
 这里总结二阶梯度的计算流程，以及有必要进行细化的表达式：
 \begin{itemize}[nosep]
   \item 电性质的梯度量 $F_{\mu \nu}^\mathbb{A} = h_{\mu \nu}^\mathbb{A}$，对于偶极外场依式 (\ref{eq.def.sleketon-huv}) 给出；
-  \item 自洽场泛函 A 张量 $A_{\mu \nu, \kappa \lambda}$ 依式 (\ref{eq.def-Auvkl}) 给出；该项有待细化；
+  \item 自洽场泛函 A 张量 $A_{\mu \nu, \kappa \lambda}$ 依式 (\ref{eq.def.Auvkl}) 给出；该项有待细化；
   \item 能量泛函的广义 Fock 矩阵 $F_{pq}^\textsf{xDH}$ 与 Lagrangian $L_{ai}^\textsf{xDH}$ 分别依式 (\ref{eq.def.generalized-fock}, \ref{eq.def.lagrangian}) 给出；该项有待细化；
   \item 通过 Z-Vector 方法，通过与 CP-SCF 相同的计算过程 (\ref{eq.Z-vector}) 给出 Z 矩阵 $Z_{ai}^\textsf{xDH}$；
   \item 通过类如式 (\ref{eq.def.rdm-ci}) 所使用的二次量子化算符运算、或通过式 (\ref{eq.collary.rdm-definition}) 的 Skeleton 导数推演，给出能量泛函对应的约化密度矩阵 $D_{pq}^{\textsf{xDH}, \textsf{RDM}}$，进而依式 (\ref{eq.def.xdh-resp-dm}) 与 Z 矩阵结合给出弛豫密度 $D_{pq}^\textsf{xDH}$；该项有待细化；
   \item 通过式 (\ref{eq.collary.deriv-xdh-1st-order}) 给出能量一阶梯度$\partial_\mathbb{A} E^\textsf{xDH}$；
-  \item 描述轨道旋转的 U 矩阵的非占-占据部分 $U_{ai}^\mathbb{A}$ 依式 (\ref{eq.CP-SCF}) 给出；占据-非占部分 $U_{ia}^\mathbb{A}$ 依轨道正交条件推论 (\ref{eq.condition-ortho-conclusion}) 给出；其余部分对于电性质可以依式 (\ref{eq.Uij-Uab-zero}) 直接置零，也可以依其它规则给出；
-  \item 
+  \item 描述轨道旋转的 U 矩阵的非占-占据部分 $U_{ai}^\mathbb{A}$ 依式 (\ref{eq.CP-SCF}) 给出；占据-非占部分 $U_{ia}^\mathbb{A}$ 依轨道正交条件推论 (\ref{eq.collary.ortho}) 给出；其余部分对于电性质可以依式 (\ref{eq.Uij-Uab-zero}) 直接置零，也可以依其它规则给出；
+  \item 电性质的二阶梯度量 $F_{\mu \nu}^\mathbb{AB}$，对于偶极外场为零；
+  \item 依导数规则求取 Fock 导数 $\partial_\mathbb{B} F_{pq}$、约化密度导数 $\partial_\mathbb{B} D_{pq}^{\textsf{xDH}, \textsf{RDM}}$、Lagrangian 导数 $\partial_\mathbb{B} L_{ai}$、A 张量导数 $\partial_\mathbb{B} A_{ai, bj}$，计算得到 $\mathscr{R}_{ai}^\mathbb{B}$ (\ref{eq.def.Rai-B}) 并最终汇总到能量二阶梯度 $\partial_\mathbb{A} \partial_\mathbb{B} E^\textsf{xDH}$ (\ref{eq.def.second-deriv-xdh-eng})。
 \end{itemize}
 
-\subsection{MP2 型双杂化泛函解析静态极化率程序化}
+\subsection{闭壳层 MP2 型双杂化泛函解析静态极化率程序化}
 \label{sec.3.program}
+
+这一节中，我们将具体地考察双杂化泛函在偶极电场下的二阶梯度计算过程与程序化思路。关于程序化实现的一些具体路线与限制、以及必要的补充记号定义是
+\begin{itemize}[nosep]
+  \item 可以实现以 XYG7 (作为区分同自旋与异自旋 MP2 相关能的泛函)、$\omega$B97X-2(TQZ) (作为含有长程交换能的泛函)、TPSS0-DH (作为含有 meta-GGA 的双杂化泛函)、lrc-XYG3 (作为含有普通、长程、短程 MP2 相关能的泛函) 等为代表的双杂化泛函的极化率计算。
+  \item 对于含有多种 MP2 相关能形式的泛函 (以 lrc-XYG3、RS-PBE-P86 为代表)，其微扰能形式是
+        \begin{equation*}
+          E^\textsf{PT} = c_\mathrm{c}^\textsf{(2)} E_\mathrm{c}^\textsf{(2)} + c_\mathrm{c}^{\textsf{(2)}, \textsf{LR}} E_\mathrm{c}^{\textsf{(2)}, \textsf{LR}} + c_\mathrm{c}^{\textsf{(2)}, \textsf{SR}} E_\mathrm{c}^{\textsf{(2)}, \textsf{SR}}
+        \end{equation*}
+        假使我们希望求取微扰能对 Lagrangian 的贡献，那么这类泛函的贡献应写为
+        \begin{equation*}
+          L_{ai}^\textsf{PT} = c_\mathrm{c}^\textsf{(2)} L_{ai}^\textsf{(2)} + c_\mathrm{c}^{\textsf{(2)}, \textsf{LR}} L_{ai}^{\textsf{(2)}, \textsf{LR}} + c_\mathrm{c}^{\textsf{(2)}, \textsf{SR}} L_{ai}^{\textsf{(2)}, \textsf{SR}}
+        \end{equation*}
+        即微扰总 Lagrangian 的贡献等于各子项的 Lagrangian、依其对能量贡献的比例的加权和。这种可加性也同样可以应用到交换相关泛函的子项拆分；以及弛豫密度、Z 矩阵、A 张量等也适用这种可加性。同时，除了使用了不同类型但维度相同的 ERI，短程、长程 MP2 相关能计算方式与普通的 MP2 完全一致；因此，不失一般性，我们仅讨论 $E^\textsf{PT} = c_\mathrm{c}^\textsf{(2)} E_\mathrm{c}^\textsf{(2)}$ 的情形。
+  \item 对于含有多种严格交换能的泛函 (以 $\omega$B97X-2(TQZ)、RS-PBE-P86 为代表)，首先短程交换能 $E_\mathrm{x}^\textsf{SR}$ 可以拆分为普通的严格交换能 $E_\mathrm{x}^\textsf{exact}$ 与长程交换能 $E_\mathrm{x}^\textsf{LR}$ 的差减；其次，长程交换能的计算与普通严格交换能计算流程一致。与 MP2 相关能同样，我们也仅在后文引入严格交换能 $E_\mathrm{x}^\textsf{exact}$。
+  \item MP2 相关能依自旋平行或反平行，拆分为同自旋 (SS, \underline{S}ame-\underline{S}pin) 与异自旋 (OS, \underline{O}pposite-\underline{S}pin) 两部分：
+        \begin{align}
+          E_\mathrm{c}^{\textsf{(2)}, \textsf{SS}} &= (t_{ij}^{ab} - t_{ij}^{ba}) (ia|jb) \\
+          E_\mathrm{c}^{\textsf{(2)}, \textsf{OS}} &= t_{ij}^{ab} (ia|jb) 
+        \end{align}
+        若同自旋能量系数为 $c_\mathrm{c}^\textsf{SS}$、异自旋能量系数为 $c_\mathrm{c}^\textsf{OS}$，则总 MP2 相关能是
+        \begin{equation}
+          E_\mathrm{c}^{\textsf{(2)}} = c_\mathrm{c}^\textsf{SS} E_\mathrm{c}^{\textsf{(2)}, \textsf{SS}} + c_\mathrm{c}^\textsf{OS} E_\mathrm{c}^{\textsf{(2)}, \textsf{OS}} = \big( (c_\mathrm{c}^\textsf{SS} + c_\mathrm{c}^\textsf{OS}) t_{ij}^{ab} - c_\mathrm{c}^\textsf{SS} t_{ij}^{ba} \big) (ia|jb)
+        \end{equation}
+        出于公式推演的方便，我们会记
+        \begin{align}
+          g_{ij}^{ab} &= (ia|jb) \\
+          T_{ij}^{ab} &= (c_\mathrm{c}^\textsf{SS} + c_\mathrm{c}^\textsf{OS}) t_{ij}^{ab} - c_\mathrm{c}^\textsf{SS} t_{ij}^{ba} \\
+          G_{ij}^{ab} &= (c_\mathrm{c}^\textsf{SS} + c_\mathrm{c}^\textsf{OS}) g_{ij}^{ab} - c_\mathrm{c}^\textsf{SS} g_{ij}^{ba}
+        \end{align}
+        由此，MP2 相关能还可以写为
+        \begin{align}
+          E_\mathrm{c}^\textsf{(2)} = T_{ij}^{ab} g_{ij}^{ab} = t_{ij}^{ab} G_{ij}^{ab}
+        \end{align}
+  \item 在极化率问题中，$F_{\mu \nu}^\mathbb{AB} = 0$ 且 $\partial_\mathbb{A} \partial_\mathbb{B} E^\textsf{non-elec} = 0$。
+\end{itemize}
 
 \subsubsection{MP2 型双杂化泛函弛豫密度实现}
 
@@ -872,7 +965,7 @@ Z 矩阵导数对总能量二阶梯度的贡献，其求取难度在于如何给
 
 对于闭壳层 MP2，非正则情形的能量与正则情形相同，都可以用激发系数与电子积分的乘积得到：
 \begin{align}
-  E_\mathrm{c}^\textsf{MP2} &= T_{ij}^{ab} (ia|jb) \\
+  E_\mathrm{c}^\textsf{(2)} &= T_{ij}^{ab} (ia|jb) \\
   T_{ij}^{ab} &= 2 t_{ij}^{ab} - t_{ij}^{ba}
 \end{align}
 但激发系数并非是正则情形下的 $t_{ij}^{ab} = (ia|jb) / D_{ij}^{ab}$，而是需要通过类似于 CISD 的迭代过程求解\cite{Pulay-Saeboe.TCA.1986}：
@@ -892,19 +985,19 @@ Z 矩阵导数对总能量二阶梯度的贡献，其求取难度在于如何给
 \end{align}
 在角标 $a, b$ 求和的前提下，容易证明对偶正交可以从激发张量迁移到 ERI 张量：
 \begin{equation}
-  E_\mathrm{c}^\textsf{MP2} = T_{ij}^{ab} g_{ij}^{ab} = t_{ij}^{ab} G_{ij}^{ab}
+  E_\mathrm{c}^\textsf{(2)} = T_{ij}^{ab} g_{ij}^{ab} = t_{ij}^{ab} G_{ij}^{ab}
 \end{equation}
 后续推导中经常使用类似的技巧。
 
 \subsubsection{电性质一阶梯度：MP2 相关能对性质的 Skeleton 导数}
 \label{sec.3.skeleton}
 
-本小节将给出 MP2 相关能的 Skeleton 导数 $\partial_\mathbb{A}^\mathrm{S} E_\mathrm{c}^\textsf{MP2}$。
+本小节将给出 MP2 相关能的 Skeleton 导数 $\partial_\mathbb{A}^\mathrm{S} E_\mathrm{c}^\textsf{(2)}$。
 
 对于电性质，Skeleton 导数仅在涉及 Fock 矩阵或单电子积分矩阵、或者原子核互斥能时出现。对于分子轨道 ERI 积分 $g_{ij}^{ab}$，其 Skeleton 导数为零。因此，MP2 相关能的 Skeleton 导数为
 \begin{equation}
   \label{eq.pdSA-Ec-MP2-0}
-  \partial_\mathbb{A}^\mathrm{S} E_\mathrm{c}^\textsf{MP2} = \frac{\partial E_\mathrm{c}^\textsf{MP2} (\mathbb{A}, \mathbf{C})}{\partial \mathbb{A}} = \frac{\partial t_{ij}^{ab}}{\partial \mathbb{A}} G_{ij}^{ab}
+  \partial_\mathbb{A}^\mathrm{S} E_\mathrm{c}^\textsf{(2)} = \frac{\partial E_\mathrm{c}^\textsf{(2)} (\mathbb{A}, \mathbf{C})}{\partial \mathbb{A}} = \frac{\partial t_{ij}^{ab}}{\partial \mathbb{A}} G_{ij}^{ab}
 \end{equation}
 因此，对于 Skeleton 导数，唯一需要关注的是激发张量 $t_{ij}^{ab}$ 在外场微扰 $\mathbb{A}$ 下的导数。
 
@@ -913,7 +1006,7 @@ Z 矩阵导数对总能量二阶梯度的贡献，其求取难度在于如何给
   \label{eq.auxfunc-pdA}
   \frac{\partial \pmb{\mathscr{F}}}{\partial \mathbb{A}} + \frac{\partial \pmb{\mathscr{F}}}{\partial \mathbf{t}} \frac{\partial \mathbf{t}}{\partial \mathbb{A}} = 0
 \end{equation}
-由于 Fock 矩阵不是 MP2 激发张量 $\mathbf{t}$ 的函数，因此讨论 $\partial_\mathbf{t} \pmb{\mathscr{F}}$ 时，可以安全地引入正则 SCF 条件 $F_{pq} = \varepsilon_p \delta_{pq}$；在该情形下，
+由于 Fock 矩阵不是 MP2 激发张量 $\mathbf{t}$ 的函数，因此讨论 $\partial_\mathbf{t} \pmb{\mathscr{F}}$ 时，可以安全地引入正则自洽场条件 $F_{pq} = \varepsilon_p \delta_{pq}$；在该情形下，
 \begin{equation*}
   \mathscr{F}_{ij}^{ab} = D_{ij}^{ab} t_{ij}^{ab} - (ia|jb) \quad \text{(when derivative not related to Fock matrix)}
 \end{equation*}
@@ -934,7 +1027,7 @@ $D_{ij}^{ab}$ 定义见式 (\ref{eq.def.D-ijab})。从而，对 $F_{ij}^{ab}$ �
 \end{equation}
 代入式 (\ref{eq.pdSA-Ec-MP2-0})，并作角标对换与应用张量对称性，可以得到
 \begin{empheq}[box=\fbox]{align}
-  \partial_\mathbb{A}^\mathrm{S} E_\mathrm{c}^\textsf{MP2} &= \left( - F_{ki}^\mathbb{A} t_{kj}^{ab} - F_{kj}^\mathbb{A} t_{ik}^{ab} + F_{ca}^\mathbb{A} t_{ij}^{cb} + F_{cb}^\mathbb{A} t_{ij}^{ac} \right) T_{ij}^{ab} \notag\\
+  \partial_\mathbb{A}^\mathrm{S} E_\mathrm{c}^\textsf{(2)} &= \left( - F_{ki}^\mathbb{A} t_{kj}^{ab} - F_{kj}^\mathbb{A} t_{ik}^{ab} + F_{ca}^\mathbb{A} t_{ij}^{cb} + F_{cb}^\mathbb{A} t_{ij}^{ac} \right) T_{ij}^{ab} \notag\\
   &= - 2 F_{ij}^\mathbb{A} T_{ik}^{ab} t_{jk}^{ab} + 2 F_{ab}^\mathbb{A} T_{ij}^{ac} t_{ij}^{bc}
 \end{empheq}
 
@@ -953,7 +1046,7 @@ $D_{ij}^{ab}$ 定义见式 (\ref{eq.def.D-ijab})。从而，对 $F_{ij}^{ab}$ �
 MP2 相关能对轨道系数的梯度相关量写为 (乘以 $C_{\mu p}$ 是因为方便在分子轨道基下进行讨论)
 \begin{equation}
   \label{eq.def-fock-cmp2}
-  F_{mp}^\textsf{(2)} := C_{\mu m} \frac{\mathrm{d} E_\mathrm{c}^\textsf{MP2}}{\mathrm{d} C_{\mu p}} = T_{ij}^{ab} C_{\mu m} \frac{\mathrm{d} g_{ij}^{ab}}{\mathrm{d} C_{\mu p}} + C_{\mu m} \frac{\mathrm{d} t_{ij}^{ab}}{\mathrm{d} C_{\mu p}} G_{ij}^{ab}
+  F_{mp}^\textsf{(2)} := C_{\mu m} \frac{\mathrm{d} E_\mathrm{c}^\textsf{(2)}}{\mathrm{d} C_{\mu p}} = T_{ij}^{ab} C_{\mu m} \frac{\mathrm{d} g_{ij}^{ab}}{\mathrm{d} C_{\mu p}} + C_{\mu m} \frac{\mathrm{d} t_{ij}^{ab}}{\mathrm{d} C_{\mu p}} G_{ij}^{ab}
 \end{equation}
 上式定义了 $F_{mp}^\textsf{(2)}$ 即 MP2 相关能对广义 Fock 矩阵的贡献。
 
@@ -992,7 +1085,7 @@ MP2 相关能对轨道系数的梯度相关量写为 (乘以 $C_{\mu p}$ 是因�
 \end{align}
 从而将 MP2 激发系数对轨道系数的导数 $\partial_\mathbf{C} \mathbf{t}$ 的求取问题，转化为辅助函数对轨道系数的导数 $\partial_\mathbf{C} \pmb{\mathscr{F}}$ 的求取问题。
 
-在进一步讨论前，先对 Fock 矩阵的导数作补充。回顾式 (\ref{eq.def-Auvkl}) 所给出的 Fock 矩阵对自洽场密度矩阵的导数，可以知道
+在进一步讨论前，先对 Fock 矩阵的导数作补充。回顾式 (\ref{eq.def.Auvkl}) 所给出的 Fock 矩阵对自洽场密度矩阵的导数，可以知道
 \begin{align}
   C_{\mu m} \frac{\partial F_{pq}}{\partial C_{\mu r}} &= \delta_{pr} F_{mq} + \delta_{qr} F_{pm} + C_{\mu m} C_{\eta p} C_{\theta q} \frac{\partial F_{\eta \theta}}{\partial D_{\kappa \lambda}} \frac{\partial D_{\kappa \lambda}}{\partial C_{\mu r}} \notag\\
   &= \delta_{pr} F_{mq} + \delta_{qr} F_{pm} + \frac{1}{4} A_{pq, \kappa \lambda} C_{\mu m} \frac{\partial D_{\kappa \lambda}}{\partial C_{\mu r}}
@@ -1016,7 +1109,7 @@ MP2 相关能对轨道系数的梯度相关量写为 (乘以 $C_{\mu p}$ 是因�
   &\quad - A_{ca, mk} t_{ij}^{cb} - A_{cb, mk} t_{ij}^{ac} - \delta_{ki} g_{mj}^{ab} - \delta_{kj} g_{im}^{ab} \\
   C_{\mu m} \frac{\partial \mathscr{F}_{ij}^{ab}}{\partial C_{\mu c}} &= - (\delta_{ca} F_{md} + \delta_{cd} F_{ma}) t_{ij}^{db} - (\delta_{cb} F_{md} + \delta_{cd} F_{mb}) t_{ij}^{ad} - \delta_{ca} g_{ij}^{mb} - \delta_{cb} g_{ij}^{am}
 \end{align}
-依据式 (\ref{eq.relation-tpdc-fpdc}) 所给出的关系、张量对称性、求和时角标对换、引入正则 SCF 条件 $F_{pq} = \varepsilon_p \delta_{pq}$，将 $\partial_\mathbf{C} \mathbf{t}$ 并入式 (\ref{eq.def-fock-cmp2}) 第二项的计算将化简得到：
+依据式 (\ref{eq.relation-tpdc-fpdc}) 所给出的关系、张量对称性、求和时角标对换、引入正则自洽场条件 $F_{pq} = \varepsilon_p \delta_{pq}$，将 $\partial_\mathbf{C} \mathbf{t}$ 并入式 (\ref{eq.def-fock-cmp2}) 第二项的计算将化简得到：
 \begin{align}
   \label{eq.fock-cmp2-part2-mk}
   F_{mk}^\textsf{(2)} &\leftarrow C_{\mu m} \frac{\mathrm{d} t_{ij}^{ab}}{\mathrm{d} C_{\mu k}} G_{ij}^{ab} = - C_{\mu m} \frac{\partial \mathscr{F}_{ij}^{ab}}{\partial C_{\mu k}} T_{ij}^{ab} \notag\\
