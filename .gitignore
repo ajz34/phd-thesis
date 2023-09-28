@@ -1,6 +1,7 @@
 # ajz34 added
 chap*.pdf
 .ipynb_checkpoints
+~*
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
