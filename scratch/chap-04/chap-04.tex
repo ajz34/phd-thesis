@@ -50,7 +50,7 @@ DFT (密度泛函理论) 在 Hohenberg-Kohn 定理\cite{Hohenberg-Kohn.PR.1964}�
 
 本工作所涉及的体系是 14 个原子或离子体系 (\ce{Be^0}, \ce{B^+}, \ce{B^3+}, \ce{C^2+}, \ce{C^4+}, \ce{N^3+}, \ce{N^5+}, \ce{O^4+}, \ce{O^6+}, \ce{F^5+}, \ce{F^7+}, \ce{Ne^0}, \ce{Ne^6+}, \ce{Ne^8+}) 的电子云密度与能量。这些体系均为 2 ($1s^2$)、4 ($1s^2 2s^2$)、10 ($1s^2 2s^2 2p^6$) 电子体系。
 
-与 Medvedev 等人的工作\cite{Medvedev-Lyssenko.S.2017}一致地，对于非变分方法，电子云密度 $\rho (\bm{r})$ 均使用弛豫密度生成 (对于 xDH 型泛函弛豫密度以 $D_{\mu \nu}^\textsf{PT2}$ 表示\alert{第三章公式})。测评过程所选用的基组是 aug-cc-p$\omega$CV5Z\cite{Dunning-Dunning.JCP.1989, Kendall-Harrison.JCP.1992, Peterson-Dunning.JCP.2002}；对于使用到 RI 近似的情形，其辅助基组使用 PySCF 默认的自动生成方案\cite{Stoychev-Neese.JCTC.2017}。所有双杂化密度泛函选用经 PySCF 默认简化的 (120, 770) 格点积分，测评所用程序为 PySCF (2.4.0)\cite{Sun-Chan.WCMS.2018, Sun-Chan.JCP.2020} 与 dh (commit 80ca9e8)；密度泛函计算使用到 LibXC (commit 2a8caee)。对于 CCSD 方法，其自洽场能量收敛限是 $10^{-11} \ \text{Hartree}$、CCSD 能量收敛限是 $10^{-9} \ \text{Hartree}$；其余方法的能量收敛限均为 $10^{-9} \ \text{Hartree}$。本工作中其他 post-HF 方法 (MP4(sdq)、MP3) 计算使用 Gaussian 09\cite{Gaussian09} 实现。
+与 Medvedev 等人的工作\cite{Medvedev-Lyssenko.S.2017}一致地，对于非变分方法，电子云密度 $\rho (\bm{r})$ 均使用弛豫密度生成 (对于 xDH 型泛函弛豫密度以 $D_{\mu \nu}^\textsf{PT2}$ 表示\alert{第三章公式})。测评过程所选用的基组是 aug-cc-p$\omega$CV5Z\cite{Dunning-Dunning.JCP.1989, Kendall-Harrison.JCP.1992, Peterson-Dunning.JCP.2002}；对于使用到 RI 近似的情形，其辅助基组使用 PySCF 默认的自动生成方案\cite{Stoychev-Neese.JCTC.2017}。所有双杂化密度泛函选用经 PySCF 默认简化的 (120, 770) 格点积分，测评所用程序为 PySCF (2.4.0)\cite{Sun-Chan.WCMS.2018, Sun-Chan.JCP.2020} 与 dh (commit 80ca9e8)；密度泛函计算使用到 LibXC (commit 2a8caee)。对于 CCSD 方法，其自洽场能量收敛限是 $10^{-11} \ \text{Hartree}$、CCSD 能量收敛限是 $10^{-9} \ \text{Hartree}$；其余方法的能量收敛限均为 $10^{-9} \ \text{Hartree}$。本工作中其他 post-HF 方法 (MP4(sdq)、MP3) 计算使用 Gaussian 09 实现\cite{Gaussian09, Su-Xu.PNAS.2018}。
 
 本工作也会对基组依赖性、RI 近似精度等问题作讨论；其具体的计算方法将在具体的讨论中展开。
 
@@ -92,21 +92,31 @@ DFT (密度泛函理论) 在 Hohenberg-Kohn 定理\cite{Hohenberg-Kohn.PR.1964}�
 
 \subsubsection{依年代发展的总体表现}
 
-Medvedev 等人工作的 Fig.\ 1 中，展现了随着年代的发展，泛函在密度径向函数 RHO 的测评上，平均误差在 2003 年左右先逐渐减小、尔后显著增大的情况。基于我们的测评，在图 \ref{fig.maxMNAE-against-year} 中，我们复现了这一趋势、并且对该图像作了拓展。
+Medvedev 等人工作的 Fig.\ 1 中，展现了随着年代的发展，泛函在密度径向函数 RHO 的测评上，平均误差在 2003 年左右先逐渐减小、尔后到 2015 年显著增大的情况。基于我们的测评，在图 \ref{fig.maxMNAE-against-year} 中，我们复现了这一趋势、并且对该图像作了拓展。图 \ref{fig.maxMNAE-against-year} 的灰色实线是“Jacob 阶梯”上低阶泛函依发展年代平均下密度径向函数的 maxMNAE 误差表现。相比于 Medvedev 等人的工作中，看到低阶密度泛函近似逐渐偏离正确结果的结论，我们看到误差在 2015 年达到高点以后逐渐下降的趋势。因此，从现在的眼光来看，低阶密度泛函近似确实回到了正确的道路上。
 
-\begin{figure}[p]
+除此之外，我们补充了双杂化密度泛函近似的结果。图 \ref{fig.maxMNAE-against-year} 的红色实现体现了“Jacob 阶梯”上所有泛函近似依发展年代平均下密度径向函数的 maxMNAE 误差表现。Medvedev 等人的工作指出，在 2005 年以前，泛函近似大体上依“Jacob 阶梯”的爬升而在密度径向函数上的误差次第降低。而从图 \ref{fig.maxMNAE-against-year} 中，我们看到双杂化泛函相比于低阶泛函，其误差有显著的进一步降低。被测评的所有低阶泛函中，没有泛函在密度的表现上超越 MP2 方法；但不少双杂化泛函的表现相较于 MP2 更好。因此，尽管双杂化泛函付出了一定程度的计算代价，引入了对大体系而言计算量较大的 MP2 型相关能、以及对小体系而言计算量较大的密度泛函近似；但密度表现上有显著提升，同时好于低阶的泛函或 MP2 方法。
+
+与此同时注意到，对于图 \ref{fig.maxMNAE-against-year}，局域、杂化与双杂化泛函三个层级之间有较为明显的差别；但在每个层级内部，对于泛函是否掺杂 LDA、GGA 或 meta-GGA 形式的近似，影响不是非常显著。这表明，总体上来说，相比于引入局域信息仔细程度的多寡而言，泛函包含多少程度的非局域信息，将比较显著地影响泛函近似在密度上的测评结果。由于双杂化泛函同时包含了交换与相关两者的非局域效应，因此更有可能给出更好的密度表现。但同时需要指出，Medvedev 等人 Fig.\ 2 附近的讨论中，表明对于交换能，并非引入愈多的非局域杂化效应，密度上的表现愈好；引入适当的非局域效应才能正确描述密度性质。
+
+\begin{figure}[tp]
     \centering
-    \caption{诸泛函密度径向函数最大均值数归一方均误差 (maxMNAE) 对其年代的散点图。实线表示的平均值曲线是通过对年代作五年为期的二次平均所得，因此反映的是 10 年左右的总体趋势变化。交换泛函中，局域部分所对应的泛函类型 (LDA、GGA、meta-GGA 或 mGGA) 以散点形状 (三角、叉号、加号) 区分；非局域部分 (无非局域、杂化、双杂化) 以颜色 (蓝色、橙色、绿色) 区分。由于部分数据点误差较大，在 GRD 图中 M11-L, N12, N12-SX, MN15, MN15-L 五个泛函、以及 LR 图中 M11-L, MN12-L, MN12-SX, MN15, MN15-L 五个泛函未展示在图中。}
+    \caption{诸泛函密度径向函数最大均值数归一方均误差 (maxMNAE) 对其年代的散点图。实线表示的平均值曲线是通过对年代作 5 年为期的二次平均所得，因此反映的是前后 10 年左右的总体趋势变化。交换泛函中，局域部分所对应的泛函类型 (LDA、GGA、meta-GGA 或 mGGA) 以散点形状 (三角、叉号、加号) 区分；非局域部分 (无非局域、杂化、双杂化) 以颜色 (蓝色、橙色、绿色) 区分。由于部分数据点误差较大，在 GRD 图中 M11-L, N12, N12-SX, MN15, MN15-L 五个泛函、以及 LR 图中 M11-L, MN12-L, MN12-SX, MN15, MN15-L 五个泛函未展示在图中。}
     \label{fig.maxMNAE-against-year}
     \includegraphics[width=0.8\textwidth]{assets/maxMNAE-against-year.pdf}
 \end{figure}
 
+除了密度性质外，在图 \ref{fig.MAE-etot-against-year} 中，我们也对诸泛函在离子体系的 $1s^2 2s^2 \rightarrow 1s^2$ 过程的电离能问题的表现作依年代发展的测评。从年代的发展趋势来看，泛函近似的误差走势在原子电离能测评上与密度测评近乎一致，但细节的结构上有比较明显的不同。相比于密度的测评表现，对于原子的电离能，尽管一般来说包含愈多的非局域信息 (即泛函从“Jacob 阶梯”的第 1--3 阶爬升到第 4 到第 5 阶) 通常有愈稳定且愈低的误差，但这种优势并非是绝对的。事实上，如果仅从表现最优异的泛函来看，甚至结论是相反的：不含任何杂化的 PBELYP (MAD 误差 0.12 eV) 比杂化泛函 M06-2X (MAD 误差 0.23 eV) 比双杂化泛函 revXYG3 (MAD 误差 0.31 eV) 要更为精确。但一方面，误差较大的泛函通常是低阶泛函、而高阶泛函在电离能上的表现可以保证稳定地好于 HF 方法。而另一方面，对于低阶泛函，不少情形下可以对能量或密度的其中一者有良好的描述，但往往难以同时对两者都有出色的表现。以上面列举的三个泛函为例，若以 RHO、GRD、LR 三者的 maxMNAE 取最大值作为密度径向函数的测评标准，则 revXYG3 (1.113) 比 PBELYP (3.710) 比 M06-2X (4.214) 要更为出色。双杂化泛函则确实可以在平衡能量和密度误差的同时，对两者同时有显著的提升。
+
 \begin{figure}[p]
     \centering
-    \caption{诸泛函密度电离能平均误差对其年代的散点图。图例参考图 \ref{fig.maxMNAE-against-year}。}
+    \caption{诸泛函密度电离能平均误差 (MAE, \underline{M}ean \underline{A}bsolute \underline{E}rror) 对其年代的散点图。图例参考图 \ref{fig.maxMNAE-against-year}。}
     \label{fig.MAE-etot-against-year}
     \includegraphics[width=0.8\textwidth]{assets/MAE-etot-against-year.pdf}
 \end{figure}
+
+\subsubsection{具体的测评结果}
+
+
 
 \subsection{讨论与本章小结}
 
@@ -127,9 +137,6 @@ Medvedev 等人的工作也已经表明，除了少数特定的泛函，泛函�
 对于低阶泛函普遍逊色于高阶泛函、特别是 xDH 型泛函；我们作如下理解。从分数电荷的表现上，xDH 型泛函表现显著地好于传统泛函\cite{Su-Xu.IJQC.2015, Su-Xu.WCMS.2016, Su-Xu.MP.2016, Su-Xu.ARPC.2017}，即更接近 PPLB 定理所要求的直线型分数电离趋势\cite{Perdew-Balduz.PRL.1982}。作为第四阶的杂化泛函，分数电荷表现欠佳；这可以归因于非局域的严格交换效应没有很好地被非局域的相关效应所平衡；而 MP2 型相关效应，作为一种非局域相关效应，其引入可以很大程度上缓解分数电荷的计算误差。分数电荷在概念上与电子云有密切的联系，因此上述讨论，很可能适用于对以 xDH 型泛函为代表的双杂化泛函，在密度表现上断档式地好于低阶泛函，这种现象的一种解释。
 
 作为展望，“Jacob 阶梯”不仅是对现有的泛函近似的一种归类方式，同样也是对未来泛函发展思路的一种指导。一方面，对于分子体系计算，从泛函近似的发展上、或从计算可行性上，引入严格交换能已经成为比较普遍的共识；因此，如果泛函近似还有哪些不足，则应该认为在相关贡献上有更多文章可作。为拓展泛函近似的可能性，作为一条前进的道路，在本论文的第二章中，我们尝试了 IEPA 型，以避免 MP2 型相关能在 HOMO/LUMO gap 过小的体系的误差。我们也期待在“Jacob 阶梯”的最高阶上有更多的工作，以拓展双杂化泛函的应用范围，在计算量可接受的方法与算法下，其能量与性质越来越接近普适泛函、达到梦想的化学精度。
-
-\newpage
-
 
 \subsection{附录}
 
