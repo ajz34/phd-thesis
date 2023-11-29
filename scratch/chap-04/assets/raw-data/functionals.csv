@@ -1,4 +1,9 @@
 functional,year,type,hybrid ex,hybrid corr,XYG3-type
+CCSD,,WFT,,,
+MP4(SDQ),,WFT,,,
+MP3,,WFT,,,
+MP2,,WFT,,,
+HF,,WFT,,,
 Slater,1974,LDA,,,
 SVWN,1980,LDA,,,
 SVWN1RPA,1980,LDA,,,
