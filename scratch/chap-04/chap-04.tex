@@ -56,7 +56,14 @@ DFT (密度泛函理论) 在 Hohenberg-Kohn 定理\cite{Hohenberg-Kohn.PR.1964}�
 
 \alert{这里有对本工作原文的引用。在盲审阶段，这里的文段需要修改。}
 
-本工作对 Medvedev 等人的工作\cite{Medvedev-Lyssenko.S.2017}和苏乃强等人的工作\cite{Su-Xu.PNAS.2018}所测评的泛函作重新计算与验证、并补充目前流行的双杂化泛函。由于 PySCF 目前不支持含 $\nabla^2 \rho(\bm{r})$ 的 meta-GGA，因此未对 B98 作测评；同时不支持多长短程参数的泛函，因此不对 HISS 作测评。出于收敛困难，因此未对含有 G96 交换的泛函 (包括 Gill, GLYP, GOP, GP86, GPBE, GPW91, GPZ81, GVWN, GVWN1RPA)、以及 MVS 和 SCAN 泛函作测评。出于实现方式不一致，本工作不展示 X$\alpha$ 的测评结果。因此，在 Medvedev 等人测评的 128 个泛函中，本工作测评并汇报其中 114 个泛函。同时，我们将引入 15 个 2015 年以后发展的低阶 (“Jacob 阶梯”上 1--4 阶) 新泛函、以及 44 个双杂化泛函。由于不同程序的实现差异，BC, M05, M05-2X, M06-2X, M06-HF, M06-L, M08-SO, M11-L, MN12-L, SOGGA11, SOP, $\tau$HTCH, xDH-PBE0 等泛函的结果与早先文献有数值上的略微差异，但不影响总体结论。
+本工作对 Medvedev 等人的工作\cite{Medvedev-Lyssenko.S.2017}和苏乃强等人的工作\cite{Su-Xu.PNAS.2018}所测评的泛函作重新计算与验证、并补充目前流行的双杂化泛函。由于 PySCF 目前不支持含 $\nabla^2 \rho(\bm{r})$ 的 meta-GGA，因此未对 B98 作测评；同时不支持多长短程参数的泛函，因此不对 HISS 作测评。出于收敛困难，因此未对含有 G96 交换的泛函 (包括 Gill, GLYP, GOP, GP86, GPBE, GPW91, GPZ81, GVWN, GVWN1RPA)、以及 MVS 和 SCAN 泛函作测评。出于实现方式不一致，本工作不展示 X$\alpha$ 的测评结果。因此，在 Medvedev 等人测评的 128 个泛函中，本工作测评并汇报其中 114 个泛函。同时，我们将引入 15 个 2015 年以后发展的低阶 (“Jacob 阶梯”上 1--4 阶) 新泛函、以及 44 个双杂化泛函，即总共 173 个泛函近似，如图 \ref{fig.functionals-distribution} 所示。由于不同程序的实现差异，BC, M05, M05-2X, M06-2X, M06-HF, M06-L, M08-SO, M11-L, MN12-L, SOGGA11, SOP, $\tau$HTCH, xDH-PBE0 等泛函的结果与早先文献有数值上的略微差异，但不影响总体结论。
+
+\begin{figure}[hp]
+    \centering
+    \caption{本工作测评泛函的大致分类与数量示意图。}
+    \label{fig.functionals-distribution}
+    \includegraphics[width=0.6\textwidth]{assets/functionals-distribution.pdf}
+\end{figure}
 
 \subsubsection{径向函数与密度测评标准定义}
 
@@ -94,12 +101,6 @@ DFT (密度泛函理论) 在 Hohenberg-Kohn 定理\cite{Hohenberg-Kohn.PR.1964}�
 
 \subsubsection{依年代发展的总体表现}
 
-Medvedev 等人工作的 Fig.\ 1 中，展现了随着年代的发展，泛函在密度径向函数 RHO 的测评上，平均误差在 2003 年左右先逐渐减小、尔后到 2015 年显著增大的情况。基于我们的测评，在图 \ref{fig.maxMNAE-against-year} 中，我们复现了这一趋势、并且对该图像作了拓展。图 \ref{fig.maxMNAE-against-year} 的灰色实线是“Jacob 阶梯”上低阶泛函依发展年代平均下密度径向函数的 maxMNAE 误差表现。相比于 Medvedev 等人的工作中，看到低阶密度泛函近似逐渐偏离正确结果的结论，我们看到误差在 2015 年达到高点以后逐渐下降的趋势。因此，从现在的眼光来看，低阶密度泛函近似确实回到了正确的道路上。
-
-除此之外，我们补充了双杂化密度泛函近似的结果。图 \ref{fig.maxMNAE-against-year} 的红色实现体现了“Jacob 阶梯”上所有泛函近似依发展年代平均下密度径向函数的 maxMNAE 误差表现。Medvedev 等人的工作指出，在 2005 年以前，泛函近似大体上依“Jacob 阶梯”的爬升而在密度径向函数上的误差次第降低。而从图 \ref{fig.maxMNAE-against-year} 中，我们看到双杂化泛函相比于低阶泛函，其误差有显著的进一步降低。被测评的所有低阶泛函中，没有泛函在密度的表现上超越 MP2 方法；但不少双杂化泛函的表现相较于 MP2 更好。因此，尽管双杂化泛函付出了一定程度的计算代价，引入了对大体系而言计算量较大的 MP2 型相关能、以及对小体系而言计算量较大的密度泛函近似；但密度表现上有显著提升，同时好于低阶的泛函或 MP2 方法。
-
-与此同时注意到，对于图 \ref{fig.maxMNAE-against-year}，局域、杂化与双杂化泛函三个层级之间有较为明显的差别；但在每个层级内部，对于泛函是否掺杂 LDA、GGA 或 meta-GGA 形式的近似，影响不是非常显著。这表明，总体上来说，相比于引入局域信息仔细程度的多寡而言，泛函包含多少程度的非局域信息，将比较显著地影响泛函近似在密度上的测评结果。由于双杂化泛函同时包含了交换与相关两者的非局域效应，因此更有可能给出更好的密度表现。但同时需要指出，Medvedev 等人 Fig.\ 2 附近的讨论中，表明对于交换能，并非引入愈多的非局域杂化效应，密度上的表现愈好；引入适当的非局域效应才能正确描述密度性质。
-
 \begin{figure}[tp]
     \centering
     \caption{诸泛函密度径向函数最大均值数归一方均误差 (maxMNAE) 对其年代的散点图。实线表示的平均值曲线是通过对年代作 5 年为期的二次平均所得，因此反映的是前后 10 年左右的总体趋势变化。交换泛函中，局域部分所对应的泛函类型 (LDA、GGA、meta-GGA 或 mGGA) 以散点形状 (三角、叉号、加号) 区分；非局域部分 (无非局域、杂化、双杂化) 以颜色 (蓝色、橙色、绿色) 区分。由于部分数据点误差较大，在 GRD 图中 M11-L, N12, N12-SX, MN15, MN15-L 五个泛函、以及 LR 图中 M11-L, MN12-L, MN12-SX, MN15, MN15-L 五个泛函未展示在图中。}
@@ -107,9 +108,15 @@ Medvedev 等人工作的 Fig.\ 1 中，展现了随着年代的发展，泛函�
     \includegraphics[width=0.8\textwidth]{assets/maxMNAE-against-year.pdf}
 \end{figure}
 
+Medvedev 等人工作的 Fig.\ 1 中，展现了随着年代的发展，泛函在密度径向函数 RHO 的测评上，平均误差在 2003 年左右先逐渐减小、尔后到 2015 年显著增大的情况。基于我们的测评，在图 \ref{fig.maxMNAE-against-year} 中，我们复现了这一趋势、并且对该图像作了拓展。图 \ref{fig.maxMNAE-against-year} 的灰色实线是“Jacob 阶梯”上低阶泛函依发展年代平均下密度径向函数的 maxMNAE 误差表现。相比于 Medvedev 等人的工作中，看到低阶密度泛函近似逐渐偏离正确结果的结论，我们看到误差在 2015 年达到高点以后逐渐下降的趋势。因此，从现在的眼光来看，低阶密度泛函近似确实回到了正确的道路上。
+
+除此之外，我们补充了双杂化密度泛函近似的结果。图 \ref{fig.maxMNAE-against-year} 的红色实现体现了“Jacob 阶梯”上所有泛函近似依发展年代平均下密度径向函数的 maxMNAE 误差表现。Medvedev 等人的工作指出，在 2005 年以前，泛函近似大体上依“Jacob 阶梯”的爬升而在密度径向函数上的误差次第降低。而从图 \ref{fig.maxMNAE-against-year} 中，我们看到双杂化泛函相比于低阶泛函，其误差有显著的进一步降低。被测评的所有低阶泛函中，没有泛函在密度的表现上超越 MP2 方法；但不少双杂化泛函的表现相较于 MP2 更好。因此，尽管双杂化泛函付出了一定程度的计算代价，引入了对大体系而言计算量较大的 MP2 型相关能、以及对小体系而言计算量较大的密度泛函近似；但密度表现上有显著提升，同时好于低阶的泛函或 MP2 方法。
+
+与此同时注意到，对于图 \ref{fig.maxMNAE-against-year}，局域、杂化与双杂化泛函三个层级之间有较为明显的差别；但在每个层级内部，对于泛函是否掺杂 LDA、GGA 或 meta-GGA 形式的近似，影响不是非常显著。这表明，总体上来说，相比于引入局域信息仔细程度的多寡而言，泛函包含多少程度的非局域信息，将比较显著地影响泛函近似在密度上的测评结果。由于双杂化泛函同时包含了交换与相关两者的非局域效应，因此更有可能给出更好的密度表现。但同时需要指出，Medvedev 等人 Fig.\ 2 附近的讨论中，表明对于交换能，并非引入愈多的非局域杂化效应，密度上的表现愈好；引入适当的非局域效应才能正确描述密度性质。
+
 除了密度性质外，在图 \ref{fig.MAE-etot-against-year} 中，我们也对诸泛函在离子体系的 $1s^2 2s^2 \rightarrow 1s^2$ 过程的电离能问题的表现作依年代发展的测评。从年代的发展趋势来看，泛函近似的误差走势在原子电离能测评上与密度测评近乎一致，但细节的结构上有比较明显的不同。相比于密度的测评表现，对于原子的电离能，尽管一般来说包含愈多的非局域信息 (即泛函从“Jacob 阶梯”的第 1--3 阶爬升到第 4 到第 5 阶) 通常有愈稳定且愈低的误差，但这种优势并非是绝对的。事实上，如果仅从表现最优异的泛函来看，甚至结论是相反的：不含任何杂化的 PBELYP (MAD 误差 0.12 eV) 比杂化泛函 M06-2X (MAD 误差 0.23 eV) 比双杂化泛函 revXYG3 (MAD 误差 0.31 eV) 要更为精确。但一方面，误差较大的泛函通常是低阶泛函、而高阶泛函在电离能上的表现可以保证稳定地好于 HF 方法。而另一方面，对于低阶泛函，不少情形下可以对能量或密度的其中一者有良好的描述，但往往难以同时对两者都有出色的表现。以上面列举的三个泛函为例，若以 RHO、GRD、LR 三者的 maxMNAE 取最大值作为密度径向函数的测评标准，则 revXYG3 (1.113) 比 PBELYP (3.710) 比 M06-2X (4.214) 要更为出色。双杂化泛函则确实可以在平衡能量和密度误差的同时，对两者同时有显著的提升。
 
-\begin{figure}[p]
+\begin{figure}[t]
     \centering
     \caption{诸泛函密度电离能平均误差 (MAE, \underline{M}ean \underline{A}bsolute \underline{E}rror) 对其年代的散点图。图例参考图 \ref{fig.maxMNAE-against-year}。}
     \label{fig.MAE-etot-against-year}
@@ -122,16 +129,16 @@ Medvedev 等人工作的 Fig.\ 1 中，展现了随着年代的发展，泛函�
 
 密度径向函数的测评包含三个指标，即 RHO ($\rho(\bm{r})$)、GRD ($|\nabla \rho(\bm{r})|$) 与 LR ($\nabla^2 \rho(\bm{r})$)。由于这些指标之间有比较强的相互关联，因此泛函在其中一个指标上的表现若更好，往往也在其他的指标上有不错的表现。图 \ref{fig.compare-err-RHO-GRD} 作为一个离子，对 RHO 与 GRD 的指标误差进行绘制，可以印证上述结论。同时注意到，相比于局域与杂化泛函而言，双杂化泛函在不同的密度径向函数误差指标上的一致性更强，即在图 \ref{fig.compare-err-RHO-GRD} 上代表双杂化泛函的散点更靠近黑色的实线。
 
-\begin{figure}[hp]
+\begin{figure}[t]
     \centering
     \caption{诸泛函密度径向函数测评的 $\text{maxMNAE}_\text{RHO}$ 与 $\text{maxMNAE}_\text{GRD}$ 对照图。}
     \label{fig.compare-err-RHO-GRD}
     \includegraphics[width=0.6\textwidth]{assets/compare-err-RHO-GRD.pdf}
 \end{figure}
 
-但类似的情况，对于电离能和密度径向函数的比较上并不成立。以图 \ref{fig.compare-err-maxMNAE-MAEIP} 为例，尽管大多数泛函大体上在当密度表现较好时，电离能的表现也较好；但注意到低阶的局域与杂化泛函中，不少在能量表现上优异、但在密度表现则稍差。图 \ref{fig.compare-err-maxMNAE-MAEIP} 中橙色虚线表示 HF 方法的误差；我们发现绝大多数能量误差最低的泛函 (包括 PBELYP (0.12 eV), mPWLYP1w (0.12 eV), PW91LYP (0.13 eV), TPSSLYP1w (0.15 eV), M06-2X (0.23 eV), M08-SO (0.25 eV) 等) 的密度误差显著地大于 HF 方法。一般来说，以 maxMNAE 为考察标准，重参数拟合的泛函如 M08-SO (4.78), M06-2X (4.21) 的误差要大于少参数或无参数泛函如 PBELYP (3.71), mPWLYP1w (3.53)；这在 M11-L (16.27) 与 MN12-SX (13.00) 等泛函体现地更为明显。对于能量表现良好、但密度表现较差的泛函，我们认为这是由于密度 $\rho$ 的误差与能量泛函的误差 $E[\rho]$ 相互抵消所致；正确的结果不能因为两次错误相互抵消，而认为这个结果导出的过程便是正确的；一旦泛函的优化方式有所改变，原本有可能正确的能量，很可能会产生严重的错误 (以电离能的 MAE 作为测评标准，M11-L 误差 2.91 eV、MN12-SX 误差 3.96 eV)。而 B3LYPV1R (Gaussian 与 LibXC 默认的 B3LYP 方法，0.25 eV) 与 mPW1LYP (0.26 eV) 等泛函近似的密度误差 (以 maxMNAE 评测) 也小于 HF 方法；这些泛函在与 HF 方法计算量相当的前提下，可以认为有效地同时处理好密度与能量的计算。
+但类似的情况，对于电离能和密度径向函数的比较上并不成立。以图 \ref{fig.compare-err-maxMNAE-MAEIP} 为例，尽管大多数泛函大体上在当密度表现较好时，电离能的表现也较好；但注意到低阶的局域与杂化泛函中，不少在能量表现上优异、但在密度表现则稍差。图 \ref{fig.compare-err-maxMNAE-MAEIP} 中橙色虚线表示 HF 方法的误差；我们发现绝大多数能量误差最低的泛函 (包括 PBELYP (0.12 eV), mPWLYP1w (0.12 eV), PW91LYP (0.13 eV), TPSSLYP1w (0.15 eV), M06-2X (0.23 eV), M08-SO (0.25 eV) 等) 的密度误差显著地大于 HF 方法。一般来说，以 maxMNAE 为考察标准，重参数拟合的泛函如 M08-SO (4.78), M06-2X (4.21) 的误差要大于少参数或无参数泛函如 PBELYP (3.71), mPWLYP1w (3.53)；这在 M11-L (16.27) 与 MN12-SX (13.00) 等泛函体现地更为明显。对于能量表现良好、但密度表现较差的泛函，我们认为这是由于密度 $\rho$ 的误差与能量泛函的误差 $E[\rho]$ 相互抵消所致；正确的结果不能因为两次错误相互抵消，而认为这个结果导出的过程便是正确的\cite{Hammes-Schiffer-Hammes-Schiffer.S.2017, Korth-Korth.ACIE.2017, Graziano-Graziano.NRC.2017}；一旦泛函的优化方式有所改变，原本有可能正确的能量，很可能会产生严重的错误 (以电离能的 MAE 作为测评标准，M11-L 误差 2.91 eV、MN12-SX 误差 3.96 eV)。而 B3LYPV1R (Gaussian 与 LibXC 默认的 B3LYP 方法，0.25 eV) 与 mPW1LYP (0.26 eV) 等泛函近似的密度误差 (以 maxMNAE 评测) 也小于 HF 方法；这些泛函在与 HF 方法计算量相当的前提下，可以认为有效地同时处理好密度与能量的计算。
 
-\begin{figure}[hp]
+\begin{figure}[t]
     \centering
     \caption{诸泛函密度径向函数测评的 $\text{maxMNAE}$ 与电离能的平均绝对值误差 (MAE) 对照图。这里的 maxMNAE 是指三个密度测评指标 $\text{maxMNAE}_\text{RHO}$、$\text{maxMNAE}_\text{GRD}$、$\text{maxMNAE}_\text{LR}$ 的最大值。}
     \label{fig.compare-err-maxMNAE-MAEIP}
@@ -140,9 +147,25 @@ Medvedev 等人工作的 Fig.\ 1 中，展现了随着年代的发展，泛函�
 
 但我们同时注意到，目前没有任何低阶的局域与杂化泛函，在密度的表现上 (以 maxMNAE 评测) 可以优于 MP2 方法。这个情形不仅在 2015 年以前发展的低阶泛函成立，也在 2015 年以后发展的低阶泛函成立。但对于双杂化泛函而言，一方面不少泛函的密度与能量误差同时小于或接近 MP2 方法的级别；即使超出了 MP2 的误差，也通常不会大于 HF 方法的误差。因此，目前所有双杂化泛函的密度与能量都可以认为比较可靠。另一方面，revXYGJ-OS, XYG6, xDH-PBE0, XYGJ-OS, XYG5 等五个泛函的能量与密度的表现甚至超越了 MP3 方法；因此，双杂化泛函有希望以较低的代价，同时在密度与能量的表现上逼近计算量更为庞大的波函数方法。
 
+\begin{figure}[t]
+    \centering
+    \caption{双杂化泛函密度径向函数测评的 $\text{maxMNAE}$ 与电离能的平均绝对值误差 (MAE) 对照图。这里的 maxMNAE 是指三个密度测评指标 $\text{maxMNAE}_\text{RHO}$、$\text{maxMNAE}_\text{GRD}$、$\text{maxMNAE}_\text{LR}$ 的最大值。}
+    \label{fig.compare-err-maxMNAE-MAEIP-dh}
+    \includegraphics[width=0.6\textwidth]{assets/compare-err-maxMNAE-MAEIP-dh.pdf}
+\end{figure}
+
+在双杂化泛函中，XYG3 型 (xDH) 泛函的表现与 B2PLYP 型 (bDH) 泛函的表现也有所差异。图 \ref{fig.compare-err-maxMNAE-MAEIP-dh} 与图 \ref{fig.compare-err-maxMNAE-MAEIP} 相同，但仅绘制双杂化泛函的数据，并区分 xDH 型与 bDH 型泛函。可以看到，xDH 型泛函不仅在能量、也同时在密度上，有着比 bDH 型泛函更优异的表现。在 bDH 型泛函中，仅有 DSD-PBEPBE-D3BJ 与 DSD-PBEB95-D3BJ 相较于 MP2 而言有更优异的密度与能量表现；但除 XYG7 外的所有测评的 xDH 型泛函，其表现都优于 MP2 方法，且也与 DSD 系列泛函拉开了一定的差距。
+
 \subsection{讨论与本章小结}
 
-上面的结果分析，确实地验证了当前双杂化泛函、特别是 xDH 型双杂化泛函，在原子体系的电离能与电子云密度上有良好的表现。需要注意到，所有本章涉及到的密度泛函，都并未专门针对这些测评标准所优化；因此几乎不存在因为经验参数拟合而有更好表现的可能——良好的测评表现更适合归因于泛函本身的优势。
+\begin{figure}[t]
+    \centering
+    \caption{部分泛函的密度径向函数最大误差 maxMNAE 与电离能平均绝对误差 MAD 测评表现示意图。线图 (maxMNAE) 的误差是指三个密度测评指标 $\text{maxMNAE}_\text{RHO}$、$\text{maxMNAE}_\text{GRD}$、$\text{maxMNAE}_\text{LR}$ 的最大值。柱状图 (电离能误差) 的零点选取为 MP2 的误差 (0.973 eV)。对于特定泛函近似，只有其在图上对应的条形柱与散点都在红色五角星标识的 MP2 误差的情形下，该方法才能被认为同时在电离能与密度径向函数的表现上都优于 MP2 方法。}
+    \label{fig.compare-err-relative}
+    \includegraphics[width=0.9\textwidth]{assets/compare-err-relative.pdf}
+\end{figure}
+
+上面的结果分析，确实地验证了当前双杂化泛函、特别是 xDH 型双杂化泛函，在原子体系的电离能与电子云密度上有良好的表现。作为具体的例子，部分泛函的测评结果用更加直观的方式，呈现在图 \ref{fig.compare-err-relative} 中。需要注意到，所有本章涉及到的密度泛函，都并未专门针对这些测评标准所优化；因此几乎不存在因为经验参数拟合而有更好表现的可能——良好的测评表现更适合归因于泛函本身的优势。
 
 Medvedev 等人的工作也已经表明，除了少数特定的泛函，泛函的“Jacob 阶梯”越高、电子云密度表现越好。我们注意到特别在电子云密度的表现上，作为“Jacob 阶梯”上最高的类别，双杂化泛函相比于其他泛函都有明显的优势；从而我们的工作印证并延伸了 Medvedev 等人的结论。因此，对于 xDH 型泛函，其优势之一在于它是“Jacob 阶梯”最高阶的双杂化泛函。
 
@@ -154,7 +177,7 @@ Medvedev 等人的工作也已经表明，除了少数特定的泛函，泛函�
 \begin{equation}
     v_\mathrm{xc}^\mathrm{GKS} (\bm{r}, \bm{r}') = \frac{\delta E_\mathrm{xc}}{\delta \rho(\bm{r}, \bm{r}')}
 \end{equation}
-后者实际上已经突破了 Kohn-Sham 理论框架本身了\cite{Su-Xu.WCMS.2016, Su-Xu.IJQC.2015, Su-Xu.MP.2016}。对于“Jacob 阶梯”上第五阶泛函，它并非表示为密度 $\rho(\bm{r})$ 或密度矩阵 $D_{\mu \nu}$ 的显式泛函；而这应当是真实泛函的特征\cite{Kohn-Kohn.PRB.1986, Yang-Mori-Sanchez.JCP.2012}。对于 xDH 型泛函，其使用较低阶的泛函近似，大体上可信与精确、但同时又以良好效率性价比地给出密度与轨道信息；而同时，在最终能量计算时，则引入更高阶的双杂化泛函近似形式，以通过引入非局域相关能效应 (也是 GKS 框架下泛函应当具有的特性) 的方式，进一步提升能量计算的精度。低阶泛函自洽场的电子云密度，则可以通过高阶能量泛函相对于自洽场泛函之差所给出的微扰，以 Z-Vector 方法矫正\cite{Handy-Schaefer.JCP.1984, Su-Xu.JCC.2013}。相比之下，低阶泛函所包含的非局域信息不足；而以 B2PLYP 为代表的一类双杂化泛函则在自洽场泛函中没有引入完整的相关效应，因此自洽场所给出的密度也缺失一些相关效应。正因为 xDH 型泛函近似在框架设计上克服了上述两类泛函的困难，可以对能量与密度两者分别作精度的调整与提升；从而，xDH 型泛函近似相比于其他低阶泛函近似、以及其他双杂化泛函近似，更有可能同时在能量与密度上有良好的表现。
+后者实际上已经突破了 Kohn-Sham 理论框架本身了\cite{Su-Xu.WCMS.2016, Su-Xu.IJQC.2015, Su-Xu.MP.2016}。对于“Jacob 阶梯”上第五阶泛函，它并非表示为密度 $\rho(\bm{r})$ 或密度矩阵 $D_{\mu \nu}$ 的显式泛函；而这应当是真实泛函的特征\cite{Kohn-Kohn.PRB.1986, Yang-Mori-Sanchez.JCP.2012}。对于 xDH 型泛函，其使用较低阶的泛函近似，大体上可信与精确、但同时又以良好效率性价比地给出密度与轨道信息；而同时，在最终能量计算时，则引入更高阶的双杂化泛函近似形式，以通过引入非局域相关能效应 (也是 GKS 框架下泛函应当具有的特性) 的方式，进一步提升能量计算的精度。低阶泛函自洽场的电子云密度，则可以通过高阶能量泛函相对于自洽场泛函之差所给出的微扰，以 Z-Vector 方法矫正\cite{Handy-Schaefer.JCP.1984, Su-Xu.JCC.2013}。相比之下，低阶泛函所包含的非局域信息不足；而 bDH 型泛函则在自洽场泛函中没有引入完整的相关效应，因此自洽场所给出的密度也缺失一些相关效应。正因为 xDH 型泛函近似在框架设计上克服了上述两类泛函的困难，可以对能量与密度两者分别作精度的调整与提升；从而，xDH 型泛函近似相比于其他低阶泛函近似、以及 bDH 型双杂化泛函近似，更有可能同时在能量与密度上有良好的表现。
 
 对于低阶泛函普遍逊色于高阶泛函、特别是 xDH 型泛函；我们作如下理解。从分数电荷的表现上，xDH 型泛函表现显著地好于传统泛函\cite{Su-Xu.IJQC.2015, Su-Xu.WCMS.2016, Su-Xu.MP.2016, Su-Xu.ARPC.2017}，即更接近 PPLB 定理所要求的直线型分数电离趋势\cite{Perdew-Balduz.PRL.1982}。作为第四阶的杂化泛函，分数电荷表现欠佳；这可以归因于非局域的严格交换效应没有很好地被非局域的相关效应所平衡；而 MP2 型相关效应，作为一种非局域相关效应，其引入可以很大程度上缓解分数电荷的计算误差。分数电荷在概念上与电子云有密切的联系，因此上述讨论，很可能适用于对以 xDH 型泛函为代表的双杂化泛函，在密度表现上断档式地好于低阶泛函，这种现象的一种解释。
 
@@ -168,14 +191,14 @@ Medvedev 等人的工作也已经表明，除了少数特定的泛函，泛函�
 
 HF 方法的 RI 近似也即 RI-JK 方法。我们分别考察了 aug-cc-pV$X$Z-jkfit 辅助基\cite{Weigend-Weigend.PCCP.2002}与自动生成辅助基 (ETB, \underline{E}ven-\underline{T}empered \underline{B}asis)\cite{Stoychev-Neese.JCTC.2017}的表现。在图 \ref{fig.HF-RI-err} 与 \ref{fig.HF-RI-mean} 中，可以看出，RI 近似对于 HF 方法的密度径向函数所引入的误差，在所有体系下 MNAE 最大不超过 $2 \times 10^{-3}$。由于泛函近似或 post-HF 方法与与 CCSD 之间的密度径向函数误差通常大于 0.1，因此 RI 所引入的误差完全可以忽略。同时，我们注意到普遍来说，通过对库伦与交换能作数值优化的 aug-cc-pV$X$Z-jkfit 基组尽管大小较小，但误差相比于自动生成的 ETB 基组要更大一些。ETB 基组的误差通常随着基组的增大 (基数 $X$ 的增大) 而减小。
 
-\begin{figure}[hp]
+\begin{figure}[t]
   \centering
   \caption{HF 方法 RI 近似下的 maxMNAE 误差。}
   \label{fig.HF-RI-err}
   \includegraphics[width=0.7\textwidth]{assets/HF-RI-err.pdf}
 \end{figure}
 
-\begin{figure}[hp]
+\begin{figure}[t]
   \centering
   \caption{HF 方法 RI 近似下的 meanMNAE 误差。}
   \label{fig.HF-RI-mean}
@@ -184,14 +207,14 @@ HF 方法的 RI 近似也即 RI-JK 方法。我们分别考察了 aug-cc-pV$X$Z-
 
 对于 MP2 方法而言，我们也分别考察了 aug-cc-pV$X$Z-rifit 辅助基\cite{Weigend-Haettig.JCP.2002}、aug-cc-p$\omega$CV$X$Z 辅助基\cite{10.1039/b415208e}与自动辅助基 (ETB)\cite{Stoychev-Neese.JCTC.2017}的表现。这里自洽场部分使用传统 ERI 积分实现，以保证 RI 近似误差仅出现在 MP2 的相关贡献部分。在图 \ref{fig.MP2-RI-err} 与 \ref{fig.MP2-RI-mean} 中，可以看出，采用对 MP2 相关能作优化的 aug-cc-pV$X$Z-rifit 辅助基或 aug-cc-p$\omega$CV$X$Z 辅助基时，密度梯度径向函数 GRD 与二阶梯度径向函数 LR 的误差会较大；对于 GRD，其最大的 MNAE 误差可以达到 0.9；这将会影响泛函或方法在密度径向函数上的评测准确性。相较而言，自动生成辅助基 ETB 方案将给出小于 $10^{-3}$ 的密度径向函数误差；这个误差不会影响测评表现。
 
-\begin{figure}[hp]
+\begin{figure}[t]
   \centering
   \caption{MP2 方法相关贡献 RI 近似下的 maxMNAE 误差。}
   \label{fig.MP2-RI-err}
   \includegraphics[width=0.7\textwidth]{assets/MP2-RI-err.pdf}
 \end{figure}
 
-\begin{figure}[hp]
+\begin{figure}[t]
   \centering
   \caption{MP2 方法相关贡献 RI 近似下的 meanMNAE 误差。}
   \label{fig.MP2-RI-mean}
@@ -206,14 +229,14 @@ HF 方法的 RI 近似也即 RI-JK 方法。我们分别考察了 aug-cc-pV$X$Z-
 
 从图 \ref{fig.HF-RI-eng} 与 \ref{fig.MP2-RI-eng} 可以看出，RI 近似对第二周期元素 $1s^2 2s^2 \rightarrow 1s^2$ 电离能所产生的误差总是小于 $5 \times 10^{-3} \, \text{eV}$；该程度的不影响测评结果。同时，我们注意到，与密度径向函数的情形不同，自动生成辅助基的 ETB 方案在 MP2 相关能计算上的误差，在 $X=\mathrm{T}$ 或更大的基组下，相比于预制辅助基而言要大。
 
-\begin{figure}[hp]
+\begin{figure}[t]
     \centering
     \caption{HF 方法 RI 近似下电离能最大误差。}
     \label{fig.HF-RI-eng}
     \includegraphics[width=0.7\textwidth]{assets/HF-RI-eng.pdf}
 \end{figure}
 
-\begin{figure}[hp]
+\begin{figure}[t]
     \centering
     \caption{MP2 方法相关贡献 RI 近似下电离能最大误差。}
     \label{fig.MP2-RI-eng}
@@ -221,8 +244,6 @@ HF 方法的 RI 近似也即 RI-JK 方法。我们分别考察了 aug-cc-pV$X$Z-
 \end{figure}
 
 我们认为，对于杂化泛函或双杂化泛函，由于其严格交换能和微扰相关能贡献占比小于 100\%，从而 RI 近似对这部分能量或密度所产生的误差，预期不会比完整的 HF 和 MP2 方法更大。因此，我们认为可以在本工作的泛函测评过程中使用 RI 近似。
-
-\subsubsection{其他补充数据}
 
 \begin{landscape}
 \begin{longtable}{ll:cccc:rrr:rrr:rrr}
