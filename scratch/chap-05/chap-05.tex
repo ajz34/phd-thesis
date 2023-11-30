@@ -1,0 +1,45 @@
+% !TEX root=./chap-05.tex
+\input{../marco.tex}
+
+\begin{document}
+
+%---------预定设置区----------
+\title{\textbf{双杂化密度泛函分子能量与性质计算方法的测评与进展\\第五章草稿}}
+\author{祝震予}
+\maketitle
+\vspace{-10pt}
+
+\tableofcontents
+
+%---------正  文  区----------
+
+\setcounter{section}{4}
+
+\section{高精度基组外推方法在 CCSD(T) 静态极化率计算上的应用}
+
+\subsection{引言}
+
+静态极化率是光学中问题重要的物理量\cite{Marder-Stucky.ACS.1991}；它在化学中，也与 Raman 光谱活性\cite{Wilson-Cross.Dover.1955}、有机反应机理\cite{Xing-Pei.HEP.2005}、以及分子间相互作用\cite{Cohen-Tannoudji-Laloe.Wiley.2020}等问题上有概念上的联系。作为计算化学可以导出的物理量，对静态极化率描述的准确与否，也可以用于判断电子结构近似方法精度与有效性。因此，静态极化率是理论与计算化学都十分关心的重要物理量。
+
+相对于静态极化率的概念是动态极化率。动态极化率 $\alpha(\omega)$ 是在特定频率 $\omega$ 下偶极电场扰动下分子能量变化的表征量，而静态极化率是动态极化率的外场频率外推至零的情况即 $\alpha(0)$。本文中，若不作额外说明，极化率一般指静态极化率。
+
+我们希望对双杂化泛函在静态极化率上的表现作评测与研究；为此，我们需要精确的静态极化率参考值。计算方法的终极目标应当是逼近物理真实的结果，因此参考值应当选取这些真实结果的数值；但现实上，真实结果难以获得。为了确定参考值以评测近似计算化学方法的有效性，可能的方案是以精确的实验数据、或高精度的计算数据替代参考值。
+
+若要通过实验数据构成参考值以测评理论计算结果，一个关键问题与困难是如何准确地联系理论结果与实验环境\cite{Mata-Suhm.ACIE.2017}。对于静态极化率问题，我们认为，通过实验数据确定与获得参考值较为困难。这种困难不仅来源于实验本身的精度，也同时来源于难于排除所有实验环境因素；这些因素包括溶剂效应、非谐效应等各种影响，也因静态偶极矩是动态偶极矩在含频电场下频率外推至零的极限、实验上这种外推的矫正难于实现或精确的数据不足。因此，在目前的研究中，电子结构方法的误差经常会被实验本身的误差、以及实验环境与理论模拟之间的差距所产生的误差的总和所掩盖\cite{Hickey-Rowley.JPCA.2014}。因此，相比起使用实验数值作为参照的方式\cite{Hickey-Rowley.JPCA.2014}，大多数对静态极化率的测评工作都使用高精度理论计算数值作为参考值\cite{Hammond-Xantheas.JCP.2009, Huzak-Deleuze.JCP.2013, Wu-Thakkar.CPL.2015, Kozlowska-Bartkowiak.PCCP.2019, Hait-Head-Gordon.PCCP.2018, Beizaei-Sauer.JPCA.2021}。
+
+若要使用理论参考值作测评工作，有两点非常关键。一者，为了确保评测相对来说公平且完整，数据集应当要足够大、且足够多样，以使得在测评结果在统计上是有意义的。目前的极化率数据集中，较为接近这一目标的有 Hickey 与 Rowley 设计的 46 分子的数据集 (HR46)\cite{Hickey-Rowley.JPCA.2014}，Wu、Kalugina 与 Thakkar 设计的 145 分子数据集 (T145)\cite{Wu-Thakkar.CPL.2015}、以及 Hait 与 Head-Gordon 设计的 132 分子与自由基数据集 (HH132)\cite{Hait-Head-Gordon.PCCP.2018}。二者，作为参考值的电子结构理论计算方法应当足够准确。完全组态相互作用 (Full-CI, Full-\underline{C}onfiguration-\underline{I}nteraction) 结合完备基组 (CBS, \underline{C}omplete \underline{B}asis \underline{S}et) 所给出的结果是最理想的情况，但其计算量巨大，显然是不现实的。HH132 数据集选择使用 CCSD(T)/CBS，即化学中常称为“黄金标准”的 CCSD(T) 方法 (\underline{C}oupled-\underline{C}luster \underline{S}ingles and \underline{D}oubles with perturbative \underline{T}riples)\cite{Cizek-Cizek.Wiley.1969, Raghavachari-Head-Gordon.CPL.1989}、并结合有限基组下的 CBS 外推方法\cite{Nyden-Petersson.JCP.1981, Petersson-Mantzaris.JCP.1988}，给出了极化率的参考值。其中，对于较小的体系，用于 CBS 外推的模式是 aCV[Q5]Z\footnote{在本文中，我们约定作为 Dunning 系列基组的 aV$X$Z 代表 aug-cc-pV$XZ$ 基组、aCV$X$Z 代表 aug-cc-pCV$XZ$ 基组 ($X \in \{\mathrm{D, T, Q, 5}\}$)。同时约定，作为双基组 CBS 外推模式，aV[$XY$]Z 代表基组从 aV$X$Z、aV$Y$Z 外推到 aV$\inf$Z 的基组极限近似。Dunning 系列基组具体的 CBS 外推方式将在\alert{后文定义}。}；对于较大的体系，用于 CBS 外推的模式是 aCV[TQ]Z\cite{Hait-Head-Gordon.PCCP.2018, Hait-Head-Gordon.JCTC.2018}。由于 CBS 外推所用的基组，几乎已是目前计算化学常用的最大基组。对于 CCSD(T) 在电性质计算问题上的准确性，已有文献对此作较为深入的讨论并给出正面的结论\cite{Halkier-Joergensen.JCP.1999, Monten-Deleuze.MP.2011, Hait-Head-Gordon.JCTC.2018}。因此，HH132 数据集的参考值可以认为是可信的。与此同时，HR46 数据集中理论计算给出参考值的模型是 CCSD/aVTZ，而 T145 数据集是 CCSD(T)/aVTZ；CCSD 被认为在计算电性质时精度较低、而 aVTZ 基组也相对较小，因此这两个数据集的理论计算参考值相对于 HH132 数据集，还有进一步提升的空间。
+
+但需要指出，HH132 之所以可以使用 CCSD(T)/aV[TQ]Z 或 CCSD(T)/aV[Q5]Z 的模型给出参考值，是因为该数据集最大的分子仅包含 3 个非氢原子 (包括 \ce{BHF2}, \ce{ClCN}, \ce{CO2}, \ce{CSO}, \ce{FCN}, \ce{FCO}, \ce{HCCCl}, \ce{HCCF}, \ce{HCNH2}, \ce{HCOOH}, \ce{NaCN}, \ce{NOCl}, \ce{O3}, \ce{OCl2}, \ce{OF2}, \ce{SCl2}, \ce{SF2}, \ce{SO2})、或 7 个原子 (包括 \ce{CH3NH2})。而作为对比，HR46 与 T145 数据集的分子相对来说大许多；HR46 最大的体系包含 15 个原子 (toluene 或 \ce{C7H8})；T145 数据集最大的体系包含 14 个原子 (1,4-dithiane 或 \ce{C4H8S2})。HR46 与 T145 数据集中，单个体系含有非氢原子数量最多可达 8 个原子 (例如 6-amino-1H-pyrimidin-2-one 或 \ce{C4H5ON3} 以及 5,5,5-trichloropenta-1,3-diyne 或 \ce{C5HCl3})。因此，HR46 与 T145 数据集难以使用与 HH132 相同的 CCSD(T) 结合大基组 CBS 外推的方式，给出精确地理论计算的参考值。
+
+为了尽可能地推高 HR46 与 T145 数据集的精度，我们考虑到使用组合化学方法。典型的组合化学方法是 G$n$\cite{Pople-Curtiss.JCP.1989, Curtiss-Pople.JCP.1990, Curtiss-Pople.JCP.1991, Curtiss-Pople.JCP.1998, Curtiss-Raghavachari.JCP.2007} 与 W$n$\cite{Martin-Oliveira.JCP.1999, Parthiban-Martin.JCP.2001}；其做法是针对特定的电子结构方法 (如 CCSD(T), CCSD, MP2, HF)，使用对应的、代价上可以承受的基组进行计算，并最终合理地依计算层级对这些方法-基组组合的结果作线性的加减处理，给出更为精确地计算结果。FPA (\underline{F}ocal-\underline{P}oint \underline{A}nalysis) 与组合化学方法有着类似的思想\cite{East-Allen.JCP.1993}。由于能量或极化率张量等性质具有可加性，因此可以将总量上占大头的 HF 方法下大基组计算的结果、MP2 与 HF 方法差减部分在中等基组下计算结果、以及计算复杂度最高但总量上较小的 CCSD(T) 与 MP2 方法差减部分在较小基组下的计算结果作加和。这样的结果一般总是比单纯使用低级别的 HF 结合大基组、或高级别的 CCSD(T) 结合小基组要更为准确。FPA 已经应用于计算化学的各种问题，包括反应生成热\cite{East-Allen.JCP.1993, Nielsen-Schaefer.JCP.1997}、构象能\cite{Csaszar-Schaefer.JCP.1998, Tschumper-Tschumper.JCP.2001, Kahn-Kahn.JCC.2008}、非共价相互作用\cite{Tschumper-Quack.JCP.2002, Jurecka-Hobza.PCCP.2006, Marshall-Sherrill.JCP.2011}、激发能\cite{Bokareva-Godunov.IJQC.2008}、核磁共振屏蔽常数\cite{Sun-Xu.JCP.2013, Wang-Xu.JCP.2018}、以及本工作所关心的静态极化率问题\cite{Huzak-Deleuze.JCP.2013, Monten-Deleuze.MP.2011}。
+
+本工作中，我们将着眼于提升 HR46 与 T145 静态极化率数据集的质量至 CCSD(T)/CBS 的精度。为此，我们首先在可以承受 aCV[Q5]Z 级别计算的小分子体系下，对 HF, MP2, CCSD 与 CCSD(T) 作详细的静态极化率基组收敛性分析。这部分工作的目标是确认对于静态极化率问题，FPA 确实可以给出与 HH132 数据集参考值相似精度的结果，即 FPA 是有效的。随后，我们将 FPA 应用于 HR46 与 T145 数据集的参考值计算上；这些参考值的精度将是 CCSD(T)/aCV[Q5]Z 级别的。我们希望这些高精度的参考值能为未来化学工作者在极化率测评，特别是对密度泛函方法的测评上，提供有效的数据来源。
+
+\subsection{具体方法与实现细节}
+
+\newpage
+
+\bibliographystyle{achemso}
+\bibliography{../thesis.bib}
+
+\end{document}
