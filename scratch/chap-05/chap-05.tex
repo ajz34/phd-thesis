@@ -37,6 +37,181 @@
 
 \subsection{具体方法与实现细节}
 
+\subsubsection{误差测评标准}
+
+对于一个数据量为 $N$ 的数据集的参考值是 $\tilde r = \{ r_n \}$，若近似计算方法的结果是 $\tilde c = \{ c_n \}$、以及作为分母的数据 $\tilde d = \{ d_n \}$，那么数据 $\tilde c$ 的相对方均根误差 (RelRMSD, \underline{Rel}ative \underline{R}oot \underline{M}ean \underline{S}quared \underline{D}eviation) 定义为
+\begin{equation}
+    \text{RelRMSD} (\tilde c, \tilde r, \tilde d) = \sqrt{\frac{1}{N} \sum_{n = 1}^N \left( \frac{c_n - r_n}{d_n} \right)^2} \times 100\%
+\end{equation}
+不少情况下，参考值 $\tilde r$ 与分母值 $\tilde d$ 是相同的；此情形下将简记 $\text{RelRMSD} (\tilde c, \tilde r, \tilde d)$ 为 $\text{RelRMSD} (\tilde c, \tilde r)$。一般来说，更低的 RelRMSD 数值，意味着近似计算方法的表现统计上来看越精确。
+
+RelRMSD 误差多大，才认为是可以被接受或容许的范围？首先，本工作的目标是对较大分子体系的极化率作逼近 CBS 外推模型的 CCSD(T)/aCV[Q5]Z 精度的计算；因此，该级别精度在本工作中视为最精确的参考值 $\tilde r$。由于静态极化率的基组极限误差与实验误差通常在 0.5\% 以内\cite{Brakestad-Frediani.JCTC.2020, Rumble-Rumble.CRC.2021}；因此我们认为，对于稍低等级的 FPA 模型或稍小基组下的计算结果，如果其相比于 CCSD(T)/aCV[Q5]Z 的 RelRMSD 误差在 0.5\% 以下，即可认为是足够准确的。
+
+% 关于实验误差，我暂时没能找到 102 版 CRC 常数手册的具体说明。在 2010 年的 90 版 Atomic and Molecular Polarizabilities Table 8 (pdf p. 1648--1649 或 10-200--10-201)，注脚中提到了 0.5% 的误差，但也同时指出了实验条件上是含频率的情况、以及数据年代问题。
+
+\subsubsection{电子结构方法与软件}
+
+本工作的极化率同时使用数值与解析的方式计算；其计算方式定义在\alert{下几小节}作定义。MP2 与 HF 解析极化率是通过 \textsc{PySCF} (commit 3d592b0)\cite{Sun-Chan.WCMS.2018, Sun-Chan.JCP.2020}的扩展程序脚本 \textsc{dh} (ver 0.1.3)\cite{dh-0.1.ajz34} 所实现。正因为该程序可以高效地实现包括双杂化泛函在内的 MP2 型相关能解析极化率，因此本工作中涉及到的所有分子的 MP2 极化率，在引入 RI 近似的前提下，都可以以最精确的 CBS 外推模式 aCV[Q5]Z 实现。对于 CCSD 与 CCSD(T) 方法，本工作使用 \textsc{Q-Chem} (ver 5.1.1)\cite{Shao-Head-Gordon.MP.2015, Kaliman-Krylov.JCC.2017}作数值极化率计算。这部分计算将不引入 RI 近似。本工作不对 post-HF 计算过程引入冻核近似 (FC, \underline{F}rozen \underline{C}ore)。自由基与其他开壳层体系的 HF 自洽场参考态通过自旋非限制性计算给出。
+
+本工作将在\alert{后文}对极化率的数值与解析之间的误差、RI 近似所导致的误差、以及基组误差进行分析。最终汇报的极化率数值中，HF 与 MP2 是通过 RI 近似下解析给出 (这两个方法将分别记为 RI-JK 与 RI-MP2)；CCSD 与 CCSD(T) 的结果将是 RI-MP2 解析极化率、以及更高阶贡献的数值极化率的加和。为更清晰明了地表示极化率数值的构成，本文将使用简记记号；这些记号列于表 \ref{tab.5.1}。该表格的所有记号是针对单个分子或自由基体系的；对于一个数据集合，我们将上标波浪号。举例而言，$\text{RelRMSD} (\Delta \tilde \alpha_{\textsf{(2)}/\text{aVTZ}}, \Delta \tilde \alpha_{\textsf{(2)}/\text{ref}}, \tilde \alpha_{\textsf{CCSD(T)}/\text{ref}})$ 代表 MP2/aVTZ 同性极化率相对于高精度 MP2 参考值的相对方均根误差；该相对误差计算所用的分母，是高精度 CCSD(T) 参考值。
+
+\begin{table}[ht]
+    \centering
+    \caption{本工作中使用的电子结构方法及其对应极化率的记号\tabnote{a}}
+    \label{tab.5.1}
+    \begin{tabular}{ll}
+    \hline
+    记号 & 说明 \\
+    \hline
+    num & 数值极化率 \\
+    anal & 解析极化率 \\
+    conv & 传统电子积分方法，即无 RI 近似的计算方法 \\
+    $\alpha$ & 同性极化率 \\
+    $\gamma$ & 异性极化率 \\
+    $\Delta \alpha_\textsf{(2)}$ & $\alpha^\text{anal}_\textsf{RI-MP2} - \alpha^\text{anal}_\textsf{RI-HF}$ \\
+    $\Delta \alpha_\textsf{D}$ & $\alpha^\text{num}_\textsf{CCSD} - \alpha^\text{num}_\textsf{MP2}$ (不引入 RI 近似) \\
+    $\Delta \alpha_\textsf{(T)}$ & $\alpha^\text{num}_\textsf{CCSD(T)} - \alpha^\text{num}_\textsf{CCSD}$ (不引入 RI 近似) \\
+    $\Delta \alpha_\textsf{D(T)}$ & $\alpha^\text{num}_\textsf{CCSD(T)} - \alpha^\text{num}_\textsf{MP2}$ (不引入 RI 近似) \\
+    $\Delta \alpha_\textsf{HF}$ & $\alpha^\text{anal}_\textsf{RI-HF}$ \\
+    $\Delta \alpha_\textsf{MP2}$ & $\alpha^\text{anal}_\textsf{RI-MP2} = \alpha_\textsf{HF} + \Delta \alpha_\textsf{(2)}$ \\
+    $\alpha_\textsf{CCSD}$ & $\alpha^\text{num}_\textsf{CCSD} - \alpha^\text{num}_\textsf{MP2} + \alpha^\text{anal}_\textsf{RI-MP2} = \alpha_\textsf{HF} + \Delta \alpha_\textsf{(2)} + \Delta \alpha_\textsf{D}$ \\
+    $\alpha_\textsf{CCSD(T)}$ & $\alpha^\text{num}_\textsf{CCSD(T)} - \alpha^\text{num}_\textsf{MP2} + \alpha^\text{anal}_\textsf{RI-MP2} = \alpha_\textsf{HF} + \Delta \alpha_\textsf{(2)} + \Delta \alpha_\textsf{D(T)}$ \\
+    \hline
+    \end{tabular}
+  
+    \raggedright
+    \par\tabnote{a} 上述所有应用于同性极化率 $\alpha$ 的记号，将同样应用于异性极化率 $\gamma$。
+\end{table}
+
+\subsubsection{数据集}
+
+本工作着重考察的数据集是 HR46 与 T144。原始的 HR46 数据集\cite{Hickey-Rowley.JPCA.2014}包含 46 个体系 (化合物结构参考附录图 \ref{fig.fig-s1})；其最精确的计算模型是在 MP2/aVTZ 结构下 CCSD/aVTZ 极化率，且该工作中使用了冻核近似。该数据集的特点是
+\begin{itemize}[nosep]
+    \item 包含的原子种类较多，包括 H, C, N, O, F, S, P, Cl, Br 等元素；
+    \item 在 15 个原子以内的限制下，包含大多数常见有机官能团与无机共价键或离域键；
+    \item 分子或自由基的选取契合化学反应、污染控制、生物化学与能源化学的需求；
+    \item 除了 3 个体系是自由基体系 (\ce{^2NO}, \ce{^3O2}, \ce{^3SO}，上标的数字表示自旋多重度)，其余体系均为非自旋极化的体系 (non-spin-polarized)。
+\end{itemize}
+在本工作中，HR46 中的所有分子的几何结构经过 RI-MP2/aVTZ 级别作优化，且没有启用冻核近似\alert{盲审通过后将结构的链接链上}。所有极化率的计算也在此几何结构下实现。
+
+原始的 T145 数据集\cite{Wu-Thakkar.CPL.2015}包含 145 个有机体系。该数据集的分子使用 B3LYP/aVTZ 下的优化结构，最精确的极化率计算模型是 CCSD(T)/aVTZ。T145 数据集是 TABS 数据集\cite{Blair-Thakkar.CTC.2014}的子集。TABS 数据集本身是一大类着眼于药物化学、有机化学与生物化学应用的、自旋非极化的数据集。TABS 数据集的分子数量为 1641；一方面该数据集本身数量较大、另一方面为使该数据集用于机器学习，Blair 等人对 TABS 挑选 298 分子作为极化率与分子容量的训练集为 T298 数据集\cite{Blair-Thakkar.CPL.2014}。但由于并非所有 T298 数据集中的分子都可以承受 CCSD(T)/aVTZ 的计算代价，因此 Wu 等人从 T298 选出 145 个较小的分子，以给出极化率参考值更精确的数据集，即 T145 数据集\cite{Wu-Thakkar.CPL.2015}。本工作中，我们选取其中的 144 个分子，并称其为 T144 数据集。相比于 T145 数据集，我们排除了第 1363 号分子 (TABS 分子编号，分子名称为 2,3-dihydro-1,3-oxazole)；这是因为 TABS 数据集提供的分子构型中，1363 号分子与分子式对应的结构相差两个氢原子，即可能存在数据的损坏。T144 数据集的分子构型使用 TABS 原始数据库提供的 B3LYP/aVTZ 几何结构\cite{Blair-Thakkar.CTC.2014} (化合物结构参考附录图 \ref{fig.fig-s2-1})。
+
+关于 HR46 与 T144 数据集化合物名称的变化与勘定，参考附录 \ref{sec.T145-HR46-name-change}。
+
+本工作的一个关键点是基组收敛性评测。为作有效的评测，测评的体系应可承受高精度大基组 (如 CCSD(T)/aCV5Z 级别模型) 的计算量与资源需求。在 HR46 与 T144 数据集中，14 个体系 (\ce{Cl2}, \ce{CO}, \ce{CO2}, \ce{H2O}, \ce{N2}, \ce{NH3}, \ce{^3O2}, \ce{PH3}, \ce{SH2}, \ce{SiH4}, \ce{^3SO}, \ce{SO2}, \ce{FCN}, \ce{HCHS}) 可以承受大计算量的计算。这 14 个数据也同样出现在 HH132 数据集中。在测评基组收敛性问题时，这 14 个小体系的分子构型将采用 NIST 计算化学数据库中实验的数据\cite{NIST.CCCBDB}；这些构型也同样为 HH132 数据集所采用。
+
+\subsubsection{基组与 RI 近似}
+
+在本工作中，我们将使用 Dunning 系列基组 aV$X$Z 与 aCV$X$Z ($X = \mathrm{D, T, Q, 5}$)\cite{Dunning-Dunning.JCP.1989, Kendall-Harrison.JCP.1992, Woon-Dunning.JCP.1993, Peterson-Dunning.JCP.1994, Wilson-Dunning.JMST.1996, VanMourik-Dunning.MP.1999, Wilson-Dunning.JCP.1999, VanMourik-Dunning.IJQC.2000, Peterson-Dunning.JCP.2002, Hill-Peterson.JCP.2010}。H 与 Br 原子并不出现在 aCV$X$Z 系列基组中；对于这两个原子作 aCV$X$Z 级别计算时，将不加说明地替换为对应的 aV$X$Z 基组。RI 近似可以大幅减少 MP2 的计算耗时，并且不会产生严重的误差损耗，是性价比相当高的技术手段\cite{Vahtras-Feyereisen.CPL.1993}。本工作的解析极化率计算中，我们对 Weigend 算法实现的 RI-JK\cite{Weigend-Weigend.PCCP.2002} 与 RI-MP2 相关贡献\cite{Weigend-Haettig.JCP.2002}计算均使用等比辅助基 (ETB, \underline{E}ven-\underline{T}empered auxiliary \underline{B}asis set)\cite{Stoychev-Neese.JCTC.2017}；等比参数设为 \textsc{PySCF} 程序默认的 $\beta = 2$。由于基于 \textsc{PySCF} 的扩展程序 \textsc{dh} 的高效率实现、以及对大基组下内存的合理控制，使得本工作中所有体系都可以在 MP2/aCV5Z 下完成计算。作为自洽场的 RI-JK 方法的能量收敛精度为 $10^{-10}$ Hartree。
+
+\subsubsection{数值极化率}
+
+在\alert{第三章的讨论}中，我们已经了解极化率是对外电场强度的二阶梯度；依外电场 $\pmb{\mathcal{E}}$ 在三个空间方向取向的大小 $(\mathcal{E}_x, \mathcal{E}_y, \mathcal{E}_z)$，极化率张量 $\bm{\alpha}$ 是 $3 \times 3$ 的对称矩阵：
+\begin{equation}
+    \alpha_{ts} = - \frac{\partial^2 E}{\partial \mathcal{E}_t \partial \mathcal{E}_s} \quad t, s \in \{ x, y, z \}
+\end{equation}
+作为物理上可观测的量，本工作着重测评同性极化率 $\alpha$\footnote{通过标量记号表示，用以区分作为矩阵的极化率张量 $\bm{\alpha}$。}和异性极化率 $\gamma$：
+\begin{align}
+    \alpha &= \frac{1}{3} \left( \alpha_{xx} + \alpha_{yy} + \alpha_zz \right) = \mathrm{tr} (\bm{\alpha}) \\
+    \gamma &= \frac{1}{\sqrt{2}} \left( (\alpha_{xx} - \alpha_{yy})^2 + (\alpha_{yy} - \alpha_{zz})^2 + (\alpha_{zz} - \alpha_{xx})^2 + 6 (\alpha_{xy}^2 + \alpha_{yz}^2 + \alpha_{zx}^2) \right)^{1/2}
+\end{align}
+对于数值极化率的求取过程，对角元部分 $\alpha_{tt}$ ($t \in \{ x, y, z \}$) 通过线性的三点格式作数值导数给出：
+\begin{equation}
+    \alpha_{tt} = - \frac{\partial^2 E}{\partial \mathcal{E}_t^2} = - \frac{1}{h^2} \left( E(- \bm{h}_t) - 2 E(\bm{0}) + E(\bm{h}_t) \right) + o(h^2)
+\end{equation}
+而非对角元部分 $\alpha_{ts}$ ($t, s \in \{ x, y, z \}, \, t \neq s$) 则通过平面上的三点格式作数值导数给出：
+\begin{equation}
+    \alpha_{ts} = - \frac{\partial^2 E}{\partial \mathcal{E}_t \partial \mathcal{E}_s} = - \frac{1}{4h^2} \left( E(- \bm{h}_t - \bm{h}_s) - E(- \bm{h}_t + \bm{h}_s) - E(\bm{h}_t - \bm{h}_s) + E(\bm{h}_t + \bm{h}_s) \right) + o(h^2)
+\end{equation}
+其中，$\bm{h}_t, \bm{h}_s$ 分别是 $t, s$ 方向外加微扰电场强度矢量：
+\begin{equation*}
+    \bm{h}_x = (h, 0, 0)^\dagger, \quad \bm{h}_y = (0, h, 0)^\dagger, \quad \bm{h}_z = (0, 0, h)^\dagger
+\end{equation*}
+标量 $h$ 是微扰电场的强度；在本工作中，我们对所有体系均使用 $h = 0.004$ au。关于使用该外加微扰强度的合理性，我们在\alert{SI}中作讨论。
+
+\newpage
+
+\subsection{附录}
+
+\subsubsection{HR46 与 T144 数据集分子结构}
+
+\begin{figure}[H]
+    \centering
+    \caption{HR46 数据集分子结构}
+    \label{fig.fig-s1}
+    \includegraphics[width=0.85\textwidth]{assets/fig-s1.pdf}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \caption{T144 数据集分子结构}
+    \label{fig.fig-s2-1}
+    \includegraphics[width=0.85\textwidth]{assets/fig-s2-1.pdf}
+\end{figure}
+
+\setcounter{figure}{\value{figure} - 1}
+
+\begin{figure}[H]
+    \centering
+    \caption{(续图)}
+    \label{fig.fig-s2-2}
+    \includegraphics[width=0.85\textwidth]{assets/fig-s2-2.pdf}
+\end{figure}
+
+\setcounter{figure}{\value{figure} - 1}
+
+\begin{figure}[H]
+    \centering
+    \caption{(续图)}
+    \label{fig.fig-s2-3}
+    \includegraphics[width=0.85\textwidth]{assets/fig-s2-3.pdf}
+\end{figure}
+
+\setcounter{figure}{\value{figure} - 1}
+
+\begin{figure}[H]
+    \centering
+    \caption{(续图)}
+    \label{fig.fig-s2-4}
+    \includegraphics[width=0.85\textwidth]{assets/fig-s2-4.pdf}
+\end{figure}
+
+\setcounter{figure}{\value{figure} - 1}
+
+\begin{figure}[H]
+    \centering
+    \caption{(续图)}
+    \label{fig.fig-s2-5}
+    \includegraphics[width=0.85\textwidth]{assets/fig-s2-5.pdf}
+\end{figure}
+
+\newpage
+
+\subsubsection{体系名称的更改}
+\label{sec.T145-HR46-name-change}
+
+本工作会对原先 T144 与 HR46 数据集的化合物名称作一定更改。我们尽量依照 IUPAC 推荐命名规则 (PIN, \underline{P}referred \underline{I}UPAC \underline{N}ame) 进行命名\cite{Favre-Powell.RSC.2013}。举例而言，“acetone”(丙酮) 将被命名为“propane-2-one”(丙-2-酮)。这类名称更改是平凡的。
+
+HR46 原文献\cite{Hickey-Rowley.JPCA.2014}中，正文中名称为“thymine”的分子应命名为“cytosine”(胞嘧啶，或 PIN 命名 6-amino-1\textit{H}-pyrimidin-2-one)。其补充信息中的命名是正确的。
+
+T144 数据集中，我们依据 TABS 数据库所提供的分子坐标文件，对下述 4 个分子的名称作勘定，并示于表 \ref{tab.T144-name-errata}。
+
+\begin{table}[H]
+    \centering
+    \caption{T144 数据集名称勘定}
+    \label{tab.T144-name-errata}
+    \begin{tabular}{lll}
+    \hline
+    ID   & Original   Name                & Updated   Name                    \\ \hline
+    0129 & carbonochloridodithioic   acid & methyl   carbonochloridodithioate \\
+    0399 & hydroxymethylperoxide          & hydroperoxymethanol               \\
+    1193 & 2-bromoethanone                & 2-bromoethen-1-one                \\
+    1630 & 5-methyl-2\textit{H}-tetrazole          & 5-methyl-1\textit{H}-tetrazole             \\ \hline
+    \end{tabular}
+\end{table}
+
+\subsubsection{}
+
 \newpage
 
 \bibliographystyle{achemso}
