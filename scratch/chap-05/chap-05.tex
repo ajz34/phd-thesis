@@ -57,7 +57,7 @@ RelRMSD 误差多大，才认为是可以被接受或容许的范围？首先，
 
 \begin{table}[ht]
     \centering
-    \caption{本工作中使用的电子结构方法及其对应极化率的记号\tabnote{a}}
+    \caption{本工作中使用的电子结构方法及其对应极化率的记号\tabnote{a}。}
     \label{tab.5.1}
     \begin{tabular}{ll}
     \hline
@@ -117,17 +117,105 @@ RelRMSD 误差多大，才认为是可以被接受或容许的范围？首先，
 \end{align}
 对于数值极化率的求取过程，对角元部分 $\alpha_{tt}$ ($t \in \{ x, y, z \}$) 通过线性的三点格式作数值导数给出：
 \begin{equation}
+    \label{eq.pol-findiff-alpha-def}
     \alpha_{tt} = - \frac{\partial^2 E}{\partial \mathcal{E}_t^2} = - \frac{1}{h^2} \left( E(- \bm{h}_t) - 2 E(\bm{0}) + E(\bm{h}_t) \right) + o(h^2)
 \end{equation}
 而非对角元部分 $\alpha_{ts}$ ($t, s \in \{ x, y, z \}, \, t \neq s$) 则通过平面上的三点格式作数值导数给出：
 \begin{equation}
+    \label{eq.pol-findiff-gamma-def}
     \alpha_{ts} = - \frac{\partial^2 E}{\partial \mathcal{E}_t \partial \mathcal{E}_s} = - \frac{1}{4h^2} \left( E(- \bm{h}_t - \bm{h}_s) - E(- \bm{h}_t + \bm{h}_s) - E(\bm{h}_t - \bm{h}_s) + E(\bm{h}_t + \bm{h}_s) \right) + o(h^2)
 \end{equation}
 其中，$\bm{h}_t, \bm{h}_s$ 分别是 $t, s$ 方向外加微扰电场强度矢量：
 \begin{equation*}
     \bm{h}_x = (h, 0, 0)^\dagger, \quad \bm{h}_y = (0, h, 0)^\dagger, \quad \bm{h}_z = (0, 0, h)^\dagger
 \end{equation*}
-标量 $h$ 是微扰电场的强度；在本工作中，我们对所有体系均使用 $h = 0.004$ au。关于使用该外加微扰强度的合理性，我们在\alert{SI}中作讨论。
+标量 $h$ 是微扰电场的强度；在本工作的数值差分计算中，我们对所有体系均使用 $h = 0.004$ au。关于使用该外加微扰强度的合理性，我们在附录的 \ref{sec.5.s9} 小节中作讨论。
+
+数值梯度计算大多数情形使用 \textsc{Q-Chem} 程序。自洽场的收敛判据 (\texttt{SCF\_CONVERGENCE} 关键词) 设为 $10^{-11}$ au，而 CCSD 能量与振幅收敛判据 (\texttt{CC\_E\_CONV} 与 \texttt{CC\_T\_CONV}) 分别设为 $10^{-10}$ au 与 $10^{-7}$ au。作为特例，对于 \ce{^2NO} 分子，其数值梯度是通过 \textsc{PySCF} 在限制分子对称性的不可约表示而实现；其自洽场与 CCSD 收敛判据与 \textsc{Q-Chem} 设置相同。由于我们在以 aCV5Z 基组计算 \ce{SO2} 分子时遇到收敛困难，因此该情形下我们分别降低 \textsc{Q-Chem} 的收敛判据 \texttt{SCF\_CONVERGENCE}, \texttt{CC\_E\_CONV}, \texttt{CC\_T\_CONV} 为 $10^{-10}$ au, $10^{-9}$ au, $10^{-6}$ au。
+
+\subsubsection{CBS 外推}
+
+CBS 外推方法通常被认为在计算资源不足、以及有限基组不充分大时，可以有效地提升计算精度以更接近完备基组极限的手段。关于具体的 CBS 外推方法与策略，目前已有许多文献对此作说明与讨论\cite{Nyden-Petersson.JCP.1981, Petersson-Mantzaris.JCP.1988, Dunning-Dunning.JCP.1989, Peterson-Dunning.JCP.1994, Jensen-Jensen.TCA.2005, Karton-Martin.TCA.2006, Truhlar-Truhlar.CPL.1998, Klopper-Kutzelnigg.JMST.1986, Kutzelnigg-Morgan.JCP.1992, Martin-Martin.CPL.1996, Helgaker-Noga.JCP.1997, Halkier-Wilson.CPL.1998, Halkier-Olsen.CPL.1999}。HH132 数据集的原始工作使用的 CBS 策略是三次外推式\cite{Hait-Head-Gordon.PCCP.2018}
+\begin{equation}
+    \label{eq.cbs.zeta3}
+    \alpha(\zeta) = \alpha(\text{CBS}) + A \zeta^{-3}
+\end{equation}
+其中，$\zeta$ 是基组的基数 (cardinal number)。对于 Dunning 基组，aV$X$Z 或 aCV$X$Z 的 $X = \mathrm{D, T, Q, 5}$ 分别对应的基数是 $\zeta = 2, 3, 4, 5$。对于 CBS 外推模型 aCV[TQ]Z，其相对于 aCV5Z 的误差，对于偶极矩大约是 $\sim 0.2\%$\cite{Hait-Head-Gordon.JCTC.2018, Halkier-Joergensen.JCP.1999}，对于极化率大约是 $\sim 0.1\%$\cite{Hait-Head-Gordon.PCCP.2018}；这意味着三次外推式 (\ref{eq.cbs.zeta3}) 对电性质的计算是有效的。在本工作中，对极化率的计算将沿用该 CBS 外推策略。对于 HR46 与 T144 全部分子的 MP2 极化率的计算，我们都使用 aCV[Q5]Z 作为参考值；而对于 CCSD 与 CCSD(T) 计算，则会依照分子体系的大小而给予相适应的 CBS 外推模型 aV[$XY$]Z ($[XY] = \mathrm{[Q5], [TQ], [DT]}$) 计算。
+
+\subsubsection{FPA 策略}
+
+在有限的计算资源内，若高等级方法难以直接计算得到，那么 FPA 方法会是一种尽可能逼近高等级计算方法结果、但使用相对较小计算资源的手段。在本工作中，我们的目标是给出 CCSD(T)/CBS 的参考值，其中的 CBS 是通过高精度的 aCV[Q5]Z 外推近似得到。考虑到不是所有体系都可以承受如此大的计算量，因此对极化率作三部分拆分：以同向极化率为例，CCSD(T) 极化率 $\alpha_\textsf{CCSD(T)}$ 拆分出这三部分是 HF 部分 $\alpha_\textsf{HF}$、MP2 相关贡献部分 $\Delta \alpha_\textsf{(2)}$、以及更高阶贡献部分 $\Delta \alpha_\textsf{D(T)}$：
+\begin{align}
+    \alpha_{\textsf{CCSD(T)}/\text{CBS}} &= \alpha_{\textsf{HF}/\text{CBS}} + \Delta \alpha_{\textsf{(2)}/\text{CBS}} + \Delta \alpha_{\textsf{D(T)}/\text{CBS}} \notag\\
+    &\simeq \alpha_{\textsf{HF}/\text{LB}} + \Delta \alpha_{\textsf{(2)}/\text{CBS}} + \Delta \alpha_{\textsf{D(T)}/\text{CBS}'} \notag\\
+    &\simeq \alpha_{\textsf{HF}/\text{LB}} + \Delta \alpha_{\textsf{(2)}/\text{CBS}} + \Delta \alpha_{\textsf{D(T)}/\text{SB}}
+\end{align}
+上式下标的 LB 是指大基组 (\underline{L}arge \underline{B}asis set)、SB 是指小基组 (\underline{S}mall \underline{B}asis set)。我们的工作对 HF 方法直接采用 $\text{LB} = \text{aCV5Z}$ 基组。对于 MP2 的相关贡献部分 $\Delta \alpha_{\textsf{(2)}/\text{CBS}}$，我们始终选择使用最高精度的 aCV[Q5]Z 外推模型。更高阶贡献部分 $\Delta \alpha_{\textsf{D(T)}/\text{CBS}'}$ 是指对高精度 CBS 外推 $\Delta \alpha_{\textsf{D(T)}/\text{CBS}}$ 的近似；目前针对 $\Delta \alpha_{\textsf{D(T)}/\text{CBS}'}$ 的计算基组级别取决于体系的大小。若对 $\Delta \alpha_{\textsf{D(T)}/\text{CBS}'}$ 的计算使用基组 aV[$XY$]Z 与 aCV[$XY$]Z，那么我们称该 FPA 策略为 FPA-aV[$XY$]Z。同样地，若对 $\Delta \alpha_{\textsf{D(T)}/\text{LB}}$ 的计算使用基组 aV[$X$]Z 与 aCV[$X$]Z ($X < 5$)，那么我们称该 FPA 策略为 FPA-aV[$X$]Z。
+
+\begin{figure}[ht]
+    \centering
+    \caption{本工作所使用的 FPA 模型。该图以 FPA-aV[TQ]Z 作为例子；其中 $\alpha_{\textsf{HF}/\text{LB}}$ 以 aCV5Z 计算所得、$\Delta \alpha_{\textsf{(2)}/\text{CBS}}$ 以 aCV[Q5]Z 计算所得、$\Delta \alpha_{\textsf{D(T)}/\text{CBS}'}$ 以 aV[TQ]Z 计算所得。}
+    \label{fig.fig-1}
+    \includegraphics[width=0.9\textwidth]{assets/fig-1.png}
+\end{figure}
+
+以 FPA-aV[TQ]Z 作为例子，使用 FPA 策略的合理性通过图 \ref{fig.fig-1} 展示。HF 方法的结果占真实结果的绝对大头；但为正确描述物性，高质量的相关效应描述也是重要的。由于 HF 方法一般来说依基组基数 $\zeta$ 的收敛速度相当快\cite{Jensen-Jensen.TCA.2005, Karton-Martin.TCA.2006}，因此许多 CBS 策略、包括 HH132 数据集的参考值，都对 HF 方法直接使用计算量上最大可承受的基组。而对于相关效应，则依基组基数 $\zeta$ 的增大，收敛速度相对缓慢。大多数情况下，MP2 占据相关效应的主要部分；因此，对 MP2 的大基组精确描述也非常重要。但对于更高阶的相关效应，一方面其绝对数值已然较小，另一方面数值对基组基数 $\zeta$ 的敏感性较小、或相对于 MP2 相关效应的收敛速度更快。对于后一方面所述的现象，目前已经在核磁屏蔽常数的计算\cite{Sun-Xu.JCP.2013, Wang-Xu.JCP.2018, Gregusova-Bartlett.JCTC.2010}、能量计算\cite{Truhlar-Truhlar.CPL.1998}等诸多情形下有所验证。因此，我们也会期望在极化率问题中，对于 CCSD(T) 相对于 MP2 之间的高级相关效应，使用较低等级基组或 CBS 外推方法，也可以提供一个合理的对高等级 CBS 外推方法的近似。本工作的其中一个重点，即是验证这个猜想的合理性。
+
+\subsection{结论与讨论}
+
+\subsubsection{RI 误差与数值差分误差}
+
+在本工作中，HF 与 MP2 的极化率是通过解析梯度给出，但引入了 RI 近似；CCSD 与 CCSD(T) 尽管未使用 RI 近似，但引入了数值差分误差。注意到表 \ref{tab.5.1} 中，将要汇报的 $\alpha_\textsf{CCSD(T)}$ 参考值是由 $\alpha^\text{anal}_\textsf{RI-MP2} + \Delta \alpha^\text{num}_\textsf{D(T)}$ 两部分构成；这两部分分别包含 RI 近似误差与数值差分误差。为了估计这部分误差的大小，我们考察了 HF 与 MP2 方法在 aVTZ 基组下、包含 RI 近似与不使用 RI 近似的同性极化率的结果。
+
+我们看到，解析 RI-HF 与数值 HF 方法同性极化率之间相对方均根误差 $\text{RelRMSD} (\tilde \alpha_\textsf{RI-HF}^\text{anal}, \tilde \alpha^\text{num}_\textsf{HF})$，对于 HR46 与 T144 数据集，分别是 0.018\% 与 0.022\%。解析 RI-MP2 与数值 MP2 方法相关能贡献部分的方均根误差 $\text{RelRMSD} (\Delta \tilde \alpha^\text{anal}_\textsf{RI-(2)}, \Delta \tilde \alpha^\text{num}_\textsf{(2)}, \tilde \alpha^\text{num}_\textsf{MP2})$，对于两个数据集的误差均小于 0.01\%。这些误差都远远小于实验误差标准的 0.5\%，因此我们认为 RI 近似与数值差分误差对总的同性极化率 $\alpha_\textsf{CCSD(T)}$ 计算结果影响相当小，以至于可以忽略。我们猜测该结论对异性极化率 $\gamma_\textsf{CCSD(T)}$ 也同样适用。
+
+我们还看到，对于相关贡献部分，自洽场收敛条件会对数值差分误差有一定影响。相关的数据与结论列于附录的 \ref{sec.5.s9} 小节。
+
+\subsubsection{小体系的同性极化率基组收敛性}
+
+在这两小节中，我们将对 14 个小体系 (\ce{Cl2}, \ce{CO}, \ce{CO2}, \ce{H2O}, \ce{N2}, \ce{NH3}, \ce{^3O2}, \ce{PH3}, \ce{SH2}, \ce{SiH4}, \ce{^3SO}, \ce{SO2}, \ce{FCN}, \ce{HCHS}) 作系统的基组收敛性分析，并基于此确定用于计算同性极化率的、高效的 FPA 模型。在该分析中，参考值由 CCSD(T)/CBS 计算所得：
+\begin{equation*}
+    \alpha_{\textsf{CCSD(T)}/\text{CBS}} = \alpha_{\textsf{HF}/\text{aCV5Z}} + \Delta \alpha_{\textsf{(2)}/\text{aCV[Q5]Z}} + \Delta \alpha_{\textsf{D(T)}/\text{aCV[Q5]Z}}
+\end{equation*}
+该参考值也对应了 HH132 数据集中最精确的 CBS 外推模型。详细的对 Dunning 系列基组的误差分析展示于表 \ref{tab.5.2}。
+
+\begin{table}[ht]
+    \centering
+    \caption{14 小体系同性极化率的相对方均根误差\tabnote{a}。}
+    \label{tab.5.2}
+    \begin{tabular}{cld{2.4}d{2.4}d{2.4}d{2.4}}
+        \hline
+          &              & \multicolumn{4}{c}{RelRMSD   error / \%}                \\ \cline{3-6}
+    Level & \multicolumn{1}{c}{Basis set}    &
+      \multicolumn{1}{c}{$\tilde \alpha_\textsf{HF}$\tabnote{b}}  &
+      \multicolumn{1}{c}{$\Delta \tilde \alpha_\textsf{(2)}$\tabnote{c}}  &
+      \multicolumn{1}{c}{$\Delta \tilde \alpha_\textsf{D}$\tabnote{c}} &
+      \multicolumn{1}{c}{$\Delta \tilde \alpha_\textsf{D(T)}$\tabnote{c}}     \\ \hline
+    2-$\zeta$ & aVDZ         & 3.385       & 0.853       & 1.113      & 0.787          \\
+              & aCVDZ        & 3.376       & 0.799       & 1.053      & 0.748          \\ \hdashline
+    3-$\zeta$ & aVTZ         & 0.703       & 0.516       & 0.406      & 0.297          \\
+              & aCVTZ        & 0.671       & 0.385       & 0.339      & 0.270          \\
+              & aV[DT]Z      &             & 0.535       & 0.155      & \textbf{0}.\textbf{144} \\ \hdashline
+              & aCV[DT]Z     &             & 0.373       & 0.156\tabnote{d}     & 0.178\tabnote{d}         \\
+    4-$\zeta$ & aVQZ         & 0.097       & 0.403       & 0.168      & 0.124          \\
+              & aCVQZ        & 0.084       & 0.244       & 0.12       & 0.101          \\
+              & aV[TQ]Z      &             & 0.359       & 0.111      & \textbf{0}.\textbf{086} \\
+              & aCV[TQ]Z     &             & 0.179       & 0.131\tabnote{e}     & 0.096\tabnote{e}         \\ \hdashline
+    5-$\zeta$ & aV5Z         & 0.024       & 0.233       & 0.082      & 0.065          \\
+              & aCV5Z        & \multicolumn{1}{c}{\textbf{0}\tabnote{f}} & 0.125       & 0.061      & 0.052          \\
+              & aV[Q5]Z      &             & 0.071       & 0.013      & \textbf{0}.\textbf{017} \\
+              & aCV[Q5]Z     &             & \multicolumn{1}{c}{\textbf{0}\tabnote{f}} & \multicolumn{1}{c}{0\tabnote{f}}         & \multicolumn{1}{c}{0\tabnote{f}}             \\
+    \hline
+    \end{tabular}
+
+    \raggedright
+    \par\tabnote{a} 粗体的数字表示除参考值模型 FPA-aCV[Q5]Z 外，目前为止最佳的 FPA 模型；即依 3,4,5-$\zeta$ 分类下 FPA-aV[DT]Z、FPA-aV[TQ]Z 与 FPA-aV[Q5]Z。
+    \par\tabnote{b} HF 同性极化率相对方均根误差为 $\text{RelRMSD} (\tilde \alpha_{\textsf{HF}/\text{basis}}, \tilde \alpha_{\textsf{HF}/\text{ref}}, \tilde \alpha_{\textsf{CCSD(T)}/\text{ref}})$。其中，$\tilde \alpha_{\textsf{HF}/\text{ref}}$ 指代的是 $\tilde \alpha_{\textsf{HF}/\text{aCV5Z}}$，$\tilde \alpha_{\textsf{CCSD(T)}/\text{ref}}$ 指代的时作为参考值的 $\alpha_{\textsf{CCSD(T)}/\text{CBS}}$。
+    \par\tabnote{c} 相关能贡献的同性极化率相对方均根误差为 $\text{RelRMSD} (\Delta \tilde \alpha_{\textsf{corr}/\text{basis}}, \Delta \tilde \alpha_{\textsf{corr}/\text{ref}}, \tilde \alpha_{\textsf{CCSD(T)}/\text{ref}})$。其中，$\Delta \tilde \alpha_{\textsf{corr}}$ 可以是指 $\Delta \tilde \alpha_{\textsf{(2)}}$、$\Delta \tilde \alpha_{\textsf{D}}$ 或 $\Delta \tilde \alpha_{\textsf{D(T)}}$；而 $\Delta \tilde \alpha_{\textsf{corr}/\text{ref}}$ 指代的是 $\Delta \tilde \alpha_{\textsf{corr}/\text{aCV[Q5]Z}}$。
+    \par\tabnote{d} 在排除 \ce{^3O2} 与 \ce{^3SO} 体系后，$\Delta \tilde \alpha_\textsf{D}$ 与 $\Delta \tilde \alpha_\textsf{D(T)}$ 的 RelRMSD 误差分别降至 0.126\% 与 0.136\%。对于这两个体系的基组收敛分析，将在附录 \ref{sec.5.s4} 小节展开。
+    \par\tabnote{e} 在排除 \ce{Cl2} 体系后，$\Delta \tilde \alpha_\textsf{D}$ 与 $\Delta \tilde \alpha_\textsf{D(T)}$ 的 RelRMSD 误差分别降至 0.089\% 与 0.069\%。对于该体系的基组收敛分析，将在附录 \ref{sec.5.s4} 小节展开。
+    \par\tabnote{f} 这些数值依据参考值的选取方式，从定义上是零。
+\end{table}
 
 \newpage
 
@@ -137,14 +225,14 @@ RelRMSD 误差多大，才认为是可以被接受或容许的范围？首先，
 
 \begin{figure}[H]
     \centering
-    \caption{HR46 数据集分子结构}
+    \caption{HR46 数据集分子结构。}
     \label{fig.fig-s1}
     \includegraphics[width=0.85\textwidth]{assets/fig-s1.pdf}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \caption{T144 数据集分子结构}
+    \caption{T144 数据集分子结构。}
     \label{fig.fig-s2-1}
     \includegraphics[width=0.85\textwidth]{assets/fig-s2-1.pdf}
 \end{figure}
@@ -198,7 +286,7 @@ T144 数据集中，我们依据 TABS 数据库所提供的分子坐标文件，
 
 \begin{table}[H]
     \centering
-    \caption{T144 数据集名称勘定}
+    \caption{T144 数据集名称勘定。}
     \label{tab.T144-name-errata}
     \begin{tabular}{lll}
     \hline
@@ -210,7 +298,116 @@ T144 数据集中，我们依据 TABS 数据库所提供的分子坐标文件，
     \end{tabular}
 \end{table}
 
-\subsubsection{}
+\subsubsection{对有限差分误差的分析}
+\label{sec.5.s9}
+
+对同性极化率 $\alpha$ 所作的因有限差分而导致误差的分析列于表 \ref{tab.5.s8}。作为参照的数值是解析梯度所计算得到的极化率。我们假定对异性极化率 $\gamma$ 应有类似的结论。在该分析中，我们将使用两种自洽场收敛判据。需要指出，解析梯度极化率的精度也受机器精度、自洽场收敛精度与 CP-HF 方程收敛精度等要素影响；但在这段分析中，我们假定这些影响要素可以忽略不计。
+
+\begin{table}[ht]
+    \centering
+    \caption{HR45 数据集同性极化率因数值导数而起的相对方均差 (RelRMSD)\tabnote{a}。}
+    \label{tab.5.s8}
+    \begin{tabular}{ccccccc}
+    \hline
+    & \multicolumn{2}{c}{$\alpha_\textsf{MP2}$ / \%\tabnote{b}} & \multicolumn{2}{l}{$\alpha_\textsf{HF}$ / \%\tabnote{c}} & \multicolumn{2}{l}{$\Delta \alpha_\textsf{(2)}$ / \%\tabnote{d}} \\
+    Interval $h$ / au & loose\tabnote{e}         & tight\tabnote{f}        & loose\tabnote{e}        & tight\tabnote{f}        & loose\tabnote{e}         & tight\tabnote{f}         \\
+    \hline
+    0.0005            & 1.625          & 0.000         & 0.000         & 0.000         & 1.625          & 0.000          \\
+    0.0010            & 0.395          & 0.002         & 0.001         & 0.001         & 0.395          & 0.001          \\
+    0.0020            & 0.046          & 0.006         & 0.005         & 0.005         & 0.046          & 0.002          \\
+    0.0040            & 0.031          & 0.025         & 0.019         & 0.019         & 0.020          & 0.008          \\
+    0.0080            & 0.101          & 0.101         & 0.075         & 0.075         & 0.033          & 0.033          \\
+    0.0160            & 0.415          & 0.415         & 0.309         & 0.309         & 0.138          & 0.138          \\
+    \hline
+    \end{tabular}
+
+    \raggedright
+    \par\tabnote{a} 该表格数据是通过 \textsc{PySCF} 结合扩展程序 \textsc{dh}，以 aVTZ 级别基组计算，对 HR45 数据集 (除去了 \ce{^2NO} 分子的 HR46 数据集)，在不同的自洽场收敛条件、以及不同的有限差分外场强度 $h$ 下所给出 (其意义在式 (\ref{eq.pol-findiff-alpha-def}, \ref{eq.pol-findiff-gamma-def}) 给出)。所有计算都使用 RI 近似，且 RI 辅助基选用 \textsc{PySCF} 默认的 ETB 给出。
+    \par\tabnote{b} $\alpha_\textsf{MP2}$ 的相对方均根误差是指 $\text{RelRMSD} (\tilde \alpha^\text{num}_\textsf{RI-MP2}, \tilde \alpha^\text{anal}_\textsf{RI-MP2})$。
+    \par\tabnote{c} $\alpha_\textsf{HF}$ 的相对方均根误差是指 $\text{RelRMSD} (\tilde \alpha^\text{num}_\textsf{RI-JK}, \tilde \alpha^\text{anal}_\textsf{RI-JK})$。
+    \par\tabnote{d} $\Delta \alpha_\textsf{(2)}$ 的相对方均根误差是指 $\text{RelRMSD} (\Delta \tilde \alpha^\text{num}_\textsf{RI-(2)}, \Delta \tilde \alpha^\text{anal}_\textsf{RI-(2)}, \tilde \alpha^\text{anal}_\textsf{RI-MP2})$。
+    \par\tabnote{e} 宽松的 (loose) 收敛条件是指，在 \textsc{PySCF} 的两次相邻的自洽场迭代过程中，当达到能量阈值 (\texttt{conv\_tol}) $10^{-10}$ au 且达到轨道梯度阈值 (\texttt{conv\_tol\_grad}) $10^{-5}$ 时，则判定自洽场收敛。该表格所有数据都成功在 50 次自洽场迭代中以宽松条件收敛。该收敛条件亦用于正文中的所有解析极化率计算过程。
+    \par\tabnote{f} 严格的 (tight) 收敛条件是指，在 \textsc{PySCF} 的两次相邻的自洽场迭代过程中，当达到能量阈值 (\texttt{conv\_tol}) $10^{-13}$ au 且达到轨道梯度阈值 (\texttt{conv\_tol\_grad}) $10^{-10}$ 时、或自洽场已经进行了 50 次迭代，则不论是否真正地收敛而停止自洽场迭代。
+\end{table}
+
+我们看到对于 $\alpha_\textsf{HF}$，数值与解析导数之间的误差近乎完全来自于外加偶极电场强度 $h$；但对于 MP2 的相关贡献部分 $\Delta \alpha_\textsf{(2)}$，若自洽场没有以严格的判标收敛，那么极化率的结果将会有比较显著的误差。
+
+对于任何计算，特别是 post-SCF 方法的分子性质计算，自洽场的收敛当然是越精确、收敛判标越严格越好。但在现实的计算资源内、以及考虑到计算成本与精度需求的平衡，过分严格的自洽场并不一定划算、也不一定可以真的实现。考虑到我们对本工作的极化率参考值误差的预期是 0.5\% 以内；一方面，我们不希望在方法和基组误差之外，还有很大的有限差分误差；但另一方面，我们注意到在外加电场强度在 $h = 0.0040 \, \text{au}$ 时，在相对宽松的 (\textsc{PySCF} 默认的) 自洽场收敛判据下，$\alpha_\textsf{MP2}$ 的数值极化率与理论极化率的相对方均根误差仅有 0.031\%。据此我们推测，对于其他后自洽场方法 (譬如 CCSD(T))，对同向极化率 $\alpha$ 与异向极化率 $\gamma$，在自洽场收敛判据不低于 $10^{-10}$ au、对于更大基组且未引入 RI 近似的情形、以及对于其他数据集，若使用外加电场强度 $h = 0.0040 \, \text{au}$ 作数值差分，那么因差分而引入的误差大约在 0.05\% 的级别。这种程度的误差相比于实验精度的 0.5\% 误差，是完全可以忽略的。
+
+\subsubsection{$\Delta \alpha_\textsf{D(T)}$ 对体系 \ce{^3O2}, \ce{^3SO}, \ce{Cl2} 计算结果的基组收敛趋势}
+\label{sec.5.s4}
+
+这里的讨论是对正文表 \ref{tab.5.2} 中异常数据的分析。需要注意本小节与下一小节对基组收敛性分析图片的纵坐标是对称对数坐标：当误差大于 0.1\% 或小于 -0.1\% 时选用对数坐标；当误差介于两者之间时选用线性坐标。对于特定基组，其相对误差是由下式所计算：
+\begin{equation*}
+    \frac{\Delta \alpha_{\textsf{D(T)} / \text{basis}} - \Delta \alpha_{\text{aCV[Q5]Z}}}{\alpha_{\textsf{CCSD(T)} / \text{ref}}}
+\end{equation*}
+图片中的叉形散点是 CBS 外推过程；图中的 CBS 外推将绘制在比原先基组基数大 1 的位置上；即 [DT]Z 被看作是 QZ (4-$\zeta$) 级别、即 [TQ]Z 被看作是 5Z (5-$\zeta$) 级别、即 [Q5]Z 被看作是 6Z (6-$\zeta$) 级别。相对误差介于 -0.5\% 与 0.5\% 之间的部分以浅绿色背景展示。
+
+\textbf{\ce{^3O2} 的基组收敛性。}收敛情况如图 \ref{fig.O2-iso} 所示。对于该体系，$\Delta \alpha_\textsf{D(T)}$ 在 aCVDZ 上的表现比 aVDZ 要更好、但 aCVTZ 上的表现比 aVTZ 要差。因此，尽管 aCV[DT]Z 作为 CBS 外推，确实其效果比 aCVTZ 要好；但外推的进步相比于 aV[DT]Z 与 aVTZ 之间的差距，则要小许多。因此会出现更大的、核层矫正的基组外推 aCV[DT]Z 不如 aV[DT]Z 的情况。
+
+\begin{figure}[ht]
+    \centering
+    \caption{$\Delta \alpha_\textsf{D(T)}$ 对体系 \ce{^3O2} 计算结果的基组收敛趋势}
+    \label{fig.O2-iso}
+    \includegraphics[width=0.5\textwidth]{assets/O2-iso.pdf}
+\end{figure}
+
+\textbf{\ce{^3SO} 的基组收敛性。}收敛情况如图 \ref{fig.SO-iso} 所示。对于该体系，我们能看到尽管更大的 aCVDZ 与 aCVTZ 基组本身的表现分别都要好于 aVDZ 与 aVTZ；但 aCV$X$Z 在该体系下收敛速度太快，因此 aCV[DT]Z 反而因为较为激进的 CBS 外推策略，而产生了较大的误差。相比之下，aV$X$Z 的基组收敛趋势与式 (\ref{eq.cbs.zeta3}) 较为接近，因此 aV[DT]Z 的结果很接近精确结果。
+
+\begin{figure}[ht]
+    \centering
+    \caption{$\Delta \alpha_\textsf{D(T)}$ 对体系 \ce{^3SO} 计算结果的基组收敛趋势}
+    \label{fig.SO-iso}
+    \includegraphics[width=0.5\textwidth]{assets/SO-iso.pdf}
+\end{figure}
+
+\textbf{\ce{Cl2} 的基组收敛性。}收敛情况如图 \ref{fig.Cl2-iso} 所示。该体系的情况与 \ce{^3SO} 有相似之处。其 aCV$X$Z 总体上比 aV$X$Z 的结果要更好，但由于收敛趋势与式 (\ref{eq.cbs.zeta3}) 有一定偏离，因此导致 aCV[TQ]Z 的 CBS 外推误差比 aV[TQ]Z 要更大，并且 aCV[TQ]Z 和 aV[TQ]Z 的误差要比代价更低的 aCV[DT]Z 和 aV[DT]Z 要更大。
+
+\begin{figure}[ht]
+    \centering
+    \caption{$\Delta \alpha_\textsf{D(T)}$ 对体系 \ce{Cl2} 计算结果的基组收敛趋势}
+    \label{fig.Cl2-iso}
+    \includegraphics[width=0.5\textwidth]{assets/Cl2-iso.pdf}
+\end{figure}
+
+\subsubsection{$\Delta \gamma_\textsf{D(T)}$ 对体系 \ce{^3O2}, \ce{^3SO}, \ce{HCHS}, \ce{Cl2} 计算结果的基组收敛趋势}
+\label{sec.5.s5}
+
+\textbf{\ce{^3O2} 的基组收敛性。}自旋极化的分子相比于自旋非极化的分子，在计算异性极化率 $\Delta \gamma_\textsf{D(T)}$ 时，使用较小的基组或 CBS 外推模型，比起同性极化率 $\Delta \alpha_\textsf{D(T)}$ 而言会有更大的误差。这在正文也有说明。该体系的收敛情况如图 \ref{fig.O2-aniso} 所示。对于该体系，我们看到 aVDZ 到 aVTZ 的过程并未真正开始收敛；在此情形下，CBS 外推的 aV[DT]Z 反而造成更严重的误差。
+
+\begin{figure}[ht]
+    \centering
+    \caption{$\Delta \gamma_\textsf{D(T)}$ 对体系 \ce{^3O2} 计算结果的基组收敛趋势}
+    \label{fig.O2-aniso}
+    \includegraphics[width=0.5\textwidth]{assets/O2-aniso.pdf}
+\end{figure}
+
+\textbf{\ce{^3SO} 的基组收敛性。}收敛情况如图 \ref{fig.SO-aniso} 所示。该体系是非常具有挑战性的体系，因此其基组误差或 CBS 外推误差都不是非常有规律，且误差较大。尽管如此，aCV5Z、aV5Z 或 aV[Q5]Z 的误差都远小于 0.5\%，因此使用这些大小的基组估计 \ce{^3SO} 的异性极化率，仍然是可以接受的。
+
+\begin{figure}[ht]
+    \centering
+    \caption{$\Delta \gamma_\textsf{D(T)}$ 对体系 \ce{^3SO} 计算结果的基组收敛趋势}
+    \label{fig.SO-aniso}
+    \includegraphics[width=0.5\textwidth]{assets/SO-aniso.pdf}
+\end{figure}
+
+\textbf{\ce{HCHS} 的基组收敛性。}收敛情况如图 \ref{fig.HCHS-aniso} 所示。可以发现该体系下，基组收敛趋势在 QZ (4-$\zeta$) 处出现了剧烈的转折。因此，更昂贵的 aV[TQ]Z、aCV[TQ]Z 外推结果不如 aV[DT]Z、aCV[DT]Z，也不如基组 aVQZ、aCVQZ。
+
+\begin{figure}[ht]
+    \centering
+    \caption{$\Delta \gamma_\textsf{D(T)}$ 对体系 \ce{HCHS} 计算结果的基组收敛趋势}
+    \label{fig.HCHS-aniso}
+    \includegraphics[width=0.5\textwidth]{assets/HCHS-aniso.pdf}
+\end{figure}
+
+\textbf{\ce{Cl2} 的基组收敛性。}收敛情况如图 \ref{fig.Cl2-aniso} 所示。该体系与 \ce{HCHS} 体系的情况类似，在 QZ (4-$\zeta$) 处 aV$X$Z 的收敛趋势发生了转折；对于 aCV$X$Z 而言，其收敛趋势也与式 (\ref{eq.cbs.zeta3}) 有一定偏离。因此，更昂贵的 CBS 外推，未必比更低等级的外推的误差更小。
+
+\begin{figure}[ht]
+    \centering
+    \caption{$\Delta \gamma_\textsf{D(T)}$ 对体系 \ce{Cl2} 计算结果的基组收敛趋势}
+    \label{fig.Cl2-aniso}
+    \includegraphics[width=0.5\textwidth]{assets/Cl2-aniso.pdf}
+\end{figure}
 
 \newpage
 
