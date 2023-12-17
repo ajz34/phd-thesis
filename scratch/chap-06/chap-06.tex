@@ -1,0 +1,212 @@
+% !TEX root=./chap-06.tex
+\input{../marco.tex}
+
+\begin{document}
+
+%---------预定设置区----------
+\title{\textbf{双杂化密度泛函分子能量与性质计算方法的测评与进展\\第六章草稿}}
+\author{祝震予}
+\maketitle
+\vspace{-10pt}
+
+\tableofcontents
+
+%---------正  文  区----------
+
+\setcounter{section}{5}
+
+\section{双杂化泛函的静态极化率测评}
+
+\subsection{引言}
+
+在上一章中，我们已经了解静态极化率的意义、其物理定义与计算策略、以及精确的理论计算极化率的具体实现方法。我们还注意到，静态极化率是现在机器学习方法在化学中应用的重要标准之一；许多机器学习方法都将静态极化率作为学习目标\alert{引用机器学习网络文献}。作为二维张量，静态极化率是最基本的具有等变性的分子性质之一；因此对它的正确描述也可以验证机器学习网络的等变性、以及确认等变网络参数的有效性\alert{引用 e3nn 相关文献}。同时，作为参数化方法的学习目标，一些分子力学方法也对电子结构方法的极化率精确性有较高的需求\alert{引用分子力场文献}。在大数据与 AI for Science 盛行的时代，可信的、大通量高效的、通过精确的电子结构方法计算得到的静态极化率，将会、或已经成为亟待解决的重要需求。
+
+尽管上一章中发展的 FPA 策略、以及其给出的 CCSD(T)/CBS 级别精确的极化率相当重要，但 CCSD(T) 计算消耗仍然十分巨大；若要将极化率计算应用到更大的体系，或者提升精确极化率计算的效率，则需要计算量更小的基组或电子结构方法。密度泛函近似在计算量与精度上，是普遍为计算化学与固体物理应用工作者所接受的方法；它有希望成为解决大量精确计算静态极化率问题的方法。
+
+如第一章所述，双杂化泛函已经在许多化学反应能量与分子性质的测评上，展现出良好的结果。如第三章所述，双杂化泛函的极化率计算尽管相比于杂化泛函更为耗时，但对于 2000 基组大小以内的中等体系是可以接受的，这也契合目前流行的诸多大数据集 20 重原子以内的分子大小\alert{引用数据集文献}。因此，双杂化泛函从计算效率上，应可以胜任静态极化率的大规模计算。对于偏重无机小分子与自旋极化分子的 HH132 数据集，Hait 与 Head-Gordon 的测评结果展示了双杂化泛函、特别是 xDH 型泛函在静态极化率计算结果相当精确\cite{Hait-Head-Gordon.PCCP.2018}。
+
+本章将拓展静态极化率测评结果，以更全面地展示密度泛函的精确性、以及如何高效但不失精度地计算静态极化率。在一定的、可容忍的误差范围内，使用合理大小的基组，可以有效地以较小的代价实现极化率的计算；\ref{sec.6.basis-converg} 节将对典型的双杂化泛函，B2PLYP 泛函与 xDH@B3LYP 类型泛函，对于静态极化率问题作基组误差分析，以探讨基组对计算精度的影响。目前基于高精度 CCSD(T)/CBS 精度的测评，仅涉及到少量双杂化泛函以及 HH132\cite{Hait-Head-Gordon.PCCP.2018} 为代表的小型无机分子；\ref{sec.6.benchmark} 节将基于第五章的 CCSD(T)/CBS 精度的参考值，拓展数据集到 HR46\cite{Hickey-Rowley.JPCA.2014} 与 T144\cite{Wu-Thakkar.CPL.2015}，测评包括更多双杂化泛函在内的诸密度泛函近似在静态极化率上的表现。
+
+\subsection{典型双杂化泛函静态极化率基组误差分析}
+\label{sec.6.basis-converg}
+
+\subsection{密度泛函的静态极化率测评}
+\label{sec.6.benchmark}
+
+
+\newpage
+
+\subsection{附录}
+
+\subsubsection{对 HH132 数据集自旋极化体系准确性的讨论}
+
+在我们的测评与验证过程中，我们发现对于 \alert{HH132} 数据集\cite{Hait-Head-Gordon.PCCP.2018}的 57 个自旋极化体系，其许多体系的计算本身存在挑战、我们的计算结果和 HH132 数据集的参考值与测评值也存在差异。\alert{在正文中，我们仅对其中部分自旋极化体系作测评与统计；在这里，我们将详细地讨论复现 HH132 数据集过程中遇到的困难，并指出测评过程中剔除部分自旋极化体系的具体原因。}
+
+\textbf{对称性破缺。}在 HH132 的 57 个自旋极化分子中，13 个分子的电子态存在对称性破缺效应；因此解析极化率的计算与数值极化率有所不同。相关的数据列于表 \ref{tab.6.supp.symm-broken}。这些分子中，
+\begin{itemize}[nosep]
+    \item 以平均场的分子轨道讨论，\ce{BN}, \ce{NO}, \ce{OCl}, \ce{OF}, \ce{OH}, \ce{SCl}, \ce{SF}, \ce{SH}, \ce{PS}, \ce{NCO} 这 10 个 $C_{\infty v}$ 对称性自由基由于存在单电子占据的 $\Pi$ 不可约表示下的轨道，因此电子云在垂直于主轴的面上并不是均匀分布的 (即当主轴为 $z$ 轴时，电子云的分布在 $x$ 方向与 $y$ 方向并不相同)。依数值差分方法给出极化率，若电子占据轨道没有特定不可约表示的限制，那么在施加垂直于 $z$ 轴的外偶极电场时，电子云总是会旋转到能量更低的状态，而不是反映无外电场时的分布，因此会给出 $\alpha_{xx} = \alpha_{yy}$ 的结论；这也与 HH132 数据集的结果表现一致。但解析梯度给出的极化率可以反映无外电场时电子云的分布，即 $\alpha_{xx}$ 未必等于 $\alpha_{yy}$。我们认为，解析梯度的极化率是理论上严格的极化率计算方式；因此，我们决定在采用 HH132 数据集参考值时，排除这 10 个存在单电子占据的  $\Pi$ 不可约表示的 $C_{\infty v}$ 对称性自由基体系。
+    \item 与上述原因类似地，我们排除 $C_{3v}$ 对称性下存在单电子占据 $E$ 不可约表示轨道的自由基 \ce{CH3O}。除此之外，该体系的解析极化率本身计算也容易产生数值问题。
+    \item \ce{Be} 原子与 \ce{Li2} 分子则是在自洽场计算中，存在对称性更低、但能量上更稳定的态 (分别是 $C_{\infty v}$ 与 $C_s$)；从而上述原因也会应用到这两个体系，导致不限制电子占据轨道不可约表示的数值极化率计算、与解析极化率在结果上存在差异。
+\end{itemize}
+
+\begin{table}[ht]
+    \centering
+    \caption{HH132 数据集中存在对称性破缺问题的分子及极化率结果\tabnote{a}。}
+    \label{tab.6.supp.symm-broken}
+    \begin{tabular}{ll:d{4.4}d{3.3}d{3.3}:d{3.3}d{3.3}d{3.3}}
+    \hline
+    & & \multicolumn{3}{c:}{Analytical\tabnote{b} / $\text{\AA}{}^{3}$} & \multicolumn{3}{c}{HH132 Original\tabnote{c} / $\text{\AA}{}^{3}$} \\
+    & & \multicolumn{1}{c}{$\alpha_{xx}$} & \multicolumn{1}{c}{$\alpha_{yy}$} & \multicolumn{1}{c:}{$\alpha_{zz}$} & \multicolumn{1}{c}{$\alpha_{xx}$} & \multicolumn{1}{c}{$\alpha_{yy}$} & \multicolumn{1}{c}{$\alpha_{zz}$} \\
+    \hline
+    $SO(3)$                          & \ce{Be  } & 7.019      & 7.019    & 7.667   & 7.074      & 7.074     & 7.074     \\
+    $D_{\infty h}$                   & \ce{Li2 } & 26.837     & 22.980   & 39.702  & 24.529     & 24.529    & 24.529    \\
+    \multirow{10}{*}{$C_{\infty v}$} & \ce{BN  } & 3.427      & 2.521    & 2.156   & 3.446      & 3.446     & 2.161     \\
+                                     & \ce{NO  } & 1.444      & 1.240    & 0.434   & 1.445      & 1.445     & 0.557     \\
+                                     & \ce{OCl } & 2.475      & 2.390    & 4.289   & 2.391      & 2.391     & 4.296     \\
+                                     & \ce{OF  } & 1.057      & 1.081    & 1.814   & 1.057      & 1.057     & 1.816     \\
+                                     & \ce{OH  } & 1.071      & 0.879    & 1.244   & 1.072      & 1.072     & 1.245     \\
+                                     & \ce{SCl } & 4.065      & 4.387    & 7.137   & 4.393      & 4.393     & 7.147     \\
+                                     & \ce{SF  } & 3.170      & 2.786    & 3.592   & 3.178      & 3.178     & 3.594     \\
+                                     & \ce{SH  } & 2.875      & 3.449    & 3.446   & 3.458      & 3.458     & 3.450     \\
+                                     & \ce{PS  } & 5.687      & 5.152    & 12.050  & 5.159      & 5.159     & 11.985    \\
+                                     & \ce{NCO } & 2.264      & 2.232    & 4.005   & 2.233      & 2.233     & 4.028     \\
+    $C_{3v}$                         & \ce{CH3O} & -318.402\tabnote{d} & 2.644    & 3.326   & 4.080      & 2.762     & 3.330     \\
+    \hline
+    \end{tabular}
+
+    \raggedright
+    \par\tabnote{a} 表中所列的分子均为极化率张量 $\bm{\alpha}$ 不满足分子点群对称性的情形。列表中所展示的点群是分子构型对应的点群。计算模型是 MP2/aCVTZ。
+    \par\tabnote{b} 解析极化率由 \textsc{Gaussian 16} (rev B01)\cite{Gaussian16} 计算。该计算开启默认的对称性 (\ce{CH3O} 分子构型接近 $C_{3v}$，但程序中使用 $C_s$ 计算)。
+    \par\tabnote{c} 数据来自于 HH132 数据集原文\cite{Hait-Head-Gordon.PCCP.2018}。
+    \par\tabnote{d} \ce{CH3O} 自由基的解析 $\alpha_{xx}$ 分量数值确实存在异常；这在 \textsc{dh} 程序给出的结果中尽管具体数值不同，但也存在相当严重的误差。
+\end{table}
+
+\textbf{MP2 极化率复现问题。}通过解析梯度计算复现 HH132 数据集的 MP2/aCVTZ 数值极化率数据时，我们认为部分体系误差较大。其中，由 \textsc{Gaussian 16} 解析计算的极化率与 HH132 原始数据集中存在大于 2\% 差异的体系有 5 个，如表 \ref{tab.6.supp.mp2-hait-g16} 所示。这些分子中，\ce{CH2NH}, \ce{NOCl}, \ce{NaLi} 使用不同的程序下给出的解析极化率也有一定程度上的不同，如表 \ref{tab.6.supp.mp2-dh-g16} 所示；这表明这些分子的电子云在 MP2/aCVTZ 模型下并不稳定，其极化率容易受外场或数值精度的影响而产生大幅改变。由于 HH132 数据集中的 MP2 极化率结果是 CCSD(T) 参考值结果的中间输出，因此我们认为，若 MP2 的计算偏差较大、那么作为参考值的 CCSD(T) 也很可能存在无法忽视的偏差；从而这些分子体系不适合使用 HH132 的参考值对诸泛函作测评。
+
+\begin{table}[ht]
+    \centering
+    \caption{HH132 数据集解析与数值极化率相对误差超过 2\% 的体系、及其极化率数值与误差\tabnote{a}。}
+    \label{tab.6.supp.mp2-hait-g16}
+    \begin{tabular}{l:d{3.3}d{3.3}d{3.3}:d{4.4}d{4.4}d{4.4}}
+    \hline
+    & \multicolumn{3}{c:}{Analytical\tabnote{b} / $\text{\AA}{}^{3}$} & \multicolumn{3}{c}{Relative Error\tabnote{c} / \%} \\
+    & \multicolumn{1}{c}{$\alpha_{xx}$} & \multicolumn{1}{c}{$\alpha_{yy}$} & \multicolumn{1}{c:}{$\alpha_{zz}$} & \multicolumn{1}{c}{$\alpha_{xx}$} & \multicolumn{1}{c}{$\alpha_{yy}$} & \multicolumn{1}{c}{$\alpha_{zz}$} \\
+    \hline
+    \ce{CH2NH} & 3.299    & 2.713    & 6.678    & 0.129       & 0.191      & -115.065    \\
+    \ce{HOF  } & 1.443    & 1.254    & 4.023    & 0.028       & 0.061      & -40.274     \\
+    \ce{NOCl } & 5.814    & 6.487    & 3.452    & -67.820     & -8.420     & 0.075       \\
+    \ce{Na2  } & 30.066   & 30.066   & 26.148   & 0.069       & 0.069      & 2.452       \\
+    \ce{NaLi } & 26.443   & 26.443   & -11.852  & 0.100       & 0.100      & -18.332     \\
+    \hline
+    \end{tabular}
+
+    \raggedright
+    \par\tabnote{a} 该表格的分析中，去除了表 \ref{tab.6.supp.symm-broken} 所涉及的 13 个分子。计算模型是 MP2/aCVTZ。
+    \par\tabnote{b} 解析极化率由 \textsc{Gaussian 16} (rev B01)\cite{Gaussian16} 计算。
+    \par\tabnote{c} 相对误差是指 HH132 数值极化率相对于 \textsc{Gaussian 16} 计算得到的解析极化率的比值误差。
+\end{table}
+
+\begin{table}[ht]
+    \centering
+    \caption{HH132 数据集不同程序 (\textsc{dh} 与 \textsc{Gaussian 16}) 解析极化率相对误差超过 0.5\% 的体系、及其极化率数值与误差\tabnote{a}。}
+    \label{tab.6.supp.mp2-dh-g16}
+    \begin{tabular}{l:d{3.3}d{3.3}d{3.3}:d{3.3}d{3.3}d{3.3}}
+    \hline
+    & \multicolumn{3}{c:}{Analytical\tabnote{b} / $\text{\AA}{}^{3}$} & \multicolumn{3}{c}{Relative Error\tabnote{c} / \%} \\
+    & \multicolumn{1}{c}{$\alpha_{xx}$} & \multicolumn{1}{c}{$\alpha_{yy}$} & \multicolumn{1}{c:}{$\alpha_{zz}$} & \multicolumn{1}{c}{$\alpha_{xx}$} & \multicolumn{1}{c}{$\alpha_{yy}$} & \multicolumn{1}{c}{$\alpha_{zz}$} \\
+    \hline
+    \ce{CH2NH} & 3.299  & 2.713  & 6.678   & 0.160 & 0.073  & 22.152 \\
+    \ce{NOCl } & 5.814  & 6.487  & 3.452   & 4.268 & 4.564  &  0.017 \\
+    \ce{NaLi } & 26.443 & 26.443 & -11.852 & 0.225 & 0.225  & -9.846 \\
+    \hline
+    \end{tabular}
+
+    \raggedright
+    \par\tabnote{a} 该表格的分析中，去除了表 \ref{tab.6.supp.symm-broken} 所涉及的 13 个分子。计算模型是 MP2/aCVTZ。\textsc{dh} 程序计算结果使用 ETB 辅助基组\cite{Stoychev-Neese.JCTC.2017}。
+    \par\tabnote{b} 解析极化率由 \textsc{Gaussian 16} (rev B01)\cite{Gaussian16} 计算。
+    \par\tabnote{c} 相对误差是 \textsc{dh} 计算得到的解析极化率、相对于 \textsc{Gaussian 16} 计算得到的解析极化率的比值误差。
+\end{table}
+
+\textbf{其他双杂化泛函复现或数值问题。}Hait 与 Head-Gordon 在 HH132 数据集上测评了双杂化泛函\cite{Hait-Head-Gordon.PCCP.2018}；他们汇报了这些双杂化泛函的 aCVTZ 基组计算结果。其中，B2PLYP、B2GPPLYP、DSD-PBEPBE-D3 三种泛函也可以通过 \textsc{Gaussian 16} 作对比验证。对比的结果如表 \ref{tab.6.supp.double-hybrid-hh132-g16} 所示。从表中可以看出，B2PLYP 下的 \ce{NaCl} 作为自旋非极化分子，其误差尽管超过 2\% 但也未超过 3\%。但其余表格中涉及到的分子，有许多误差超过 5\% 或更大；这种程度的误差将对测评结果产生明显影响。我们也注意到这些分子几乎全部是自旋极化分子，其较大的误差、较有可能来自于电子态的收敛结果不同。事实上，我们在 \textsc{Gaussian 16} 解析极化率计算中采用的稳定性分析 (stability analysis) 是基于 aCVTZ 基组、而 HH132 测评工作大多数情况下基于 aug-pc-2 基组\cite{Hait-Head-Gordon.PCCP.2018}；尽管这两个基组的大小较为接近，但仍然是不同的基组，确实在一些分子下可能导致波函数的稳定性有所差异。同时我们观察到，泛函中交换系数较高时，极化率出现较大偏差的分子也较多、波函数也更有可能不稳定；这种现象也出现在偶极矩计算问题中\cite{Gu-Xu.JCTC.2021a}。
+
+\begin{table}[ht]
+    \centering
+    \caption{HH132 数据集部分双杂化泛函 aCVTZ 数据与解析极化率相对误差超过 2\% 的体系、及其极化率数值与误差\tabnote{a}。}
+    \label{tab.6.supp.double-hybrid-hh132-g16}
+    \begin{tabular}{lll:d{2.3}d{2.3}d{2.3}:d{3.4}d{3.4}d{3.4}}
+    \hline
+    & & & \multicolumn{3}{c:}{Analytical\tabnote{b} / $\text{\AA}{}^{3}$} & \multicolumn{3}{c}{Relative Error\tabnote{c} / \%} \\
+    functional & species & spin\tabnote{d} & \multicolumn{1}{c}{$\alpha_{xx}$} & \multicolumn{1}{c}{$\alpha_{yy}$} & \multicolumn{1}{c:}{$\alpha_{zz}$} & \multicolumn{1}{c}{$\alpha_{xx}$} & \multicolumn{1}{c}{$\alpha_{yy}$} & \multicolumn{1}{c}{$\alpha_{zz}$} \\
+    \hline
+    B2PLYP        & \ce{C2H  } & SP  & 3.543 & 3.543 & 4.020  & 8.564   & 8.564   & -0.127  \\
+    53\% $E_\mathrm{x}^\mathrm{exact}$ & \ce{CN   } & SP  & 3.192 & 3.192 & 4.518  & -18.839 & -18.839 & -2.985  \\
+                  & \ce{HNS  } & SP  & 5.796 & 3.959 & 3.031  & -1.502  & 3.246   & 10.542  \\
+                  & \ce{NaCl } & NSP & 4.334 & 4.334 & 5.471  & 0.698   & 0.698   & 2.058   \\
+                  & \ce{O3   } & SP  & 1.713 & 4.580 & 2.124  & 0.000   & -4.345  & -1.471  \\
+    \hdashline
+    B2GPPLYP      & \ce{C2H  } & SP  & 3.395 & 3.395 & 4.009  & 7.009   & 7.009   & -0.751  \\
+    65\% $E_\mathrm{x}^\mathrm{exact}$ & \ce{CN   } & SP  & 3.304 & 3.304 & 4.243  & -18.696 & -18.696 & -1.834  \\
+                  & \ce{HNO  } & SP  & 1.490 & 2.289 & 2.719  & 5.253   & 0.786   & 1.883   \\
+                  & \ce{HNS  } & SP  & 6.974 & 3.971 & 4.786  & -18.989 & 1.673   & -30.387 \\
+                  & \ce{NP   } & SP  & 3.357 & 3.357 & 6.635  & 6.480   & 6.480   & -18.120 \\
+                  & \ce{O2   } & SP  & 1.174 & 1.174 & 2.193  & 0.372   & 0.372   & -3.047  \\
+                  & \ce{O3   } & SP  & 1.696 & 4.518 & 2.095  & 0.226   & -4.981  & -1.451  \\
+    \hdashline
+    DSD-PBEPBE-D3 & \ce{BO   } & SP  & 2.308 & 2.308 & 2.790  & 0.141   & 0.141   & 3.479   \\
+    69\% $E_\mathrm{x}^\mathrm{exact}$ & \ce{BS   } & SP  & 4.437 & 4.437 & 6.279  & -0.390  & -0.390  & 2.786   \\
+                  & \ce{C2H  } & SP  & 3.275 & 3.275 & 4.028  & 5.621   & 5.621   & -2.152  \\
+                  & \ce{C2H3 } & SP  & 3.458 & 5.224 & 3.253  & -0.041  & -2.868  & -1.886  \\
+                  & \ce{CH2PH} & SP  & 9.288 & 5.237 & 5.774  & -18.140 & -4.902  & -1.666  \\
+                  & \ce{CN   } & SP  & 3.168 & 3.168 & 3.985  & -14.950 & -14.950 & 0.268   \\
+                  & \ce{F2   } & SP  & 0.886 & 0.886 & 2.649  & 2.027   & 2.027   & -32.081 \\
+                  & \ce{HNO  } & SP  & 1.373 & 2.288 & 2.662  & 13.702  & 0.703   & 3.008   \\
+                  & \ce{HNS  } & SP  & 6.957 & 3.972 & 3.554  & -19.780 & 1.397   & -6.832  \\
+                  & \ce{NP   } & SP  & 3.320 & 3.320 & 6.949  & 7.205   & 7.205   & -22.109 \\
+                  & \ce{O2   } & SP  & 1.179 & 1.179 & 2.236  & 0.584   & 0.584   & -3.005  \\
+                  & \ce{O3   } & SP  & 1.697 & 4.495 & 2.096  & -0.148  & -7.296  & -1.446  \\
+                  & \ce{P2   } & SP  & 6.176 & 6.176 & 11.026 & -3.827  & -3.827  & -7.977  \\
+    \hline
+    \end{tabular}
+
+    \raggedright
+    \par\tabnote{a} 该表格的分析中，去除了表 \ref{tab.6.supp.symm-broken} 所涉及的 13 个分子和表 \ref{tab.6.supp.mp2-hait-g16} 所涉及的 5 个分子；即总共涉及 HH132 数据集中的 114 个分子，其中自旋极化分子数为 44 个。
+    \par\tabnote{b} 解析极化率由 \textsc{Gaussian 16} (rev B01)\cite{Gaussian16} 计算。基组为 aCVTZ、DFT 积分格点选用程序默认的格点。
+    \par\tabnote{c} 相对误差是指 HH132 数值极化率相对于 \textsc{Gaussian 16} 计算得到的解析极化率的比值误差。
+    \par\tabnote{d} 此处 SP 表示自旋极化 (\underline{S}pin-\underline{P}olarized)、NSP 表示自旋非极化 (\underline{N}on-\underline{S}pin-\underline{P}olarized)。
+\end{table}
+
+我们也使用 \textsc{dh} 程序作 HH132 数据集上 B2PLYP、B2GPPLYP、DSD-PBEPBE-D3 泛函在 aCVTZ 下极化率的验证计算。大部分分子的计算结果与 \textsc{Gaussian 16} 数值上非常接近；所有误差大于 0.2\% 的体系列表于 \ref{tab.6.supp.double-hybrid-dh-g16}；即使极少数分子确实存在误差，但误差最大也不超过 1\%。在排除对称性破缺的 13 个体系、以及 MP2 复现问题的 5 个体系后，\textsc{dh} 程序与 \textsc{Gaussian 16} 几乎给出完全一致的解析极化率，从而也基本验证了 \textsc{dh} 程序的正确性、也同时验证了 \textsc{Gaussian 16} 所计算得到的数据可以由其他程序复现。
+
+\begin{table}[ht]
+    \centering
+    \caption{HH132 数据集部分双杂化泛函 aCVTZ 数据不同程序 (\textsc{dh} 与 \textsc{Gaussian 16}) 解析极化率相对误差超过 0.2\% 的体系、及其极化率数值与误差\tabnote{a}。}
+    \label{tab.6.supp.double-hybrid-dh-g16}
+    \begin{tabular}{lll:d{2.3}d{2.3}d{2.3}:d{3.4}d{3.4}d{3.4}}
+    \hline
+    & & & \multicolumn{3}{c:}{Analytical\tabnote{b} / $\text{\AA}{}^{3}$} & \multicolumn{3}{c}{Relative Error\tabnote{c} / \%} \\
+    functional & species & spin\tabnote{d} & \multicolumn{1}{c}{$\alpha_{xx}$} & \multicolumn{1}{c}{$\alpha_{yy}$} & \multicolumn{1}{c:}{$\alpha_{zz}$} & \multicolumn{1}{c}{$\alpha_{xx}$} & \multicolumn{1}{c}{$\alpha_{yy}$} & \multicolumn{1}{c}{$\alpha_{zz}$} \\
+    \hline
+    B2PLYP        & \ce{LiCl} & NSP & 3.894 & 3.894 & 4.194 & 0.051  & 0.051  & 0.245  \\ \hdashline
+    B2GPPLYP      & \ce{NP  } & SP  & 3.357 & 3.357 & 6.635 & 0.000  & 0.000  & 0.812  \\
+                  & \ce{NaH } & NSP & 5.326 & 5.326 & 7.562 & -0.515 & -0.515 & -0.041 \\ \hdashline
+    DSD-PBEPBE-D3 & \ce{LiH } & NSP & 4.282 & 4.282 & 3.767 & -0.203 & -0.203 & -0.055 \\
+    \hline
+    \end{tabular}
+
+    \raggedright
+    \par\tabnote{a} 该表格的分析中，去除了表 \ref{tab.6.supp.symm-broken} 所涉及的 13 个分子和表 \ref{tab.6.supp.mp2-hait-g16} 所涉及的 5 个分子；即总共涉及 HH132 数据集中的 114 个分子，其中自旋极化分子数为 44 个。\textsc{dh} 程序计算结果使用 ETB 辅助基组\cite{Stoychev-Neese.JCTC.2017}。
+    \par\tabnote{b} 解析极化率由 \textsc{Gaussian 16} (rev B01)\cite{Gaussian16} 计算。基组为 aCVTZ、DFT 积分格点选用程序默认的格点。
+    \par\tabnote{c} 相对误差是指 HH132 数值极化率相对于 \textsc{Gaussian 16} 计算得到的解析极化率的比值误差。
+    \par\tabnote{d} 此处 SP 表示自旋极化 (\underline{S}pin-\underline{P}olarized)、NSP 表示自旋非极化 (\underline{N}on-\underline{S}pin-\underline{P}olarized)。
+\end{table}
+
+总地来说，自旋极化体系的极化率计算结果容易因对称性破缺、收敛问题、波函数稳定性问题、外加电场合理性问题等等，而导致不同程序、不同计算策略会给出不同的结果。表 \ref{tab.6.supp.double-hybrid-hh132-g16} 涉及到的自旋极化体系的数量有 13 个；加上表 \ref{tab.6.supp.symm-broken} 涉及到的 13 个对称性破缺体系、与表 \ref{tab.6.supp.mp2-hait-g16} 涉及到的 5 个 MP2 极化率误差超过 2\% 的体系，总共有 31 个自旋极化体系的计算存在困难。这占到 HH132 数据集中 57 个自旋极化体系的 54\%。
+
+一方面，为尽可能保证测评的公平，我们将在 HH132 数据集的计算中，排除上述计算上有困难的 31 个自旋极化体系；即对 HH132 数据集总共测评 101 个分子，其中自旋非极化体系为 75 个保持不变、自旋极化体系为 26 个。另一方面，由于排除的自旋极化体系过多，很大程度上改变了原先数据集自旋极化与非极化体系的平衡；因此与 HH132 测评工作\cite{Hait-Head-Gordon.PCCP.2018}不同，本工作的测评结果将对自旋极化与非极化体系分别作测评，而不测评两类体系的总误差。
+
+\newpage
+
+\bibliographystyle{achemso}
+\bibliography{../thesis.bib}
+
+\end{document}
