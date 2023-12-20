@@ -19,13 +19,19 @@
 
 \subsection{引言}
 
-在上一章中，我们已经了解静态极化率的意义、其物理定义与计算策略、以及精确的理论计算极化率的具体实现方法。我们还注意到，静态极化率是现在机器学习方法在化学中应用的重要标准之一；许多机器学习方法都将静态极化率作为学习目标\alert{引用机器学习网络文献}。作为二维张量，静态极化率是最基本的具有等变性的分子性质之一；因此对它的正确描述也可以验证机器学习网络的等变性、以及确认等变网络参数的有效性\alert{引用 e3nn 相关文献}。同时，作为参数化方法的学习目标，一些分子力学方法也对电子结构方法的极化率精确性有较高的需求\alert{引用分子力场文献}。在大数据与 AI for Science 盛行的时代，可信的、大通量高效的、通过精确的电子结构方法计算得到的静态极化率，将会、或已经成为亟待解决的重要需求。
+在上一章中，我们已经了解静态极化率的意义、其物理定义与计算策略、以及精确的理论计算极化率的具体实现方法。我们还注意到，静态极化率是现在机器学习方法在化学中应用的重要标准之一；许多机器学习方法都将静态极化率作为学习目标\cite{Ramakrishnan-Lilienfeld.SD.2014, Gilmer-Dahl.ICML.2017, Faber-Lilienfeld.JCTC.2017, Schuett-Mueller.NIPS.2017, Schuett-Mueller.JCP.2018, Wilkins-Ceriotti.PNAS.2019, Schuett-Gastegger.arXiv.2021, Zhang-Jiang.Elsevier.2023, Zou-Hu.NCS.2023}。作为二维张量，静态极化率是最基本的具有等变性的分子性质之一；因此对它的正确描述也可以验证机器学习网络的等变性、以及确认等变网络参数的有效性\cite{Cohen-Welling.arXiv.2016, Schuett-Gastegger.arXiv.2021, Brandstetter-Welling.arXiv.2022, Geiger-Smidt.arXiv.2022}。同时，作为参数化方法的学习目标，一些分子力学方法也对电子结构方法的极化率精确性有较高的需求\cite{Halgren-Damm.COSB.2001, Baker-Baker.WCMS.2015, Goloviznina-Padua.JCTC.2019, Schauperl-Gilson.CC.2020}。在大数据与 AI for Science 盛行的时代，可信的、大通量高效的、通过精确的电子结构方法计算得到的静态极化率，将会、或已经成为亟待解决的重要需求。
 
 尽管上一章中发展的 FPA 策略、以及其给出的 CCSD(T)/CBS 级别精确的极化率相当重要，但 CCSD(T) 计算消耗仍然十分巨大；若要将极化率计算应用到更大的体系，或者提升精确极化率计算的效率，则需要计算量更小的基组或电子结构方法。密度泛函近似在计算量与精度上，是普遍为计算化学与固体物理应用工作者所接受的方法；它有希望成为解决大量精确计算静态极化率问题的方法。
 
-如第一章所述，双杂化泛函已经在许多化学反应能量与分子性质的测评上，展现出良好的结果。如第三章所述，双杂化泛函的极化率计算尽管相比于杂化泛函更为耗时，但对于 2000 基组大小以内的中等体系是可以接受的，这也契合目前流行的诸多大数据集 20 重原子以内的分子大小\alert{引用数据集文献}。因此，双杂化泛函从计算效率上，应可以胜任静态极化率的大规模计算。对于偏重无机小分子与自旋极化分子的 HH132 数据集，Hait 与 Head-Gordon 的测评结果展示了双杂化泛函、特别是 xDH 型泛函在静态极化率计算结果相当精确\cite{Hait-Head-Gordon.PCCP.2018}。
+如第一章所述，双杂化泛函已经在许多化学反应能量与分子性质的测评上，展现出良好的结果。如第三章所述，双杂化泛函的极化率计算尽管相比于杂化泛函更为耗时，但对于 2000 基组大小以内的中等体系是可以接受的，这也契合目前流行的诸多大数据集 20 重原子以内的分子大小\cite{Ruddigkeit-Reymond.JCIM.2012, Ramakrishnan-Lilienfeld.SD.2014, Bowman-Yu.JCP.2022, Zou-Hu.NCS.2023}。因此，双杂化泛函从计算效率上，应可以胜任静态极化率的大规模计算。对于偏重无机小分子与自旋极化分子的 HH132 数据集，Hait 与 Head-Gordon 的测评结果展示了双杂化泛函、特别是 xDH 型泛函在静态极化率计算结果相当精确\cite{Hait-Head-Gordon.PCCP.2018}。
 
 本章将拓展静态极化率测评结果，以更全面地展示密度泛函的精确性、以及如何高效但不失精度地计算静态极化率。在一定的、可容忍的误差范围内，使用合理大小的基组，可以有效地以较小的代价实现极化率的计算；\ref{sec.6.basis-converg} 节将对典型的双杂化泛函，B2PLYP 泛函与 xDH@B3LYP 类型泛函，对于静态极化率问题作基组误差分析，以探讨基组对计算精度的影响。目前基于高精度 CCSD(T)/CBS 精度的测评，仅涉及到少量双杂化泛函以及 HH132\cite{Hait-Head-Gordon.PCCP.2018} 为代表的小型无机分子；\ref{sec.6.benchmark} 节将基于第五章的 CCSD(T)/CBS 精度的参考值，拓展数据集到 HR46\cite{Hickey-Rowley.JPCA.2014} 与 T144\cite{Wu-Thakkar.CPL.2015}，测评包括更多双杂化泛函在内的诸密度泛函近似在静态极化率上的表现。
+
+本章工作也对 HH132 数据集的部分分子作测评与分析。由于诸多原因，HH132 中实际被测评的分子是 75 个自旋非极化分子、以及 26 个自旋极化分子，总共 101 个分子。详细说明见 \ref{sec.6.supp-HH132-remove}。
+
+\subsection{实现细节}
+
+
 
 \subsection{典型双杂化泛函静态极化率基组误差分析}
 \label{sec.6.basis-converg}
@@ -39,6 +45,7 @@
 \subsection{附录}
 
 \subsubsection{对 HH132 数据集自旋极化体系准确性的讨论}
+\label{sec.6.supp-HH132-remove}
 
 在我们的测评与验证过程中，我们发现对于 \alert{HH132} 数据集\cite{Hait-Head-Gordon.PCCP.2018}的 57 个自旋极化体系，其许多体系的计算本身存在挑战、我们的计算结果和 HH132 数据集的参考值与测评值也存在差异。\alert{在正文中，我们仅对其中部分自旋极化体系作测评与统计；在这里，我们将详细地讨论复现 HH132 数据集过程中遇到的困难，并指出测评过程中剔除部分自旋极化体系的具体原因。}
 
@@ -202,7 +209,32 @@
 
 总地来说，自旋极化体系的极化率计算结果容易因对称性破缺、收敛问题、波函数稳定性问题、外加电场合理性问题等等，而导致不同程序、不同计算策略会给出不同的结果。表 \ref{tab.6.supp.double-hybrid-hh132-g16} 涉及到的自旋极化体系的数量有 13 个；加上表 \ref{tab.6.supp.symm-broken} 涉及到的 13 个对称性破缺体系、与表 \ref{tab.6.supp.mp2-hait-g16} 涉及到的 5 个 MP2 极化率误差超过 2\% 的体系，总共有 31 个自旋极化体系的计算存在困难。这占到 HH132 数据集中 57 个自旋极化体系的 54\%。
 
-一方面，为尽可能保证测评的公平，我们将在 HH132 数据集的计算中，排除上述计算上有困难的 31 个自旋极化体系；即对 HH132 数据集总共测评 101 个分子，其中自旋非极化体系为 75 个保持不变、自旋极化体系为 26 个。另一方面，由于排除的自旋极化体系过多，很大程度上改变了原先数据集自旋极化与非极化体系的平衡；因此与 HH132 测评工作\cite{Hait-Head-Gordon.PCCP.2018}不同，本工作的测评结果将对自旋极化与非极化体系分别作测评，而不测评两类体系的总误差。
+一方面，为尽可能保证测评的公平，我们将在 HH132 数据集的计算中，排除上述计算上有困难的 31 个自旋极化体系；即对 HH132 数据集总共测评 101 个分子，其中自旋非极化体系为 75 个保持不变、自旋极化体系为 26 个。具体计算的体系如 \ref{tab.6.supp.HH101-species} 所示。另一方面，由于排除的自旋极化体系过多，很大程度上改变了原先数据集自旋极化与非极化体系的平衡；因此与 HH132 测评工作\cite{Hait-Head-Gordon.PCCP.2018}不同，本工作的测评结果将对自旋极化与非极化体系分别作测评，而不测评两类体系的总误差。
+
+\begin{table}[ht]
+    \centering
+    \caption{本工作所测评的 HH132 数据集体系；其中自旋极化体系 75 个、自旋极化体系 26 个。}
+    \label{tab.6.supp.HH101-species}
+    \begin{tabular}{llllll:ll}
+    \hline
+    \multicolumn{6}{c:}{non-spin-polarized} & \multicolumn{2}{c}{spin-polarized} \\
+    \hline
+    \ce{AlF   } & \ce{CH3F  } & \ce{FNO   } & \ce{HF   } & \ce{NH2Cl} & \ce{PH3O  } & \ce{^2BH2   } & \ce{^2Li  } \\
+    \ce{Ar    } & \ce{CH3NH2} & \ce{^2H   } & \ce{HNC  } & \ce{NH2F } & \ce{S2H2  } & \ce{^2BeH   } & \ce{^4N   } \\
+    \ce{BF    } & \ce{CH3OH } & \ce{H2    } & \ce{HOCl } & \ce{NH2OH} & \ce{SCl2  } & \ce{^3CH2   } & \ce{^1N2H2} \\
+    \ce{BH2Cl } & \ce{CH3SH } & \ce{H2O   } & \ce{HOOH } & \ce{NH3  } & \ce{SF2   } & \ce{^2CH2F  } & \ce{^3NH  } \\
+    \ce{BH2F  } & \ce{CH4   } & \ce{HBO   } & \ce{He   } & \ce{NH3O } & \ce{SH2   } & \ce{^2CH3   } & \ce{^2NH2 } \\
+    \ce{BH3   } & \ce{CO    } & \ce{HBS   } & \ce{LiBH4} & \ce{NaCN } & \ce{SO2   } & \ce{^2FCO   } & \ce{^2Na  } \\
+    \ce{BHF2  } & \ce{CO2   } & \ce{HCCCl } & \ce{LiCN } & \ce{NaCl } & \ce{SiH3Cl} & \ce{^2FH-OH } & \ce{^1OF2 } \\
+    \ce{BeH2  } & \ce{CS    } & \ce{HCCF  } & \ce{LiCl } & \ce{NaH  } & \ce{SiH3F } & \ce{^2H2CN  } & \ce{^4P   } \\
+    \ce{C2H2  } & \ce{CSO   } & \ce{HCHO  } & \ce{LiH  } & \ce{Ne   } & \ce{SiH4  } & \ce{^2H2O-Li} & \ce{^3PH  } \\
+    \ce{C2H4  } & \ce{Cl2   } & \ce{HCN   } & \ce{Mg   } & \ce{OCl2 } & \ce{SiO   } & \ce{^1HCHS  } & \ce{^2PH2 } \\
+    \ce{CH2BH } & \ce{ClCN  } & \ce{HCONH2} & \ce{Mg2  } & \ce{P2H4 } & \ce{      } & \ce{^2HCO   } & \ce{^3S2  } \\
+    \ce{CH3BH2} & \ce{ClF   } & \ce{HCOOH } & \ce{N2   } & \ce{PH2OH} & \ce{      } & \ce{^1HCP   } & \ce{^3SO  } \\
+    \ce{CH3Cl } & \ce{FCN   } & \ce{HCl   } & \ce{N2H4 } & \ce{PH3  } & \ce{      } & \ce{^2HO2   } & \ce{^2SiH3} \\
+    \hline
+    \end{tabular}
+\end{table}
 
 \newpage
 

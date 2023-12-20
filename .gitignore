@@ -2,6 +2,7 @@
 chap*.pdf
 ~*
 *.h5
+nohup.out
 
 ## ===== Tex =====
 
