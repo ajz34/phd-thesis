@@ -211,7 +211,7 @@ CBS 外推方法通常被认为在计算资源不足、以及有限基组不充�
 
     \raggedright
     \par\tabnote{a} 粗体的数字表示除参考值模型 FPA-aCV[Q5]Z 外，目前为止最佳的 FPA 模型；即依 3,4,5-$\zeta$ 分类下 FPA-aV[DT]Z、FPA-aV[TQ]Z 与 FPA-aV[Q5]Z。
-    \par\tabnote{b} HF 同性极化率相对方均根误差为 $\text{RelRMSD} (\tilde \alpha_{\textsf{HF}/\text{basis}}, \tilde \alpha_{\textsf{HF}/\text{ref}}, \tilde \alpha_{\textsf{CCSD(T)}/\text{ref}})$。其中，$\tilde \alpha_{\textsf{HF}/\text{ref}}$ 指代的是 $\tilde \alpha_{\textsf{HF}/\text{aCV5Z}}$，$\tilde \alpha_{\textsf{CCSD(T)}/\text{ref}}$ 指代的时作为参考值的 $\alpha_{\textsf{CCSD(T)}/\text{CBS}}$。
+    \par\tabnote{b} HF 同性极化率相对方均根误差为 $\text{RelRMSD} (\tilde \alpha_{\textsf{HF}/\text{basis}}, \tilde \alpha_{\textsf{HF}/\text{ref}}, \tilde \alpha_{\textsf{CCSD(T)}/\text{ref}})$。其中，$\tilde \alpha_{\textsf{HF}/\text{ref}}$ 指代的是 $\tilde \alpha_{\textsf{HF}/\text{aCV5Z}}$，$\tilde \alpha_{\textsf{CCSD(T)}/\text{ref}}$ 指代的是作为参考值的 $\alpha_{\textsf{CCSD(T)}/\text{CBS}}$。
     \par\tabnote{c} 相关能贡献的同性极化率相对方均根误差为 $\text{RelRMSD} (\Delta \tilde \alpha_{\textsf{corr}/\text{basis}}, \Delta \tilde \alpha_{\textsf{corr}/\text{ref}}, \tilde \alpha_{\textsf{CCSD(T)}/\text{ref}})$。其中，$\Delta \tilde \alpha_{\textsf{corr}}$ 可以是指 $\Delta \tilde \alpha_{\textsf{(2)}}$、$\Delta \tilde \alpha_{\textsf{D}}$ 或 $\Delta \tilde \alpha_{\textsf{D(T)}}$；而 $\Delta \tilde \alpha_{\textsf{corr}/\text{ref}}$ 指代的是 $\Delta \tilde \alpha_{\textsf{corr}/\text{aCV[Q5]Z}}$。
     \par\tabnote{d} 在排除 \ce{^3O2} 与 \ce{^3SO} 体系后，$\Delta \tilde \alpha_\textsf{D}$ 与 $\Delta \tilde \alpha_\textsf{D(T)}$ 的 RelRMSD 误差分别降至 0.126\% 与 0.136\%。对于这两个体系的基组收敛分析，将在附录 \ref{sec.5.s4} 小节展开。
     \par\tabnote{e} 在排除 \ce{Cl2} 体系后，$\Delta \tilde \alpha_\textsf{D}$ 与 $\Delta \tilde \alpha_\textsf{D(T)}$ 的 RelRMSD 误差分别降至 0.089\% 与 0.069\%。对于该体系的基组收敛分析，将在附录 \ref{sec.5.s4} 小节展开。
@@ -259,7 +259,7 @@ CBS 外推方法通常被认为在计算资源不足、以及有限基组不充�
           & aCV[DT]Z &             & 0.408       & 0.173      & 0.177           \\ \hdashline
     4-$\zeta$   & aVQZ         & 0.508       & 0.390       & 0.276      & 0.186           \\
           & aCVQZ        & 0.203       & 0.251       & 0.122      & 0.101           \\
-          & aV[TQ]Z  &             & 0.417       & 0.246c     & \textbf{0}.\textbf{230}\tabnote{c} \\
+          & aV[TQ]Z  &             & 0.417       & 0.246\tabnote{c}     & \textbf{0}.\textbf{230}\tabnote{c} \\
           & aCV[TQ]Z &             & 0.229       & 0.168      & 0.131           \\ \hdashline
     5-$\zeta$   & aV5Z         & 0.130       & 0.173       & 0.129      & 0.091           \\
           & aCV5Z        & \multicolumn{1}{c}{\textbf{0}\tabnote{d}} & 0.129       & 0.063      & 0.052           \\
