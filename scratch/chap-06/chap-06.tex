@@ -38,10 +38,11 @@ $$
 \text{RMSRE (reported)} = \frac{1}{3} \sum_{i=x,y,z} \sqrt{\frac{1}{N} \sum_{n=1}^N \varepsilon_{i,n}^2}
 $$
 这与 HH132 原文献的式 (3) 表述的方式有所不同；式 (3) 的具体表述是
-$$
-\text{RMSRE (designed)} = \sqrt{\frac{1}{3N} \sum_{i=x,y,z} \sum_{n=1}^N \varepsilon_{i,n}^2}
-$$
-尽管一般来说两者数值上非常接近、且几乎不会影响泛函测评表现。在本工作中，我们使用 HH132 原文献的式 (3) 的表述、或者等价地使用 RelRMSD 对数据集的极化率分量 $\alpha_{xx}, \alpha_{yy}, \alpha_{zz}$ 作测评。
+\begin{equation}
+    \label{eq.6.rmsre}
+    \text{RMSRE (designed)} = \sqrt{\frac{1}{3N} \sum_{i=x,y,z} \sum_{n=1}^N \varepsilon_{i,n}^2}
+\end{equation}
+尽管一般来说两者数值上非常接近、且几乎不会影响泛函测评表现。在本工作中，我们使用 HH132 原文献式 (3) 的表述、或者等价地使用 RelRMSD 对数据集的极化率分量 $\alpha_{xx}, \alpha_{yy}, \alpha_{zz}$ 作测评。
 }。
 
 \subsubsection{数据集}
@@ -87,18 +88,18 @@ HR46 与 T144 大多数分子为有机分子、且分子大小较大，两个数
     & & \multicolumn{3}{:c}{HR46} & \multicolumn{3}{:c}{T144} \\ \cline{3-8}
     Level & Basis set & \multicolumn{1}{:c}{$\tilde \alpha_\textsf{SCF}$\tabnote{b}} & \multicolumn{1}{c}{$\Delta \tilde \alpha_\textsf{PT2}$\tabnote{c}} & \multicolumn{1}{c}{$\tilde \alpha_\textsf{DH}$\tabnote{d}} & \multicolumn{1}{:c}{$\tilde \alpha_\textsf{SCF}$} & \multicolumn{1}{c}{$\Delta \tilde \alpha_\textsf{PT2}$} & \multicolumn{1}{c}{$\tilde \alpha_\textsf{DH}$} \\
     \hline
-    2-$\zeta$ & aCVDZ    & 2.428 & 0.250 & 2.528 & 1.559 & 0.185 & 1.447 \\
+    2-$\zeta$ & aCVDZ    & 2.428 & 0.250 & 2.528 & 1.560 & 0.185 & 1.448 \\
               & apc1     & 1.001 & 0.188 & 0.905 & 0.855 & 0.225 & 0.686 \\ \hdashline
     3-$\zeta$ & aCVTZ    & 0.542 & 0.120 & 0.571 & 0.241 & 0.134 & 0.152 \\
               & apc2     & 0.262 & 0.144 & 0.187 & 0.222 & 0.166 & 0.099 \\
-              & aCV[DT]Z &       & 0.111 & 0.533 &       & 0.124 & 0.146 \\
-              & apc[12]  &       & 0.152 & 0.224 &       & 0.150 & 0.114 \\ \hdashline
+              & aCV[DT]Z &       & 0.111 & 0.532 &       & 0.124 & 0.146 \\
+              & apc[12]  &       & 0.153 & 0.224 &       & 0.150 & 0.114 \\ \hdashline
     4-$\zeta$ & aCVQZ    & 0.086 & 0.069 & 0.121 & 0.018 & 0.082 & 0.073 \\
               & apc3     & 0.067 & 0.061 & 0.120 & 0.029 & 0.078 & 0.104 \\
-              & aCV[TQ]Z &       & 0.057 & 0.097 &       & 0.049 & 0.041 \\
+              & aCV[TQ]Z &       & 0.057 & 0.096 &       & 0.049 & 0.041 \\
               & apc[23]  &       & 0.029 & 0.073 &       & 0.019 & 0.044 \\ \hdashline
     5-$\zeta$ & aCV5Z    & 0     & 0.036 & 0.036 & 0     & 0.042 & 0.042 \\
-              & apc4     & 0.099 & 0.046 & 0.139 & 0.050 & 0.054 & 0.102 \\
+              & apc4     & 0.099 & 0.046 & 0.140 & 0.050 & 0.054 & 0.102 \\
               & aCV[Q5]Z &       & 0     & 0     &       & 0     & 0     \\
               & apc[34]  &       & 0.034 & 0.127 &       & 0.032 & 0.080 \\
     \hline
@@ -118,7 +119,7 @@ HR46 与 T144 大多数分子为有机分子、且分子大小较大，两个数
     \begin{tabular}{cl:d{1.3}d{1.3}d{1.3}:d{1.3}d{1.3}d{1.3}}
     \hline
     & & \multicolumn{3}{:c}{HR46} & \multicolumn{3}{:c}{T144} \\ \cline{3-8}
-    Level & Basis set & \multicolumn{1}{:c}{$\tilde \gamma_\textsf{SCF}$\tabnote{b}} & \multicolumn{1}{c}{$\Delta \tilde \gamma_\textsf{PT2}$\tabnote{c}} & \multicolumn{1}{c}{$\tilde \gamma_\textsf{DH}$\tabnote{d}} & \multicolumn{1}{:c}{$\tilde \gamma_\textsf{SCF}$} & \multicolumn{1}{c}{$\Delta \tilde \gamma_\textsf{PT2}$} & \multicolumn{1}{c}{$\tilde \gamma_\textsf{DH}$} \\
+    Level & Basis set & \multicolumn{1}{:c}{$\tilde \gamma_\textsf{SCF}$} & \multicolumn{1}{c}{$\Delta \tilde \gamma_\textsf{PT2}$} & \multicolumn{1}{c}{$\tilde \gamma_\textsf{DH}$} & \multicolumn{1}{:c}{$\tilde \gamma_\textsf{SCF}$} & \multicolumn{1}{c}{$\Delta \tilde \gamma_\textsf{PT2}$} & \multicolumn{1}{c}{$\tilde \gamma_\textsf{DH}$} \\
     \hline
     2-$\zeta$ & aCVDZ    & 3.389 & 0.505 & 3.596 & 1.742 & 0.264 & 1.860 \\
               & apc1     & 2.271 & 0.892 & 2.885 & 1.321 & 0.446 & 1.530 \\ \hdashline
@@ -145,13 +146,64 @@ HR46 与 T144 大多数分子为有机分子、且分子大小较大，两个数
 
 在\alert{第五章与其表格}对小分子体系 MP2 极化率的基组误差分析中，HF 方法的极化率 $\alpha_\textsf{HF}$ 与 $\gamma_\textsf{HF}$ 的误差，随着基组基数 $\zeta$ 的增大而快速减小。而相对地，MP2 的相关贡献 $\Delta \alpha_\textsf{(2)}$ 与 $\Delta \gamma_\textsf{(2)}$ 的收敛趋势较慢；对于同性极化率 $\Delta \alpha_\textsf{(2)}$ 的误差在 4,5-$\zeta$ 下远远大于 $\alpha_\textsf{HF}$。而对于 HR46 与 T144 数据集的 B2PLYP 计算下，二阶微扰贡献 $\Delta \alpha_\textsf{PT2}$ 与 $\Delta \gamma_\textsf{PT2}$ 的误差相比于自洽场部分 $\alpha_\textsf{SCF}$ 与 $\gamma_\textsf{SCF}$ 一般来说相当或更小。注意到 B2PLYP 泛函的二阶微扰贡献系数 $c_\mathrm{c} = 0.27$，因此尽管二阶微扰本身的收敛趋势较慢、但在系数的缩放下并没有体现出很大的误差。
 
-对于 Jensen 基组 apc$n$，其计算同性极化率 $\alpha_\textsf{DH}$ 时，apc2 的误差已经小于 0.2\%；甚至在 T144 数据集下 $\alpha_\textsf{DH}$ 的相对方均根误差为 0.099\%，比之计算代价更大的 apc3 基组的误差更小。但同时考虑到构成 $\alpha_\textsf{DH}$ 的两个分项 $\alpha_\textsf{SCF}$ 与 $\Delta \alpha_\textsf{PT2}$，apc2 在这两个分项的误差远远大于 apc3。因此，apc2 同性极化率 $\alpha_\textsf{DH}$ 相当小的误差，应当归因于 $\alpha_\textsf{SCF}$ 与 $\Delta \alpha_\textsf{PT2}$ 误差的相互抵消，而不应认为其同性极化率 $\alpha_\textsf{DH}$ 已经接近基组极限；考虑到其他双杂化泛函的构造与 B2PLYP 有所不同，apc2 的 $\alpha_\textsf{DH}$ 计算结果未必能保证对其他双杂化泛函有稳定的低误差。
+对于 Jensen 基组 apc$n$，其计算同性极化率 $\alpha_\textsf{DH}$ 时，apc2 的误差已经小于 0.2\%；甚至在 T144 数据集下 $\alpha_\textsf{DH}$ 的相对方均根误差为 0.099\%，比之计算代价更大的 apc3 基组的误差更小。但同时考虑到构成 $\alpha_\textsf{DH}$ 的两个分项 $\alpha_\textsf{SCF}$ 与 $\Delta \alpha_\textsf{PT2}$，apc2 在这两个分项的误差远远大于 apc3。因此，apc2 同性极化率 $\alpha_\textsf{DH}$ 相当小的误差，应当归因于 $\alpha_\textsf{SCF}$ 与 $\Delta \alpha_\textsf{PT2}$ 误差的相互抵消，而不应认为其同性极化率 $\alpha_\textsf{DH}$ 已经接近基组极限；考虑到其他双杂化泛函的构造与 B2PLYP 有所不同，apc2 的 $\alpha_\textsf{DH}$ 计算结果未必能保证对 B2PLYP 以外的其他双杂化泛函有稳定的低误差。
 
 CBS 外推模型在 4-$\zeta$ 的基组基数下有较好的效果：相对于单一基组 aCVQZ 或 apc3 计算，CBS 外推的 aCV[TQ]Z 或 apc[23] 的误差有所降低。对于 3-$\zeta$ 下，CBS 外推与否对同性极化率 $\Delta \alpha_\textsf{PT2}$ 影响较小；而对异性极化率 $\Delta \gamma_\textsf{PT2}$，Dunning 基组 aCV[DT]Z 的误差比 aCVTZ 误差大、但 Jensen 基组 apc[12] 的误差比 apc2 小。值得注意的是，apc[12] 的同性极化率误差比 $\Delta \alpha_\textsf{PT2}$ 小、但 $\alpha_\textsf{DH}$ 的误差反而更大；即每个极化率贡献项分别更小的误差，反而在总和的结果上给出更大的误差；这也印证了 apc2 较低的 $\alpha_\textsf{DH}$ 误差不能表明 apc2 本身的误差很小。
 
 尽管 CBS 外推模型在 4-$\zeta$ 基组基数下有良好表现，但注意到 4-$\zeta$ 基组 aCVQZ、apc3 本身的计算误差也仅有不到 0.2\%，CBS 外推的优势比较有限。因此，我们认为对于 HR46 与 T144 数据集，使用 4-$\zeta$ 基组 aCVQZ、apc3 进行双杂化泛函的计算，误差较低且远低于实验误差的 0.5\%，是适合用于测评的基组。而对于 3-$\zeta$，若分别考察 $\alpha_\textsf{SCF}$ 与 $\Delta \alpha_\textsf{PT2}$ 分别的误差并作加和，则对于 HR46 数据集的 aCVTZ 或 aCV[DT]Z 误差在 0.65\% 左右，HR46 数据集的 apc2 或 apc[12]、以及 T144 数据集的 3-$\zeta$ 基组或 CBS 外推模型的误差在 0.40\% 左右。apc2 或 apc[12] 的误差尽管小于实验误差的 0.5\%，但幅度不是很大。我们认为，apc2 或 apc[12] 也是可以接受的；但在计算量可接受的情形下，应尽可能使用 4-$\zeta$ 基组或 CBS 外推模型。
 
-最后，我们指出，表 \ref{tab.6.b2p-conv-hr46-t144-iso} 与表 \ref{tab.6.b2p-conv-hr46-t144-aniso} 的数据将表明 5-$\zeta$ 情形下 Jensen 基组 apc4 与 apc[34] 的误差普遍比 Dunning 基组 aCV5Z 更大，并且 apc4 与 apc[34] 通过计算代价更大，其误差并未比 apc3 与 apc[23] 更进步、甚至误差更大。对此，我们认为，5-$\zeta$ 情形下 Jensen 基组与 Dunning 基组之间的误差反映的是 5-$\zeta$ 级别基组的基组不完备程度；这个不完备程度一般小于 0.15\%，且远小于 0.5\% 的实验误差，这是完全可以接受的误差范围。除此之外，这里作 B2PLYP 基组误差分析的目的，是确认一种在可接受误差的前提下计算效率更高的基组、以及确定基组误差对双杂化泛函测评的影响；当基组达到 4-$\zeta$ 或更大时，其极化率相对误差已经远小于 0.5\%，不会对泛函测评的结果产生明显影响。关于 5-$\zeta$ 精度的更多分析，我们在\alert{附录}中展开。
+最后，我们指出，表 \ref{tab.6.b2p-conv-hr46-t144-iso} 与表 \ref{tab.6.b2p-conv-hr46-t144-aniso} 的数据将表明 5-$\zeta$ 情形下 Jensen 基组 apc4 与 apc[34] 的误差普遍比 Dunning 基组 aCV5Z 更大；并且尽管 apc4 与 apc[34] 计算代价更大，其误差并未比 apc3 与 apc[23] 更进步、甚至误差更大。对此，我们认为，5-$\zeta$ 情形下 Jensen 基组与 Dunning 基组之间的误差反映的是 5-$\zeta$ 级别基组的基组不完备程度；这个不完备程度一般小于 0.15\%，且远小于 0.5\% 的实验误差，这是完全可以接受的误差范围。除此之外，这里作 B2PLYP 基组误差分析的目的，是确认一种在可接受误差的前提下计算效率更高的基组、以及确定基组误差对双杂化泛函测评的影响；当基组达到 4-$\zeta$ 或更大时，其极化率相对误差已经远小于 0.5\%，不会对泛函测评的结果产生明显影响。关于 5-$\zeta$ 级别基组或 CBS 外推方法精度的更多分析，我们在\alert{附录}中展开。
+
+\subsubsection{HH101 数据集分析}
+
+HH101 数据集包含的分子或原子较小、且有机分子很少；其数据集构成与 HR46 与 T144 有较大差异。表 \ref{tab.6.b2p-conv-hh101-iso} 展示了 HH101 数据集下 B2PLYP 在同性极化率 $\alpha$ 下的基组收敛性表现。
+
+\begin{table}[ht]
+    \centering
+    \caption{B2PLYP 在数据集 HH101 下同性极化率 $\alpha$ 的基组相对方均根误差 (RelRMSD / \%)\tabnote{a}。}
+    \label{tab.6.b2p-conv-hh101-iso}
+    \begin{tabular}{cl:d{1.3}d{1.3}d{1.3}:d{1.3}d{1.3}d{1.3}}
+    \hline
+    & & \multicolumn{3}{:c}{HH101 (NSP)\tabnote{b}} & \multicolumn{3}{:c}{HH101 (SP)} \\ \cline{3-8}
+    Level & Basis set & \multicolumn{1}{:c}{$\tilde \alpha_\textsf{SCF}$} & \multicolumn{1}{c}{$\Delta \tilde \alpha_\textsf{PT2}$} & \multicolumn{1}{c}{$\tilde \alpha_\textsf{DH}$} & \multicolumn{1}{:c}{$\tilde \alpha_\textsf{SCF}$} & \multicolumn{1}{c}{$\Delta \tilde \alpha_\textsf{PT2}$} & \multicolumn{1}{c}{$\tilde \alpha_\textsf{DH}$} \\
+    \hline
+    2-$\zeta$ & aCVDZ    & 4.565 & 0.569 & 4.939 & 3.721 & 0.746 & 4.030 \\
+              & apc1     & 1.783 & 0.882 & 1.991 & 1.642 & 0.944 & 1.800 \\ \hdashline
+    3-$\zeta$ & aCVTZ    & 1.358 & 0.294 & 1.568 & 0.866 & 0.325 & 1.006 \\
+              & apc2     & 0.508 & 0.334 & 0.450 & 0.622 & 0.618 & 0.693 \\
+              & aCV[DT]Z &       & 0.218 & 1.469 &       & 0.213 & 0.916 \\
+              & apc[12]  &       & 0.550 & 0.578 &       & 0.500 & 0.605 \\ \hdashline
+    4-$\zeta$ & aCVQZ    & 0.302 & 0.150 & 0.432 & 0.146 & 0.205 & 0.282 \\
+              & apc3     & 0.196 & 0.109 & 0.248 & 0.167 & 0.143 & 0.190 \\
+              & aCV[TQ]Z &       & 0.070 & 0.344 &       & 0.161 & 0.219 \\
+              & apc[23]  &       & 0.257 & 0.329 &       & 0.224 & 0.344 \\ \hdashline
+    5-$\zeta$ & aCV5Z    & 0     & 0.077 & 0.077 & 0     & 0.105 & 0.105 \\
+              & apc4     & 0.216 & 0.075 & 0.256 & 0.136 & 0.112 & 0.190 \\
+              & aCV[Q5]Z &       & 0     & 0     &       & 0     & 0     \\
+              & apc[34]  &       & 0.155 & 0.283 &       & 0.094 & 0.177 \\
+    \hline
+    \end{tabular}
+
+    \raggedright
+    \par\tabnote{a} 该表格的图例参考表 \ref{tab.6.b2p-conv-hr46-t144-iso}。
+    \par\tabnote{b} 由于氢原子在 \textsc{dh} 程序中无法给出解析极化率，因此分析自旋非极化分子总体误差时排除氢原子，即总共分析 74 个自旋非极化体系。
+\end{table}
+
+可以看到，在相同的基组大小下，HH101 数据集的基组误差相比于 HR46 或 T144 数据集有更大的误差。以 4-$\zeta$ 级别基组来看，HR46 与 T144 数据集同性极化率对于 aCVQZ 与 apc3、以及对应的 CBS 外推模型下，$\alpha_\textsf{SCF}$ 与 $\Delta \alpha_\textsf{PT2}$ 的相对方均根误差之和普遍 0.15\% 以内；但在 HH101 数据集中，aCVQZ 在自旋非极化的 74 个分子中，其 $\alpha_\textsf{SCF}$ 与 $\Delta \alpha_\textsf{PT2}$ 的相对方均根误差之和可以达到 0.45\%；apc3 的误差也达到 0.31\%；这表明 apc3 基组的误差仍然可以接受，但已经比较接近实验误差的 0.5\%。
+
+需要指出，即使到 5-$\zeta$ 级别，apc4 基组 $\alpha_\textsf{SCF}$ 与 $\Delta \alpha_\textsf{PT2}$ 的相对方均根误差之和也达到了 0.29\%，意味着我们所测评的最高等级基组之间也存在不能完全忽视的相对误差；这应归因于 5-$\zeta$ 级别基组的不完备性误差 (BSIE, \underline{B}asis \underline{S}et \underline{I}ncomplete \underline{E}rror)。
+
+若不考虑 CBS 外推模型，与 HR46、T144 数据集在 4-$\zeta$ 下 $\alpha_\textsf{SCF}$ 比起 $\Delta \alpha_\textsf{PT2}$ 相对方均根误差较为接近或者更小的情况不同，HH101 数据集即使基组达到了 4-$\zeta$ 的较大级别，$\alpha_\textsf{SCF}$ 仍然具有一定的相对误差、且数值上与 $\Delta \alpha_\textsf{PT2}$ 的相对误差接近或更大。
+
+作为表 \ref{tab.6.b2p-conv-hh101-iso} 的补充，在本章附录中，表 \ref{tab.6.b2p-conv-hh101-rmsre} 的测评数据引入了非同性的效应，展示了极化率分量 $\alpha_{xx}$, $\alpha_{yy}$, $\alpha_{zz}$ 下的基组收敛性表现。从数据数值来看，HH101 数据集 B2PLYP 双杂化泛函下极化率分量的基组收敛性与同性极化率的基组收敛性表现相近；因此，上述分析对于非同性的电子极化效应仍然适用。
+
+\subsubsection{基组误差分析小结}
+
+这一节中，我们对 B2PLYP 双泛函的基组收敛性作了分析。我们认为，对于所有本工作所涉及的数据集 (HH101, HR46, T144)、在同性极化率 $\alpha$ 与异性极化率 $\gamma$ 上，4-$\zeta$ 基组可以同时在自洽场部分 $\alpha_\textsf{SCF}$, $\gamma_\textsf{SCF}$ 与二阶微扰部分 $\Delta \alpha_\textsf{PT2}$, $\Delta \gamma_\textsf{PT2}$ 稳定的达到不大于 0.5\% 的误差。在 4-$\zeta$ 级别的基组或 CBS 外推模型中，apc3 基组不仅误差相对较低、其基组大小也相对较小；使用 apc3 精确地计算静态极化率是性价比相对较高的计算方式。
+
+B2PLYP 是典型的双杂化泛函；其他各式各色双杂化泛函的严格交换能杂化系数 $c_\mathrm{x}$ 与二阶微扰相关能杂化系数 $c_\mathrm{c}$ 与 B2PLYP 相对接近，因此可以预期其他双杂化泛函将有类似的基组误差表现。下一节的泛函静态极化率测评中，我们将统一使用 apc3 基组。
+
+上述分析中，我们没有非常细致地讨论不同 5-$\zeta$ 基组或 CBS 外推模型的误差分析。我们认为这很有可能是作为参考值的 aCV[Q5]Z 仍然存在一定的 BSIE；但由于更大基组计算上存在困难、一些基组系列欠缺更大的 Gaussian 函数型基组 (如目前没有标准的 aug-cc-pCV6Z 基组)、以及我们尚未掌握更精确的双杂化泛函的非 Gaussian 函数型基组解析极化率计算方法\cite{Brakestad-Frediani.JCTC.2020}，因此目前无法在更高的基组精度上做严格的 BSIE 分析。我们猜测，在考虑 5-$\zeta$ 级别基组或 CBS 外推方法的 BSIE 的前提下，上述基组误差分析的结论仍然成立、apc3 基组的误差将不会严重影响双杂化泛函的测评。更多关于 BSIE 误差的推测与推论，参考附录 \ref{sec.6.supp-bsie} 的讨论。
 
 \subsection{密度泛函的静态极化率测评}
 \label{sec.6.benchmark}
@@ -164,7 +216,7 @@ CBS 外推模型在 4-$\zeta$ 的基组基数下有较好的效果：相对于�
 \subsubsection{对 HH132 数据集自旋极化体系准确性的讨论}
 \label{sec.6.supp-HH132-remove}
 
-在我们的测评与验证过程中，我们发现对于 \alert{HH132} 数据集\cite{Hait-Head-Gordon.PCCP.2018}的 57 个自旋极化体系，其许多体系的计算本身存在挑战、我们的计算结果和 HH132 数据集的参考值与测评值也存在差异。\alert{在正文中，我们仅对其中部分自旋极化体系作测评与统计；在这里，我们将详细地讨论复现 HH132 数据集过程中遇到的困难，并指出测评过程中剔除部分自旋极化体系的具体原因。}
+在我们的测评与验证过程中，我们发现对于 \alert{HH132} 数据集\cite{Hait-Head-Gordon.PCCP.2018}的 57 个自旋极化体系，其许多体系的计算本身存在挑战、我们的计算结果和 HH132 数据集的参考值与测评值也存在差异。在正文中，我们仅对其中部分自旋极化体系作测评与统计；在这里，我们将详细地讨论复现 HH132 数据集过程中遇到的困难，并指出测评过程中剔除部分自旋极化体系的具体原因。
 
 \textbf{对称性破缺。}在 HH132 的 57 个自旋极化分子中，13 个分子的电子态存在对称性破缺效应；因此解析极化率的计算与数值极化率有所不同。相关的数据列于表 \ref{tab.6.supp.symm-broken}。这些分子中，
 \begin{itemize}[nosep]
@@ -334,7 +386,7 @@ CBS 外推模型在 4-$\zeta$ 的基组基数下有较好的效果：相对于�
     \label{tab.6.supp.HH101-species}
     \begin{tabular}{llllll:ll}
     \hline
-    \multicolumn{6}{c:}{non-spin-polarized} & \multicolumn{2}{c}{spin-polarized} \\
+    \multicolumn{6}{c:}{NSP (non-spin-polarized)} & \multicolumn{2}{c}{SP (spin-polarized)} \\
     \hline
     \ce{AlF   } & \ce{CH3F  } & \ce{FNO   } & \ce{HF   } & \ce{NH2Cl} & \ce{PH3O  } & \ce{^2BH2   } & \ce{^2Li  } \\
     \ce{Ar    } & \ce{CH3NH2} & \ce{^2H   } & \ce{HNC  } & \ce{NH2F } & \ce{S2H2  } & \ce{^2BeH   } & \ce{^4N   } \\
@@ -352,6 +404,173 @@ CBS 外推模型在 4-$\zeta$ 的基组基数下有较好的效果：相对于�
     \hline
     \end{tabular}
 \end{table}
+
+\subsubsection{HH101 数据集下 B2PLYP 极化率分量的相对误差分析}
+
+表 \ref{tab.6.b2p-conv-hh101-rmsre} 展示了 HH101 数据集下 B2PLYP 在极化率分量 $\alpha_{xx}, \alpha_{yy}, \alpha_{zz}$ 下的基组收敛性表现。这里的误差计算方式与 Hait 等\cite{Hait-Head-Gordon.PCCP.2018}在 HH132 测评过程中所使用的标准 RMSRE 相匹配。该表格与表 \ref{tab.6.b2p-conv-hh101-iso} 相同，均是考察 HH101 数据集下 B2PLYP 极化率的基组收敛性。由于 HH101 数据集本身只包含三个极化率分量 $\alpha_{xx}$, $\alpha_{yy}$, $\alpha_{zz}$，而该数据集部分分子的极化率张量非对角元 $\alpha_{xy}$, $\alpha_{yz}$, $\alpha_{zx}$ 非零，从而尚无各向异性极化率 $\gamma$。因此，表 \ref{tab.6.b2p-conv-hh101-rmsre} 对三个极化率张量对角元分量的考量，能体现极化率非同性效应的基组收敛性。对比表 \ref{tab.6.b2p-conv-hh101-iso}，我们认为在相同的基组下，对极化率张量的对角元分量 $\alpha_{xx}$, $\alpha_{yy}$, $\alpha_{zz}$ 的基组相对误差比同性极化率 $\alpha$ 的误差更大，但变化幅度不大、且误差趋势一致。因此，我们认为正文对同性极化率 $\alpha$ 的基组误差分析结论，也可以应用于对角元分量 $\alpha_{xx}$, $\alpha_{yy}$, $\alpha_{zz}$ 的分析中。
+
+\begin{table}[ht]
+    \centering
+    \caption{B2PLYP 在数据集 HH101 下极化率分量 $\alpha_{xx}, \alpha_{yy}, \alpha_{zz}$ 的基组相对方均根误差 (RelRMSD / \%)\tabnote{a}。}
+    \label{tab.6.b2p-conv-hh101-rmsre}
+    \begin{tabular}{cl:d{1.3}d{1.3}d{1.3}:d{1.3}d{1.3}d{1.3}}
+    \hline
+    & & \multicolumn{3}{:c}{HH101 (NSP)\tabnote{b}} & \multicolumn{3}{:c}{HH101 (SP)} \\ \cline{3-8}
+    Level & Basis set & \multicolumn{1}{:c}{$\tilde \alpha_\textsf{SCF}$} & \multicolumn{1}{c}{$\Delta \tilde \alpha_\textsf{PT2}$} & \multicolumn{1}{c}{$\tilde \alpha_\textsf{DH}$} & \multicolumn{1}{:c}{$\tilde \alpha_\textsf{SCF}$} & \multicolumn{1}{c}{$\Delta \tilde \alpha_\textsf{PT2}$} & \multicolumn{1}{c}{$\tilde \alpha_\textsf{DH}$} \\
+    \hline
+    2-$\zeta$ & aCVDZ    & 4.990 & 0.619 & 5.390 & 4.276 & 0.815 & 4.673 \\
+              & apc1     & 2.069 & 0.900 & 2.278 & 1.804 & 0.962 & 1.934 \\ \hdashline
+    3-$\zeta$ & aCVTZ    & 1.455 & 0.324 & 1.690 & 1.019 & 0.364 & 1.211 \\
+              & apc2     & 0.607 & 0.349 & 0.561 & 0.656 & 0.628 & 0.712 \\
+              & aCV[DT]Z &       & 0.240 & 1.584 &       & 0.240 & 1.104 \\
+              & apc[12]  &       & 0.560 & 0.674 &       & 0.516 & 0.632 \\ \hdashline
+    4-$\zeta$ & aCVQZ    & 0.323 & 0.166 & 0.468 & 0.181 & 0.218 & 0.331 \\
+              & apc3     & 0.214 & 0.181 & 0.302 & 0.182 & 0.146 & 0.202 \\
+              & aCV[TQ]Z &       & 0.077 & 0.370 &       & 0.163 & 0.250 \\
+              & apc[23]  &       & 0.343 & 0.410 &       & 0.231 & 0.354 \\ \hdashline
+    5-$\zeta$ & aCV5Z    & 0     & 0.085 & 0.085 & 0     & 0.112 & 0.112 \\
+              & apc4     & 0.238 & 0.078 & 0.279 & 0.160 & 0.114 & 0.210 \\
+              & aCV[Q5]Z &       & 0     & 0     &       & 0     & 0     \\
+              & apc[34]  &       & 0.214 & 0.335 &       & 0.097 & 0.199 \\
+    \hline
+    \end{tabular}
+
+    \raggedright
+    \par\tabnote{a} 该表格的图例参考表 \ref{tab.6.b2p-conv-hr46-t144-iso}。极化率分量的相对方均根误差公式也可以参考式 (\ref{eq.6.rmsre})。
+    \par\tabnote{b} 由于氢原子在 \textsc{dh} 程序中无法给出解析极化率，因此分析自旋非极化分子总体误差时排除氢原子，即总共分析 74 个自旋非极化体系。
+\end{table}
+
+\subsubsection{极化率基组不完备性补充推测与推论}
+\label{sec.6.supp-bsie}
+
+在正文中，所有基组误差与收敛性分析是基于 aCV[Q5]Z 外推模型作为参考而来；而 aCV[Q5]Z 作为非常精确且昂贵的外推模式，已经应用于 HH132 数据集的构建\cite{Hait-Head-Gordon.PCCP.2018}，是目前流行且受到承认的高精度基组模型。
+
+但也必须指出，对于 aCV[Q5]Z 本身 BSIE 的具体数值，目前的研究较少。一方面，尚不完全明朗的 aCV[Q5]Z 外推模型的 BSIE 意味着 HH132 数据集参考值\cite{Hait-Head-Gordon.PCCP.2018}、HR46 与 T144 数据集参考值\alert{我们的文章}除了 CCSD(T) 方法本身的误差外，仍然存在一定的 BSIE 且具体的数值尚无定量估计，即参考值的可信度仍然有提升空间。另一方面，基组极限下的计算量是巨大的；而使用巨大的 Gaussian 函数型基组还可能容易导致对角化算法或部分电子积分在双浮点精度下出现数值问题。在静态极化率的计算问题上，Brakestad 等人\cite{Brakestad-Frediani.JCTC.2020}通过多重小波 (MW, \underline{M}ulti-\underline{W}avelet) 基组方法，有效地对 PBE、VWN 方法逼近基组极限；但该工作测评的 Gaussian 函数型基组仅包含 apc4 而未考察其他基组、同时 MW 型基组难以简单推广到后自洽场方法或双杂化泛函近似。因此，CCSD(T)/aCV[Q5]Z 的 BSIE 数值、以及接近基组极限的自洽场方法或双杂化泛函静态极化率计算，目前还存在技术上的困难。
+
+由于上述困难，严格的 BSIE 分析目前无法实现。但通过对现有数据的分析，我们可以作一些猜测与推论。这些猜测与推论将不会明显影响正文中对 apc3 基组误差的论断，也不会弱化使用 apc3 作双杂化泛函静态极化率测评的合理性。
+
+\textbf{aCV$\bm{X}$Z 与 apc$\bm{n}$ 基组函数构成的比较。}我们首先比较 3,4,5-$\zeta$ 基组基数下，aCV$X$Z ($X=\mathrm{T,Q,5}$) 与 apc$n$ ($n=2,3,4$) 基组函数的构成。图 \ref{fig.6.basis-exponent-plot} 展示了这两类基组的碳原子原始 GTO (\underline{G}aussian-\underline{T}ype \underline{O}rbital) 函数指数分布、以及它们是否单独构成基组或缩并为 CGTO (\underline{C}ontracted \underline{GTO})。可以看到，apc$n$ 基组系列在靠近原子核的区域 (原始 GTO 函数的指数较大的区域) 仅使用少量 $s, p$ 壳层的 CGTO 基组描述；而 aCV$X$Z 基组系列则在指数为 5--125 的区域内依基组基数的，引入 $s, p, d, f, g$ 壳层的原始 GTO 函数作为基组。在不靠近原子核的区域 (原始 GTO 函数指数小于 5 的区域)，两类基组都使用原始 GTO 函数作为基函数，apc$n$ 的 GTO 函数指数分散程度比 aCV$X$Z 更宽。在相同的基组基数下，apc$n$ 的 GTO 函数指数的最低数值 (最弥散的基函数) 也比 aCV$X$Z 更低 (更加弥散)；这点在更大的基组、更高的角动量壳层下尤为明显。
+
+\begin{figure}[ht]
+    \centering
+    \caption{aCV$X$Z ($X=\mathrm{T,Q,5}$) 与 apc$n$ ($n=2,3,4$) 碳原子基函数构成。线条对应的横坐标是 GTO 的指数。实线对应的是作为基函数的原始 GTO。虚线对应的是 CGTO 中被缩并的原始 GTO；单根虚线不构成基。缩并系数信息未展示于该图。图例括号中的数字代表该基组碳原子的基函数数量。}
+    \label{fig.6.basis-exponent-plot}
+    \includegraphics[width=0.9\textwidth]{assets/basis_exponent_plot.pdf}
+\end{figure}
+
+当对比 apc$n$ ($n=2,3,4$) 与 aCV5Z 时，如图 \ref{fig.6.basis-exponent-plot-compare} 所示，可以发现每个壳层下，apc$n$ 基组的弥散函数普遍比 aCV5Z 更加弥散 (除了 apc2 在 $d$ 壳层的弥散基组)。aCV5Z 相对于 apc$n$ 来说，则是增加了靠近原子核区域的原始 GTO 基函数、以及在价层区域有更为密集的原始 GTO 基函数。
+
+\begin{figure}[ht]
+    \centering
+    \caption{aCV5Z 与 apc$n$ ($n=2,3,4$) 碳原子基函数构成。图例参考图 \ref{fig.6.basis-exponent-plot}。}
+    \label{fig.6.basis-exponent-plot-compare}
+    \includegraphics[width=0.4\textwidth]{assets/basis_exponent_plot_compare.pdf}
+\end{figure}
+
+\textbf{B2PLYP 同性极化率中自洽场泛函部分 $\alpha_\textsf{SCF}$ 的收敛趋势。}这一小节中，为简化分析，我们仅细致考察同性极化率 $\alpha$ 的基组收敛趋势。接续 \ref{sec.6.basis-converg} 节的做法，作为双杂化的典型泛函的典型，我们对 B2PLYP 的基组收敛趋势作详细分析。由于自洽场部分 $\alpha_\textsf{SCF}$ 与微扰部分 $\Delta \alpha_\textsf{PT2}$ 的收敛趋势并不相同，因此两个贡献部分将分开讨论。
+
+这里的分析将使用小提琴图 (violin plot)。该图像的纵坐标轴是双对数 (symmetric logarithmic) 缩放，线性区间为 $-0.01$\% 至 $0.01$\%；图像的数据密度建模方式是 Gaussian 核，采样的数据是纵坐标轴缩放后的结果 (而非误差本身)，模型参数设为较小的 \texttt{bw\_method=0.1}。图像纵坐标的主格点是 $\pm 10^{n} \%$ $(n = -2, -1, 0, 1)$，副格点是 $\pm 5 \times 10^{n} \%$ $(n = -2, -1, 0)$。该类型图可以展示数据分布的细节，但当前的绘制方式不会凸显较为异常的数值；相对地，正文中的相对方均根误差 RelRMSD 对误差较大的数据比较敏感，两种分析可以互补。同时，小提琴图展示的是误差分布本身，而非每个数据点的误差随着基组增大而变化的趋势；因此仍然无法分析具体分子或某一类分子的基组收敛趋势。
+
+\begin{figure}[ht]
+    \centering
+    \caption{B2PLYP 同性极化率的自洽场贡献部分 $\alpha_\textsf{SCF}$ 不同基组相对于 aCV5Z 的相对误差。对于 HH101 非自旋极化数据集 (NSP)，氢原子未纳入该图的分析 (下同)。}
+    \label{fig.6.converg-b2p-scf-aCV5Z}
+    \includegraphics[width=0.9\textwidth]{assets/converg-b2p-scf-aCV5Z.pdf}
+\end{figure}
+
+图 \ref{fig.6.converg-b2p-scf-aCV5Z} 展示的是当选取 aCV5Z 基组作为参考值时，B2PLYP 自洽场部分同性极化率 $\alpha_\textsf{SCF}$ 在不同基组下的相对误差。总体来说，基组越大，误差分布大体上越接近零点附近；这意味着 aCV5Z 基组确实比较接近基组极限，以及 aCV$X$Z 与 apc$n$ 基组随着基数增大有较好的收敛性。
+
+但同时注意到，一方面，$\alpha_\textsf{SCF}$ 一般随着基组增大，其数值也相应地增大；反映在误差表现上，则是相对误差随基组增大而愈加趋近正值；就此我们推测，对于当前工作所测评的大多数分子，分子的极化率随着基组接近基组极限而增大。我们认为，Brakestad 等人工作\cite{Brakestad-Frediani.JCTC.2020} Figure 6 数据表现也支持这个观点：尽管这并非 Brakestad 等人原文的结论，但可以发现在 PBE 泛函下 apc4 相比于更为精确的 MW7 基组的误差大体上是负误差\footnote{通过对 Brakestad 等人工作\cite{Brakestad-Frediani.JCTC.2020} 的 Supporting Information 分析，可以发现对于 PBE 泛函下 apc4 解析极化率与 MW7 数值极化率的相对误差，其所测评的 124 个体系 (HH132 数据集排除了 8 个分子)，除了 \ce{^2HO2} 与 \ce{^2Na} 两个奇异情形外，其余体系的平均误差是 $-0.025\%$、方均根误差是 $0.061\%$。误差大于 $0.1\%$ 的体系共 2 个 (\ce{Mg}, \ce{^2SF}，其中 $\ce{^2SF}$ 在我们的工作中不作测评)、大于 $0.01\%$ 的体系共 7 个；误差小于 $-0.1\%$ 的体系共 8 个 (\ce{^2H2O-Li}, \ce{Na2}, \ce{Li}, \ce{He}, \ce{Ne}, \ce{NaLi}, \ce{^2BeH}, \ce{Ar}，其中 \ce{Na2} 在我们的工作中不测评)。Brakestad 等人工作中分子 \ce{^2HO2} 与 \ce{^2Na} 的 PBE 泛函 apc4 解析极化率与 MW7 数值极化率误差大于 0.9\%；在我们的工作中，这两个分子的 B2PLYP 自洽场部分 apc4 与 aCV5Z 极化率之间相对误差较小 (分别为 0.199\% 与 -0.154\%)，二阶微扰部分 \ce{^2HO2} 误差很小 (0.025\%)、\ce{^2Na} 误差较大 (0.453\%)}。
+
+另一方面，对比 apc3 和 apc4 相对于 aCV5Z 基组的误差，我们发现对于所有被测评的数据集，绝大多数分子的 apc4 误差都大于零；而 apc3 作为更小的基组，尽管有更广的误差分布，但更多分子的误差反而更接近于零；这照应了正文的表 \ref{tab.6.b2p-conv-hr46-t144-iso} 的 HR46 与 T144 数据集、与表 \ref{tab.6.b2p-conv-hh101-iso} 的 HH101 (NSP) 数据集中，apc4 的 $\alpha_\textsf{SCF}$ RelRMSD 误差比 apc3 更大的结论；而若参考值足够准确，这样的结论是较为反常的。
+
+综合上述推测与数据表现，我们猜测 apc4 尽管基函数数量更少，但在计算 $\alpha_\textsf{SCF}$ 的问题上很可能比 aCV5Z 更接近基组极限。若将 $\alpha_\textsf{SCF}$ 参考值设定为 apc4，如图 \ref{fig.6.converg-b2p-scf-apc4} 所示，则不论是 apc$n$ ($n=1,2,3$) 或 aCV$X$Z ($X = \mathrm{[D,T,Q,5]}$)，绝大多数分子的误差均是负误差；且对于同系列基组，误差趋势随基组基数的增大而稳定地减少。结合对图 \ref{fig.6.basis-exponent-plot} 与图 \ref{fig.6.basis-exponent-plot-compare} 附近的讨论，我们认为这有可能与 apc4 弥散基组的原始 GTO 基函数指数较小、相比于 aCV5Z 更为弥散有关。
+
+\begin{figure}[ht]
+    \centering
+    \caption{B2PLYP 同性极化率的自洽场贡献部分 $\alpha_\textsf{SCF}$ 不同基组相对于 apc4 的相对误差。}
+    \label{fig.6.converg-b2p-scf-apc4}
+    \includegraphics[width=0.9\textwidth]{assets/converg-b2p-scf-apc4.pdf}
+\end{figure}
+
+\textbf{B2PLYP 同性极化率二阶微扰部分 $\Delta \alpha_\textsf{PT2}$ 的收敛趋势。}图 \ref{fig.6.converg-b2p-pt2-aCV5Z} 与图 \ref{fig.6.converg-b2p-pt2-apc4} 分别展示了以 aCV[Q5]Z 与 apc[34] 作为参考值下 $\Delta \alpha_\textsf{PT2}$ 的相对误差收敛趋势。首先，从收敛趋势上，除了 aCVDZ 基组或 HH101 的自旋极化分子集，其余情形绝大多数分子的误差是正误差、且误差确实随基组基数的增大而逐步地逼近零。这表明以 aCV[Q5]Z 与 apc[34] 这两种 CBS 外推模型作为参考值，都有较好的基组收敛性趋势。
+
+\begin{figure}[ht]
+    \centering
+    \caption{B2PLYP 同性极化率的自洽场贡献部分 $\Delta \alpha_\textsf{PT2}$ 不同基组相对于 aCV[Q5]Z 的相对误差。}
+    \label{fig.6.converg-b2p-pt2-aCV5Z}
+    \includegraphics[width=0.9\textwidth]{assets/converg-b2p-pt2-aCV5Z.pdf}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \caption{B2PLYP 同性极化率的自洽场贡献部分 $\Delta \alpha_\textsf{PT2}$ 不同基组相对于 apc[34] 的相对误差。}
+    \label{fig.6.converg-b2p-pt2-apc4}
+    \includegraphics[width=0.9\textwidth]{assets/converg-b2p-pt2-apc4.pdf}
+\end{figure}
+
+但相比于 PBE 泛函可以通过极高精度的 MW7 基组实现 $\alpha_\textsf{SCF}$ 的计算，目前更高基组精度的 $\Delta \alpha_\textsf{PT2}$ 计算较为困难；也鲜有在 $\Delta \alpha_\textsf{PT2}$ 计算问题上广受验证与测试的高精度 CBS 外推模型\footnote{CBS 外推方法最初是针对相关能而设计的计算方法\cite{Nyden-Petersson.JCP.1981}；尽管 CBS 外推方法有长足的发展\cite{Peterson-Dunning.JCP.1994, Nyden-Petersson.JCP.1981, Petersson-Mantzaris.JCP.1988, Jensen-Jensen.TCA.2005, Karton-Martin.TCA.2006, Klopper-Kutzelnigg.JMST.1986, Kutzelnigg-Morgan.JCP.1992, Martin-Martin.CPL.1996, Helgaker-Noga.JCP.1997, Halkier-Wilson.CPL.1998, Halkier-Olsen.CPL.1999}，但这些发展通常仍然是提升能量的描述精度。而对于性质的计算，则通常使用与能量计算相同的 CBS 外推模型\cite{Monten-Deleuze.MP.2011, Huzak-Deleuze.JCP.2013, Hait-Head-Gordon.JCTC.2018, Hait-Head-Gordon.PCCP.2018}，而鲜有专门针对性质本身设计的 CBS 外推模型。}。同时与 $\alpha_\textsf{SCF}$ 的分析不同，即当使用 apc4 作为 $\alpha_\textsf{SCF}$ 参考值时，基组随基数增大而收敛的趋势比使用 aCV5Z 作为参考值的情形要更加明朗清晰；对于 $\Delta \alpha_\textsf{PT2}$，不论使用 aCV[Q5]Z 或 apc[34] 基组的收敛趋势都较为正常。因此，依现有的数据，我们无法判断何种 CBS 外推模型更接近基组极限。
+
+\textbf{BSIE 误差的推测。}在正文的工作中，我们主要使用 apc3 基组进行测评计算。在没有基组极限结果的情况下，对于同性极化率 $\alpha_\textsf{DH} = \alpha_\textsf{SCF} + \Delta \alpha_\textsf{PT2}$ 的计算，其 BSIE 误差的来源在于
+\begin{itemize}[nosep]
+    \item 分析基组收敛性时，作为参考值的基组 (5-$\zeta$ 的基组或 CBS 外推模型) 本身的误差；
+    \item apc3 与参考值之间的误差。
+\end{itemize}
+
+\begin{table}[ht]
+    \centering
+    \caption{B2PLYP 泛函 apc[34] 与 aCV[Q5]Z 外推模型间同性极化率 $\alpha$ 的基组相对方均根误差 (RelRMSD / \%)。}
+    \label{tab.6.b2p-conv-5zeta}
+    \begin{tabular}{ld{2.4}d{2.4}d{2.4}}
+    \hline
+    dataset                & \multicolumn{1}{c}{$\tilde \alpha_\textsf{SCF}$\tabnote{b}} & \multicolumn{1}{c}{$\Delta \tilde \alpha_\textsf{PT2}$\tabnote{c}} & \multicolumn{1}{c}{$\tilde \alpha_\textsf{DH}$\tabnote{d}} \\ \hline
+    HR46                   & 0.099 & 0.034 & 0.127 \\
+    T144                   & 0.050 & 0.032 & 0.080 \\
+    HH101 (NSP)\tabnote{a} & 0.214 & 0.154 & 0.282 \\
+    HH101 (SP)             & 0.135 & 0.094 & 0.177 \\ \hline
+    \end{tabular}
+
+    \raggedright
+    \par\tabnote{a} 该误差数据未将氢原子体系纳入统计，即总共分析了 74 个 HH101 数据集的自旋非极化分子体系。
+    \par\tabnote{b} $\text{RelRMSD} (\tilde \alpha_{\textsf{SCF}/\text{apc4}}, \tilde \alpha_{\textsf{SCF}/\text{aCV5Z}}, \tilde \alpha_{\textsf{DH}/\text{aCV[Q5]Z}})$。
+    \par\tabnote{c} $\text{RelRMSD} (\Delta \tilde \alpha_{\textsf{PT2}/\text{apc[34]}}, \Delta \tilde \alpha_{\textsf{PT2}/\text{aCV[Q5]Z}}, \tilde \alpha_{\textsf{DH}/\text{aCV[Q5]Z}})$。
+    \par\tabnote{d} $\text{RelRMSD} (\tilde \alpha_{\textsf{DH}/\text{apc[34]}}, \tilde \alpha_{\textsf{DH}/\text{aCV[Q5]Z}})$。
+\end{table}
+
+表 \ref{tab.6.b2p-conv-5zeta} 的数据总结了两种 5-$\zeta$ 级别 CBS 外推模型 apc[34] 与 aCV[Q5]Z 之间的相对误差。首先，对于 $\alpha_\textsf{SCF}$ 的误差，可以看到 HH101 数据集的误差显著地大于 HR46 与 T144 数据集。而 Brakestad 等人工作\cite{Brakestad-Frediani.JCTC.2020}中对 PBE 泛函的误差分析表明，除去两个奇异分子 \ce{^2HO2} 与 \ce{^2Na}，其所测评的 HH132 数据集中的 122 个体系 apc4 基组相对于非常接近基组极限的 MW7 基组的相对方均根误差是 0.061\%；远小于我们工作中 B2PLYP 自洽场部分 apc4 与 aCV5Z 之间的 0.214\% (自旋非极化体系) 或 0.135\% (自旋极化体系) 的误差。在假定 B2PLYP 的自洽场部分基组收敛性与 PBE 较为接近的前提下，我们倾向于认为作为 HH132 数据集的子集，HH101 数据集 $\alpha_\textsf{SCF}$ 在 apc4 基组下的相对 BSIE 在 0.06\% 左右；而对于 HR46 与 T144 数据集，apc4 的相对 BSIE 可能更低。对于 $\Delta \alpha_\textsf{PT2}$，在没有更精确的基组作为参考值的情况下，我们通过 apc[34] 与 aCV[Q5]Z 之间的相对误差来估计相对 BSIE 大小。对于 HH101 数据集的非自旋极化体系，该相对误差是 0.154\%；其他数据集的相对误差更小。综上，在所测评的数据集、以及 apc[34] 外推模型下，我们预估 B2PLYP 同性极化率 $\tilde \alpha_\textsf{DH}$ 相对 BSIE 将不大于 0.2\%。
+
+\begin{table}[ht]
+    \centering
+    \caption{B2PLYP apc3 与 apc[34] 间极化率的基组相对方均根误差 (RelRMSD / \%)。}
+    \label{tab.6.b2p-conv-apc3}
+    \begin{tabular}{lld{2.4}d{2.4}d{2.4}}
+    \hline
+                             & dataset                & \multicolumn{1}{c}{SCF} & \multicolumn{1}{c}{PT2} & \multicolumn{1}{c}{DH} \\ \hline
+    isotropic\tabnote{a}     & HR46                   & 0.041 & 0.039            & 0.035 \\
+                             & T144                   & 0.024 & 0.050            & 0.032 \\
+                             & HH101 (NSP)\tabnote{d} & 0.074 & 0.218\tabnote{e} & 0.222 \\
+                             & HH101 (SP)             & 0.159\tabnote{f} & 0.095 & 0.145 \\ \hdashline
+    anisotropic\tabnote{b}   & HR46                   & 0.046 & 0.152\tabnote{g} & 0.167 \\
+                             & T144                   & 0.018 & 0.061            & 0.070 \\ \hdashline
+    components\tabnote{c}    & HH101 (NSP)\tabnote{d} & 0.081 & 0.353\tabnote{h} & 0.355 \\
+                             & HH101 (SP)             & 0.165\tabnote{i} & 0.101 & 0.153 \\ \hline
+    \end{tabular}
+
+    \raggedright
+    \par\tabnote{a} 这部分测评的是同性极化率 $\tilde \alpha_\textsf{SCF}, \Delta \tilde \alpha_\textsf{PT2}, \tilde \alpha_\textsf{DH}$ 的误差；RelRMSD 误差的具体定义参考表 \ref{tab.6.b2p-conv-hr46-t144-iso} 表头的注释，作为参考值的基组为 apc[34]。
+    \par\tabnote{b} 这部分测评的是异性极化率 $\tilde \gamma_\textsf{SCF}, \Delta \tilde \gamma_\textsf{PT2}, \tilde \gamma_\textsf{DH}$ 的误差；RelRMSD 误差的具体定义参考表 \ref{tab.6.b2p-conv-hr46-t144-aniso} 表头的注释，作为参考值的基组为 apc[34]。
+    \par\tabnote{c} 这部分测评的是极化率分量 $\alpha_{xx}, \alpha_{yy}, \alpha_{zz}$ 在自洽场部分、二阶微扰部分、与总和的误差；RelRMSD 误差的具体定义参考表 \ref{tab.6.b2p-conv-hh101-rmsre} 表头的注释，作为参考值的基组为 apc[34]。
+    \par\tabnote{d} 该误差数据未将氢原子体系纳入统计，即总共分析了 74 个 HH101 数据集的自旋非极化分子体系。
+    \par\tabnote{e} \ce{NaCl} 误差为 $-1.660\%$；去除该体系，误差将是 0.102\%。
+    \par\tabnote{f} \ce{^4P} 误差为 $-0.615\%$；去除该体系，误差将是 0.105\%。
+    \par\tabnote{g} \ce{N(CH3)3} 误差为 $-0.622\%$；去除该体系，误差将是 0.117\%。
+    \par\tabnote{h} 去除 \ce{NaCl}，误差将是 0.110\%。
+    \par\tabnote{i} 去除 \ce{^4P}，误差将是 0.103\%。
+\end{table}
+
+表 \ref{tab.6.b2p-conv-apc3} 的数据表明，除了一些特例分子 (包括 \ce{NaCl}, \ce{N(CH3)3}, \ce{^4P})，其余情形下 apc3 基组相对于 apc[34]，自洽场与二阶微扰两个贡献量的相对误差均不大于 0.1\%；因此，总极化率作为自洽场与二阶微扰贡献量之和，误差不超过 0.2\%。结合上一段的分析，我们认为对于绝大多数分子，apc3 的 BSIE 误差应不大于 0.4\%，处在实验误差 0.5\% 范围以内。
+
+作为这一小节的总结，我们首先注意到了正文的基组收敛性分析中，以 aCV[Q5]Z 为参考值时，以表 \ref{tab.6.b2p-conv-hr46-t144-iso} 为代表的一些测评基准下，存在 apc4 相较于 apc3 误差更大的情形；同时注意到 Brakestad 等人工作\cite{Brakestad-Frediani.JCTC.2020}表明 apc4 的 BSIE 误差相当小，因而引起了我们对 aCV[Q5]Z 作为参考值准确性的疑问、并且希望对 5-$\zeta$ 级别基组或 CBS 外推方法 BSIE 误差作分析。我们从基组的原始 GTO 基函数指数大小、同性极化率误差分布的基组收敛性、以及对比 Brakestad 等人工作\cite{Brakestad-Frediani.JCTC.2020}的结果入手，推断 apc4 相较于 aCV5Z 在 $\alpha_\textsf{SCF}$ 的计算问题上可能具有更低的 BSIE。对于 B2PLYP 泛函，以 apc[34] 作为参考值、并且引入 apc[34] 外推模型的 BSIE 预估值，我们认为绝大多数分子的 apc3 的 BSIE 误差不超过 0.4\%。这与正文中以 aCV[Q5]Z 作为参考值、且未引入 aCV[Q5]Z 的 BSIE 预估值的误差分析结论相仿；因此，使用 apc3 作为双杂化泛函静态极化率的测评基组是合理的。
 
 \newpage
 
