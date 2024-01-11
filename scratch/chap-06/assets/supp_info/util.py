@@ -61,10 +61,10 @@ def get_df_err(df, df_sub, ref=None):
     df_err = {
         "MaxE/A^3": df_err_val.abs().max(),
         "MAD/A^3": df_err_val.abs().mean(),
-        "RMSD/A^3": np.sqrt((df_err_val**2).mean()),
+        "RMSD/A^3": (df_err_val**2).mean()**0.5,
         "RelMaxE/%": df_err_rel.abs().max(),
         "RelMAD/%": df_err_rel.abs().mean(),
-        "RelRMSD/%": np.sqrt((df_err_rel**2).mean()),
+        "RelRMSD/%": (df_err_rel**2).mean()**0.5,
     }
     # In case df is pd.Series instead of pd.DataFrame 
     try:

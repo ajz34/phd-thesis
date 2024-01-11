@@ -427,7 +427,7 @@ G\"orling-Levy 微扰与波函数理论中的 M\o{}ller-Plesset 微扰有所不�
 
 GMTKN55 数据集计算选用的基组列于表 \ref{tab.basis-gmtkn55}。其中，基组 daug-def2-universal-jkfit 是针对 def2-universal-jkfit 基组，使用基于 Woon 与 Dunning 所提出的方法\cite{Woon-Dunning.JCP.1994}，在各角量子数上增加两个弥散基函数；增加弥散基函数所用的程序是 \textsc{Basis Set Exchange} 的 \textsc{Python} API\cite{Feller-Feller.JCC.1996, Schuchardt-Windus.JCIM.2007, Pritchard-Windus.JCIM.2019}。GMTKN55 计算所选用的冻核近似规则列于表 \ref{tab.fc-gmtkn55}。Minnesota 2015 数据集所选用的基组是 def2-QZVPP\cite{10.1007/BF01112983, 10.1007/BF00528565, 10.1063/1.1622924, 10.1063/1.1305880, 10.1007/s002149900101, 10.1016/0009-2614(96)00382-x, 10.1063/1.459993, 10.1007/bf01114537, 10.1039/b508541a, 10.1063/1.1406535, 10.1063/1.456066, 10.1021/ct300302u, 10.1063/1.1627293}，冻核近似规则为表 \ref{tab.fc-gmtkn55} 中的 FC-2 规则。
 
-本工作选用 \textsc{SciPy}\cite{Virtanen-Vazquez-Baeza.NM.2020} 进行泛函参数的优化。优化算法选用 L-BFGS-B 算法\cite{Byrd-Zhu.SJSC.1995}，收敛判标是参数梯度模长 (\verb|gtol|) 小于 $10^{-5}$。
+本工作选用 \textsc{SciPy}\cite{Virtanen-Vazquez-Baeza.NM.2020} 进行泛函参数的优化。优化算法选用 L-BFGS-B 算法\cite{Byrd-Zhu.SJSC.1995}，收敛判标是参数梯度模长 (\verb|gtol|) 小于 $10^{-5}$。本工作没有进行严格的全局优化；对于后文表 \ref{tab.coeff-xyg6-1-weighted-error} 的参数，优化过程是非对电子能矫正项以 XYG6 的参数、对电子能占比微扰能比例以 0.7 作为初始参数；对于 \ref{sec.proportion-iepa-like}、\ref{sec.proportion-exchange}、\ref{sec.propotion-dataset} 等小节中的参数优化问题与图像绘制过程，则以其对应的原始泛函参数、或图中相邻的数据点作为初始参数优化。
 
 \begin{table}[h]
   \centering
@@ -534,7 +534,7 @@ xDH@B3LYP 模型总共有 7 个可变参数。XYG7 近似泛函的参数是通�
   $a_1$ 或 $c_\mathrm{x}$ & $E_\mathrm{x}^\mathrm{exact}$ 系数   &  0.851546   &  0.872368     &  0.716712    \\
   $a_2$\tabnote{a}        & $E_\mathrm{x}^\mathrm{S}$ 系数       & [0.209516]  & [0.297015]    & [0.272940]   \\
   $a_3$                   & $E_\mathrm{x}^\mathrm{B88}$ 系数     & -0.061062   & -0.169383     &  0.010348    \\
-  $a_4$                   & $E_\mathrm{c}^\mathrm{LDA}$ 系数     &  0.168713   &  0.334350     &  0.359041    \\
+  $a_4$                   & $E_\mathrm{c}^\mathrm{VWN3}$ 系数    &  0.168713   &  0.334350     &  0.359041    \\
   $a_5$                   & $E_\mathrm{c}^\mathrm{LYP}$ 系数     &  0.204008   &  0.088983     &  0.247560    \\
   $a_6$                   & $E_\mathrm{c}^\text{OS-PT}$ 系数     &  0.460703   &  0.479659     &  0.286591    \\
   $a_7$                   & $E_\mathrm{c}^\text{SS-PT}$ 系数     &  0.214325   & -0.004645     &  0.102393    \\
@@ -648,6 +648,7 @@ Yu 等\cite{Yu-Truhlar.CS.2016} 认为，Hartree-Fock 交换能通常可以提�
 XYG6+1 模型尽管可以更好地处理以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为代表的 HOMO/LUMO gap 较小的计算问题，但需要指出的是，尽管引入了 IEPA-like 型相关能的 XYG6+1 模型一定程度上减少了 MR-TM-BE13 的误差，但减小幅度远小于降低 $c_\mathrm{x}$ 所带来的收益；类如 \ce{TiCl}、\ce{NiCH2+}、\ce{VO}、\ce{CoH}、\ce{FeH}、\ce{FeCl} 等困难的计算问题，一定程度地降低 $c_\mathrm{x}$ 尽管能有更好的计算表现，但同时会推高 GMTKN55 为代表的主族化学问题的误差。因此需要承认，为要更好地解决这两类问题，仅使用引入 IEPA-like 相关能的 XYG6+1 框架仍然是不够的。
 
 \subsubsection{参数优化讨论：数据集的影响}
+\label{sec.propotion-dataset}
 
 简单讨论引入 Minnesota 2015 数据集与否，对参数优化结果的影响。图 \ref{fig.plot-seq-xyg7} 展示了 XYG6+1/cr 模型下，仅对 GMTKN55 数据集参数优化、与额外引入 Minnesota 2015 五个数据子集参数优化的误差比较。可以看到，引入额外的数据集、并重新定义误差量标，确实会使得部分数据子集的误差表现有明显的变化。引入 Minnesota 2015 数据集进行优化后，在所有图中展示的 $c_\mathrm{x}$ 区域内对 GMTKN55 的 WTMAD-2 误差量标有大约 0.5 \si{kcal.mol^{-1}} 的增加。因此，GMTKN55 的误差总体变化不大；由于我们在构造加权误差时对 GMTKN55 的 WTMAD-2 施加权重为很大的 48\%，因此 GMTKN55 的误差变化较小是可以预期的。
 
@@ -702,7 +703,7 @@ XYG6+1 模型尽管可以更好地处理以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为�
   \includegraphics[width=0.7\textwidth]{assets/curve-H2O-part.pdf}
 \end{figure}
 
-作为一种不太常规的单键解离问题，图 \ref{fig.curve-H6} 所示的环状 \ce{H6} 解离曲线也有一定挑战性。对于 CCSD 与 CCSD(T) 方法，它们在 1.8 \AA 以前的表现骄傲好，但在 2.0 \AA 以后能量明显地出现了不符合物理直觉的下降。MP2 与 MP2/cr-III 方法则不管是在 0.75--1.25 \AA 的成键区域、还是以后的解离区域，相比于参考值 DMC 都有一定程度的高估。B3LYP 在成键区域低估、但在解离区域则明显高估势能面上的能量。对于经测评的 xDH 方法，他们都在成键区域有良好的表现，但在解离区域产生明显的高估。
+作为一种不太常规的单键解离问题，图 \ref{fig.curve-H6} 所示的环状 \ce{H6} 解离曲线也有一定挑战性。对于 CCSD 与 CCSD(T) 方法，它们在 1.8 \AA 以前的表现骄傲好，但在 2.0 \AA 以后能量明显地出现了不符合物理直觉的下降。MP2 与 MP2/cr-III 方法则不管是在 0.75--1.25 \AA 的成键区域、还是以后的解离区域，相比于参考值 DMC 都有一定程度的高估。B3LYP 在成键区域低估、但在解离区域则明显高估势能面上的能量。对于经测评的 xDH 型泛函，他们都在成键区域有良好的表现，但在解离区域产生明显的高估。
 
 \begin{figure}[h]
   \centering

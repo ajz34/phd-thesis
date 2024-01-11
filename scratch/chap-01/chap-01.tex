@@ -199,7 +199,7 @@ Hohenberg-Kohn 定理的提出，标志着密度泛函理论成为了一个原�
   \end{equation}
   故称杂化泛函 (hybrid functional)；上式的 $\sigma$ 表示电子自旋。在各种反应、分子性质的测评结果上，杂化泛函经常比 GGA 或 meta-GGA 有更好的表现；在分子体系下，其计算效率又与 meta-GGA 或 Hartree-Fock 相当。因此，这类既能兼顾精度又有较高计算效率的泛函受到广泛的应用。杂化泛函对自相关问题、交换相关势 $v_\mathrm{xc} = \frac{\delta E_\mathrm{xc}}{\delta \rho}$ 的渐进性质等问题上也有一定的改善。这类泛函的典型是 B3LYP\cite{Becke-Becke.JCP.1993, Stephens-Frisch.JPC.1994}、PBE0\cite{Adamo-Barone.JCP.1999, Ernzerhof-Scuseria.JCP.1999}、X3LYP\cite{Xu-Goddard.PNAS.2004}、M06-2X\cite{Zhao-Truhlar.TCA.2008} 等。
   
-  由于杂化泛函的计算量相对可接受、计算表现优异，第四阶 Jacob 阶梯到现在还有大量的发展。为了解决一般密度泛函长短程相互作用上不正确的性质、进一减少自相互作用误差、更精确地计算电荷转移与激发态等等问题，长短程分离 (range-separate) 杂化泛函\cite{Iikura-Hirao.JCP.2001}以及局域混合 (local hybrid) 泛函\cite{Jaramillo-Ernzerhof.JCP.2003}的概念应运而生，并衍生出类如 $\omega$B97X-V\cite{Mardirossian-Head-Gordon.PCCP.2014}、MN15\cite{Yu-Truhlar.CS.2016}、DM21\cite{Kirkpatrick-Cohen.S.2021} 等被广泛使用或有良好测评结果的泛函。
+  由于杂化泛函的计算量相对可接受、计算表现优异，第四阶 Jacob 阶梯到现在还有大量的发展。为了解决一般密度泛函长短程相互作用上不正确的性质、进一减少自相互作用误差、更精确地计算电荷转移与激发态等等问题，长短程分离杂化泛函 (RSH, \underline{R}ange-\underline{S}eparate \underline{H}ybrid)\cite{Iikura-Hirao.JCP.2001}以及局域混合 (local hybrid) 泛函\cite{Jaramillo-Ernzerhof.JCP.2003}的概念应运而生，并衍生出类如 $\omega$B97X-V\cite{Mardirossian-Head-Gordon.PCCP.2014}、MN15\cite{Yu-Truhlar.CS.2016}、DM21\cite{Kirkpatrick-Cohen.S.2021} 等被广泛使用或有良好测评结果的泛函。
 
   \item 显式地引入 Kohn-Sham 非占轨道的泛函。这是“Jacob 阶梯”最接近化学精度“天堂”的一阶。这类泛函相比于杂化泛函，在反应势垒、弱相互作用等问题上有明显的提升；在各种测评计算上，这类泛函表现通常最为优异。由于它杂糅了严格交换能之外的部分严格相关效应，这类泛函也称为双杂化泛函 (Doubly Hybrid, DH)。这类泛函的典型是 B2PLYP\cite{Grimme-Grimme.JCP.2006}、XYG3\cite{Zhang-Goddard.PNAS.2009}、$\omega$B97M(2)\cite{Mardirossian-Head-Gordon.JCP.2018} 等。
 \end{enumerate}

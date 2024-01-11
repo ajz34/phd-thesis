@@ -19,17 +19,44 @@
 
 \subsection{引言}
 
-在上一章中，我们已经了解静态极化率的意义、其物理定义与计算策略、以及精确的理论计算极化率的具体实现方法。我们还注意到，静态极化率是现在机器学习方法在化学中应用的重要标准之一；许多机器学习方法都将静态极化率作为学习目标\cite{Ramakrishnan-Lilienfeld.SD.2014, Gilmer-Dahl.ICML.2017, Faber-Lilienfeld.JCTC.2017, Schuett-Mueller.NIPS.2017, Schuett-Mueller.JCP.2018, Wilkins-Ceriotti.PNAS.2019, Schuett-Gastegger.arXiv.2021, Zhang-Jiang.Elsevier.2023, Zou-Hu.NCS.2023}。作为二维张量，静态极化率是最基本的具有等变性的分子性质之一；因此对它的正确描述也可以验证机器学习网络的等变性、以及确认等变网络参数的有效性\cite{Cohen-Welling.arXiv.2016, Schuett-Gastegger.arXiv.2021, Brandstetter-Welling.arXiv.2022, Geiger-Smidt.arXiv.2022}。同时，作为参数化方法的学习目标，一些分子力学方法也对电子结构方法的极化率精确性有较高的需求\cite{Halgren-Damm.COSB.2001, Baker-Baker.WCMS.2015, Goloviznina-Padua.JCTC.2019, Schauperl-Gilson.CC.2020}。在大数据与 AI for Science 盛行的时代，可信的、大通量高效的、通过精确的电子结构方法计算得到的静态极化率，将会、或已经成为亟待解决的重要需求。
+在上一章中，我们已经了解静态极化率的意义、其物理定义与计算策略、以及精确的理论计算极化率的具体实现方法。我们还注意到，静态极化率是现在机器学习方法在化学中应用的重要标准之一；许多机器学习方法都将静态极化率作为学习目标\cite{Ramakrishnan-Lilienfeld.SD.2014, Gilmer-Dahl.ICML.2017, Faber-Lilienfeld.JCTC.2017, Schuett-Mueller.NIPS.2017, Schuett-Mueller.JCP.2018, Wilkins-Ceriotti.PNAS.2019, Schuett-Gastegger.arXiv.2021, Zhang-Jiang.Elsevier.2023, Zou-Hu.NCS.2023}。作为二维张量，静态极化率是最基本的具有等变性的分子性质之一；因此对它的正确描述也可以验证机器学习网络的等变性、以及确认等变网络参数的有效性\cite{Cohen-Welling.arXiv.2016, Schuett-Gastegger.arXiv.2021, Brandstetter-Welling.arXiv.2022, Geiger-Smidt.arXiv.2022}。同时，作为参数化方法的学习目标，一些分子力学方法也对电子结构方法的极化率精确性有较高的需求\cite{Halgren-Damm.COSB.2001, Baker-Baker.WCMS.2015, Goloviznina-Padua.JCTC.2019, Schauperl-Gilson.CC.2020}。在大数据与 AI for Science 思潮盛行的时代，可信的、大通量高效的、通过精确的电子结构方法计算得到的静态极化率，将会、或已经成为亟待解决的重要需求。
 
 尽管上一章中发展的 FPA 策略、以及其给出的 CCSD(T)/CBS 级别精确的极化率相当重要，但 CCSD(T) 计算消耗仍然十分巨大；若要将极化率计算应用到更大的体系，或者提升精确极化率计算的效率，则需要计算量更小的基组或电子结构方法。密度泛函近似在计算量与精度上，是普遍为计算化学与固体物理应用工作者所接受的方法；它有希望成为解决大量精确计算静态极化率问题的方法。
 
 如第一章所述，双杂化泛函已经在许多化学反应能量与分子性质的测评上，展现出良好的结果。如第三章所述，双杂化泛函的极化率计算尽管相比于杂化泛函更为耗时，但对于 2000 基组大小以内的中等体系是可以接受的，这也契合目前流行的诸多大数据集 20 重原子以内的分子大小\cite{Ruddigkeit-Reymond.JCIM.2012, Ramakrishnan-Lilienfeld.SD.2014, Bowman-Yu.JCP.2022, Zou-Hu.NCS.2023}。因此，双杂化泛函从计算效率上，应可以胜任静态极化率的大规模计算。对于偏重无机小分子与自旋极化分子的 HH132 数据集，Hait 与 Head-Gordon 的测评结果展示了双杂化泛函、特别是 xDH 型泛函在静态极化率计算结果相当精确\cite{Hait-Head-Gordon.PCCP.2018}。
 
-本章将拓展静态极化率测评结果，以更全面地展示密度泛函的精确性、以及如何高效但不失精度地计算静态极化率。在一定的、可容忍的误差范围内，使用合理大小的基组，可以有效地以较小的代价实现极化率的计算；\ref{sec.6.basis-converg} 节将对典型的双杂化泛函，B2PLYP 泛函与 xDH@B3LYP 类型泛函，对于静态极化率问题作基组误差分析，以探讨基组对计算精度的影响。目前基于高精度 CCSD(T)/CBS 精度的测评，仅涉及到少量双杂化泛函以及 HH132\cite{Hait-Head-Gordon.PCCP.2018} 为代表的小型无机分子；\ref{sec.6.benchmark} 节将基于第五章的 CCSD(T)/CBS 精度的参考值，拓展数据集到 HR46\cite{Hickey-Rowley.JPCA.2014} 与 T144\cite{Wu-Thakkar.CPL.2015}，测评包括更多双杂化泛函在内的诸密度泛函近似在静态极化率上的表现。
+本章将拓展静态极化率测评结果，以更全面地展示密度泛函的精确性、以及如何高效但不失精度地计算静态极化率。在一定的、可容忍的误差范围内，使用合理大小的基组，可以有效地以较小的代价实现极化率的计算；\ref{sec.6.basis-converg} 节将对典型的双杂化泛函，B2PLYP 泛函与 xDH@B3LYP 类型泛函，对于静态极化率问题作基组误差分析，以探讨基组对计算精度的影响。目前基于高精度 CCSD(T)/CBS 精度的测评，仅涉及到少量双杂化泛函以及 HH132\cite{Hait-Head-Gordon.PCCP.2018} 为代表的小型无机分子；\ref{sec.6.benchmark} 节将基于第五章的 CCSD(T)/CBS 精度的参考值，拓展数据集到 HR46\cite{Hickey-Rowley.JPCA.2014} 与 T144\cite{Wu-Thakkar.CPL.2015}，测评包括更多双杂化泛函在内的诸密度泛函近似在静态极化率上的表现。对于分子性质的测评，最终应服务于密度泛函的发展；作为最初步的探索，\ref{sec.6.pol-xdh-optimize} 节将基于 xDH@B3LYP 参数化模型\cite{Zhang-Xu.JPCL.2021}，仅针对极化率测评表现进行参数优化，探究 xDH@B3LYP 模式在极化率问题上的极限。
 
 \subsection{实现细节}
 
 本章工作继承第五章工作；大多数实现细节上也参考\alert{第五章的细节}。需要额外说明或有所不同的实现细节列出如下。
+
+\subsubsection{数据集}
+
+本章将测评 HR46\cite{Hickey-Rowley.JPCA.2014} 与 T144\cite{Wu-Thakkar.CPL.2015} 数据集。这两个数据集的 CCSD(T) 方法 FPA-aV[DT]Z、FPA-aV[TQ]Z 或 FPA-aV[Q5]Z 级别下计算得到的同性极化率 $\alpha$、异性极化率 $\gamma$ 的参考值已由\alert{第五章表格}给出。
+
+本章工作也对 HH132 数据集\cite{Hait-Head-Gordon.PCCP.2018}的部分分子作测评与分析。由于诸多原因，HH132 中实际被测评的分子是 75 个自旋非极化分子、以及 26 个自旋极化分子，总共 101 个分子。详细说明见 \ref{sec.6.supp-HH132-remove} 节的讨论。本章后续将称该数据集为 HH101 数据集；对该数据集的误差讨论与分析中，将区分 75 个自旋极化 (SP, \underline{S}pin-\underline{P}olarized) 与 26 个自旋非极化分子 (NSP, \underline{N}on-\underline{S}pin-\underline{P}olarized)。该数据集的参考值是 CCSD(T) 方法 aCV[TQ]Z 或 aCV[Q5]Z 计算得到。
+
+\subsubsection{电子结构计算}
+
+本工作测评的极化率是解析梯度计算得到的结果。程序通过 \textsc{PySCF} (介于 2.1.0 到 2.4.0 版本)\cite{Sun-Chan.WCMS.2018, Sun-Chan.JCP.2020}以及扩展程序脚本 \textsc{dh} (commit 80ca9e8)\cite{dh.ajz34} 实现。对于所有泛函，DFT 积分所使用的密度格点为第 4 级 (默认修剪、第一周期 (60, 434)、第二周期 (90, 590)、第三周期 (95, 590))。辅助基组均使用 ETB 自动生成基组\cite{Stoychev-Neese.JCTC.2017}。在极化率测评中，基组统一使用 aug-pc-3\cite{Jensen-Jensen.JCP.2001, Jensen-Jensen.JCP.2002, Jensen-Jensen.JCP.2002a, Jensen-Helgaker.JCP.2004, Jensen-Jensen.JPCA.2007, Jensen-Jensen.JCP.2012}；在基组误差分析中，我们将使用 aCV$X$Z ($X = \mathrm{D, T, Q, 5}$) 与 aug-pc-$n$ ($n = 1, 2, 3, 4$) 基组\alert{基组文献}；所使用到的 CBS 模型与上一章的 \alert{公式 5.7 或 5.2.6 节} 相同，且 CBS 外推仅针对相关贡献部分、而对自洽场部分不作外推。后续文段中，我们将简记基组 aug-pc-$n$ 为 apc$n$ ($n = 1, 2, 3, 4$)。
+
+本工作测评并汇报 62 个密度泛函近似的极化率误差结果。被测评泛函分布如图 \ref{fig.6.pol-functionals-distribution} 所示。我们尽可能对目前流行的、且在 \textsc{dh} 程序中实现的双杂化泛函做极化率测评；涉及到 B95 的双杂化泛函由于部分体系存在收敛问题，本工作暂不纳入 \textsc{dh} 程序已经实现的 DSD-PBEB95-D3BJ 与 PWPB95-D3Zero 泛函；对于 $\omega$B97X-2 泛函，我们仅测评其 TQZ 版本。本工作所涉及到的低阶泛函包括
+\begin{itemize}[nosep]
+    \item mBEEF, MVS, SCAN, MPW1K, PBE50, SCAN0, MPW91, N12 等泛函是 HH132 测评工作\cite{Hait-Head-Gordon.PCCP.2018}中表现较好的 GGA 或 mGGA 泛函；
+    \item M11, M06-2X 是 T145 测评工作\cite{Wu-Thakkar.CPL.2015}中表现较好的泛函；
+    \item PBE, BLYP, TPSS, N12, M06-L, B3LYP, PBE0, M06, TPSSh, MN15, CAM-B3LYP, $\omega$B97M-V 等泛函是目前计算化学应用的常见泛函。
+\end{itemize}
+对于 $\omega$B97M-V 泛函，本工作的计算不考虑其 VV10 贡献项。
+
+我们同时对 HF、MP2、CCSD 的极化率表现作测评。对于 HH101 数据集，计算结果取自 Hait 与 Head-Gordon 的工作的 aCV[TQ]Z 或 aCV[Q5]Z 计算结果。对于 HR46 与 T144 数据集，计算结果取自第五章工作；即 HF 与 MP2 使用 aCV[Q5]Z 计算结果，CCSD 使用 FPA-aV[DT]Z、FPA-aV[TQ]Z 或 FPA-aV[Q5]Z 计算结果。
+
+\begin{figure}[hp]
+    \centering
+    \caption{本工作测评泛函的大致分类与数量示意图。}
+    \label{fig.6.pol-functionals-distribution}
+    \includegraphics[width=0.6\textwidth]{assets/pol-functionals-distribution.pdf}
+\end{figure}
 
 \subsubsection{误差测评标准}
 
@@ -45,15 +72,45 @@ $$
 尽管一般来说两者数值上非常接近、且几乎不会影响泛函测评表现。在本工作中，我们使用 HH132 原文献式 (3) 的表述、或者等价地使用 RelRMSD 对数据集的极化率分量 $\alpha_{xx}, \alpha_{yy}, \alpha_{zz}$ 作测评。
 }。
 
-\subsubsection{数据集}
+由于我们将测评多种数据集以及多种类型的极化率；为简化分析，这里定义加权相对误差 WTRE (\underline{W}eigh\underline{T}ed \underline{R}elative \underline{E}rror) 以对泛函的总体极化率误差进行合适的排序。对于数据集以及其对应的测评性质 $d$，泛函 $f$ 的相对方均根误差 RelRMSD 的测评结果 $\epsilon_{f,d}$，泛函的加权相对误差是
+\begin{equation}
+    \label{eq.6.wtre}
+    \mathrm{WTRE}_f = \sum_d w_d \epsilon_{f,d}
+\end{equation}
+具体的测评性质 $d$、以及权重 $w_d$ 定义如表 \ref{tab.6.benchmark-weight} 所示。WTRE 是无量纲量，也并非百分比误差。权重 $w_d$ 定义为反比于本工作所测评泛函的平均 RelRMSD 误差的量：
+\begin{equation}
+    w_d = \frac{1}{\mathrm{count} \{ d \}} \frac{1}{\mathrm{count} \{ f \}} \frac{1}{\displaystyle \sum_{f} \epsilon_{f,d}}
+\end{equation}
+其中，$\mathrm{count} \{ d \} = 8$ 是指 8 个被测评的性质 (参考表 \ref{tab.6.benchmark-weight})，$\mathrm{count} \{ f \}$ 是指被测评的 64 个泛函 (参考图 \ref{fig.6.pol-functionals-distribution})。在此定义下，本工作所测评的泛函 WTRE 误差的平均值是 1，即
+\begin{equation*}
+    \frac{1}{\mathrm{count} \{ f \}} \sum_f \mathrm{WTRE}_f = 1
+\end{equation*}
+若泛函 $f$ 所对应的加权误差 $\mathrm{WTRE}_f$ 越小，则泛函 $f$ 的总体极化率表现越好；若 $\mathrm{WTRE}_f$ 接近 1，则表明泛函 $f$ 的测评表现处于平均水平。
 
-本章将测评 HR46\cite{Hickey-Rowley.JPCA.2014} 与 T144\cite{Wu-Thakkar.CPL.2015} 数据集。这两个数据集的同性极化率 $\alpha$、异性极化率 $\gamma$ 的参考值已由\alert{第五章表格}给出。
+\begin{table}[ht]
+    \centering
+    \caption{极化率测评权重表。}
+    \label{tab.6.benchmark-weight}
+    \begin{tabular}{lld{3.8}}
+    \hline
+    property    & dataset ($d$) & \multicolumn{1}{c}{weight ($w_d$)} \\ \hline
+    isotropic   & HR46        & 0.0618371 \\
+                & T144        & 0.0548781 \\
+                & HH101 (NSP) & 0.0382151 \\
+                & HH101 (SP)  & 0.0326924 \\ \hdashline
+    anisotropic\tabnote{a} & HR46        & 0.0245850 \\
+                & T144        & 0.0250915 \\ \hdashline
+    components  & HH101 (NSP) & 0.0370998 \\
+                & HH101 (SP)  & 0.0298901 \\ \hline
+    \end{tabular}
 
-本章工作也对 HH132 数据集\cite{Hait-Head-Gordon.PCCP.2018}的部分分子作测评与分析。由于诸多原因，HH132 中实际被测评的分子是 75 个自旋非极化分子、以及 26 个自旋极化分子，总共 101 个分子。详细说明见 \ref{sec.6.supp-HH132-remove} 节的讨论。本章后续将称该数据集为 HH101 数据集；对该数据集的误差讨论与分析中，将区分 75 个自旋极化 (SP, \underline{S}pin-\underline{P}olarized) 与 26 个自旋非极化分子 (NSP, \underline{N}on-\underline{S}pin-\underline{P}olarized)。
+    \raggedright
+    \par\tabnote{a} 部分分子异向极化率 $\gamma$ 小于 0.5 \AA${}^3$，不适合作相对误差分析；因此对于异向极化率，HR46 数据集总共测评 39 个分子 (除去 \ce{H2O}, \ce{CH4}, \ce{CH3F}, \ce{PH2}, \ce{H2S}, \ce{SiH4}, \ce{NH3} 共七个分子)，T144 数据集总共测评 141 个分子 (除去 0351 \ce{C2H5F}, 0353 \ce{CH3F}, 0998 \ce{CF3CHF2} 共三个分子)。
+\end{table}
 
-\subsubsection{电子结构计算}
+\subsubsection{泛函参数优化}
 
-本工作的极化率使用解析结果。程序通过 \textsc{PySCF} (介于 2.1.0 到 2.4.0 版本)\cite{Sun-Chan.WCMS.2018, Sun-Chan.JCP.2020}以及扩展程序脚本 \textsc{dh} (commit 80ca9e8)\cite{dh.ajz34} 实现。对于所有泛函，DFT 积分所使用的密度格点为第 4 级 (默认修剪、第一周期 (60, 434)、第二周期 (90, 590)、第三周期 (95, 590))。辅助基组均使用 ETB 自动生成基组\cite{Stoychev-Neese.JCTC.2017}。在极化率测评中，基组统一使用 aug-pc-3\cite{Jensen-Jensen.JCP.2001, Jensen-Jensen.JCP.2002, Jensen-Jensen.JCP.2002a, Jensen-Helgaker.JCP.2004, Jensen-Jensen.JPCA.2007, Jensen-Jensen.JCP.2012}；在基组误差分析中，我们将使用 aCV$X$Z ($X = \mathrm{D, T, Q, 5}$) 与 aug-pc-$n$ ($n = 1, 2, 3, 4$) 基组\alert{基组文献}；所使用到的 CBS 模型与上一章的 \alert{公式 5.7 或 5.2.6 节} 相同，且 CBS 外推仅针对相关贡献部分、而对自洽场部分不作外推。后续文段中，我们将简记基组 aug-pc-$n$ 为 apc$n$ ($n = 1, 2, 3, 4$)。
+本工作将会简要地考察泛函的参数调整问题。我们选用 \textsc{SciPy}\cite{Virtanen-Vazquez-Baeza.NM.2020} 进行泛函参数的优化。优化算法选用 L-BFGS-B 算法\cite{Byrd-Zhu.SJSC.1995}，收敛判标是参数梯度模长 (\verb|gtol|) 小于 $10^{-5}$。我们采用简单的全局优化方法，即在优化后的泛函参数上施加不超过 0.5 的随机参数系数再次优化，反复 20 次，并汇报取得最低 $\mathrm{WTRE}_f$ 时的泛函参数。
 
 \subsection{典型双杂化泛函静态极化率基组误差分析}
 \label{sec.6.basis-converg}
@@ -139,10 +196,10 @@ HR46 与 T144 大多数分子为有机分子、且分子大小较大，两个数
     \end{tabular}
 
     \raggedright
-    \par\tabnote{a} 该表格的图例参考表 \ref{tab.6.b2p-conv-hr46-t144-iso}。部分分子异向极化率小于 0.5 \AA${}^3$，不适合作相对误差分析；因此 HR46 数据集总共测评 39 个分子 (除去 \ce{H2O}, \ce{CH4}, \ce{CH3F}, \ce{PH2}, \ce{H2S}, \ce{SiH4}, \ce{NH3} 共七个分子)，T144 数据集总共测评 141 个分子 (除去 0351 \ce{C2H5F}, 0353 \ce{CH3F}, 0998 \ce{CF3CHF2} 共三个分子)。
+    \par\tabnote{a} 该表格的图例参考表 \ref{tab.6.b2p-conv-hr46-t144-iso}。
 \end{table}
 
-可以看到，若不考虑计算量相当大的 5-$\zeta$ 基组或 CBS 方法，对于双杂化总极化率 $\alpha_\textsf{DH}$ 或 $\gamma_\textsf{DH}$，Jensen 基组 apc$n$ ($n = 1, 2, 3$) 通常比 Dunning 基组 aCV$X$Z ($X = \mathrm{D, T, Q}$) 在相同的基组基数 $\zeta$ 下，有更低的误差 (例外是 T144 数据集 4-$\zeta$ 下同性极化率 $\alpha_\textsf{DH}$ 的相对方均根误差)。而同时注意到，对于相同的基组基数 $\zeta$，Jensen 基组 apc$n$ 的大小通常小于 Dunning 基组 aCV$X$Z；因此对于 2,3,4-$\zeta$ 的情形，Jensen 基组 apc$n$ 在极化率计算问题上，不论是性能需求还是误差都要好于 Dunning 基组 aCV$X$Z。
+可以看到，若不考虑计算量相当大的 5-$\zeta$ 基组或 CBS 方法，对于双杂化泛函总极化率 $\alpha_\textsf{DH}$ 或 $\gamma_\textsf{DH}$，Jensen 基组 apc$n$ ($n = 1, 2, 3$) 通常比 Dunning 基组 aCV$X$Z ($X = \mathrm{D, T, Q}$) 在相同的基组基数 $\zeta$ 下，有更低的误差 (例外是 T144 数据集 4-$\zeta$ 下同性极化率 $\alpha_\textsf{DH}$ 的相对方均根误差)。而同时注意到，对于相同的基组基数 $\zeta$，Jensen 基组 apc$n$ 的大小通常小于 Dunning 基组 aCV$X$Z；因此对于 2,3,4-$\zeta$ 的情形，Jensen 基组 apc$n$ 在极化率计算问题上，不论是性能需求还是误差都要好于 Dunning 基组 aCV$X$Z。
 
 在\alert{第五章与其表格}对小分子体系 MP2 极化率的基组误差分析中，HF 方法的极化率 $\alpha_\textsf{HF}$ 与 $\gamma_\textsf{HF}$ 的误差，随着基组基数 $\zeta$ 的增大而快速减小。而相对地，MP2 的相关贡献 $\Delta \alpha_\textsf{(2)}$ 与 $\Delta \gamma_\textsf{(2)}$ 的收敛趋势较慢；对于同性极化率 $\Delta \alpha_\textsf{(2)}$ 的误差在 4,5-$\zeta$ 下远远大于 $\alpha_\textsf{HF}$。而对于 HR46 与 T144 数据集的 B2PLYP 计算下，二阶微扰贡献 $\Delta \alpha_\textsf{PT2}$ 与 $\Delta \gamma_\textsf{PT2}$ 的误差相比于自洽场部分 $\alpha_\textsf{SCF}$ 与 $\gamma_\textsf{SCF}$ 一般来说相当或更小。注意到 B2PLYP 泛函的二阶微扰贡献系数 $c_\mathrm{c} = 0.27$，因此尽管二阶微扰本身的收敛趋势较慢、但在系数的缩放下并没有体现出很大的误差。
 
@@ -152,7 +209,7 @@ CBS 外推模型在 4-$\zeta$ 的基组基数下有较好的效果：相对于�
 
 尽管 CBS 外推模型在 4-$\zeta$ 基组基数下有良好表现，但注意到 4-$\zeta$ 基组 aCVQZ、apc3 本身的计算误差也仅有不到 0.2\%，CBS 外推的优势比较有限。因此，我们认为对于 HR46 与 T144 数据集，使用 4-$\zeta$ 基组 aCVQZ、apc3 进行双杂化泛函的计算，误差较低且远低于实验误差的 0.5\%，是适合用于测评的基组。而对于 3-$\zeta$，若分别考察 $\alpha_\textsf{SCF}$ 与 $\Delta \alpha_\textsf{PT2}$ 分别的误差并作加和，则对于 HR46 数据集的 aCVTZ 或 aCV[DT]Z 误差在 0.65\% 左右，HR46 数据集的 apc2 或 apc[12]、以及 T144 数据集的 3-$\zeta$ 基组或 CBS 外推模型的误差在 0.40\% 左右。apc2 或 apc[12] 的误差尽管小于实验误差的 0.5\%，但幅度不是很大。我们认为，apc2 或 apc[12] 也是可以接受的；但在计算量可接受的情形下，应尽可能使用 4-$\zeta$ 基组或 CBS 外推模型。
 
-最后，我们指出，表 \ref{tab.6.b2p-conv-hr46-t144-iso} 与表 \ref{tab.6.b2p-conv-hr46-t144-aniso} 的数据将表明 5-$\zeta$ 情形下 Jensen 基组 apc4 与 apc[34] 的误差普遍比 Dunning 基组 aCV5Z 更大；并且尽管 apc4 与 apc[34] 计算代价更大，其误差并未比 apc3 与 apc[23] 更进步、甚至误差更大。对此，我们认为，5-$\zeta$ 情形下 Jensen 基组与 Dunning 基组之间的误差反映的是 5-$\zeta$ 级别基组的基组不完备程度；这个不完备程度一般小于 0.15\%，且远小于 0.5\% 的实验误差，这是完全可以接受的误差范围。除此之外，这里作 B2PLYP 基组误差分析的目的，是确认一种在可接受误差的前提下计算效率更高的基组、以及确定基组误差对双杂化泛函测评的影响；当基组达到 4-$\zeta$ 或更大时，其极化率相对误差已经远小于 0.5\%，不会对泛函测评的结果产生明显影响。关于 5-$\zeta$ 级别基组或 CBS 外推方法精度的更多分析，我们在\alert{附录}中展开。
+最后，我们指出，表 \ref{tab.6.b2p-conv-hr46-t144-iso} 与表 \ref{tab.6.b2p-conv-hr46-t144-aniso} 的数据将表明 5-$\zeta$ 情形下 Jensen 基组 apc4 与 apc[34] 的误差普遍比 Dunning 基组 aCV5Z 更大；并且尽管 apc4 与 apc[34] 计算代价更大，其误差并未比 apc3 与 apc[23] 更进步、甚至误差更大。对此，我们认为，5-$\zeta$ 情形下 Jensen 基组与 Dunning 基组之间的误差反映的是 5-$\zeta$ 级别基组的基组不完备程度；这个不完备程度一般小于 0.2\%，且远小于 0.5\% 的实验误差，这是完全可以接受的误差范围。除此之外，这里作 B2PLYP 基组误差分析的目的，是确认一种在可接受误差的前提下计算效率更高的基组、以及确定基组误差对双杂化泛函测评的影响；当基组达到 4-$\zeta$ 或更大时，其极化率相对误差已经远小于 0.5\%，不会对泛函测评的结果产生明显影响。关于 5-$\zeta$ 级别基组或 CBS 外推方法精度的更多分析，我们在\alert{附录}中展开。
 
 \subsubsection{HH101 数据集分析}
 
@@ -208,6 +265,138 @@ B2PLYP 是典型的双杂化泛函；其他各式各色双杂化泛函的严格�
 \subsection{密度泛函的静态极化率测评}
 \label{sec.6.benchmark}
 
+这一节对诸多密度泛函在静态极化率上的测评表现作讨论。详细的测评数据在附录的表 \ref{tab.6.full-benchmark} 中呈现；这里将对该表格数据作整理与分析。
+
+\subsubsection{总体误差测评与讨论}
+
+\begin{figure}[hp]
+    \centering
+    \caption{诸双杂化泛函 (DH) 与诸低阶泛函 (low-rung DFA) 泛函极化率数据集相对方均根误差 (RelRMSD) 测评表现图。小提琴图的数据密度建模方式是 Gaussian 核，参数 \texttt{bw\_method} 设为 0.2。箱型图展示了密度泛函测评误差的 1/4 位次、中位次、3/4 位次误差。图例中括号数字表示其对应分类被测评的泛函数量。}
+    \label{fig.6.benchmark-compare-dh-low}
+    \includegraphics[width=0.8\textwidth]{assets/benchmark-compare-dh-low.pdf}
+\end{figure}
+
+首先对所有泛函总体表现作简要的测评。图 \ref{fig.6.benchmark-compare-dh-low} 展示了双杂化泛函与低阶泛函的总体误差表现、以及这两者之间的对比情况：
+\begin{itemize}[nosep]
+    \item 对于所有泛函，HR46 与 T144 数据集的异性极化率 $\gamma$ 误差都大于同性极化率 $\alpha$ 误差。对于双杂化泛函，HR46 与 T144 数据集的异性极化率 $\gamma$ 误差平均比同性极化率 $\alpha$ 误差分别大 2.14\% 与 1.69\%；对于低阶泛函，误差分别增大了 4.43\% 与 4.80\%。这也意味着同性极化率 $\alpha$ 与异性极化率 $\gamma$ 的误差表现有必要分开讨论。
+    \item 对于所有泛函，HH101 数据集的分量 $\alpha_{xx}, \alpha_{yy}, \alpha_{zz}$ 大于同性极化率 $\alpha$ 误差；但增幅并不大，且泛函误差分布情况也非常相近。对于双杂化泛函，HH101 数据集的自旋非极化 (NSP) 与极化 (SP) 子集的分量 $\alpha_{xx}, \alpha_{yy}, \alpha_{zz}$ 误差平均比同性极化率 $\alpha$ 误差分别大 0.06\% 与 0.28\%；对于低阶泛函，误差分别增大了 0.17\% 与 0.45\%。因此，尽管分量 $\alpha_{xx}, \alpha_{yy}, \alpha_{zz}$ 作为与同性极化率 $\alpha$ 不同的测评标准，其测评结果可以一定程度地反映极化率在各分量上的表现；但其测评结果与同性极化率 $\alpha$ 非常相近。
+    \item 双杂化泛函在所有数据集上的表现明显优于低阶泛函；即使是如 MPW1K、SCAN0 等低阶泛函中表现最好的泛函，其误差也仍然高于所测评的双杂化泛函误差的中位数。
+    \item 双杂化泛函中表现最好的泛函，可以在 HR46、HH101 数据集上与 CCSD 有相近的良好误差表现，在 T144 数据集上与 MP2 有相近的良好误差表现。
+\end{itemize}
+
+在极化率计算问题上，双杂化泛函的计算误差显著小于低阶泛函；而相比于高精度波函数方法，双杂化泛函可能同时大幅降低计算量、但同时有更精准的计算结果。对于双杂化泛函优异的极化率表现，我们对此作如下理解。
+
+回顾第三章，xDH 泛函的静态电性质的计算可以归结为分子总能量 $E^\textsf{xDH}$ 对外场 $\mathbb{A}$ 的梯度计算；偶极矩 $t \in \{ x, y, z \}$ 分量的计算可以化归为问题
+\begin{equation*}
+    \mu_t^\textsf{xDH} = \partial_{\mathcal{E}_t} E^\textsf{xDH} = D_{pq}^\textsf{xDH} F_{pq}^{\mathcal{E}_t} + \partial_{\mathcal{E}_t} E^\textsf{non-elec}
+\end{equation*}
+该式的 $\partial_{\mathcal{E}_t} E^\textsf{non-elec}$ 一般情况下是原子核受外电场影响下的能量变化，与电子结构方法无关。如果将分子轨道下的密度矩阵作基变换到原子轨道下：
+\begin{equation*}
+    D_{\mu \nu}^\textsf{xDH} = D_{pq}^\textsf{xDH} C_{\mu p} C_{\nu q}
+\end{equation*}
+则偶极矩的计算问题可以继续化归为
+\begin{equation}
+    \mu_t^\textsf{xDH} = D_{\mu \nu}^\textsf{xDH} F_{\mu \nu}^{\mathcal{E}_t} + \partial_{\mathcal{E}_t} E^\textsf{non-elec}
+\end{equation}
+其中 $F_{\mu \nu}^{\mathcal{E}_t}$ 作为电性质 Skeleton 导数，也仅与分子结构有关，而与电子结构无关。因而，可以左右计算电子结构在偶极矩计算问题上计算表现的唯一变量，是该方法的弛豫密度矩阵 $D_{\mu \nu}^\textsf{xDH}$。对于 bDH 型泛函、以及低阶泛函，它们可以看做是 xDH 泛函的退化形式，即上式对 bDH 与低阶泛函也同样成立。作为密度矩阵的导出量，第四章的测评已经表明双杂化泛函的密度 $\rho^\textsf{xDH} (\bm{r}) = D_{\mu \nu}^\textsf{xDH} \phi_\mu (\bm{r}) \phi_\nu (\bm{r})$ 及其关于空间坐标的梯度，有良好的表现；而在 Hait 与 Head-Gordon 的工作\cite{Hait-Head-Gordon.JCTC.2018}中，双杂化泛函也有良好的偶极矩测评结果。
+
+极化率分量 $t, s \in \{ x, y, z \}$ 则是偶极矩在偶极外场下的梯度：
+\begin{equation*}
+    \alpha_{ts} = - \partial_{\mathcal{E}_s} \partial_{\mathcal{E}_t} E^\textsf{xDH} = - \big( \partial_{\mathcal{E}_s} D_{\mu \nu}^\textsf{xDH} \big) F_{\mu \nu}^{\mathcal{E}_t}
+\end{equation*}
+因此，与偶极矩类似地，可以左右计算电子结构在极化率计算问题上计算表现的唯一变量，是该方法弛豫密度矩阵在偶极电场下的微扰响应 $\partial_{\mathcal{E}_s} D_{\mu \nu}^\textsf{xDH}$。因此，我们认为双杂化泛函在极化率计算问题上有良好的表现，其根本的原因是对 $\partial_{\mathcal{E}_s} D_{\mu \nu}^\textsf{xDH}$ 有成功的描述。
+
+\subsubsection{双杂化泛函误差测评与讨论}
+
+\begin{figure}[hp]
+    \centering
+    \caption{诸 XYG3 型双杂化泛函 (xDH) 与诸 B2PLYP 型双杂化泛函 (bDH) 泛函极化率数据集相对方均根误差 (RelRMSD) 测评表现图。图例参考图 \ref{fig.6.benchmark-compare-dh-low}。}
+    \label{fig.6.benchmark-compare-xdh-bdh}
+    \includegraphics[width=0.8\textwidth]{assets/benchmark-compare-xdh-bdh.pdf}
+\end{figure}
+
+随后对不同类型的双杂化的误差作更细致的讨论。图 \ref{fig.6.benchmark-compare-xdh-bdh} 展示了 xDH 型泛函与 bDH 型泛函误差的比较示意图。可以看到，对于 HR46 同性极化率 $\alpha$、T144 数据集以及 HH101 自旋非极化分子子集，比之于 bDH 型泛函，xDH 型泛函的总体表现与最低误差都更好。作为特例，在 HR46 异性极化率 $\gamma$ 数据集上，DSD-PBEPBE-D3BJ 的 RelRMSD 误差是 2.23\%，比 xDH 型泛函中误差最低的 revXYG3 (2.49\%) 更低一些；但除此泛函以及 DSD-PBEP86-D3BJ (2.56\%) 之外，其余的 bDH 型泛函误差都比除 XYG-OS5 (3.68\%) 外的所有经测评的 xDH 泛函误差更大。因此，我们认为，诸多 xDH 型泛函在 HR46 与 T144 等中等分子的、以自旋非极化体系为主的数据集上，不论是同性极化率 $\alpha$ 还是异性极化率 $\gamma$，都有较为稳定且优异的误差表现。
+
+但 HH101 自旋极化分子子集上，xDH 泛函尽管在平均表现上比 bDH 型泛函更好，但更多的 bDH 型泛函在该数据集上展现出优势。为简化讨论，我们仅考察 HH101 自旋极化子集的同性极化率 $\alpha$ 测评结果。在该数据集上，表现较好的 xDH 型泛函是 XYG7 (1.58\%)、XYGJ-OS (1.59\%)、XYG6 (1.91\%)；而 bDH 型泛函中，$\omega$PBEPP86 (0.95\%)、$\omega$B88PP86 (1.13\%)、DSD-PBEP86-D3BJ (1.32\%)、DSD-PBEPBE-D3BJ (1.41\%) 的表现相当出色。除此之外，$\omega$B2GP-PLYP (1.83\%) 也有较好的误差表现。我们注意到，$\omega$PBEPP86、$\omega$B88PP86、$\omega$B2GP-PLYP 等泛函在交换部分包含长短程矫正。
+
+\begin{figure}[hp]
+    \centering
+    \caption{诸 bDH 型双杂化泛函依交换部分是否为 RSH 型泛函而分类的极化率数据集相对方均根误差 (RelRMSD) 测评表现图。图例参考图 \ref{fig.6.benchmark-compare-dh-low}。}
+    \label{fig.6.benchmark-compare-dh-rsh}
+    \includegraphics[width=0.8\textwidth]{assets/benchmark-compare-dh-rsh.pdf}
+\end{figure}
+
+由于本工作不涉及交换部分 RSH 型的 xDH 型泛函，因此这里在测评交换部分 RSH 对极化率误差表现时，我们仅考察 bDH 型双杂化泛函。误差表现展示于图 \ref{fig.6.benchmark-compare-dh-rsh}。可以发现，RSH 项的引入确实提升了部分泛函在 HH101 自旋非极化数据集的测评表现，但交换部分 RSH 型泛函总体表现并非总是比非 RSH 型泛函更具有优势。我们还发现，交换部分 RSH 型泛函的测评表现与泛函的构成风格有较大关系：
+\begin{itemize}[nosep]
+    \item RSX-QIDH、SOS-RSX-PBE-QIDH 等泛函是非参数优化的泛函；它们的表现相对一般；
+    \item $\omega$PBEPP86、$\omega$B88PP86、$\omega$B2GP-PLYP、$\omega$B2PLYP 等泛函是专门针对激发态计算所优化；这些泛函在 HH101 数据集上有较好的表现；
+    \item RS-B88-LYP、RS-PBE-PBE、RS-PBE-P86、RS-PW91-PW91 等泛函也专门针对激发态作优化，但在泛函形式上还包含相关部分 RSH 的贡献；这些泛函在 T144 数据集上有较好的表现，但在 HH101 自旋极化子集上表现较差。
+\end{itemize}
+因此，尽管对双杂化泛函引入 RSH 项，确实可以提升部分静态极化率数据集的评测表现；但 RSH 项并非唯一的影响因素、也并非能保证在所有静态极化率计算问题上有所提升。
+
+\subsection{xDH@B3LYP 模型静态极化率参数优化}
+\label{sec.6.pol-xdh-optimize}
+
+这一节将基于 xDH@B3LYP 参数化模型\cite{Zhang-Xu.JPCL.2021}，仅针对极化率测评表现进行参数优化。需要指出，本节所涉及的泛函名称 (如 XYG7、B3LYP 等) 可能指代其对应的参数化模型，而并非指代业已发表的泛函本身。本节的参数优化仅适用于静态极化率测评与分析；既不额外引入基于能量或结构等测评结果、也未引入对泛函公式形式的物理限制的前提下，我们认为这里的泛函参数优化过程并非是对普适泛函的一种逼近策略。
+
+表 \ref{tab.6.xdh-b3lyp-polar-opt} 展示了针对极化率的加权相对误差量标 WTRE，xDH@B3LYP 模型下的参数优化结果与测评误差。可以看到，
+\begin{itemize}[nosep]
+    \item 原始的 B3LYP 泛函的 WTRE 误差为 1.647；而对 B3LYP 三参数模型作优化后，其 WTRE 误差降低到 0.884，与本工作所被测评的最好的低阶泛函 MPW1K 的 WTRE 误差 0.877 较为接近。这一方面表明，对于类似于 B3LYP 等的低阶泛函，其极化率表现可以通过参数重新优化得到大幅提升；但另一方面，在没有引入二阶微扰贡献的前提下，即使放开 B3LYP 的三参数优化，也难以达到普通双杂化泛函的极化率计算误差表现。这加强了先前泛函测评得到的结论，即双杂化泛函的表现明显优于低阶泛函。
+    \item 除 XYG3 之外，其余 xDH@B3LYP 泛函的参数化模型都可以优化得到 0.41 以下的 WTRE (在表 \ref{tab.6.full-benchmark} 所测评的泛函中，表现最好的是 XYGJ-OS，其 WTRE 为 0.418)。这意味着放开部分或所有 xDH@B3LYP 模型参数确实可以提升静态极化率测评表现。但同时需要指出，当放开所有参数时，XYG7 参数化模型的 WTRE 误差仍然有 0.342；该误差并未比原始的 XYGJ-OS 泛函误差 0.418 小许多。因此，对 xDH@B3LYP 模型参数放开优化确实有所提升，但提升较为有限。
+    \item 对于同时放开 VWN3 型相关能参数 $a_4$ 与 LYP 型相关能参数 $a_5$ 的情形 (XYG6, XYG7, XYGJ-OS, XYG-OS5 四种模型)，参数 $a_5$ 的数值会产生相当严重的负值、同时参数 $a_4$ 有较大的数值；这些参数化模型给出的 WTRE 误差也相对较小 (在 0.34--0.36 之间)。但考虑到 xDH@B3LYP 参数化模型在对诸如 GMTKN55 等反应能误差量标下，参数优化很少遇到这种严重负值的情形；且同时放开 $a_4$ 与 $a_5$ 参数优化的极化率测评 WTRE 误差表现并不显著地比冻结其中一者优化的情形有优势 (XYG5 模型或 XYG-OS3 模型的误差在 0.38--0.41 之间)；因此我们担忧，过度放开参数优化限制、且仅针对极化率问题作参数优化，尽管在 WTRE 量标上有微少的提升，但却会导出偏离物理图像或直觉的泛函。
+    \item 在放开同自旋二阶微扰贡献项 $E_\mathrm{c}^\text{SS-PT}$ 的 $a_7$ 参数模型中 (XYG5, XYG6, XYG7 三种模型)，所有优化得到的 $a_7$ 参数接近零值 (均小于 0.12)。而若将 $a_7$ 参数置零，如 XYG-OS5 模型之于 XYG6 模型，误差不会显著地提升。而对比 XYG3 模型与 XYG-OS3 模型，可以发现同样为三参数模型，XYG-OS3 模型静默 $a_7$ 参数的 WTRE 误差 0.41 明显小于 XYG3 模型的 0.47。因此，限制 $E_\mathrm{c}^\text{SS-PT}$ 的贡献、或合理地分离二阶微扰的两种自旋贡献 $E_\mathrm{c}^\text{OS-PT}$ 与 $E_\mathrm{c}^\text{SS-PT}$，可以有效地提升极化率测评表现。
+\end{itemize}
+
+\begin{landscape}
+\begin{table}[htp]
+    \centering
+    \caption{以 WTRE 误差量标优化的 xDH@B3LYP 模型静态极化率参数，及各静态极化率数据集误差结果\tabnote{a}。}
+    \label{tab.6.xdh-b3lyp-polar-opt}
+    \begin{tabular}{lld{3.7}d{3.7}d{3.7}d{3.7}d{3.7}d{3.7}d{3.7}d{3.7}}
+    \hline
+    & & \multicolumn{1}{c}{B3LYP} & \multicolumn{1}{c}{XYG3} & \multicolumn{1}{c}{XYG5} & \multicolumn{1}{c}{XYG6} & \multicolumn{1}{c}{XYG7} & \multicolumn{1}{c}{XYG-OS3} & \multicolumn{1}{c}{XYGJ-OS} & \multicolumn{1}{c}{XYG-OS5} \\
+    \hline
+    parameters\tabnote{b}
+                & $a_1$ ($E_\mathrm{x}^\text{exact}$) & 0.330646   & 0.887385   & 0.843480   & 0.707769   & 0.714877  & 0.794151 & 0.667163   & 0.681864   \\
+                & $a_2$ ($E_\mathrm{x}^\text{S}$) & [0.113675] & [0.297922] & [0.231657] & [0.520989] & 0.523649  & [0.205849] & [0.332837] & [0.338714] \\
+                & $a_3$ ($E_\mathrm{x}^\text{B88}$) & 0.555679   & -0.185307  & -0.075137  & -0.228758  & -0.259884 & [0.{\color{white}000000}]     & [0.{\color{white}000000}] & -0.020578  \\
+                & $a_4$ ($E_\mathrm{c}^\text{VWN3}$) & [0.741727] & [0.{\color{white}000000}] & [0.{\color{white}000000}] & 0.995154   & 1.271473  & [0.{\color{white}000000}] & 0.883246   & 1.120226   \\
+                & $a_5$ ($E_\mathrm{c}^\text{LYP}$) & 0.258273   & [0.659253] & 0.615211   & -0.667102  & -0.811699 & 0.673447 & -0.500754  & -0.614148  \\
+                & $a_6$ ($E_\mathrm{c}^\text{OS-PT}$) & [0.{\color{white}000000}] & 0.340747   & 0.408184   & 0.365681   & 0.371477  & 0.419592 & 0.353082   & 0.359351   \\
+                & $a_7$ ($E_\mathrm{c}^\text{SS-PT}$) & [0.{\color{white}000000}] & [0.340747] & 0.115199   & 0.049551   & 0.038238  & [0.{\color{white}000000}] & [0.{\color{white}000000}] & [0.{\color{white}000000}] \\
+    \hline
+    isotropic\tabnote{c}
+                & HR46        & 1.365      & 0.926      & 0.739      & 0.560      & 0.553     & 0.720    & 0.637      & 0.661      \\
+                & T144        & 2.102      & 1.004      & 0.729      & 0.794      & 0.784     & 0.668    & 0.875      & 0.867      \\
+                & HH101 (NSP) & 2.307      & 1.341      & 0.815      & 0.879      & 0.971     & 0.913    & 0.800      & 0.853      \\
+                & HH101 (SP)  & 3.577      & 2.158      & 2.035      & 1.288      & 1.106     & 2.118    & 1.281      & 1.123      \\ \hdashline
+    anisotropic\tabnote{c}
+                & HR46        & 5.201      & 2.185      & 2.238      & 2.290      & 2.322     & 2.565    & 2.537      & 2.585      \\
+                & T144        & 6.007      & 2.343      & 1.826      & 2.252      & 2.205     & 1.853    & 2.431      & 2.367      \\ \hdashline
+    components\tabnote{c}
+                & HH101 (NSP) & 2.398      & 1.431      & 0.998      & 1.020      & 1.131     & 1.118    & 0.942      & 1.003      \\
+                & HH101 (SP)  & 3.725      & 2.395      & 2.237      & 1.418      & 1.240     & 2.306    & 1.410      & 1.259      \\ \hdashline
+    WTRE\tabnote{d}
+                &             & 0.884      & 0.471      & 0.388      & 0.347      & 0.342     & 0.405    & 0.360      & 0.356      \\ \hline
+    \end{tabular}
+
+    \raggedright
+    \par\tabnote{a} 该表格的泛函名称 (如 B3LYP、XYG7 等) 并不指代业已发表的泛函，而是指代其对应的参数模型。B3LYP 参数模型参考 Stephens 等人工作\cite{Stephens-Frisch.JPC.1994}，XYG-OS3 为本工作的参数模型，其余参数模型参考张颖与徐昕的工作\cite{Zhang-Xu.JPCL.2021}。
+    \par\tabnote{b} 该参数表的定义参考张颖与徐昕的工作\cite{Zhang-Xu.JPCL.2021}，或参考\alert{表 2.5}。
+    \par\tabnote{c} 测评误差以 RelRMSD (\%) 表示。
+    \par\tabnote{d} 加权相对误差的定义参考式 (\ref{eq.6.wtre}) 附近的讨论。
+\end{table}
+\end{landscape}
+
+\subsection{本章小结}
+
+基于对双杂化泛函的极化率测评的目的，本章展开了一系列分析、验证与测评工作。
+
+为确认一种高效且具有足够精度的计算基组，我们以 B2PLYP 泛函作为双杂化泛函的典型，作细致的基组收敛性分析；并最终估计 aug-pc-3 基组作为计算代价较小的基组，其同性极化率 $\alpha$ 或异性极化率 $\gamma$ 的 BSIE 误差在 0.5\% 误差范围内。我们认为，以该基组作为双杂化或低阶泛函的静态极化率测评是合适的。
+
+我们对诸多双杂化与低阶泛函，对 HR46、T144、HH101 三个数据集的同性极化率 $\alpha$，HR46 与 T144 两个数据集的异性极化率 $\gamma$，以及 HH101 数据集极化率分量 $\alpha_{xx}, \alpha_{yy}, \alpha_{zz}$ 作系统的测评。这部分测评表明，双杂化泛函的极化率误差显著地小于低阶泛函的误差；且表现最优异的双杂化泛函，在以 CCSD(T) 为基准的前提下，其误差可以媲美波函数方法 MP2、或计算开销上更为昂贵 CCSD 或甚至更小。双杂化泛函适合用于以 HR46、T144、HH101 为代表的一系列中小分子的静态极化率计算；而在其中，以 XYGJ-OS、XYG6、xDH-PBE0 为代表的 xDH 型泛函，与 DSD-PBEPBE-D3BJ 为代表的 bDH 型泛函，在各极化率数据集上有相当低的误差表现，是适合用于静态极化率计算的双杂化泛函。
+
+本工作还对各种 xDH@B3LYP 模型下的泛函作参数优化的尝试。我们发现，异自旋二阶微扰贡献项 $E_\mathrm{c}^\text{OS-PT}$ 对于静态极化率的描述有重要的作用；即在合理的泛函构造下，双杂化泛函确实比专门针对极化率作参数优化的低阶泛函，有更低的误差。同时，当同自旋二阶微扰贡献项 $E_\mathrm{c}^\text{SS-PT}$ 贡献相比于 $E_\mathrm{c}^\text{OS-PT}$ 较少甚至于零贡献时，双杂化泛函的极化率误差通常较小。专门针对静态极化率而优化的 xDH@B3LYP 模型泛函确实有更好的极化率表现，但也容易产生非物理或不符合直觉的泛函参数，测评误差的提升也比较有限；考虑到密度泛函的泛用性，我们认为使用以 XYGJ-OS、XYG6、xDH-PBE0、DSD-PBEPBE-D3BJ 为代表的基于能量误差量标优化的泛函，也可以很好地描述静态极化率。
 
 \newpage
 
@@ -571,6 +760,107 @@ B2PLYP 是典型的双杂化泛函；其他各式各色双杂化泛函的严格�
 表 \ref{tab.6.b2p-conv-apc3} 的数据表明，除了一些特例分子 (包括 \ce{NaCl}, \ce{N(CH3)3}, \ce{^4P})，其余情形下 apc3 基组相对于 apc[34]，自洽场与二阶微扰两个贡献量的相对误差均不大于 0.1\%；因此，总极化率作为自洽场与二阶微扰贡献量之和，误差不超过 0.2\%。结合上一段的分析，我们认为对于绝大多数分子，apc3 的 BSIE 误差应不大于 0.4\%，处在实验误差 0.5\% 范围以内。
 
 作为这一小节的总结，我们首先注意到了正文的基组收敛性分析中，以 aCV[Q5]Z 为参考值时，以表 \ref{tab.6.b2p-conv-hr46-t144-iso} 为代表的一些测评基准下，存在 apc4 相较于 apc3 误差更大的情形；同时注意到 Brakestad 等人工作\cite{Brakestad-Frediani.JCTC.2020}表明 apc4 的 BSIE 误差相当小，因而引起了我们对 aCV[Q5]Z 作为参考值准确性的疑问、并且希望对 5-$\zeta$ 级别基组或 CBS 外推方法 BSIE 误差作分析。我们从基组的原始 GTO 基函数指数大小、同性极化率误差分布的基组收敛性、以及对比 Brakestad 等人工作\cite{Brakestad-Frediani.JCTC.2020}的结果入手，推断 apc4 相较于 aCV5Z 在 $\alpha_\textsf{SCF}$ 的计算问题上可能具有更低的 BSIE。对于 B2PLYP 泛函，以 apc[34] 作为参考值、并且引入 apc[34] 外推模型的 BSIE 预估值，我们认为绝大多数分子的 apc3 的 BSIE 误差不超过 0.4\%。这与正文中以 aCV[Q5]Z 作为参考值、且未引入 aCV[Q5]Z 的 BSIE 预估值的误差分析结论相仿；因此，使用 apc3 作为双杂化泛函静态极化率的测评基组是合理的。
+
+\subsubsection{其他补充数据}
+
+\begin{itemize}[nosep]
+    \item 表 \ref{tab.6.full-benchmark} 展示了所有经测评密度泛函近似的极化率误差表现。
+\end{itemize}
+
+\newpage
+
+\begin{landscape}
+\begin{longtable}[c]{lc:cccc:rrrr:rr:rr:c}
+\caption{诸密度泛函近似在数据集 HR46、T144 与 HH101 上的极化率测评表现。除 WTRE 为无量纲量外，其余误差以 RelRMSD (\%) 计算\tabnote{a}。}
+\label{tab.6.full-benchmark}
+\\ \hline
+& & & \multicolumn{3}{c}{hybrid} & \multicolumn{4}{:c}{isotropic} & \multicolumn{2}{:c}{anisotropic} & \multicolumn{2}{:c:}{components} & \\
+functionals & year & type & ex\tabnote{b} & corr\tabnote{c} & xDH & \multicolumn{1}{:c}{HR46} & \multicolumn{1}{c}{T144} & \multicolumn{2}{c}{HH101} & \multicolumn{1}{:c}{HR46} & \multicolumn{1}{c}{T144} & \multicolumn{2}{:c}{HH101} & \multicolumn{1}{:c}{WTRE} \\
+& & & & & & & & \multicolumn{1}{c}{(NSP)} & \multicolumn{1}{c:}{(SP)} & & & \multicolumn{1}{:c}{(NSP)} & \multicolumn{1}{c:}{(SP)} & \\ \hline
+\endfirsthead
+\caption{(续表)}
+\\ \hline
+& & & \multicolumn{3}{c}{hybrid} & \multicolumn{4}{:c}{isotropic} & \multicolumn{2}{:c}{anisotropic} & \multicolumn{2}{:c:}{components} & \\
+functionals & year & type & ex & corr & xDH & \multicolumn{1}{:c}{HR46} & \multicolumn{1}{c}{T144} & \multicolumn{2}{c}{HH101} & \multicolumn{1}{:c}{HR46} & \multicolumn{1}{c}{T144} & \multicolumn{2}{:c}{HH101} & \multicolumn{1}{:c}{WRTE} \\
+& & & & & & & & \multicolumn{1}{c}{(NSP)} & \multicolumn{1}{c:}{(SP)} & & & \multicolumn{1}{:c}{(NSP)} & \multicolumn{1}{c:}{(SP)} & \\ \hline
+\endhead
+\hline
+\endfoot
+\hline
+\endlastfoot
+%
+XYGJ-OS          & 2011 & GGA  & hyb & hyb & xDH & 0.911 & 0.813 & 1.235  & 1.592  & 2.756  & 1.845  & 1.381  & 1.762  & 0.418 \\
+XYG6             & 2021 & GGA  & hyb & hyb & xDH & 1.040 & 1.050 & 1.285  & 1.905  & 2.841  & 2.112  & 1.429  & 2.101  & 0.472 \\
+CCSD             &      & WFT  &     &     &     & 1.294 & 1.567 & 1.507  & 1.141  & 2.372  & 2.313  & 1.556  & 1.283  & 0.473 \\
+DSD-PBEPBE-D3BJ  & 2013 & GGA  & hyb & hyb &     & 1.146 & 1.274 & 1.615  & 1.412  & 2.234  & 2.446  & 1.651  & 1.578  & 0.473 \\
+xDH-PBE0         & 2012 & GGA  & hyb & hyb & xDH & 0.685 & 0.561 & 2.014  & 2.216  & 2.554  & 1.648  & 2.049  & 2.439  & 0.476 \\
+XYG-OS5          & 2021 & GGA  & hyb & hyb & xDH & 0.817 & 0.625 & 1.477  & 2.200  & 3.678  & 2.096  & 1.636  & 2.368  & 0.488 \\
+$\omega$PBEPP86         & 2021 & GGA  & rsh & hyb &     & 1.093 & 1.069 & 2.068  & 0.949  & 3.252  & 2.542  & 2.090  & 1.074  & 0.490 \\
+XYG5             & 2021 & GGA  & hyb & hyb & xDH & 1.095 & 1.138 & 1.330  & 1.981  & 2.739  & 2.235  & 1.479  & 2.197  & 0.490 \\
+revXYGJ-OS       & 2021 & GGA  & hyb & hyb & xDH & 0.965 & 0.680 & 1.515  & 2.187  & 3.624  & 2.025  & 1.716  & 2.384  & 0.501 \\
+XYG3             & 2009 & GGA  & hyb & hyb & xDH & 1.083 & 1.385 & 1.345  & 2.047  & 2.513  & 3.141  & 1.456  & 2.272  & 0.524 \\
+revXYG3          & 2021 & GGA  & hyb & hyb & xDH & 0.971 & 1.062 & 1.739  & 2.410  & 2.493  & 2.671  & 1.858  & 2.645  & 0.540 \\
+$\omega$B88PP86         & 2021 & GGA  & rsh & hyb &     & 1.434 & 1.490 & 2.225  & 1.130  & 2.978  & 2.817  & 2.270  & 1.273  & 0.559 \\
+$\omega$B2GP-PLYP       & 2019 & GGA  & rsh & hyb &     & 1.062 & 1.140 & 2.374  & 1.829  & 3.005  & 2.824  & 2.403  & 1.875  & 0.569 \\
+DSD-PBEP86-D3BJ  & 2013 & GGA  & hyb & hyb &     & 1.720 & 1.826 & 1.974  & 1.317  & 2.563  & 2.714  & 2.032  & 1.420  & 0.574 \\
+PBE-QIDH         & 2014 & GGA  & hyb & hyb &     & 1.026 & 1.160 & 2.252  & 1.775  & 3.478  & 3.275  & 2.268  & 1.983  & 0.582 \\
+DSD-BLYP-D3BJ    & 2013 & GGA  & hyb & hyb &     & 1.552 & 1.709 & 1.865  & 1.776  & 3.022  & 2.977  & 1.919  & 1.907  & 0.596 \\
+SOS0-PBE-QIDH    & 2016 & GGA  & hyb & hyb &     & 1.147 & 1.209 & 2.216  & 2.188  & 3.243  & 2.665  & 2.241  & 2.489  & 0.598 \\
+XYG7             & 2021 & GGA  & hyb & hyb & xDH & 2.003 & 1.947 & 2.029  & 1.575  & 2.767  & 2.111  & 2.097  & 1.758  & 0.611 \\
+PBE0-2           & 2012 & GGA  & hyb & hyb &     & 1.040 & 0.850 & 2.189  & 3.393  & 3.306  & 2.334  & 2.193  & 3.695  & 0.637 \\
+lrc-XYG3         & 2013 & GGA  & hyb & rsh & xDH & 1.294 & 1.733 & 2.405  & 2.020  & 2.799  & 3.565  & 2.479  & 2.260  & 0.651 \\
+$\omega$B2PLYP          & 2019 & GGA  & rsh & hyb &     & 1.217 & 1.314 & 2.691  & 2.362  & 3.170  & 3.122  & 2.729  & 2.392  & 0.656 \\
+PBE-CIDH         & 2015 & GGA  & hyb & hyb &     & 1.101 & 1.564 & 2.182  & 2.100  & 4.310  & 4.500  & 2.214  & 2.216  & 0.673 \\
+RS-B88-LYP       & 2021 & GGA  & rsh & rsh &     & 1.149 & 0.860 & 2.603  & 3.622  & 2.894  & 2.010  & 2.616  & 4.145  & 0.679 \\
+LS1DH-PBE        & 2011 & GGA  & hyb & hyb &     & 1.012 & 0.989 & 2.229  & 3.833  & 3.250  & 2.752  & 2.238  & 4.224  & 0.686 \\
+B2GP-PLYP        & 2008 & GGA  & hyb & hyb &     & 1.680 & 1.987 & 2.004  & 2.254  & 3.254  & 3.747  & 2.071  & 2.396  & 0.686 \\
+SOS0-PBE0-DH     & 2016 & GGA  & hyb & hyb &     & 1.111 & 1.587 & 2.146  & 2.320  & 4.332  & 4.470  & 2.188  & 2.442  & 0.686 \\
+TPSS-QIDH        & 2014 & mGGA & hyb & hyb &     & 1.210 & 1.223 & 2.782  & 2.462  & 3.715  & 3.304  & 2.803  & 2.718  & 0.688 \\
+RS-PBE-PBE       & 2021 & GGA  & rsh & rsh &     & 1.161 & 0.822 & 2.857  & 3.445  & 3.058  & 1.988  & 2.869  & 4.048  & 0.691 \\
+RS-PBE-P86       & 2021 & GGA  & rsh & rsh &     & 1.160 & 0.819 & 2.906  & 3.491  & 3.100  & 2.002  & 2.918  & 4.073  & 0.698 \\
+$\omega$B97X-2-TQZ      & 2009 & GGA  & rsh & hyb &     & 1.732 & 1.769 & 2.785  & 2.196  & 2.943  & 2.394  & 2.836  & 2.641  & 0.699 \\
+RS-PW91-PW91     & 2021 & GGA  & rsh & rsh &     & 1.223 & 0.853 & 2.937  & 3.474  & 3.094  & 1.986  & 2.950  & 4.080  & 0.706 \\
+PBE0-DH          & 2011 & GGA  & hyb & hyb &     & 1.173 & 1.730 & 2.213  & 2.286  & 4.607  & 4.925  & 2.251  & 2.375  & 0.718 \\
+PTPSS-D3Zero     & 2011 & mGGA & hyb & hyb &     & 1.823 & 2.138 & 2.385  & 2.477  & 3.131  & 4.104  & 2.450  & 2.530  & 0.749 \\
+RSX-QIDH         & 2018 & GGA  & rsh & hyb &     & 1.530 & 1.584 & 3.278  & 2.226  & 4.044  & 3.122  & 3.308  & 2.879  & 0.766 \\
+revPBE0-DH       & 2013 & GGA  & hyb & hyb &     & 1.165 & 1.759 & 2.322  & 2.936  & 4.701  & 4.978  & 2.363  & 3.070  & 0.773 \\
+TPSS-CIDH        & 2015 & mGGA & hyb & hyb &     & 1.238 & 1.548 & 2.782  & 2.889  & 4.646  & 4.503  & 2.849  & 3.125  & 0.789 \\
+TPSS0-DH         & 2013 & mGGA & hyb & hyb &     & 1.241 & 1.662 & 2.760  & 3.028  & 4.953  & 4.910  & 2.805  & 3.252  & 0.819 \\
+SOS-RSX-PBE-QIDH & 2021 & GGA  & rsh & hyb &     & 1.821 & 1.933 & 3.331  & 2.662  & 4.408  & 3.197  & 3.370  & 3.398  & 0.848 \\
+MPW1K            & 2000 & GGA  & hyb &     &     & 1.654 & 2.024 & 2.899  & 2.426  & 5.929  & 5.502  & 2.971  & 2.663  & 0.877 \\
+mPW2PLYP         & 2006 & GGA  & hyb & hyb &     & 2.255 & 2.678 & 2.647  & 3.273  & 3.948  & 4.853  & 2.762  & 3.431  & 0.918 \\
+SCAN0            & 2016 & mGGA & hyb &     &     & 1.718 & 2.551 & 2.504  & 2.668  & 6.328  & 7.160  & 2.608  & 2.857  & 0.946 \\
+RSX-0DH          & 2019 & GGA  & rsh & hyb &     & 2.047 & 2.251 & 3.968  & 2.683  & 5.429  & 4.062  & 4.017  & 3.531  & 0.979 \\
+PBE50            & 2012 & GGA  & hyb &     &     & 2.108 & 2.226 & 3.398  & 2.839  & 6.371  & 5.224  & 3.475  & 3.114  & 0.985 \\
+MP2              &      & WFT  &     &     &     & 2.609 & 0.813 & 2.146  & 4.752  & 10.532 & 1.625  & 2.188  & 5.693  & 0.994 \\
+B2PLYP           & 2006 & GGA  & hyb & hyb &     & 2.552 & 2.987 & 2.908  & 3.468  & 4.256  & 5.194  & 2.998  & 3.656  & 1.002 \\
+SOS-RSX-PBE0-DH  & 2021 & GGA  & rsh & hyb &     & 2.188 & 2.401 & 4.005  & 2.850  & 5.618  & 4.096  & 4.058  & 3.737  & 1.016 \\
+M11              & 2011 & mGGA & rsh &     &     & 1.490 & 1.859 & 4.525  & 4.341  & 5.459  & 5.046  & 4.682  & 5.799  & 1.117 \\
+MVS              & 2015 & mGGA &     &     &     & 1.658 & 2.550 & 3.460  & 2.823  & 7.291  & 9.230  & 3.659  & 3.694  & 1.124 \\
+CAM-B3LYP        & 2004 & GGA  & rsh &     &     & 2.315 & 2.612 & 4.080  & 4.621  & 4.286  & 5.258  & 4.184  & 4.733  & 1.127 \\
+PBE0             & 1999 & GGA  & hyb &     &     & 2.478 & 3.247 & 3.874  & 4.148  & 6.272  & 7.493  & 3.979  & 4.243  & 1.232 \\
+M06-2X           & 2006 & mGGA & hyb &     &     & 1.548 & 1.930 & 3.310  & 8.244  & 5.741  & 4.998  & 3.394  & 8.438  & 1.242 \\
+MN15             & 2016 & mGGA & hyb &     &     & 2.613 & 2.892 & 3.366  & 7.328  & 4.785  & 6.037  & 3.500  & 7.908  & 1.324 \\
+mBEEF            & 2014 & mGGA &     &     &     & 2.501 & 3.714 & 3.588  & 4.523  & 8.951  & 10.585 & 3.771  & 4.662  & 1.408 \\
+M06              & 2006 & mGGA & hyb &     &     & 2.488 & 3.282 & 4.622  & 7.004  & 7.030  & 8.107  & 4.756  & 7.175  & 1.507 \\
+$\omega$B97M-V          & 2016 & mGGA & hyb &     &     & 3.188 & 3.207 & 5.395  & 8.415  & 4.615  & 4.898  & 5.555  & 8.627  & 1.555 \\
+SCAN             & 2015 & mGGA &     &     &     & 3.410 & 4.485 & 4.688  & 4.841  & 8.410  & 10.529 & 4.792  & 5.153  & 1.597 \\
+M06-L            & 2006 & mGGA &     &     &     & 1.847 & 3.131 & 3.835  & 9.348  & 7.531  & 9.761  & 4.118  & 9.793  & 1.614 \\
+TPSSh            & 2003 & mGGA & hyb &     &     & 3.362 & 4.396 & 4.966  & 5.497  & 7.975  & 9.892  & 5.070  & 5.628  & 1.619 \\
+B3LYP            & 1993 & GGA  & hyb &     &     & 3.790 & 4.524 & 5.195  & 6.111  & 6.646  & 8.458  & 5.381  & 6.369  & 1.647 \\
+HF               &      & WFT  &     &     &     & 4.727 & 4.126 & 6.592  & 5.948  & 13.901 & 8.483  & 6.868  & 7.069  & 1.986 \\
+TPSS             & 2003 & mGGA &     &     &     & 4.875 & 5.916 & 6.843  & 7.721  & 10.162 & 12.239 & 6.998  & 8.071  & 2.198 \\
+N12              & 2012 & GGA  &     &     &     & 4.666 & 5.446 & 7.607  & 11.687 & 11.588 & 13.180 & 8.072  & 12.043 & 2.535 \\
+MPW91            & 1998 & GGA  &     &     &     & 6.042 & 6.860 & 8.515  & 10.081 & 11.414 & 13.041 & 8.712  & 11.005 & 2.665 \\
+PBE              & 1997 & GGA  &     &     &     & 6.690 & 7.369 & 9.403  & 11.117 & 12.088 & 13.202 & 9.652  & 12.131 & 2.890 \\
+BLYP             & 1988 & GGA  &     &     &     & 7.446 & 8.153 & 10.425 & 12.666 & 12.103 & 13.292 & 10.752 & 13.838 & 3.164
+\end{longtable}
+\small
+\vspace{-1em}
+\par\noindent\tabnote{a} 该表格以 WTRE 数值排序。作为参考值的方法是 CCSD(T)；如前文所述，HH101 参考值由 Hait 与 Head-Gordon 在 aCV[TQ]Z 或 aCV[Q5]Z 级别下给出\cite{Hait-Head-Gordon.PCCP.2018}；HR46 与 T144 参考值由本论文第五章给出，为 FPA-aV[DT]Z、FPA-aV[TQ]Z 或 FPA-aV[Q5]Z 级别下给出。
+\par\noindent\tabnote{b} “hyb”指交换能中掺杂部分非局域的严格交换能；“exact”指交换能全部为严格交换能；“rsh”(\underline{R}ange-\underline{S}eparate \underline{H}ybrid) 指交换能包含长短程分离的非局域交换能，不论其是否包含非局域短程交换。该项若非空缺，则视为杂化泛函。
+\par\noindent\tabnote{c} “hyb”指相关能中掺杂 MP2 型非局域相关能；“rsh”指相关能中掺杂长短程分离的 MP2 型非局域相关能。该项若非空缺，则视为双杂化泛函。
+\end{landscape}
 
 \newpage
 
