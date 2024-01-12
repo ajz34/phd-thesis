@@ -1,27 +1,4 @@
-% !TEX root=./chap-03.tex
-\input{../marco.tex}
-
-\begin{document}
-
-%---------预定设置区----------
-\title{\textbf{双杂化密度泛函分子能量与性质计算方法的测评与进展\\第三章草稿}}
-\author{祝震予}
-\maketitle
-\vspace{-10pt}
-
-\tableofcontents
-
-%---------正  文  区----------
-
-\section*{未尽事项}
-
-\begin{itemize}
-  \item \alert{标题将换为“双杂化泛函的电性质梯度理论与程序实现”，即增加“电性质”一词。}
-\end{itemize}
-
-\setcounter{section}{2}
-
-\newpage
+% !TEX root=./chap-03-dummy.tex
 
 \section{双杂化泛函的电性质梯度理论与程序实现}
 
@@ -1396,45 +1373,37 @@ MP2 相关能对轨道系数的梯度相关量写为 (乘以 $C_{\mu p}$ 是因�
 
 \subsubsection{None}
 
-\newpage
 
-\bibliographystyle{achemso}
-\bibliography{../thesis.bib}
-
-\end{document}
-
-
-
-后文中，用于实现双杂化电性质梯度的程序是 dh (ver 80ca9e)。该程序仅在计算复杂度上有合理的表现；但出于实现便利与快速开发的目的，该程序并没有通过张量对称性、JIT 等策略加速程序。从图 \ref{fig.timing-rimp2-implemented} 中的表现来看，对于 RI-MP2 能量计算，dh 程序并未能发挥最高的效能。因此，我们预期未来
-
-\subsubsection{重要的解析梯度先驱性工作}
-
-本工作的目标之一是高效率实现 RI 近似下 MP2 型 xDH 双杂化泛函的电性质二阶梯度；其理论推导与实现基于大量先驱性工作。其中，不完全的、具有代表性的或对本工作有一定影响的文献列举如下：
-\begin{itemize}[nosep]
-  \item Gerratt 与 Mills 在 1968 年发展了 Hartree-Fock 方法二阶梯度理论，并提出耦合微扰方程 (CPHF, \underline{C}oupled \underline{P}erturbed \underline{H}artree-\underline{F}ock)\cite{Gerratt-Mills.JCP.1968, Gerratt-Mills.JCP.1968a}；
-  \item Pople 等在 1979 年发展了 MP2 方法的一阶梯度理论\cite{Pople-Binkley.IJQC.1979}；
-  \item Dykstra 与 Jasien 在 1984 年发展了 Hartree-Fock 方法任意阶梯度理论，并提出了高阶轨道系数导数计算方法、与梯度理论的 $2n+1$ 规则\cite{Dykstra-Jasien.CPL.1984}；
-  \item Handy 与 Schaefer III 在 1984 年发展了 CISD 方法四阶梯度理论，提出了 Z-Vector 方法，并指出 Z-Vector 方法在 MP2 等微扰方法下的应用前景\cite{Handy-Schaefer.JCP.1984}；
-  \item Handy 在 1985 年针对轨道系数梯度矩阵中可能存在的奇点的问题，提出数值上更稳定的梯度计算方法\cite{Handy-Simandiras.CPL.1985}；
-  \item Pulay 与 Saebø 在 1986 年提出 MP2 方法在非正则 Hartree-Fock 方法下的表达式，并指出该理论在二阶梯度下的应用前景\cite{Pulay-Saeboe.TCA.1986}；
-  \item Frisch、Head-Gordon、Pople 在 1990 年基于 Gaussian 程序实现了 Hartree-Fock 方法的二阶梯度与 MP2 方法的一阶梯度\cite{Frisch-Pople.CP.1990, Frisch-Pople.CPL.1990, Frisch-Pople.CPL.1990a}；
-  \item Bartlett、Gauss 与 Stanton 在 1992 年基于 ACES II 程序 (后期发展为 CFOUR) 实现了 MP2 方法的二阶梯度\cite{Gauss-Bartlett.JCP.1992, Stanton-Bartlett.CPL.1992}；
-  \item Johnson 与 Frisch 在 1993 年基于 Gaussian 程序实现了 GGA 泛函的二阶梯度\cite{Johnson-Frisch.CPL.1993}；
-  \item Head-Gordon 与 Head-Gordon 在 1994 年基于 Gaussian 程序实现了 MP2 方法的二阶梯度\cite{Head-Gordon-Head-Gordon.CPL.1994}；
-  \item Yamaguchi、Goddard、Osamura 与 Schaefer III 在 1994 年对变分方法下的梯度理论作全面的总结\cite{Yamaguchi-Schaefer.Oxford.1994}；
-  \item Weigend 与 H\"aser 在 1997 年发展并基于 TURBOMOLE 程序实现了 RI-MP2 方法的一阶梯度\cite{Weigend-Haeser.TCA.1997}；
-  \item Gordon 课题组 Aikens 等在 2004 年发展并基于 GAMESS US 程序实现了冻结轨道的 MP2 方法一阶梯度\cite{Aikens-Gordon.TCA.2003}；
-  \item Cammi 等在 2004 年发展并基于 Gaussian 程序实现了溶剂化 MP2 方法二阶梯度\cite{Cammi-Frisch.TCA.2004}；
-  \item Head-Gordon 课题组 Distasio, Jr.\ 等在 2007 年基于 Q-Chem 程序实现了 RI-MP2 方法的一阶梯度\cite{Distasio-Head-Gordon.JCC.2007}；
-  \item Neese、Schwabe 与 Grimme 在 2007 年发展并基于 ORCA 程序实现了 MP2 型 bDH 双杂化泛函的一阶梯度\cite{Neese-Grimme.JCP.2007}；
-  \item Biczysko 等在 2010 年发展并基于 Gaussian 程序实现了 MP2 型 bDH 双杂化泛函二阶梯度\cite{Biczysko-Barone.JCTC.2010}；
-  \item 苏乃强、张颖、徐昕在 2013 年发展并基于 NWChem 程序实现了 MP2 型 xDH 双杂化泛函一阶梯度\cite{Su-Xu.JCC.2013}；
-  \item Jung 课题组 Ji 等在 2013 年发展并基于 Q-Chem 程序实现了 Laplace-Transform 近似 ($1/x$ 的指数函数展开近似) OS-MP2 型 xDH 双杂化泛函一阶梯度\cite{Ji-Jung.JCTC.2013}；
-  \item Neese 课题组 Bykov 等与 Valeev 合作在 2015 年发展并基于 ORCA 程序实现了 RIJ-COSX 近似下的二阶梯度，并高效实现了 RI 近似下自洽场的二阶梯度\cite{Bykov-Neese.MP.2015}；
-  \item Stoychev、Auer 与 Neese 在 2018 年发展并基于 ORCA 程序实现了 RI-MP2 以及 RI 近似下 MP2 型 bDH 双杂化泛函电性质和磁性质二阶梯度\cite{Stoychev-Neese.JCTC.2018}；
-  \item 谷永浩、祝震予、徐昕在 2021 年发展并基于 Gaussian 程序实现了 MP2 型 xDH 双杂化泛函振动频率与极化率二阶梯度\cite{Gu-Xu.JCTC.2021}。
-  \item 颜文杰、徐昕在 2022 年发展并基于 Gaussian 程序实现了 MP2 型 xDH 双杂化泛函磁化率与核磁矩二阶梯度\cite{Yan-Xu.JCTC.2022}。
-\end{itemize}
+% 后文中，用于实现双杂化电性质梯度的程序是 dh (ver 80ca9e)。该程序仅在计算复杂度上有合理的表现；但出于实现便利与快速开发的目的，该程序并没有通过张量对称性、JIT 等策略加速程序。从图 \ref{fig.timing-rimp2-implemented} 中的表现来看，对于 RI-MP2 能量计算，dh 程序并未能发挥最高的效能。因% 此，我们预期未来
+% 
+% \subsubsection{重要的解析梯度先驱性工作}
+% 
+% 本工作的目标之一是高效率实现 RI 近似下 MP2 型 xDH 双杂化泛函的电性质二阶梯度；其理论推导与实现基于大量先驱性工作。其中，不完全的、具有代表性的或对本工作有一定影响的文献列举如下：
+% \begin{itemize}[nosep]
+%   \item Gerratt 与 Mills 在 1968 年发展了 Hartree-Fock 方法二阶梯度理论，并提出耦合微扰方程 (CPHF, \underline{C}oupled \underline{P}erturbed \underline{H}artree-\underline{F}ock)\cite{Gerratt-Mills.JCP.1968, Gerratt-Mills.JCP.1968a}；
+%   \item Pople 等在 1979 年发展了 MP2 方法的一阶梯度理论\cite{Pople-Binkley.IJQC.1979}；
+%   \item Dykstra 与 Jasien 在 1984 年发展了 Hartree-Fock 方法任意阶梯度理论，并提出了高阶轨道系数导数计算方法、与梯度理论的 $2n+1$ 规则\cite{Dykstra-Jasien.CPL.1984}；
+%   \item Handy 与 Schaefer III 在 1984 年发展了 CISD 方法四阶梯度理论，提出了 Z-Vector 方法，并指出 Z-Vector 方法在 MP2 等微扰方法下的应用前景\cite{Handy-Schaefer.JCP.1984}；
+%   \item Handy 在 1985 年针对轨道系数梯度矩阵中可能存在的奇点的问题，提出数值上更稳定的梯度计算方法\cite{Handy-Simandiras.CPL.1985}；
+%   \item Pulay 与 Saebø 在 1986 年提出 MP2 方法在非正则 Hartree-Fock 方法下的表达式，并指出该理论在二阶梯度下的应用前景\cite{Pulay-Saeboe.TCA.1986}；
+%   \item Frisch、Head-Gordon、Pople 在 1990 年基于 Gaussian 程序实现了 Hartree-Fock 方法的二阶梯度与 MP2 方法的一阶梯度\cite{Frisch-Pople.CP.1990, Frisch-Pople.CPL.1990, Frisch-Pople.CPL.1990a}；
+%   \item Bartlett、Gauss 与 Stanton 在 1992 年基于 ACES II 程序 (后期发展为 CFOUR) 实现了 MP2 方法的二阶梯度\cite{Gauss-Bartlett.JCP.1992, Stanton-Bartlett.CPL.1992}；
+%   \item Johnson 与 Frisch 在 1993 年基于 Gaussian 程序实现了 GGA 泛函的二阶梯度\cite{Johnson-Frisch.CPL.1993}；
+%   \item Head-Gordon 与 Head-Gordon 在 1994 年基于 Gaussian 程序实现了 MP2 方法的二阶梯度\cite{Head-Gordon-Head-Gordon.CPL.1994}；
+%   \item Yamaguchi、Goddard、Osamura 与 Schaefer III 在 1994 年对变分方法下的梯度理论作全面的总结\cite{Yamaguchi-Schaefer.Oxford.1994}；
+%   \item Weigend 与 H\"aser 在 1997 年发展并基于 TURBOMOLE 程序实现了 RI-MP2 方法的一阶梯度\cite{Weigend-Haeser.TCA.1997}；
+%   \item Gordon 课题组 Aikens 等在 2004 年发展并基于 GAMESS US 程序实现了冻结轨道的 MP2 方法一阶梯度\cite{Aikens-Gordon.TCA.2003}；
+%   \item Cammi 等在 2004 年发展并基于 Gaussian 程序实现了溶剂化 MP2 方法二阶梯度\cite{Cammi-Frisch.TCA.2004}；
+%   \item Head-Gordon 课题组 Distasio, Jr.\ 等在 2007 年基于 Q-Chem 程序实现了 RI-MP2 方法的一阶梯度\cite{Distasio-Head-Gordon.JCC.2007}；
+%   \item Neese、Schwabe 与 Grimme 在 2007 年发展并基于 ORCA 程序实现了 MP2 型 bDH 双杂化泛函的一阶梯度\cite{Neese-Grimme.JCP.2007}；
+%   \item Biczysko 等在 2010 年发展并基于 Gaussian 程序实现了 MP2 型 bDH 双杂化泛函二阶梯度\cite{Biczysko-Barone.JCTC.2010}；
+%   \item 苏乃强、张颖、徐昕在 2013 年发展并基于 NWChem 程序实现了 MP2 型 xDH 双杂化泛函一阶梯度\cite{Su-Xu.JCC.2013}；
+%   \item Jung 课题组 Ji 等在 2013 年发展并基于 Q-Chem 程序实现了 Laplace-Transform 近似 ($1/x$ 的指数函数展开近似) OS-MP2 型 xDH 双杂化泛函一阶梯度\cite{Ji-Jung.JCTC.2013}；
+%   \item Neese 课题组 Bykov 等与 Valeev 合作在 2015 年发展并基于 ORCA 程序实现了 RIJ-COSX 近似下的二阶梯度，并高效实现了 RI 近似下自洽场的二阶梯度\cite{Bykov-Neese.MP.2015}；
+%   \item Stoychev、Auer 与 Neese 在 2018 年发展并基于 ORCA 程序实现了 RI-MP2 以及 RI 近似下 MP2 型 bDH 双杂化泛函电性质和磁性质二阶梯度\cite{Stoychev-Neese.JCTC.2018}；
+%   \item 谷永浩、祝震予、徐昕在 2021 年发展并基于 Gaussian 程序实现了 MP2 型 xDH 双杂化泛函振动频率与极化率二阶梯度\cite{Gu-Xu.JCTC.2021}。
+%   \item 颜文杰、徐昕在 2022 年发展并基于 Gaussian 程序实现了 MP2 型 xDH 双杂化泛函磁化率与核磁矩二阶梯度\cite{Yan-Xu.JCTC.2022}。
+% \end{itemize}
 
 
 
