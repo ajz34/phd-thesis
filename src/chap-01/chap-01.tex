@@ -1,10 +1,10 @@
 % !TEX root=./chap-01-dummy.tex
 
-\section{绪论}
+\chapter{绪论}
 
-\subsection{密度泛函理论}
+\section{密度泛函理论}
 
-\subsubsection{\Schrodinger 方程}
+\subsection{\Schrodinger 方程}
 
 从第一性的角度 (\emph{ab initio}) 出发，对于分子体系的微观状态描述，在 Born-Oppenheimer 近似下\cite{Born-Oppenheimer.AP.1927}，原子核运动对电子运动的影响可以忽略。非相对论的分子中电子运动问题在数学形式上，可以化归为对含时 \Schrodinger 方程\cite{Schroedinger-Schroedinger.PR.1926}求解关于电子自旋坐标 $\{\bm{x}_i\}$ ($i = 1, 2, \cdots, n_\mathrm{elec}$，其中 $n_\mathrm{elec}$ 表示电子数、$\bm{x}_i = (\bm{r}_i, \sigma_i)$ 代表电子的三维空间坐标与自旋) 与时间 $t$ 的波函数 $\Psi(\{\bm{x}_i\}, t)$：
 \begin{equation}
@@ -42,15 +42,15 @@
 
 本论文的工作涉及到偶极电场对分子体系的作用。对于电中性体系，该电场对分子的影响是规范不变的；我们始终规定规范原点 (gauge origin) 为原点。在此情形下，$\hat T$ 与 $\hat V_\mathrm{ee}$ 没有发生变化。在强度为 $\pmb{\mathcal{E}}^\dagger = (\varepsilon_x, \varepsilon_y, \varepsilon_z)$ 的偶极电场下 \cite{Atkins-Friedman.Oxford.2011}\footnote{事实上，电场是依频率而随时间变化的场；本工作中，不考虑含频率情形，或认为频率为 0，从而外势电场随时间是恒定的。}，
 \begin{align}
-  v (\bm{r}) &= - \sum_{A}^{n_\mathrm{atom}} \frac{Z_A}{| \bm{r} - \bm{R}_A |} - \pmb{\mathcal{E}}^\dagger \bm{r} \quad \text{(偶极电场外势)} \\
-  \hat V_\text{non-elec} &= \frac{1}{2} \sum_{A \neq B}^{n_\mathrm{atom}} \frac{Z_A Z_B}{| \bm{R}_A  - \bm{R}_B |} + \sum_{A}^{n_\mathrm{atom}} Z_A \pmb{\mathcal{E}}^\dagger \boldsymbol{R}_A \quad \text{(偶极电场外势)}
+  v (\bm{r}) &= - \sum_{A}^{n_\mathrm{atom}} \frac{Z_A}{| \bm{r} - \bm{R}_A |} - \mathbfcal{E}^\dagger \bm{r} \quad \text{(偶极电场外势)} \\
+  \hat V_\text{non-elec} &= \frac{1}{2} \sum_{A \neq B}^{n_\mathrm{atom}} \frac{Z_A Z_B}{| \bm{R}_A  - \bm{R}_B |} + \sum_{A}^{n_\mathrm{atom}} Z_A \mathbfcal{E}^\dagger \bm{R}_A \quad \text{(偶极电场外势)}
 \end{align}
 
 定态 \Schrodinger 方程求解的困难至少来自于两方面。一者，从应用的角度，对计算化学的精度要求非常高。以化学反应为例，若速率方程满足 Arrhenius 公式 $k = A \exp (- \frac{E_\mathrm{a}}{R T})$，又自由能 $E_a$ 计算若存在 1 kcal/mol 的误差，那么在 298 K 下速率就会有约 5 倍的误差。而目前密度泛函近似方法 (DFA, \underline{D}ensity \underline{F}unctional \underline{A}pproximation) 声称的最佳精度在 1.2 -- 2.0 kcal/mol \cite{Zhang-Xu.JPCL.2021, Santra-Martin.JPCL.2021}，还有可以提升的空间。二者，从表达式来看，由于库伦排斥算符 $\hat V_\mathrm{ee}$ 的存在，无法通过变量分离等技巧快速求解 \Schrodinger 方程。最近的研究表明，如果将定态 \Schrodinger 方程看作 $k$-local Hamiltonian 问题 ($k \geq 2$)，那么该方程的求解是困难的 QMA (Quantum Merlin Arthur) 问题：即不论是经典计算还是量子计算，对基组大小为 $n > n_\mathrm{elec}$ 的算符 $\hat H$，无法在多项式时间 $\mathrm{poly}(n)$ 内、以较大的正确概率判断基态能量 $\min \langle \hat H \rangle$ 是否小于给定数值 \cite{Kempe-Regev.SJC.2006}。
 
 为了在保证一定精度的同时，更快地求解化学所关心的体系，对定态 \Schrodinger 方程的近似方法、以及为近似方法所设计的框架就有重要的价值。
 
-\subsubsection{Hohenberg-Kohn 定理}
+\subsection{Hohenberg-Kohn 定理}
 
 若不将自旋看作变量，那么定态 \Schrodinger 方程 (\ref{eq.tise}) 是关于电子坐标 $\{\bm{r}_i\}$ 的方程；其中 $i = 1, 2, \cdots, n_\mathrm{elec}$，待处理的自变量数量非常大。为避免分析复杂的波函数，Hohenberg 与 Kohn 考虑使用变量数非常少的电子密度 $\rho(\bm{r})$ 对体系进行研究，并提出了两条基本定理 \cite{Hohenberg-Kohn.PR.1964}。
 
@@ -86,7 +86,7 @@
 
 Hohenberg-Kohn 定理的提出，标志着密度泛函理论成为了一个原则上严格的理论。然而，如何构建普适泛函 $F[\rho]$，定理本身没有给出具体的路径。如何分析与构建 $F[\rho]$、并且基于这个泛函求解能量基态 $E[\rho]$，是密度泛函理论与近似研究的核心与难点问题。
 
-\subsubsection{Kohn-Sham 方程}
+\subsection{Kohn-Sham 方程}
 
 作为 Hohenberg-Kohn 变分定理的拓展，Kohn 与 Sham 提出一种在假定泛函 $F[\rho]$ 已知的前提下，解决对电子密度 $\rho(\bm{r})$ 变分计算的具体过程 \cite{Kohn-Sham.PR.1965}。
 
@@ -129,7 +129,7 @@ Hohenberg-Kohn 定理的提出，标志着密度泛函理论成为了一个原�
 
 上述过程表明，对于任意的外势 $v(\bm{r})$，总存在一个无电子相互作用 (noninteracting) 的体系，其密度 $\rho(\bm{r})$ 是泛函 $E_v[\rho]$ 变分取最小值时的密度，即真实基态密度。这个无相互作用体系的电子轨道 $\{\phi_i\}$ 可以通过 Kohn-Sham 方程 (\ref{eq.ks}) 导出。它与 Hartree-Fock 方程尽管具有完全不同的意义；但表达式非常相似、都可以用自洽场过程求解。这也就意味着，如果泛函 $F[\rho]$ 的形式是已知的，那么基态能量可以通过已知的数值方法求解。
 
-\subsubsection{Kohn-Sham 框架与“Jacob 阶梯”}
+\subsection{Kohn-Sham 框架与“Jacob 阶梯”}
 
 尽管 Kohn-Sham 方程解决了在给定 $F[\rho]$ 的情况下，如何求解基态密度与能量的具体自洽场方法；但它尚没有解决如何构建 $F[\rho]$ 的问题。Kohn 与 Sham 提出 \cite{Kohn-Sham.PR.1965}，$F[\rho]$ 中，很大一部分贡献项可以准确地给出。定义无相互作用体系动能为
 \begin{equation}
@@ -193,7 +193,7 @@ Hohenberg-Kohn 定理的提出，标志着密度泛函理论成为了一个原�
 
 双杂化泛函作为目前最高阶的泛函类别，其精度的上限更高、更大程度上能接近真实的交换相关泛函 $E_\mathrm{xc}[\rho]$。对双杂化泛函的更多物理认知、计算方法与高效实现、拓展双杂化泛函的应用领域，对密度泛函理论和近似的发展都有重要的价值和意义。
 
-\subsection{双杂化泛函方法}
+\section{双杂化泛函方法}
 
 自第一个双杂化泛函泛函在 2004 年提出起\cite{Zhao-Truhlar.JPCA.2004}，双杂化泛函经历大约 20 年的发展，已然成为庞大的密度泛函近似谱系的一个重要且粗壮的分支。这里对双杂化泛函的发展历程与大致分类作说明。
 
@@ -246,7 +246,7 @@ xDH 型泛函的能量泛函是第五阶泛函，相比于杂化泛函包含更�
   \item 路径积分泛函。一般的双杂化泛函对于所有化学体系都假定有相似的绝热路径曲线形状；对这类路径积分近似积分，对于不同的分子体系，可以得到相同的交换系数 $c_\mathrm{x}$ 与相关系数 $c_\mathrm{c}$。但实际的情况是，不同分子的绝热路径差异可能很大\cite{Teale-Helgaker.JCP.2010}。因此，对于大多数双杂化泛函而言，绝热路径理论的意义在于提供了理论依据；但实际计算中不会真正地构造绝热路径本身。SPL2 型泛函\cite{Seidl-Levy.PRA.1999, Daas-Vuckovic.JPCL.2021, Daas-Vuckovic.arXiv.2023} 则是依据不同的分子体系近似了不同的绝热路径，并加以积分得到相关能。
 \end{itemize}
 
-\subsection{MP2 型双杂化泛函的测评表现}
+\section{MP2 型双杂化泛函的测评表现}
 
 关于 MP2 型双杂化泛函的测评，目前已有大量的文献作了详细的阐述，并为研究工作者提供了有价值的参考意见。近年 xDH 型双杂化泛函发展了一阶梯度、二阶梯度、周期性计算的理论，几何结构、电子云密度、周期性体系、振动频率与偶极矩等性质的计算得以实现并测评。本工作的主要研究对象是 xDH 型泛函，为此我们先对这类型泛函已有的测评情况作说明，以对该类型泛函有直观的认识。这一段的讨论同时参见论文\cite{Gu.Thesis.2020, Yan.Thesis.2022}。
 
@@ -283,9 +283,15 @@ xDH 型泛函的能量泛函是第五阶泛函，相比于杂化泛函包含更�
   \centering
   \caption{部分泛函在 F38 测试集下谐振频率计算的测评表现。误差单位为波数 ($\text{cm}^{-1}$)。数据取自文献\cite{Gu-Xu.JCTC.2021}。}
   \label{tab.xdh-freq-bench}
-  \begin{tabular}{l|llllll}
+  \begin{tabular}{l | 
+      S[table-format=+4.2]
+      S[table-format=+4.2]
+      S[table-format=+4.2]
+      S[table-format=+4.2]
+      S[table-format=+4.2]
+      S[table-format=+4.2]}
     \hline
-        & XYG3 & XYGJ-OS & xDH-PBE0 & B2PLYP & B3LYP & PBE0 \\ \hline
+        & {XYG3} & {XYGJ-OS} & {xDH-PBE0} & {B2PLYP} & {B3LYP} & {PBE0} \\ \hline
     MAD & 42   & 19      & 28       & 18     & 33    & 42   \\
     MIN & -87  & -65     & -105     & -51    & -75   & -55  \\
     MAX & 115  & 42      & 51       & 96     & 130   & 122  \\
@@ -302,7 +308,7 @@ xDH 型泛函的能量泛函是第五阶泛函，相比于杂化泛函包含更�
   \includegraphics[width=0.4\textwidth]{assets/xdh-nmr.jpeg}
 \end{figure}
 
-\subsection{本文研究思路与主要工作}
+\section{本文研究思路与主要工作}
 
 xDH 型泛函构造的理论框架搭建在绝热路径与 G\"{o}rling-Levy 微扰之上，使用较好的单电子轨道作为基础，并在能量计算中追求“Jacob 阶梯”上更高、更精确的阶梯，有着良好的理论基础。xDH 型双杂化泛函在分子能量与性质计算上，其精度水平代表了目前密度泛函方法的最高水准。对于类如 MP2 与 RPA 等相近计算量或计算标度的 post-SCF 方法而言，双杂化泛函的精度通常也更为优异。近年来发展的 xDH 泛函在主族化学反应的能量的表现，已经在切实地逼近 1 kcal/mol 的化学精度；而其它性质的测评工作也表明，xDH 型泛函不仅在能量，还在分子几何结构、振动频率、核磁屏蔽常数等问题上有令人鼓舞的表现。而这些良好的数值结果，也印证了 xDH 型泛函良好的理论框架的重要性。但也需要指出，目前发展的大多数 xDH 型泛函近似的具体实现，依赖于 MP2 型相关能；而 MP2 型相关能本身存在的问题，也可能会反映到双杂化泛函中。
 
@@ -328,120 +334,4 @@ xDH 型泛函构造的理论框架搭建在绝热路径与 G\"{o}rling-Levy 微�
 \end{enumerate}
 
 \newpage
-
-\subsection{Kohn-Sham 方程中关于占据数的讨论}
-
-\alert{\textsf{本节内容不出现在论文中。是对正文的一些补充。}}
-
-正文对 Kohn-Sham 方程的讨论中，并不是\textsf{假定}电子密度可以写作无相互作用波函数的密度，且这个体系的轨道是 Kohn-Sham 方程的解；而是通过 Kohn-Sham 方程，\textsf{推导}出使得 $E_v[\rho]$ 能级最低的电子密度必然可以写作无相互作用波函数的密度。这两者意义并不相同：前者的意义是 Kohn-Sham 是一个优秀的近似，而后者则表明 Kohn-Sham 确实是一个严格的理论。
-
-容易产生歧义的问题之一是，$N$ 可表示密度是允许电子在轨道上分数占据的 (占据数 $0 \leqslant n_i \leqslant 1$)，即
-\begin{equation*}
-  \rho(\bm{r}) = \sum_{i} n_i |\phi_i(\bm{r})|^2
-\end{equation*}
-但 Kohn-Sham 框架有两个额外的问题。第一个问题是，任意 $N$ 可表示密度是否能表示为无相互作用体系的密度
-\begin{equation*}
-  \rho(\bm{r}) = \sum_i^{n_\mathrm{elec}} |\phi_i(\bm{r})|^2
-\end{equation*}
-这样的密度看起来似乎比 $N$ 可表示密度限制多一些；但实际上，根据 Lieb \cite{Lieb-Lieb.IJQC.1983} 的 Theorem 1.2，给定一个 $N$ 可表示密度，依它可以构造出一个密度相同的无相互作用体系。
-
-但 Lieb 充其量只是说明，无相互作用体系密度的函数空间确实是 $N$ 可表示密度的空间。任何密度都可以\textsf{构造}出一种无相互作用体系，但它其实可以\textsf{构造}出不只一种无相互作用体系。构造出的无相互作用体系，大多数时候不满足 Kohn-Sham 方程。总得来说，这里又有第二个问题：Kohn-Sham 方程的电子密度一定就是上述无相互作用体系的密度吗？为何 Kohn-Sham 轨道不能是分数占据的？
-
-我认为现在的很多教材、文献引言中，对于这件事经常模糊其词。说清楚这件事不应很困难，但也不尽然是直观的 (如果下述证明过程没有错误或者没有漏掉前提条件)。
-
-回顾我们通过 Euler 方程
-\begin{equation}
-  \left( \frac{\delta F[\rho]}{\delta \rho} + v(\bm{r}) - \mu \right) n_i \phi_i (\bm{r}) = \varepsilon_i \phi_i (\bm{r})
-\end{equation}
-给出了 $n_i = 1 \; (i > n_\mathrm{elec})$ 以及 $n_i = 0 \; (i \leqslant n_\mathrm{elec})$ 的结论。正文中，我们说 $\varepsilon_i$ 的取值应尽可能小，一笔带过了。但实际上，这个结论并不是那么显然的。
-
-这里，我们将不会进行非常严格的数学讨论，但应当对问题作比较清楚的说明。
-
-首先，使用 Lagrange 乘子 $\varepsilon_i$ 其实不太方便，因为 $n_i$ 会干扰我们的工作。假使对于任意 $i$ 而言，$\varepsilon_i, n_i \neq 0$ (我们也可以用极限的方法让其成为无穷小而不是真的零值)，定义
-\begin{equation*}
-  \epsilon_i = \varepsilon_i / n_i + \mu
-\end{equation*}
-那么就有通常的 Kohn-Sham 方程的形式了：
-\begin{equation}
-  \label{eq.ks-analysis}
-  \left( \frac{\delta F[\rho]}{\delta \rho} + v(\bm{r}) \right) \phi_i (\bm{r}) = \epsilon_i \phi_i (\bm{r})
-\end{equation}
-也因此，对于特定的密度 $\rho(\bm{r})$ 而言，$\{\epsilon_i\}$ 数列将是确定的。但我们这个时候还没有令 $\rho(\bm{r})$ 的表达式是关于 $\{\phi_i(\bm{r})\}$ 函数的非一即零的平方和，即没有令 $\rho(\bm{r})$ 是无相互作用波函数的密度。
-
-现在我们对等式两边乘以 $n_i \phi_i^*(\bm{r})$，得到
-\begin{equation*}
-  \left( \frac{\delta F[\rho]}{\delta \rho} + v(\bm{r}) \right) n_i |\phi_i (\bm{r})|^2 = \epsilon_i n_i |\phi_i (\bm{r})|^2
-\end{equation*}
-对上式作关于 $i$ 的求和，并且对电子坐标 $\bm{r}$ 作积分，并注意到
-\begin{equation*}
-  \rho(\bm{r}) = \sum_i n_i |\phi_i (\bm{r})|^2
-\end{equation*}
-以及正交条件
-\begin{equation*}
-  \int |\phi_i (\bm{r})|^2f \bm{r} = 1
-\end{equation*}
-由此可以得到
-\begin{equation*}
-  \int \left( \frac{\delta F[\rho]}{\delta \rho} + v(\bm{r}) \right) \rho(\bm{r}) \, \mathrm{d} \bm{r} = \sum_i n_i \epsilon_i
-\end{equation*}
-注意到我们的核心目标是对 $E_v[\rho]$ 作关于 $\rho$ 的变分极小；将 $\int v(\bm{r}) \rho(\bm{r}) \, \mathrm{d} \bm{r}$ 的结果代入 $E_v[\rho]$ 中，可以得到
-\begin{equation*}
-  E_v[\rho] = F[\rho] + \int v(\bm{r}) \rho(\bm{r}) \, \mathrm{d} \bm{r} = F[\rho] - \int \frac{\delta F[\rho]}{\delta \rho} \rho(\bm{r}) \, \mathrm{d} \bm{r} + \sum_i n_i \epsilon_i
-\end{equation*}
-
-现在我们假设对关于 $\phi_i^* (\bm{r})$ 的变分没有疑问 (这也是说这部分推导并不是完全严格的原因)。有疑问的部分是 $n_i$ 到底是否非一即零。那么，我们不妨对其中的两个轨道 $j \neq k$ 作考虑，其中 $\varepsilon_k > \varepsilon_j$。被考虑的轨道并非是能级简并的。
-
-对于一定的密度 $\rho$，如果对 $j, k$ 轨道的占据数分别减去与加上一个小量 $\omega$ (将低能级的少量电子填充到高能级)，那么此时电子云密度的变化 $\delta \rho$ 是
-\begin{align*}
-  \eta &\mathrel{:=} (|\phi_k|^2 - |\phi_j|^2) \\
-  \delta \rho &= \omega \eta
-\end{align*}
-我们看看 $E_v[\rho]$ 在这个小量变化下的影响。当 $\omega \rightarrow 0$ 时，
-\begin{align}
-  \label{eq.ks-limit}
-  \lim_{\omega \rightarrow 0} (E_v[\rho + \delta \rho] - E_v[\rho])
-  &= \lim_{\omega \rightarrow 0} \left( F[\rho + \delta \rho] - F[\rho] \right)
-  - \lim_{\omega \rightarrow 0} \left( \int \frac{\delta F[\rho + \delta \rho]}{\delta \rho} ( \rho + \delta \rho ) \, \mathrm{d} \bm{r} - \int \frac{\delta F[\rho]}{\delta \rho} \rho \, \mathrm{d} \bm{r} \right) \notag \\
-  &\quad
-  + \lim_{\omega \rightarrow 0} \sum_i n_i \big( \epsilon_i [\rho + \delta \rho] - \epsilon_i [\rho] \big) + \lim_{\omega \rightarrow 0} \omega \left( \epsilon_k [\rho + \delta \rho] - \epsilon_j [\rho + \delta \rho] \right)
-\end{align}
-这样的表达式确实比较奇怪，因为一旦取到极限，等式左右显然都是零。不过我们现在的主要目标是看这个变化的单调性，即将电子从低能级轨道拉到高能级轨道时，$E_v[\rho]$ 是否单调地变大。我们将作上式的一阶极限 (即一次导数)。接下来就验证这个结论。
-
-对式 (\ref{eq.ks-limit}) 的第一项作一阶极限，得到
-\begin{equation*}
-  \lim_{\omega \rightarrow 0} \frac{1}{\omega} \left( F[\rho + \delta \rho] - F[\rho] \right) = \lim_{\omega \rightarrow 0} \frac{1}{\omega} \int \frac{\delta F}{\delta \rho} \delta \rho \, \mathrm{d} \bm{r} = \int \frac{\delta F}{\delta \rho} \eta \, \mathrm{d} \bm{r}
-\end{equation*}
-根据变分的乘法法则，对 (\ref{eq.ks-limit}) 的第二项作一阶极限，
-\begin{align*}
-  &\quad - \lim_{\omega \rightarrow 0} \frac{1}{\omega} \left( \int \frac{\delta F[\rho + \delta \rho]}{\delta \rho} ( \rho + \delta \rho ) \, \mathrm{d} \bm{r} - \int \frac{\delta F[\rho]}{\delta \rho} \rho \, \mathrm{d} \bm{r} \right) \\
-  &= - \lim_{\omega \rightarrow 0} \frac{1}{\omega} \left( \int \frac{\delta F}{\delta \rho} \delta \rho \, \mathrm{d} \bm{r} + \iint \frac{\delta^2 F}{\delta \rho(\bm{r}) \delta \rho(\bm{r}')} \rho(\bm{r}) \delta \rho(\bm{r}') \, \mathrm{d} \bm{r} \, \mathrm{d} \bm{r}' \right) \\
-  &= - \int \frac{\delta F}{\delta \rho} \eta \, \mathrm{d} \bm{r} - \iint \frac{\delta^2 F}{\delta \rho(\bm{r}) \delta \rho(\bm{r}')} \rho(\bm{r}) \eta(\bm{r}') \, \mathrm{d} \bm{r} \, \mathrm{d} \bm{r}'
-\end{align*}
-
-式 (\ref{eq.ks-limit}) 的第三、四项中，我们将泛函记号也引入了轨道能量中；即我们将轨道能量看作密度的泛函。尽管我们目标仅仅是调整电子占据数 $n_j, n_k$，但这些调整会对整体的轨道能级 $\epsilon_i$ 发生变化；而且这个变化不是高阶的，而是有一阶贡献的。四项的一阶极限比较容易 (留意到我们要求电子从低能级 $\epsilon_j$ 微量地移动到高能级 $\epsilon_k$)：
-\begin{equation*}
-  \lim_{\omega \rightarrow 0} \left( \epsilon_k [\rho + \delta \rho] - \epsilon_j [\rho + \delta \rho] \right) = \epsilon_k - \epsilon_j > 0
-\end{equation*}
-第三项的一阶极限比较麻烦。我们对 Kohn-Sham 式作密度的微扰变化 $\rho \rightarrow \rho + \delta \rho$，并且乘以 $\phi_i^*(\bm{r})$ 进行积分，得到
-\begin{equation*}
-  \epsilon_i [\rho + \delta \rho] = \epsilon_i + \delta \epsilon_i = \int \left( \frac{\delta F[\rho + \delta \rho]}{\delta \rho} + v(\bm{r}) \right) |\phi_i (\bm{r})|^2 \, \mathrm{d} \bm{r}
-\end{equation*}
-对上式作一阶极限 (注意到这里我们认为轨道函数没有一阶的微扰贡献)，得到
-\begin{equation*}
-  \frac{\mathrm{d} \epsilon_i}{\mathrm{d} \omega} = \lim_{\omega \rightarrow 0} \frac{\delta \epsilon_i}{\omega}
-  = \iint \frac{\delta F^2}{\delta \rho(\bm{r}) \delta \rho(\bm{r}')} |\phi_i (\bm{r})|^2 \eta(\bm{r}') \, \mathrm{d} \bm{r} \, \mathrm{d} \bm{r}'
-\end{equation*}
-代入到式 (\ref{eq.ks-limit}) 的第三项中，
-\begin{align*}
-  &\quad \lim_{\omega \rightarrow 0} \frac{1}{\omega} \sum_i n_i \big( \epsilon_i [\rho + \delta \rho] - \epsilon_i [\rho] \big)
-  = \sum_i n_i \frac{\mathrm{d} \epsilon_i}{\mathrm{d} \omega} \\
-  &= \iint \frac{\delta F^2}{\delta \rho(\bm{r}) \delta \rho(\bm{r}')} \sum_i n_i |\phi_i (\bm{r})|^2 \eta(\bm{r}') \, \mathrm{d} \bm{r} \, \mathrm{d} \bm{r}' = \iint \frac{\delta^2 F}{\delta \rho(\bm{r}) \delta \rho(\bm{r}')} \rho(\bm{r}) \eta(\bm{r}') \, \mathrm{d} \bm{r} \, \mathrm{d} \bm{r}'
-\end{align*}
-
-现在我们整理式 (\ref{eq.ks-limit})。我们发现在一阶极限中，许多项都可以互相抵消；并进而得到
-\begin{equation*}
-  \frac{\mathrm{d} E_v[\rho + \delta \rho]}{\mathrm{d} \omega} = \lim_{\omega \rightarrow 0} \frac{1}{\omega} (E_v[\rho + \delta \rho] - E_v[\rho]) = \epsilon_k - \epsilon_j > 0
-\end{equation*}
-尽管结论很简单也很直观，但推导过程并不真的非常轻松。上述结论意味着，电子确实一定会倾向于占据低能级的轨道。因此，在能级没有简并的前提下，电子一定会要么满占据、要么空占据 Kohn-Sham 轨道。由此，我们由 Kohn-Sham 方程\textsf{推导}出了无相互作用体系，而不是\textsf{基于}无相互作用体系给出了 Kohn-Sham 方程。
-
 

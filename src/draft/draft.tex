@@ -1,3 +1,5 @@
+% !TEX root=./draft.tex
+
 %-----全局定义-----
 \documentclass[type=doctor]{fduthesis}
 
@@ -18,7 +20,7 @@
         % declaration-page = {declaration.pdf},
         % 插入扫描版的声明页 PDF 文档
         % 默认使用预定义的声明页，但不带签名
-        auto-make-cover = false
+        % auto-make-cover = true
         % 是否自动生成论文封面（封一）、指导小组成员名单（封二）和声明页（封三）
         % 除非特殊需要（e.g. 不要封面），否则不建议设为 false
     },
@@ -97,3 +99,16 @@
 \newcommand{\alert}[1]{{\color{red}{#1}}}
 
 %---------设定区结束----------
+
+\begin{document}
+
+\graphicspath{{../chap-01/}}
+\input{../chap-01/chap-01.tex}
+
+% 后置部分包含参考文献、声明页（自动生成）等
+\backmatter
+
+% 打印参考文献列表
+\printbibliography
+
+\end{document}
