@@ -102,8 +102,25 @@
 
 \begin{document}
 
+%-----前置区-----
+
+% 前置部分包含目录、中英文摘要以及符号表等
+\frontmatter
+
+% 目录
+\tableofcontents
+
+\input{../notations/abbr.tex}
+
+%-----论文主体-----
+
+% 主体部分是论文的核心
+\mainmatter
+
 \graphicspath{{../chap-01/}}
 \input{../chap-01/chap-01.tex}
+
+%-----后置区-----
 
 % 后置部分包含参考文献、声明页（自动生成）等
 \backmatter
