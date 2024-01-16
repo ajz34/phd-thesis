@@ -80,8 +80,8 @@
 \usepackage{multicol}
 \usepackage{multirow}
 \usepackage{arydshln}
-% \usepackage{dcolumn}
-% \newcolumntype{d}[1]{D{.}{.}{#1}}
+\usepackage{dcolumn}
+\newcolumntype{d}[1]{D{.}{.}{#1}}
 \setlength\dashlinedash{0.5pt}
 \setlength\dashlinegap{1.5pt}
 \setlength\arrayrulewidth{0.5pt}
@@ -111,6 +111,7 @@
 \tableofcontents
 
 \input{../notations/abbr.tex}
+\input{../notations/method.tex}
 
 %-----论文主体-----
 
@@ -119,6 +120,9 @@
 
 \graphicspath{{../chap-01/}}
 \input{../chap-01/chap-01.tex}
+
+\graphicspath{{../chap-02/}}
+\input{../chap-02/chap-02.tex}
 
 %-----后置区-----
 

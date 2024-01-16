@@ -57,7 +57,7 @@
 
 若不将自旋看作变量，那么定态 \Schrodinger 方程 (\ref{eq.1.tise}) 是关于电子坐标 $\{\bm{r}_i\}$ 的方程；其中 $i = 1, 2, \cdots, n_\mathrm{elec}$，待处理的自变量数量非常大。为避免分析复杂的波函数，Hohenberg 与 Kohn 考虑使用变量数非常少的电子密度 $\rho(\bm{r})$ 对体系进行研究，并提出了两条基本定理 \cite{Hohenberg-Kohn.PR.1964}。
 
-\textsf{唯一性定理}：体系的基态电子密度 $\rho(\bm{r})$ 与体系所处的外势 $v(\bm{r})$ 存在一一对应关系 (不计入外势函数上的任意常数)。该定理的意义有两者：
+\textbf{唯一性定理}：体系的基态电子密度 $\rho(\bm{r})$ 与体系所处的外势 $v(\bm{r})$ 存在一一对应关系 (不计入外势函数上的任意常数)。该定理的意义有两者：
 \begin{itemize}[nosep]
   \item 由于算符 $\hat H$ 可以看作关于外势 $\hat V_\mathrm{ext}$ 的算符，因此在 \Schrodinger 方程下，基态能量 $E$ 可以写成关于外势函数 $v(\bm{r})$ 的泛函：
   \begin{equation}
@@ -79,7 +79,7 @@
   该项表达式没有 $v$ 显式的参与，因此这部分贡献可以看作是对任意外势普适的泛函。具体来说，该泛函 $F[\rho]$ 可以应用于任何不同构型的分子体系、以及任何不影响动能与电子库伦互斥效应的外势。
 \end{itemize}
 
-\textsf{变分定理}：在给定外势 $v(\bm{r})$ 的体系下，基态能量可以通过对下述泛函求取电子密度 $\rho(\bm{r})$ 的变分极小得到：
+\textbf{变分定理}：在给定外势 $v(\bm{r})$ 的体系下，基态能量可以通过对下述泛函求取电子密度 $\rho(\bm{r})$ 的变分极小得到：
 \begin{equation}
   E[\rho] = \min_{\rho \rightarrow n_\mathrm{elec}} \left( F[\rho] + \int v (\bm{r}) \rho (\bm{r}) \, \mathrm{d} \bm{r} \right)
 \end{equation}
@@ -303,7 +303,7 @@ xDH 型泛函的能量泛函是第五阶泛函，相比于杂化泛函包含更�
   \end{tabular}
 \end{table}
 
-\textbf{核磁屏蔽常数}。图 \ref{fig.1.xdh-nmr} 中，颜文杰等对部分双杂化泛函的核磁屏蔽常数作测评\cite{Yan-Xu.JCTC.2022}。FPA-M 数据集包含 20 个分子的 34 个 \ce{^{13}C}、\ce{^{15}N}、\ce{^{17}O}、\ce{^{19}F} 原子核的化学位移理论计算结果；其参考值是通过 FPA (Focal-Point Analysis) 方法给出 CCSD(T) 在完备基组极限 (CBS, Complete Basis Set) 得来。测评表明，XYGJ-OS 在诸多双杂化泛函中有出色的表现，并且误差明显小于 Stoychev 等的测评文章\cite{Stoychev-Neese.JCTC.2018} 中表现最好的 DSD-PBEP86 泛函。该工作同时测评了氢原子的化学位移，表明 XYGJ-OS 与 xDH-PBE0 等泛函在 HC\_48/40 数据集上的测评精度对于 \ce{^{1}H} 而言约为 0.03 ppm、对于 \ce{^{13}C} 而言约为 1 ppm，达到了相当高的精度。
+\textbf{核磁屏蔽常数}。图 \ref{fig.1.xdh-nmr} 中，颜文杰等对部分双杂化泛函的核磁屏蔽常数作测评\cite{Yan-Xu.JCTC.2022}。FPA-M 数据集包含 20 个分子的 34 个 \ce{^{13}C}、\ce{^{15}N}、\ce{^{17}O}、\ce{^{19}F} 原子核的化学位移理论计算结果；其参考值是 FPA 模型下的 CCSD(T)/CBS 结果。测评表明，XYGJ-OS 在诸多双杂化泛函中有出色的表现，并且误差明显小于 Stoychev 等的测评文章\cite{Stoychev-Neese.JCTC.2018} 中表现最好的 DSD-PBEP86 泛函。该工作同时测评了氢原子的化学位移，表明 XYGJ-OS 与 xDH-PBE0 等泛函在 HC\_48/40 数据集上的测评精度对于 \ce{^{1}H} 而言约为 0.03 ppm、对于 \ce{^{13}C} 而言约为 1 ppm，达到了相当高的精度。
 
 \begin{figure}[h]
   \centering
