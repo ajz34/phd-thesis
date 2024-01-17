@@ -1,5 +1,6 @@
 %-----全局定义-----
 \documentclass[type=doctor]{fduthesis}
+% \usepackage{fdudoc}
 
 %-----FDU thesis setup-----
 \fdusetup{
@@ -63,12 +64,19 @@
 \ExplSyntaxOn
 \tl_set:Nn \c__fdu_cover_info_align_tl { c @ { \c__fdu_fwid_colon_tl } l }
 \ExplSyntaxOff
+% 化学系图表格式要求
+\ExplSyntaxOn
+\cs_set:Npn \thefigure
+{ \thechapter . \__fdu_arabic:n { figure } }
+\cs_set:Npn \thetable
+{ \thechapter . \__fdu_arabic:n { table } }
+\ExplSyntaxOff
 
 %-----图表设置-----
 \usepackage{siunitx}
 \usepackage{enumitem}
 \newcommand{\tabnote}[1]{\textsuperscript{\emph{#1}}}
-
+\usepackage{threeparttable}
 \usepackage{graphicx}
 \usepackage{longtable}
 \usepackage{longfigure}
@@ -84,6 +92,7 @@
 \setlength\dashlinegap{1.5pt}
 \setlength\arrayrulewidth{0.5pt}
 \usepackage{rotating}
+\usepackage{booktabs}
 
 %-----化学符号-----
 \usepackage[version=4]{mhchem}
@@ -93,7 +102,52 @@
 \allowdisplaybreaks[1]
 
 %-----其它定义-----
+\usepackage{ifthen}
 \newcommand{\Schrodinger}{Schr\"o\-dinger}
 \newcommand{\alert}[1]{{\color{red}{#1}}}
 
+% tablenotes 与表格内注释超链接 (from fdudoc.cls)
+\makeatletter
+\renewlist{tablenotes}{description}{1}
+\setlist[tablenotes]{
+  format      = \normalfont\itshape\tnote@item,
+  labelwidth  = 0.5em,
+  itemindent  = 0pt,
+  rightmargin = \tabcolsep,
+  leftmargin  = \the\dimexpr\tabcolsep+1em\relax,
+  after       = \@noparlisttrue}
+\AtBeginEnvironment{tablenotes}{%
+  \setlength\parindent{2\ccwd}%
+  \normalfont\footnotesize}
+\AtBeginEnvironment{threeparttable}{%
+  \stepcounter{tpt@id}%
+  \edef\curr@tpt@id{tpt@\arabic{tpt@id}}}
+\newcounter{tpt@id}
+\def\tnote@item#1{%
+  \Hy@raisedlink{\hyper@anchor{\curr@tpt@id-#1}}#1}
+\def\TPTtagStyle#1{\textit{\hyperlink{\curr@tpt@id-#1}{#1}}}
+\makeatother
+
+% 用于表格注释与 threeparttable 环境引入的便利函数
+\renewcommand{\TPTminimum}{\linewidth}
+\newcommand{\widetabular}[2]{%
+\ifx&#2&
+  \begin{threeparttable}
+    \centerline{\makebox[2\linewidth]{#1}}
+  \end{threeparttable}
+\else
+  \begin{threeparttable}
+    \centerline{\makebox[2\linewidth]{#1}}
+  \begin{tablenotes}[nosep, topsep=0.5em]
+    #2
+  \end{tablenotes}
+  \end{threeparttable}
+\fi}
+
 %---------设定区结束----------
+
+% 格式检查列表
+% [ ] 表格数据使用 \widetabular{}{} 插入，以替代自定义的 \tabnote 和默认的 threeparttable。
+% [ ] 表格 caption 在上，图片 caption 在下。图片不引入注释。
+% [ ] 表格尽可能不引入纵向分割线。
+% [ ] 建构术语表与符号表，避免文中出现术语定义、特别是英文定义。

@@ -254,31 +254,31 @@ xDH 型泛函的能量泛函是第五阶泛函，相比于杂化泛函包含更�
 
 关于 MP2 型双杂化泛函的测评，目前已有大量的文献作了详细的阐述，并为研究工作者提供了有价值的参考意见。近年 xDH 型双杂化泛函发展了一阶梯度、二阶梯度、周期性计算的理论，几何结构、电子云密度、周期性体系、振动频率与偶极矩等性质的计算得以实现并测评。本工作的主要研究对象是 xDH 型泛函，为此我们先对这类型泛函已有的测评情况作说明，以对该类型泛函有直观的认识。这一段的讨论同时参见论文\cite{Gu.Thesis.2020, Yan.Thesis.2022}。
 
-\textbf{分子能量测评表现}。目前反应能测评集中，最普遍与流行的测评集之一是 GMTKN55 数据集\cite{Goerigk-Grimme.PCCP.2017}。该数据集囊括了 1505 个反应的相对能量数据；这些反应包含主族化学的热力学、动力学与非共价相互作用。具体来说，该数据集分为五个子数据集，分别是基本性质与小体系反应能 (Sub1)、大体系反应能与异构能 (Sub2)、反应势垒 (Sub3)、分子间非共价相互作用 (Sub4)、分子内非共价相互作用 (Sub5)。由于 GMTKN55 的反应种类较为全面、数据量相对于双杂化参数量非常大，该数据集也经常用于新泛函开发、或系统性地测评与比较各种密度泛函近似或波函数方法。GMTKN55 所使用的测评标准是一种加权平均绝对值的误差 (WTMAD-2，单位 kcal/mol)，以公允地对不同类型、大小的体系进行误差表现评价。张颖等对以 B3LYP 为参考态的 xDH 型密度泛函进行了系统性的测评\cite{Zhang-Xu.JPCL.2021}。从图 \ref{fig.1.xdh-b3lyp-wtmad} 可以看到，在爬升“Jacob 阶梯”时，作为第 5 阶的各 bDH 型与 xDH 型泛函在各个数据集上的表现都显著地优于作为第 4 阶的 B3LYP。早期的双杂化泛函，如 B2PLYP、XYG3、DSD-BLYP-D3 等并非在 GMTKN55 数据集上进行优化；因此，进一步地在 GMTKN55 上优化的 XYG7 与 xrevDSD-PBEB86-D4 泛函，在 GMTKN55 测评表现上普遍优于早期的双杂化泛函。即使对泛函可优化参数施加较强的限制，在 GMTKN55 重新优化下的 revXYG3 仍然能达到 2.5 kcal/mol 的精度。总地来说，XYG7、$\omega$B97M(2)、xrevDSD-PBEB86-D4 等泛函在 GMTKN55 下测评精度达到 2.2 kcal/mol 左右，是现在主族反应表现最佳的一类泛函。
+\textbf{分子能量测评表现}。目前反应能测评集中，最普遍与流行的测评集之一是 GMTKN55 数据集\cite{Goerigk-Grimme.PCCP.2017}。该数据集囊括了 1505 个反应的相对能量数据；这些反应包含主族化学的热力学、动力学与非共价相互作用。具体来说，该数据集分为五个子数据集，分别是基本性质与小体系反应能 (Sub1)、大体系反应能与异构能 (Sub2)、反应势垒 (Sub3)、分子间非共价相互作用 (Sub4)、分子内非共价相互作用 (Sub5)。由于 GMTKN55 的反应种类较为全面、数据量相对于双杂化参数量非常大，该数据集也经常用于新泛函开发、或系统性地测评与比较各种密度泛函近似或波函数方法。GMTKN55 所使用的测评标准是一种加权平均绝对值的误差 WTMAD-2 (单位 kcal/mol)，以公允地对不同类型、大小的体系进行误差表现评价。张颖等对以 B3LYP 为参考态的 xDH 型密度泛函进行了系统性的测评\cite{Zhang-Xu.JPCL.2021}。从图 \ref{fig.1.xdh-b3lyp-wtmad} 可以看到，在爬升“Jacob 阶梯”时，作为第 5 阶的各 bDH 型与 xDH 型泛函在各个数据集上的表现都显著地优于作为第 4 阶的 B3LYP。早期的双杂化泛函，如 B2PLYP、XYG3、DSD-BLYP-D3 等并非在 GMTKN55 数据集上进行优化；因此，进一步地在 GMTKN55 上优化的 XYG7 与 xrevDSD-PBEB86-D4 泛函，在 GMTKN55 测评表现上普遍优于早期的双杂化泛函。即使对泛函可优化参数施加较强的限制，在 GMTKN55 重新优化下的 revXYG3 仍然能达到 2.5 kcal/mol 的精度。总地来说，XYG7、$\omega$B97M(2)、xrevDSD-PBEB86-D4 等泛函在 GMTKN55 下测评精度达到 2.2 kcal/mol 左右，是现在主族反应表现最佳的一类泛函。
 
 \begin{figure}[h]
   \centering
-  \caption{各类双杂化密度泛函与 B3LYP 杂化泛函在 GMTKN55 数据集上的测评表现。数据取自文献\cite{Zhang-Xu.JPCL.2021}。图表样式参考论文\cite{Yan.Thesis.2022}。下图中的 xrevDSD 泛函指代 xrevDSD-PBEP86-D4。}
-  \label{fig.1.xdh-b3lyp-wtmad}
   \includegraphics[width=0.8\textwidth]{assets/xdh-b3lyp-wtmad.pdf}
+  \caption{各类双杂化密度泛函与 B3LYP 杂化泛函在 GMTKN55 数据集上的 WTMAD-2 测评表现。数据取自文献\cite{Zhang-Xu.JPCL.2021}。图表样式参考论文\cite{Yan.Thesis.2022}。下图中的 xrevDSD 泛函指代 xrevDSD-PBEP86-D4。}
+  \label{fig.1.xdh-b3lyp-wtmad}
 \end{figure}
 
 \textbf{固体能量测评表现}。图 \ref{fig.1.xdh-solid} 中，王艺臻、李亚静等对 XYG3、XYGJ-OS 双杂化泛函、以及部分低阶 (2--4 阶) 泛函作分子解离能与固体聚合能的测评\cite{Wang-Xu.JA.2021}。其中，CE14 测试集包括 14 种具有强聚合能 (包括强共价键与离子键) 的固体，Bond142 测试集则是由 142 个小分子的键解离能。测评结果表明。尽管 SCAN 与 SCAN0 在处理固体聚合能上有不亚于 xDH 的测评结果，但在分子键能问题上则没有很好的表现。XYG3 与 XYGJ-OS 可以相比于其他低阶泛函、或波函数理论下的 MP2 与 RPA 方法，能够更好地同时处理固体与分子体系中强共价作用的问题，取得两家之长。该工作的其它测评表明，XYGJ-OS 在金红石的两相结构、一氧化碳分子在氯化钠晶体下的吸附能等典型固体计算问题下也有优异的表现。
 
 \begin{figure}[h]
   \centering
+  \includegraphics[width=0.4\textwidth]{assets/xdh-solid.jpeg}
   \caption{固体聚合能测试集 CE14 与分子键解离能测试集 Bond142 测评结果。CE14 呈现的是分摊到每个原子上的误差表现。图片取自文献\cite{Wang-Xu.JA.2021}。}
   \label{fig.1.xdh-solid}
-  \includegraphics[width=0.4\textwidth]{assets/xdh-solid.jpeg}
 \end{figure}
 
 \textbf{分子几何结构}。图 \ref{fig.1.xdh-pbe0-bond} 中，苏乃强等对包括 xDH 型双杂化泛函的部分杂化、双杂化泛函作分子几何结构的测评\cite{Su-Xu.SCC.2013}。为了方便比较测评结果，选取了缩放的 s-MAD (即以 XYG3 为单位测评结果作为 1 进行缩放的平均绝对值误差) 作为测评依据。其中，Cov 测试集包括 63 种共价分子与离子体系、NBI 测试集选用了 6 种小分子的二聚体结构用于测评非共价相互作用下的键长表现、TS 测试集收录了 12 个过渡态结构信息。可以看到，作为“Jacob 阶梯”第 5 阶的双杂化泛函的总体表现明显由于第 4 阶的 B3LYP 与 PBE0。除了 xDH-PBE0 在非键作用体系有待改进外，xDH 型泛函在各个数据集上的表现也明显优于 B2PLYP 或 MP2。
 
 \begin{figure}[h]
   \centering
+  \includegraphics[width=0.7\textwidth]{assets/xdh-pbe0-bond.jpg}
   \caption{部分杂化、双杂化泛函及 MP2 方法在分子结构上的总体表现。Cov 代表共价键合分子、NBI 代表非键作用体系、TS 代表过渡态结构、Tot 代表三者的平均。图片取自文献\cite{Su-Xu.SCC.2013}。}
   \label{fig.1.xdh-pbe0-bond}
-  \includegraphics[width=0.7\textwidth]{assets/xdh-pbe0-bond.jpg}
 \end{figure}
 
 \textbf{振动频率}。表 \ref{tab.1.xdh-freq-bench} 中，谷永浩等对部分泛函的谐振频率作测评\cite{Gu-Xu.JCTC.2021}。测试集 F38 包含 38 个小分子的高精度谐振频率实验测量结果 (除 \ce{NH3} 的伞式振动参考值为 CCSD(T)/cc-pVQZ 计算结果)。XYGJ-OS、B2PLYP、xDH-PBE0 的测评表现较好，与实验结果的误差平均不超过 30 $\text{cm}^{-1}$。与此同时，XYGJ-OS 的误差分布较窄，产生较大误差的分子很少。对比 xDH 中表现较好的泛函 XYGJ-OS 与 xDH-PBE0、与其基底泛函 B3LYP 与 PBE0，可以认为在频率计算问题中，泛函的精度仍然沿着“Jacob 阶梯”的爬升稳步提高。
@@ -307,9 +307,9 @@ xDH 型泛函的能量泛函是第五阶泛函，相比于杂化泛函包含更�
 
 \begin{figure}[h]
   \centering
+  \includegraphics[width=0.4\textwidth]{assets/xdh-nmr.jpeg}
   \caption{部分双杂化泛函在 FPA-M 集上以 4-$\zeta$ 基组计算的测评表现。图片取自文献\cite{Yan-Xu.JCTC.2022}。}
   \label{fig.1.xdh-nmr}
-  \includegraphics[width=0.4\textwidth]{assets/xdh-nmr.jpeg}
 \end{figure}
 
 \section{本文研究思路与主要工作}
