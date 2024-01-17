@@ -1,8 +1,8 @@
-% !TEX root=./chap-04-dummy.tex
+% !TEX root=./dummy-04.tex
 
-\section{双杂化泛函原子体系电子云密度与能量测评}
+\chapter{双杂化泛函原子体系电子云密度与能量测评}
 
-\subsection{引言}
+\section{引言}
 
 DFT (密度泛函理论) 在 Hohenberg-Kohn 定理\cite{Hohenberg-Kohn.PR.1964}的框架下，是原理上严格的理论；即没有引入任何近似，且必然存在一个对所有体系普适的、严格正确的泛函 $F[\rho]$；它可以导出精确的能量、电子云密度、各种分子或物质性质、以至于精确的波函数本身。
 
@@ -29,9 +29,9 @@ DFT (密度泛函理论) 在 Hohenberg-Kohn 定理\cite{Hohenberg-Kohn.PR.1964}�
 
 在本章与第六章，我们将对上述猜测作验证。我们基于 Medvedev 等人的工作\cite{Medvedev-Lyssenko.S.2017}，对双杂化泛函作较为系统地评测。我们将同时关注能量 $E$ 与密度 $\rho(\bm{r})$ 的表现，并对基组依赖性作简要的讨论。我们期望表明，双杂化泛函不仅在反应能量上有良好的表现\cite{Su-Xu.WCMS.2016, Goerigk-Grimme.PCCP.2017, Zhang-Xu.JPCL.2021, Santra-Martin.JPCL.2021}；在原子体系的电离和电子云密度的表现上，也沿着“Jacob 阶梯”仍然走在正确的道路上。
 
-\subsection{实现细节}
+\section{实现细节}
 
-\subsubsection{计算体系与方法}
+\subsection{计算体系与方法}
 
 本工作所涉及的体系是 14 个原子或离子体系 (\ce{Be^0}, \ce{B^+}, \ce{B^3+}, \ce{C^2+}, \ce{C^4+}, \ce{N^3+}, \ce{N^5+}, \ce{O^4+}, \ce{O^6+}, \ce{F^5+}, \ce{F^7+}, \ce{Ne^0}, \ce{Ne^6+}, \ce{Ne^8+}) 的电子云密度与能量。这些体系均为 2 ($1s^2$)、4 ($1s^2 2s^2$)、10 ($1s^2 2s^2 2p^6$) 电子体系。
 
@@ -50,7 +50,7 @@ DFT (密度泛函理论) 在 Hohenberg-Kohn 定理\cite{Hohenberg-Kohn.PR.1964}�
     \includegraphics[width=0.6\textwidth]{assets/functionals-distribution.pdf}
 \end{figure}
 
-\subsubsection{径向函数与密度测评标准定义}
+\subsection{径向函数与密度测评标准定义}
 
 本工作所采用的测评标准与 Medvedev 等人的工作\cite{Medvedev-Lyssenko.S.2017}一致，通过分析密度格点的径向分布函数 (RDF, \underline{R}adial \underline{D}istribution \underline{F}unction) 以作评测。该 RDF 的坐标选取为以原子核为中心均匀分布的 0 -- 10 \AA 的 50000 个格点。
 
@@ -80,11 +80,11 @@ DFT (密度泛函理论) 在 Hohenberg-Kohn 定理\cite{Hohenberg-Kohn.PR.1964}�
 
 本工作的 median RMSD，对于 RHO (单位 $\text{e} \, \text{\AA}^{-1}$) 为 0.009943368，对于 GRD (单位 $\text{e} \, \text{\AA}^{-1} \, \text{Bohr}^{-1}$) 为 0.092398036，对 LR (单位 $\text{e} \, \text{\AA}^{-1} \, \text{Bohr}^{-2}$) 为 1.445110833\footnote{在 Medvedev 等人的工作\cite{Medvedev-Lyssenko.S.2017} 中，用于图片展示的 GRD 的单位是 $\text{e} \, \text{\AA}^{-2}$、LR 的单位是 $\text{e} \, \text{\AA}^{-3}$；但我们的验证认为其单位换算可能存在问题。尽管如此，由于实际用于衡量泛函或方法间误差与优劣的标准是无量纲的 maxMNAE 或 meanMNAE，因此物理单位的问题不影响结论与讨论。}。
 
-\subsection{测评结果}
+\section{测评结果}
 
 完整的测评结果参考附录的表 \ref{tab.full-atom-benchmark}。由于数据较多，后文将对该表格的结果作分析与讨论。
 
-\subsubsection{依年代发展的总体表现}
+\subsection{依年代发展的总体表现}
 
 \begin{figure}[tp]
     \centering
@@ -108,7 +108,7 @@ Medvedev 等人工作的 Fig.\ 1 中，展现了随着年代的发展，泛函�
     \includegraphics[width=0.7\textwidth]{assets/MAE-etot-against-year.pdf}
 \end{figure}
 
-\subsubsection{具体测评表现}
+\subsection{具体测评表现}
 
 这里我们将更具体地讨论泛函的测评误差表现。
 
@@ -141,7 +141,7 @@ Medvedev 等人工作的 Fig.\ 1 中，展现了随着年代的发展，泛函�
 
 在双杂化泛函中，XYG3 型 (xDH) 泛函的表现与 B2PLYP 型 (bDH) 泛函的表现也有所差异。图 \ref{fig.compare-err-maxMNAE-MAEIP-dh} 与图 \ref{fig.compare-err-maxMNAE-MAEIP} 相同，但仅绘制双杂化泛函的数据，并区分 xDH 型与 bDH 型泛函。可以看到，xDH 型泛函不仅在能量、也同时在密度上，有着比 bDH 型泛函更优异的表现。在 bDH 型泛函中，仅有 DSD-PBEPBE-D3BJ 与 DSD-PBEB95-D3BJ 相较于 MP2 而言有更优异的密度与能量表现；但除 XYG7 外的所有测评的 xDH 型泛函，其表现都优于 MP2 方法，且也与 DSD 系列泛函拉开了一定的差距。
 
-\subsection{讨论与本章小结}
+\section{讨论与本章小结}
 
 \begin{figure}[t]
     \centering
@@ -168,9 +168,9 @@ Medvedev 等人的工作也已经表明，除了少数特定的泛函，泛函�
 
 作为展望，“Jacob 阶梯”不仅是对现有的泛函近似的一种归类方式，同样也是对未来泛函发展思路的一种指导。一方面，对于分子体系计算，从泛函近似的发展上、或从计算可行性上，引入严格交换能已经成为比较普遍的共识；因此，如果泛函近似还有哪些不足，则应该认为在相关贡献上有更多文章可作。为拓展泛函近似的可能性，作为一条前进的道路，在本论文的第二章中，我们尝试了 IEPA 型，以避免 MP2 型相关能在 HOMO/LUMO gap 过小的体系的误差。我们也期待在“Jacob 阶梯”的最高阶上有更多的工作，以拓展双杂化泛函的应用范围，在计算量可接受的方法与算法下，其能量与性质越来越接近普适泛函、达到梦想的化学精度。
 
-\subsection{附录}
+\section{附录}
 
-\subsubsection{密度径向函数的 RI 近似误差}
+\subsection{密度径向函数的 RI 近似误差}
 
 我们对 HF 与 MP2 方法的 RI 近似在密度径向函数上的误差作简要的评测与分析。在本评测中，参考值取为非 RI 近似 (传统 ERI 积分) 的情形，而非以 CCSD 精确地密度作为参考。我们仅针对 aug-cc-pV$X$Z 与 aug-cc-p$\omega$CV$X$Z ($X=\mathrm{D,T,Q,5}$) 作测评。该小节不考察 Be 原子，即总共考察 13 个原子或离子体系。
 
@@ -208,7 +208,7 @@ HF 方法的 RI 近似也即 RI-JK 方法。我们分别考察了 aug-cc-pV$X$Z-
 
 从上述简要的分析，我们认为，对自洽场与微扰部分使用自动生成辅助基的 ETB 方案、作 RI 近似，对密度径向函数的影响非常小以至于可以忽略；而采用预制的针对能量计算作优化的辅助基，对于自洽场部分的影响较小、但对微扰部分的影响较大以至于不能忽略。因此，在本工作中，我们统一使用 ETB 方案的辅助基。
 
-\subsubsection{电离能的 RI 近似误差}
+\subsection{电离能的 RI 近似误差}
 
 我们对 HF 与 MP2 方法的 RI 近似在离子电离能上的误差作简要的评测与分析。评测的方式与上一小节相似。该小节考察的体系是 \ce{Be^+}, \ce{C^2+}, \ce{N^3+}, \ce{O^4+}, \ce{F^5+}, \ce{Ne^6+} 六个离子体系电离两个电子，即 $1s^2 2s^2 \rightarrow 1s^2$ 的电离能。
 
@@ -230,7 +230,7 @@ HF 方法的 RI 近似也即 RI-JK 方法。我们分别考察了 aug-cc-pV$X$Z-
 
 我们认为，对于杂化泛函或双杂化泛函，由于其严格交换能和微扰相关能贡献占比小于 100\%，从而 RI 近似对这部分能量或密度所产生的误差，预期不会比完整的 HF 和 MP2 方法更大。因此，我们认为可以在本工作的泛函测评过程中使用 RI 近似。
 
-\subsubsection{密度径向函数测评的基组依赖性}
+\subsection{密度径向函数测评的基组依赖性}
 
 \begin{figure}[t]
     \centering
@@ -247,7 +247,7 @@ HF 方法的 RI 近似也即 RI-JK 方法。我们分别考察了 aug-cc-pV$X$Z-
     \item 以绿色散点表示的双杂化泛函，在包括 $\text{maxMNAE}_\text{LR}$ 在内的所有密度径向误差指标上，aug-cc-p$\omega$CV5Z 与 aug-cc-pV5Z 基组的误差都较为接近。本工作着重关注双杂化泛函的测评表现；从图 \ref{fig.basisdep-RDF} 的表现上，我们认为使用不同 5-$\zeta$ 基组，不会影响先前文段的结论，即基组依赖性并不非常显著。
 \end{itemize}
 
-\subsubsection{其他补充数据}
+\subsection{其他补充数据}
 
 \begin{itemize}[nosep]
     \item 所有经测评密度泛函近似的密度径向函数与电离能误差展示于表 \ref{tab.full-atom-benchmark}；
