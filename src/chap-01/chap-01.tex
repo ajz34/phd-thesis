@@ -284,23 +284,27 @@ xDH 型泛函的能量泛函是第五阶泛函，相比于杂化泛函包含更�
 \textbf{振动频率}。表 \ref{tab.1.xdh-freq-bench} 中，谷永浩等对部分泛函的谐振频率作测评\cite{Gu-Xu.JCTC.2021}。测试集 F38 包含 38 个小分子的高精度谐振频率实验测量结果 (除 \ce{NH3} 的伞式振动参考值为 CCSD(T)/cc-pVQZ 计算结果)。XYGJ-OS、B2PLYP、xDH-PBE0 的测评表现较好，与实验结果的误差平均不超过 30 $\text{cm}^{-1}$。与此同时，XYGJ-OS 的误差分布较窄，产生较大误差的分子很少。对比 xDH 中表现较好的泛函 XYGJ-OS 与 xDH-PBE0、与其基底泛函 B3LYP 与 PBE0，可以认为在频率计算问题中，泛函的精度仍然沿着“Jacob 阶梯”的爬升稳步提高。
 
 \begin{table}[h]
-  \centering
-  \caption{部分泛函在 F38 测试集下谐振频率计算的测评表现。误差单位为波数 ($\text{cm}^{-1}$)。数据取自文献\cite{Gu-Xu.JCTC.2021}。}
-  \label{tab.1.xdh-freq-bench}
-  \begin{tabular}{l | 
+\centering
+\caption{部分泛函在 F38 测试集下谐振频率计算的测评表现。误差单位为波数 ($\text{cm}^{-1}$)。数据取自文献\cite{Gu-Xu.JCTC.2021}。}
+\label{tab.1.xdh-freq-bench}
+\widetabular{
+  \begin{tabular}{l
       S[table-format=+3.1]
       S[table-format=+3.1]
       S[table-format=+3.1]
       S[table-format=+3.1]
       S[table-format=+3.1]
       S[table-format=+3.1]}
-    \hline
-        & {XYG3} & {XYGJ-OS} & {xDH-PBE0} & {B2PLYP} & {B3LYP} & {PBE0} \\ \hline
+    \toprule
+        & {XYG3} & {XYGJ-OS} & {xDH-PBE0} & {B2PLYP} & {B3LYP} & {PBE0} \\
+    \midrule
     MAD & 42   & 19      & 28       & 18     & 33    & 42   \\
     MIN & -87  & -65     & -105     & -51    & -75   & -55  \\
     MAX & 115  & 42      & 51       & 96     & 130   & 122  \\
-    Error Range & 202 & 107 & 156 & 147 & 205 & 177 \\ \hline
+    Error Range & 202 & 107 & 156 & 147 & 205 & 177 \\
+    \bottomrule
   \end{tabular}
+}{}
 \end{table}
 
 \textbf{核磁屏蔽常数}。图 \ref{fig.1.xdh-nmr} 中，颜文杰等对部分双杂化泛函的核磁屏蔽常数作测评\cite{Yan-Xu.JCTC.2022}。FPA-M 数据集包含 20 个分子的 34 个 \ce{^{13}C}、\ce{^{15}N}、\ce{^{17}O}、\ce{^{19}F} 原子核的化学位移理论计算结果；其参考值是 FPA 模型下的 CCSD(T)/CBS 结果。测评表明，XYGJ-OS 在诸多双杂化泛函中有出色的表现，并且误差明显小于 Stoychev 等的测评文章\cite{Stoychev-Neese.JCTC.2018} 中表现最好的 DSD-PBEP86 泛函。该工作同时测评了氢原子的化学位移，表明 XYGJ-OS 与 xDH-PBE0 等泛函在 HC\_48/40 数据集上的测评精度对于 \ce{^{1}H} 而言约为 0.03 ppm、对于 \ce{^{13}C} 而言约为 1 ppm，达到了相当高的精度。
