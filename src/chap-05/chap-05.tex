@@ -1,8 +1,8 @@
-% !TEX root=./chap-05-dummy.tex
+% !TEX root=./dummy-05.tex
 
-\section{高精度基组外推方法在 CCSD(T) 静态极化率计算上的应用}
+\chapter{高精度基组外推方法在 CCSD(T) 静态极化率计算上的应用}
 
-\subsection{引言}
+\section{引言}
 
 静态极化率是光学中问题重要的物理量\cite{Marder-Stucky.ACS.1991}；它在化学中，也与 Raman 光谱活性\cite{Wilson-Cross.Dover.1955}、有机反应机理\cite{Xing-Pei.HEP.2005}、以及分子间相互作用\cite{Cohen-Tannoudji-Laloe.Wiley.2020}等问题上有概念上的联系。作为计算化学可以导出的物理量，对静态极化率描述的准确与否，也可以用于判断电子结构近似方法精度与有效性。因此，静态极化率是理论与计算化学都十分关心的重要物理量。
 
@@ -20,9 +20,9 @@
 
 本工作中，我们将着眼于提升 HR46 与 T145 静态极化率数据集的质量至 CCSD(T)/CBS 的精度。为此，我们首先在可以承受 aCV[Q5]Z 级别计算的小分子体系下，对 HF, MP2, CCSD 与 CCSD(T) 作详细的静态极化率基组收敛性分析。这部分工作的目标是确认对于静态极化率问题，FPA 确实可以给出与 HH132 数据集参考值相似精度的结果，即 FPA 是有效的。随后，我们将 FPA 应用于 HR46 与 T145 数据集的参考值计算上；这些参考值的精度将是 CCSD(T)/aCV[Q5]Z 级别的。我们希望这些高精度的参考值能为未来化学工作者在极化率测评，特别是对密度泛函方法的测评上，提供有效的数据来源。
 
-\subsection{具体方法与实现细节}
+\section{具体方法与实现细节}
 
-\subsubsection{误差测评标准}
+\subsection{误差测评标准}
 
 对于一个数据量为 $N$ 的数据集的参考值是 $\tilde r = \{ r_n \}$，若近似计算方法的结果是 $\tilde c = \{ c_n \}$、以及作为分母的数据 $\tilde d = \{ d_n \}$，那么数据 $\tilde c$ 的相对方均根误差 (RelRMSD, \underline{Rel}ative \underline{R}oot \underline{M}ean \underline{S}quared \underline{D}eviation) 定义为
 \begin{equation}
@@ -34,7 +34,7 @@ RelRMSD 误差多大，才认为是可以被接受或容许的范围？首先，
 
 % 关于实验误差，我暂时没能找到 102 版 CRC 常数手册的具体说明。在 2010 年的 90 版 Atomic and Molecular Polarizabilities Table 8 (pdf p. 1648--1649 或 10-200--10-201)，注脚中提到了 0.5% 的误差，但也同时指出了实验条件上是含频率的情况、以及数据年代问题。
 
-\subsubsection{电子结构方法与软件}
+\subsection{电子结构方法与软件}
 
 本工作的极化率同时使用数值与解析的方式计算。MP2 与 HF 解析极化率是通过 \textsc{PySCF} (commit 3d592b0)\cite{Sun-Chan.WCMS.2018, Sun-Chan.JCP.2020}的扩展程序脚本 \textsc{dh} (ver 0.1.3)\cite{dh-0.1.ajz34} 所实现。正因为该程序可以高效地实现包括双杂化泛函在内的 MP2 型相关能解析极化率，因此本工作中涉及到的所有分子的 MP2 极化率，在引入 RI 近似的前提下，都可以以最精确的 CBS 外推模式 aCV[Q5]Z 实现。对于 CCSD 与 CCSD(T) 方法，本工作使用 \textsc{Q-Chem} (ver 5.1.1)\cite{Shao-Head-Gordon.MP.2015, Kaliman-Krylov.JCC.2017}作数值极化率计算。这部分计算将不引入 RI 近似。本工作不对 post-HF 计算过程引入冻核近似 (FC, \underline{F}rozen \underline{C}ore)。自由基与其他开壳层体系的 HF 自洽场参考态通过自旋非限制性计算给出。
 
@@ -68,7 +68,7 @@ RelRMSD 误差多大，才认为是可以被接受或容许的范围？首先，
     \par\tabnote{a} 上述所有应用于同性极化率 $\alpha$ 的记号，将同样应用于异性极化率 $\gamma$。
 \end{table}
 
-\subsubsection{数据集}
+\subsection{数据集}
 
 本工作着重考察的数据集是 HR46 与 T144。原始的 HR46 数据集\cite{Hickey-Rowley.JPCA.2014}包含 46 个体系 (化合物结构参考附录图 \ref{fig.fig-s1})；其最精确的计算模型是在 MP2/aVTZ 结构下 CCSD/aVTZ 极化率，且该工作中使用了冻核近似。该数据集的特点是
 \begin{itemize}[nosep]
@@ -85,11 +85,11 @@ RelRMSD 误差多大，才认为是可以被接受或容许的范围？首先，
 
 本工作的一个关键点是基组收敛性评测。为作有效的评测，测评的体系应可承受高精度大基组 (如 CCSD(T)/aCV5Z 级别模型) 的计算量与资源需求。在 HR46 与 T144 数据集中，14 个体系 (\ce{Cl2}, \ce{CO}, \ce{CO2}, \ce{H2O}, \ce{N2}, \ce{NH3}, \ce{^3O2}, \ce{PH3}, \ce{SH2}, \ce{SiH4}, \ce{^3SO}, \ce{SO2}, \ce{FCN}, \ce{HCHS}) 可以承受大计算量的计算。这 14 个数据也同样出现在 HH132 数据集中。在测评基组收敛性问题时，这 14 个小体系的分子构型将采用 NIST 计算化学数据库中实验的数据\cite{NIST.CCCBDB}；这些构型也同样为 HH132 数据集所采用。
 
-\subsubsection{基组与 RI 近似}
+\subsection{基组与 RI 近似}
 
 在本工作中，我们将使用 Dunning 系列基组 aV$X$Z 与 aCV$X$Z ($X = \mathrm{D, T, Q, 5}$)\cite{Dunning-Dunning.JCP.1989, Kendall-Harrison.JCP.1992, Woon-Dunning.JCP.1993, Peterson-Dunning.JCP.1994, Wilson-Dunning.JMST.1996, VanMourik-Dunning.MP.1999, Wilson-Dunning.JCP.1999, VanMourik-Dunning.IJQC.2000, Peterson-Dunning.JCP.2002, Hill-Peterson.JCP.2010}。H 与 Br 原子并不出现在 aCV$X$Z 系列基组中；对于这两个原子作 aCV$X$Z 级别计算时，将不加说明地替换为对应的 aV$X$Z 基组。RI 近似可以大幅减少 MP2 的计算耗时，并且不会产生严重的误差损耗，是性价比相当高的技术手段\cite{Vahtras-Feyereisen.CPL.1993}。本工作的解析极化率计算中，我们对 Weigend 算法实现的 RI-JK\cite{Weigend-Weigend.PCCP.2002} 与 RI-MP2 相关贡献\cite{Weigend-Haettig.JCP.2002}计算均使用等比辅助基 (ETB, \underline{E}ven-\underline{T}empered auxiliary \underline{B}asis set)\cite{Stoychev-Neese.JCTC.2017}；等比参数设为 \textsc{PySCF} 程序默认的 $\beta = 2$。由于基于 \textsc{PySCF} 的扩展程序 \textsc{dh} 的高效率实现、以及对大基组下内存的合理控制，使得本工作中所有体系都可以在 MP2/aCV5Z 下完成计算。作为自洽场的 RI-JK 方法的能量收敛精度为 $10^{-10}$ Hartree。
 
-\subsubsection{数值极化率}
+\subsection{数值极化率}
 
 在\alert{第三章的讨论}中，我们已经了解极化率是对外电场强度的二阶梯度；依外电场 $\pmb{\mathcal{E}}$ 在三个空间方向取向的大小 $(\mathcal{E}_x, \mathcal{E}_y, \mathcal{E}_z)$，极化率张量 $\bm{\alpha}$ 是 $3 \times 3$ 的对称矩阵：
 \begin{equation}
@@ -118,7 +118,7 @@ RelRMSD 误差多大，才认为是可以被接受或容许的范围？首先，
 
 数值梯度计算大多数情形使用 \textsc{Q-Chem} 程序。自洽场的收敛判据 (\texttt{SCF\_CONVERGENCE} 关键词) 设为 $10^{-11}$ au，而 CCSD 能量与振幅收敛判据 (\texttt{CC\_E\_CONV} 与 \texttt{CC\_T\_CONV}) 分别设为 $10^{-10}$ au 与 $10^{-7}$ au。作为特例，对于 \ce{^2NO} 分子，其数值梯度是通过 \textsc{PySCF} 在限制分子对称性的不可约表示而实现；其自洽场与 CCSD 收敛判据与 \textsc{Q-Chem} 设置相同。由于我们在以 aCV5Z 基组计算 \ce{SO2} 分子时遇到收敛困难，因此该情形下我们分别降低 \textsc{Q-Chem} 的收敛判据 \texttt{SCF\_CONVERGENCE}, \texttt{CC\_E\_CONV}, \texttt{CC\_T\_CONV} 为 $10^{-10}$ au, $10^{-9}$ au, $10^{-6}$ au。
 
-\subsubsection{CBS 外推}
+\subsection{CBS 外推}
 
 CBS 外推方法通常被认为在计算资源不足、以及有限基组不充分大时，可以有效地提升计算精度以更接近完备基组极限的手段。关于具体的 CBS 外推方法与策略，目前已有许多文献对此作说明与讨论\cite{Nyden-Petersson.JCP.1981, Petersson-Mantzaris.JCP.1988, Dunning-Dunning.JCP.1989, Peterson-Dunning.JCP.1994, Jensen-Jensen.TCA.2005, Karton-Martin.TCA.2006, Truhlar-Truhlar.CPL.1998, Klopper-Kutzelnigg.JMST.1986, Kutzelnigg-Morgan.JCP.1992, Martin-Martin.CPL.1996, Helgaker-Noga.JCP.1997, Halkier-Wilson.CPL.1998, Halkier-Olsen.CPL.1999}。HH132 数据集的原始工作使用的 CBS 策略是三次外推式\cite{Hait-Head-Gordon.PCCP.2018}
 \begin{equation}
@@ -127,7 +127,7 @@ CBS 外推方法通常被认为在计算资源不足、以及有限基组不充�
 \end{equation}
 其中，$\zeta$ 是基组的基数 (cardinal number)。对于 Dunning 基组，aV$X$Z 或 aCV$X$Z 的 $X = \mathrm{D, T, Q, 5}$ 分别对应的基数是 $\zeta = 2, 3, 4, 5$。对于 CBS 外推模型 aCV[TQ]Z，其相对于 aCV5Z 的误差，对于偶极矩大约是 $\sim 0.2\%$\cite{Hait-Head-Gordon.JCTC.2018, Halkier-Joergensen.JCP.1999}，对于极化率大约是 $\sim 0.1\%$\cite{Hait-Head-Gordon.PCCP.2018}；这意味着三次外推式 (\ref{eq.cbs.zeta3}) 对电性质的计算是有效的。在本工作中，对极化率的计算将沿用该 CBS 外推策略。对于 HR46 与 T144 全部分子的 MP2 极化率的计算，我们都使用 aCV[Q5]Z 作为参考值；而对于 CCSD 与 CCSD(T) 计算，则会依照分子体系的大小而给予相适应的 CBS 外推模型 aV[$XY$]Z ($[XY] = \mathrm{[Q5], [TQ], [DT]}$) 计算。
 
-\subsubsection{FPA 策略}
+\subsection{FPA 策略}
 
 在有限的计算资源内，若高等级方法难以直接计算得到，那么 FPA 方法会是一种尽可能逼近高等级计算方法结果、但使用相对较小计算资源的手段。在本工作中，我们的目标是给出 CCSD(T)/CBS 的参考值，其中的 CBS 是通过高精度的 aCV[Q5]Z 外推近似得到。考虑到不是所有体系都可以承受如此大的计算量，因此对极化率作三部分拆分：以同性极化率为例，CCSD(T) 极化率 $\alpha_\textsf{CCSD(T)}$ 拆分出这三部分是 HF 部分 $\alpha_\textsf{HF}$、MP2 相关贡献部分 $\Delta \alpha_\textsf{(2)}$、以及更高阶贡献部分 $\Delta \alpha_\textsf{D(T)}$：
 \begin{align}
@@ -146,9 +146,9 @@ CBS 外推方法通常被认为在计算资源不足、以及有限基组不充�
 
 以 FPA-aV[TQ]Z 作为例子，使用 FPA 策略的合理性通过图 \ref{fig.fig-1} 展示。HF 方法的结果占真实结果的绝对大头；但为正确描述物性，高质量的相关效应描述也是重要的。由于 HF 方法一般来说依基组基数 $\zeta$ 的收敛速度相当快\cite{Jensen-Jensen.TCA.2005, Karton-Martin.TCA.2006}，因此许多 CBS 策略、包括 HH132 数据集的参考值，都对 HF 方法直接使用计算量上最大可承受的基组。而对于相关效应，则依基组基数 $\zeta$ 的增大，收敛速度相对缓慢。大多数情况下，MP2 占据相关效应的主要部分；因此，对 MP2 的大基组精确描述也非常重要。但对于更高阶的相关效应，一方面其绝对数值已然较小，另一方面数值对基组基数 $\zeta$ 的敏感性较小、或相对于 MP2 相关效应的收敛速度更快。对于后一方面所述的现象，目前已经在核磁屏蔽常数的计算\cite{Sun-Xu.JCP.2013, Wang-Xu.JCP.2018, Gregusova-Bartlett.JCTC.2010}、能量计算\cite{Truhlar-Truhlar.CPL.1998}等诸多情形下有所验证。因此，我们也会期望在极化率问题中，对于 CCSD(T) 相对于 MP2 之间的高级相关效应，使用较低等级基组或 CBS 外推方法，也可以提供一个合理的对高等级 CBS 外推方法的近似。本工作的其中一个重点，即是验证这个猜想的合理性。
 
-\subsection{结论与讨论}
+\section{结论与讨论}
 
-\subsubsection{RI 误差与数值差分误差}
+\subsection{RI 误差与数值差分误差}
 \label{sec.5.3.1}
 
 在本工作中，HF 与 MP2 的极化率是通过解析梯度给出，但引入了 RI 近似；CCSD 与 CCSD(T) 尽管未使用 RI 近似，但引入了数值差分误差。注意到表 \ref{tab.5.1} 中，将要汇报的 $\alpha_\textsf{CCSD(T)}$ 参考值是由 $\alpha^\text{anal}_\textsf{RI-MP2} + \Delta \alpha^\text{num}_\textsf{D(T)}$ 两部分构成；这两部分分别包含 RI 近似误差与数值差分误差。为了估计这部分误差的大小，我们考察了 HF 与 MP2 方法在 aVTZ 基组下、包含 RI 近似与不使用 RI 近似的同性极化率的结果。
@@ -157,7 +157,7 @@ CBS 外推方法通常被认为在计算资源不足、以及有限基组不充�
 
 我们还看到，对于相关贡献部分，自洽场收敛条件会对数值差分误差有一定影响。相关的数据与结论列于附录的 \ref{sec.5.s9} 小节。
 
-\subsubsection{小体系的同性极化率基组收敛性}
+\subsection{小体系的同性极化率基组收敛性}
 
 在这两小节中，我们将对 14 个小体系 (\ce{Cl2}, \ce{CO}, \ce{CO2}, \ce{H2O}, \ce{N2}, \ce{NH3}, \ce{^3O2}, \ce{PH3}, \ce{SH2}, \ce{SiH4}, \ce{^3SO}, \ce{SO2}, \ce{FCN}, \ce{HCHS}) 作系统的基组收敛性分析，并基于此确定用于计算同性极化率的、高效的 FPA 模型。在该分析中，参考值由 CCSD(T)/CBS 计算所得：
 \begin{equation*}
@@ -220,7 +220,7 @@ CBS 外推方法通常被认为在计算资源不足、以及有限基组不充�
 \end{equation}
 其中，$[XY] \in \mathrm{[DT], [TQ], [Q5]}$，具体的取值依据分子大小而定。相对于最佳的理论计算模型 $\alpha_{\text{FPA-aCV[Q5]Z}}$，$\alpha_{\text{FPA-aV[}XY\text{]Z}}$ 的误差来源仅出现在 $\Delta \tilde \alpha_\textsf{D(T)}$ 的基组不完备程度。因此，从表 \ref{tab.5.2} 的数据来看，FPA-aV[DT]Z、FPA-aV[TQ]Z、FPA-aV[Q5]Z 在计算同性极化率时的相对方均根误差分别是 0.144\%、0.086\%、0.017\%。这些 FPA 模型的误差都明显小于我们的目标精度 0.5\%。我们期待这些 FPA 模型应用于更大体系、如 HR46 或 T144 中更大的分子时，计算精度可以与 HH132 的参考值相比较。
 
-\subsubsection{自旋非极化小体系的异性极化率基组收敛性}
+\subsection{自旋非极化小体系的异性极化率基组收敛性}
 
 本工作同样考虑了异性极化率 $\gamma$ 的计算问题。在这一小节中，我们考虑 7 个自旋非极化分子 (\ce{Cl2}, \ce{CO}, \ce{CO2}, \ce{FCN}, \ce{HCHS}, \ce{N2}, \ce{SO2}) 的基组收敛性与 CBS 外推精度，以确定对异性极化率计算所适合使用的 FPA 模型。相对于同性极化率分析过程中使用的 14 个体系，我们排除了 5 个自旋非极化与 2 个自旋极化分子。其中，5 个自旋非极化分子 (\ce{H2O}, \ce{H2S}, \ce{NH3}, \ce{PH3}, \ce{SiH4}) 由于异性极化率的数值过小 (小于 0.5 $\text{\AA}^3$)，使用相对方均根误差不是非常合理。在附录的表 \ref{tab.5.s7} 中，我们使用绝对值的方均根误差作为判标，将这 5 个小分子引入基组收敛性与 CBS 外推精度分析，并且认为引入这 5 个异性极化率 $\gamma$ 较小的体系不影响结论。同时，由于 HR46 与 T144 的绝大多数分子都是自旋非极化分子；在对异性极化率的讨论中，我们的讨论将局限于自旋非极化体系，因此排除了自旋计划体系 \ce{^3O2} 与 \ce{^3SO}。详细的对 Dunning 系列基组的误差分析展示于表 \ref{tab.5.3}。
 
@@ -275,7 +275,7 @@ CBS 外推方法通常被认为在计算资源不足、以及有限基组不充�
 
 最后，我们指出，我们所测评的自旋极化体系 (\ce{^3O2}, \ce{^3SO}) 的异性极化率，其收敛趋势与精度都相当有挑战性。这些测评在附录 \ref{sec.5.s5} 中展示。因此，若要对各类体系的异性极化率 $\gamma$ 作更全面的研究，那么需要在表 \ref{tab.5.3} 的基础上引入更多的自旋非极化体系。
 
-\subsubsection{极化率参考值的更新}
+\subsection{极化率参考值的更新}
 
 我们现在将 FPA-aV[DT]Z、FPA-aV[TQ]Z、FPA-aV[Q5]Z 这三个 FPA 模型，应用于 HR46 与 T144 数据集的同性极化率 $\alpha$ 与异性极化率 $\gamma$ 参考值的计算，以将提升参考值的精度更新到 CCSD(T)/CBS 的级别上。出于计算资源限制、但同时要以尽可能高的精度给出数据，我们需要对 HR46 与 T144 分出子集；不同的子集将使用不同级别的 FPA 模型。表 \ref{tab.5.4} 展示了数据集分割的总体情况。需要指出，该数据分割方式并非毫无偏向性：以 HR46 数据集为例，其 Set I 子集仅包含无机分子、而 Set III 的大多数分子都具有芳环。详细的数据集分割情况参考表 \ref{tab.5.s1}, \ref{tab.5.s2}, \ref{tab.5.s3}, \ref{tab.5.s4}。
 
@@ -335,7 +335,7 @@ CBS 外推方法通常被认为在计算资源不足、以及有限基组不充�
 
 尽管我们对 FPA-aV[$XY$]Z 模型应用于异性极化率 $\gamma$ 在自旋非极化体系 (如 \ce{^3O2}, \ce{^3SO}, \ce{^2NO}) 下的计算，是否其精度达到目标需求，这个问题上我们报以保留的态度；但在我们关心的 HR46 与 T144 数据集中，仅有 3 个分子是自旋极化、且它们足够小以至于可以通过最高精度的 FPA-aV[Q5]Z 计算。而 HR46 与 T144 数据集剩下的所有分子均为自旋非极化的；对于这些体系可以应用 FPA 模型作高精度计算。因此，对于提升数据集精度的目的而言，表 \ref{tab.5.4} 的策略是完全有效的。通过 FPA-aV[$XY$]Z 模型提升精度后的、具体的 HR46 与 T144 极化率数据列于表 \ref{tab.5.s1}, \ref{tab.5.s2}, \ref{tab.5.s3}, \ref{tab.5.s4}。
 
-\subsubsection{对 HF、MP2 与 CCSD 的极化率测评}
+\subsection{对 HF、MP2 与 CCSD 的极化率测评}
 
 如前所述，参考值的极化率计算中，HF 方法通过 aCV5Z 给出、MP2 相关部分通过 aCV[Q5]Z 给出。对于 CCSD 方法，我们使用了与 CCSD(T) 相同的 FPA 模型给出结果，具体的情形总结在表 \ref{tab.5.4} 中。CCSD 方法在部分子集、不同 FPA 模型下的误差比较也列于表 \ref{tab.5.s5} 与表 \ref{tab.5.s6} ；这些表格可以与 CCSD(T) 情形的表 \ref{tab.5.5} 与表 \ref{tab.5.6} 作对照。CCSD 的基组收敛性与 CBS 外推误差分析也在表 \ref{tab.5.2} 与表 \ref{tab.5.3} 呈现。我们认为，CCSD 方法在基组误差上与 CCSD(T) 有近乎相似的表现；因此，所有针对 CCSD(T) 的分析，应可用于 CCSD 的计算上。
 
@@ -387,7 +387,7 @@ CBS 外推方法通常被认为在计算资源不足、以及有限基组不充�
 
 比较有意思的是，MP2 方法，作为最基础、计算代价最小的波函数方法，在自旋非极化体系下 (表 \ref{tab.5.7} 与表 \ref{tab.5.8} 呈现的 HR46' 与 T144 数据集)，其同性极化率 $\tilde \alpha_\textsf{MP2}$ 与异性极化率 $\tilde \gamma_\textsf{MP2}$ 相较于计算代价更昂贵的 CCSD 方法 $\tilde \alpha_\textsf{CCSD}$、$\tilde \gamma_\textsf{CCSD}$ 要更小。这与 HH132 数据集的测评结论并不完全一致\cite{Hait-Head-Gordon.PCCP.2018}。在\alert{附录表格}的具体结果中，可以看到不同级别的相关效应对极化率的贡献，在不同的体系下大小有很大差异、符号上也不一定一致。因此，准确地描述极化率问题下的相关效应较为困难；MP2 更低的误差更可能归结为高阶相关效应 $\Delta \alpha_\textsf{D}$ 与 $\Delta \alpha_\textsf{(T)}$ 之间的相互抵消。这些结果也表明，对于 MP2 或 CCSD 等方法而言，分子体系尺寸大小的不同，可能会有不同的误差表现。因此，若要对极化率问题作系统地电子结构方法测评，我们认为有必要考虑稍大一些体系的情形。综上所述，我们认为 MP2 作为波函数方法，在自旋非极化体系下可以相对有效地对静态极化率作计算模拟。而 CCSD 方法由于缺少了三阶微扰的贡献部分，而在极化率描述上略显欠缺；同时考虑到其庞大的计算代价，因此我们认为 CCSD 方法的性价比稍低。
 
-\subsection{本章小结}
+\section{本章小结}
 
 本工作的目标是提升 HR46 与 T144 数据集参考值的同性极化率的精度、并且给出异性极化率的高精度结果。为此，我们对 CCSD(T) 到 HF 之间的各级波函数方法的基组收敛性、相关效应的 CBS 外推误差作分析，并确定与 CCSD(T)/CBS 精度匹配、但计算代价上更可接受的 FPA 模型。我们确认了在使用 ETB 辅助基与数值差分时外加偶极电场强度为 $h = 0.004 \, \text{au}$ 的情形下，RI 误差与数值差分误差几乎不会干扰极化率的计算精度。在 RI 近似下，HR46 与 T144 的所有分子，对于大基组 MP2 的极化率计算，其代价是可接受的；因此，我们总是使用高度精确的 aCV[Q5]Z 给出 MP2 极化率的相关效应。在此前提下，更高阶的相关效应 (CCSD 或 CCSD(T) 与 MP2 之间的差距)，其对基组的敏感性较低、可以使用如 aV[DT]Z 等较小基组的 CBS 外推模型而不致产生严重精度损耗。基于这个推断，三个 FPA 模型 FPA-aV[$XY$]Z ($[XY] = \mathrm{[DT], [TQ], [Q5]}$) 得以提出，其定义也在表达式 (\ref{eq.fpa-alpha}, \ref{eq.fpa-gamma}) 给出。通过 14 个小体系数据集对各 FPA 模型作测评，我们认为相比于 HH132 所采用的精确地 FPA-aCV[Q5]Z 模型，三个 FPA-aV[$XY$]Z 在同性极化率 $\alpha$ 上的误差普遍小于 0.2\%、在自旋非极化的异性极化率 $\gamma$ 上的误差普遍小于 0.3\%。因此，我们认为这些情形下 FPA 模型的误差小于实验精度的 0.5\%；这些模型用于数据集参考值的计算是误差可接受、且计算代价可承受的。
 
@@ -395,9 +395,9 @@ CBS 外推方法通常被认为在计算资源不足、以及有限基组不充�
 
 我们期待本工作所建立的 FPA 方法将可以用于构建新的的极化率数据集、并且拓展高精度计算的体系大小至 15 原子左右。我们将在\alert{第六章}中，对提升后的 HR46 与 T144 数据集、结合 HH132 等高质量的极化率数据集，对密度泛函方法作系统性的测评。
 
-\subsection{附录}
+\section{附录}
 
-\subsubsection{HR46 与 T144 数据集分子结构}
+\subsection{HR46 与 T144 数据集分子结构}
 
 \begin{figure}[H]
     \centering
@@ -451,7 +451,7 @@ CBS 外推方法通常被认为在计算资源不足、以及有限基组不充�
 
 \newpage
 
-\subsubsection{体系名称的更改}
+\subsection{体系名称的更改}
 \label{sec.T145-HR46-name-change}
 
 本工作会对原先 T144 与 HR46 数据集的化合物名称作一定更改。我们尽量依照 IUPAC 推荐命名规则 (PIN, \underline{P}referred \underline{I}UPAC \underline{N}ame) 进行命名\cite{Favre-Powell.RSC.2013}。举例而言，“acetone”(丙酮) 将被命名为“propane-2-one”(丙-2-酮)。这类名称更改是平凡的。
@@ -474,7 +474,7 @@ T144 数据集中，我们依据 TABS 数据库所提供的分子坐标文件，
     \end{tabular}
 \end{table}
 
-\subsubsection{CCSD 方法下不同 FPA 模型之间的相对误差}
+\subsection{CCSD 方法下不同 FPA 模型之间的相对误差}
 
 下述的表 \ref{tab.5.s5} 与表 \ref{tab.5.s6} 整理了 CCSD 计算数据，它是针对正文 \ref{tab.5.5} 与表 \ref{tab.5.6} 整理的 CCSD(T) 数据的补充。
 
@@ -512,7 +512,7 @@ T144 数据集中，我们依据 TABS 数据库所提供的分子坐标文件，
     \par\tabnote{a} 相对误差以 $\text{RelRMSD} (\tilde \gamma_{\textsf{CCSD}/\text{Scheme}}, \tilde \gamma_{\textsf{CCSD}/\text{Reference}})$ 呈现。统计误差时，仅考虑 $\gamma_{\textsf{CCSD(T)}}$ 大于 0.5 $\text{\AA}{}^{3}$ 的体系。关于具体被考虑的体系，参考表 \ref{tab.5.6}。
 \end{table}
 
-\subsubsection{对有限差分误差的分析}
+\subsection{对有限差分误差的分析}
 \label{sec.5.s9}
 
 对同性极化率 $\alpha$ 所作的因有限差分而导致误差的分析列于表 \ref{tab.5.s8}。作为参照的数值是解析梯度所计算得到的极化率。我们假定对异性极化率 $\gamma$ 应有类似的结论。在该分析中，我们将使用两种自洽场收敛判据。需要指出，解析梯度极化率的精度也受机器精度、自洽场收敛精度与 CP-HF 方程收敛精度等要素影响；但在这段分析中，我们假定这些影响要素可以忽略不计。
@@ -548,7 +548,7 @@ T144 数据集中，我们依据 TABS 数据库所提供的分子坐标文件，
 
 对于任何计算，特别是 post-SCF 方法的分子性质计算，自洽场的收敛当然是越精确、收敛判标越严格越好。但在现实的计算资源内、以及考虑到计算成本与精度需求的平衡，过分严格的自洽场并不一定划算、也不一定可以真的实现。考虑到我们对本工作的极化率参考值误差的预期是 0.5\% 以内；一方面，我们不希望在方法和基组误差之外，还有很大的有限差分误差；但另一方面，我们注意到在外加电场强度在 $h = 0.0040 \, \text{au}$ 时，在相对宽松的 (\textsc{PySCF} 默认的) 自洽场收敛判据下，$\alpha_\textsf{MP2}$ 的数值极化率与理论极化率的相对方均根误差仅有 0.031\%。据此我们推测，对于其他后自洽场方法 (譬如 CCSD(T))，对同性极化率 $\alpha$ 与异性极化率 $\gamma$，在自洽场收敛判据不低于 $10^{-10}$ au、对于更大基组且未引入 RI 近似的情形、以及对于其他数据集，若使用外加电场强度 $h = 0.0040 \, \text{au}$ 作数值差分，那么因差分而引入的误差大约在 0.05\% 的级别。这种程度的误差相比于实验精度的 0.5\% 误差，是完全可以忽略的。
 
-\subsubsection{异性极化率 $\gamma$ 在不同基组下的绝对值方均根误差分析}
+\subsection{异性极化率 $\gamma$ 在不同基组下的绝对值方均根误差分析}
 
 \begin{table}[ht]
     \centering
@@ -592,7 +592,7 @@ T144 数据集中，我们依据 TABS 数据库所提供的分子坐标文件，
 
 在正文表 \ref{tab.5.3} 中，自旋非极化的异性极化率的分析仅限于 7 个分子，而 5 个分子因其 $\gamma_\textsf{CCSD(T)}$ 过小、以至于不适合使用相对误差判标分析。为对所有这 12 个分子进行合理的分析，我们在表 \ref{tab.5.s7} 中补充了以异性极化率绝对值的方均根误差 (RMSD) 为量标的分析。根据表格中的数据，我们认为，这 5 个 $\gamma_\textsf{CCSD(T)}$ 较小体系的基组收敛性误差与 7 个 $\gamma_\textsf{CCSD(T)}$ 较大体系相当。但若将这 5 个 $\gamma_\textsf{CCSD(T)}$ 较小体系引入表 \ref{tab.5.3}，则会产生非常严重与异常的误差。我们相信，表 \ref{tab.5.3} 排除这 5 个体系，不会破坏对该表格的分析结论的合理性。
 
-\subsubsection{$\Delta \alpha_\textsf{D(T)}$ 对体系 \ce{^3O2}, \ce{^3SO}, \ce{Cl2} 计算结果的基组收敛趋势}
+\subsection{$\Delta \alpha_\textsf{D(T)}$ 对体系 \ce{^3O2}, \ce{^3SO}, \ce{Cl2} 计算结果的基组收敛趋势}
 \label{sec.5.s4}
 
 这里的讨论是对正文表 \ref{tab.5.2} 中异常数据的分析。需要注意本小节与下一小节对基组收敛性分析图片的纵坐标是对称对数坐标：当误差大于 0.1\% 或小于 -0.1\% 时选用对数坐标；当误差介于两者之间时选用线性坐标。对于特定基组，其相对误差是由下式所计算：
@@ -628,7 +628,7 @@ T144 数据集中，我们依据 TABS 数据库所提供的分子坐标文件，
     \includegraphics[width=0.5\textwidth]{assets/Cl2-iso.pdf}
 \end{figure}
 
-\subsubsection{$\Delta \gamma_\textsf{D(T)}$ 对体系 \ce{^3O2}, \ce{^3SO}, \ce{HCHS}, \ce{Cl2} 计算结果的基组收敛趋势}
+\subsection{$\Delta \gamma_\textsf{D(T)}$ 对体系 \ce{^3O2}, \ce{^3SO}, \ce{HCHS}, \ce{Cl2} 计算结果的基组收敛趋势}
 \label{sec.5.s5}
 
 这里的讨论是对正文表 \ref{tab.5.3} 中异常数据的分析、以及作自旋非极化分子在异性极化率 $\gamma$ 下基组收敛情况的补充。
@@ -671,7 +671,7 @@ T144 数据集中，我们依据 TABS 数据库所提供的分子坐标文件，
 
 \newpage
 
-\subsubsection{更新后的 HR46 与 T144 极化率参考值}
+\subsection{更新后的 HR46 与 T144 极化率参考值}
 
 更新后的 HR46 与 T144 极化率参考值数据列于表 \ref{tab.5.s1}, \ref{tab.5.s2}, \ref{tab.5.s3}, \ref{tab.5.s4}。对于同性极化率，HF 方法极化率以 $\alpha_{\textsf{HF}/\text{aCV5Z}}$ 计算，MP2 方法极化率以 $\alpha_{\textsf{HF}/\text{aCV5Z}} + \Delta \alpha_{\textsf{(2)}/\text{aCV[Q5]Z}}$ 计算。CCSD 与 CCSD(T) 依照不同分子大小划分不同的子集；每个子集使用其对应的 FPA 模型。对于异性极化率 $\gamma$ 同样如此。上述记号在表 \ref{tab.5.1} 中定义，FPA 模型的计算方式在式 (\ref{eq.fpa-alpha}, \ref{eq.fpa-gamma}) 定义，数据子集及其对应 FPA 模型在表 \ref{tab.5.4} 给出。
 
