@@ -1,0 +1,40 @@
+% !TEX root=./notations.tex
+
+\chapter{原子轨道基组表}
+
+下述表格列出本工作所使用的基组、基组基数、基组简称，以及其对应的参考文献。
+
+部分基组的不同元素是由不同参考文献所定义。这里所列举的参考文献，仅针对本工作所涉及的原子。
+
+基组 daug-def2-universal-jkfit 是针对 def2-universal-jkfit 基组，使用基于 Woon 与 Dunning 所提出的方法\cite{Woon-Dunning.JCP.1994}，在各角量子数上增加两个弥散基函数；增加弥散基函数所用的程序是 \textsc{Basis Set Exchange} 的 \textsc{Python} API\cite{Feller-Feller.JCC.1996, Schuchardt-Windus.JCIM.2007, Pritchard-Windus.JCIM.2019}。
+
+\begingroup
+\setlength{\LTleft}{-20cm plus -1fill}
+\setlength{\LTright}{\LTleft}
+
+\begin{longtable}{lllll}
+    \hline
+    基组家族 & 基组名称 & 基组基数 $\zeta$ & 基组简称 & 参考文献 \\ \hline
+    \endhead
+    \hline
+    \endfoot
+    %
+    Dunning
+    & cc-pV5Z & 5 & & \citenum{Dunning-Dunning.JCP.1989} \\
+    & cc-pV5Z-jkfit & (auxiliary) & & \citenum{Weigend-Weigend.PCCP.2002} \\
+    & cc-pV5Z-rifit & (auxiliary) & & \citenum{Haettig-Haettig.PCCP.2005} \\
+    & ccecp-cc-pVQZ & (ECP) & & \citenum{Bennett-Mitas.JCP.2017} \\
+    %
+    \midrule
+    Karlsruhe
+    & def2-TZVPP & 3 & & \citenum{Dolg-Preuss.TCA.1993, Dolg-Preuss.TCA.1989, Peterson-Dolg.JCP.2003, Metz-Dolg.JCP.2000, Metz-Liu.TCA.2000, Leininger-Bergner.CPL.1996, Kaupp-Preuss.JCP.1991, Andrae-Preuss.TCA.1990, Weigend-Ahlrichs.PCCP.2005, Cao-Dolg.JCP.2001, Dolg-Preuss.JCP.1989, Gulde-Weigend.JCTC.2012} \\
+    & def2-QZVPP & 4 & & \citenum{Dolg-Preuss.TCA.1993, Dolg-Preuss.TCA.1989, Peterson-Dolg.JCP.2003, Metz-Dolg.JCP.2000, Metz-Liu.TCA.2000, Leininger-Bergner.CPL.1996, Kaupp-Preuss.JCP.1991, Andrae-Preuss.TCA.1990, Weigend-Ahlrichs.PCCP.2005, Cao-Dolg.JCP.2001, Dolg-Preuss.JCP.1989, Gulde-Weigend.JCTC.2012, Weigend-Ahlrichs.JCP.2003} \\
+    & def2-QZVPPD & 4 & & \citenum{Dolg-Preuss.TCA.1993, Dolg-Preuss.TCA.1989, Peterson-Dolg.JCP.2003, Metz-Dolg.JCP.2000, Metz-Liu.TCA.2000, Leininger-Bergner.CPL.1996, Kaupp-Preuss.JCP.1991, Andrae-Preuss.TCA.1990, Weigend-Ahlrichs.PCCP.2005, Cao-Dolg.JCP.2001, Dolg-Preuss.JCP.1989, Gulde-Weigend.JCTC.2012, Weigend-Ahlrichs.JCP.2003, Rappoport-Furche.JCP.2010} \\
+    & def2-universal-jkfit & (auxiliary) & & \citenum{Gulde-Weigend.JCTC.2012, Weigend-Weigend.JCC.2008} \\
+    & daug-def2-universal-jkfit & (auxiliary) & & \citenum{Gulde-Weigend.JCTC.2012, Weigend-Weigend.JCC.2008, Woon-Dunning.JCP.1994} \\
+    & def2-TZVPP-rifit & (auxiliary) & & \citenum{Hellweg-Klopper.TCA.2007, Haettig-Haettig.PCCP.2005, Weigend-Ahlrichs.CPL.1998} \\
+    & def2-QZVPP-rifit & (auxiliary) & & \citenum{Hellweg-Klopper.TCA.2007, Haettig-Haettig.PCCP.2005} \\
+    & def2-QZVPPD-rifit & (auxiliary) & & \citenum{Hellweg-Rappoport.PCCP.2015, Hellweg-Klopper.TCA.2007, Haettig-Haettig.PCCP.2005, Weigend-Ahlrichs.CPL.1998} \\
+\end{longtable}
+
+\endgroup

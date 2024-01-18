@@ -9,20 +9,14 @@
 \setlength{\LTright}{\LTleft}
 
 \begin{longtable}{lll}
-    \hline 简称 & 中文术语 & 英文术语 \\ \hline \endhead
-    \hline \endfoot
+    \toprule 简称 & 中文术语 & 英文术语 \\ \midrule \endhead
+    \bottomrule \endlastfoot
     %
+    \multicolumn{3}{l}{\textsf{波函数理论}} \\
     & 第一性 & \emph{ab initio} \\
     WFT & 波函数理论 & wavefunction theory \\
     SCF & 自洽场 & self-consistent field \\
     post-HF & (专指波函数理论的) 后自洽场 & post Hartree-Fock \\
-    & 规范原点 & gauge origin \\
-    GIAO & 规范原点不变原子轨道 & gauge-invariant atomic orbital \\
-    RPA & 无规相近似 & random phase approximation \\
-    OO & 轨道优化 & orbital-optimized \\
-    SS & 自旋相同 & same-spin \\
-    OS & 自旋相反 & opposite-spin \\
-    SCS & 自旋组分缩放 & spin-component-scaled \\
     PT & 微扰 & perturbation \\
     CI & 组态相互作用 & configuration interaction \\
     Full-CI & 完全组态相互作用 & full configuration interaction \\
@@ -30,17 +24,28 @@
     CEPA & 耦合电子对近似 & coupled electron pair approximation \\
     CPF & 耦合电子对泛函 & coupled pair functional \\
     IEPA & 独立电子对近似 & independent electron pair approximation \\
-    & (非) 限制性方法 & (un)restricted \\
-    QMC & 量子蒙特卡洛 & quantum Monte Carlo \\
-    DMC & 扩散蒙特卡洛 & diffusion Monte Carlo \\
-    VMC & 变分蒙特卡洛 & variational Monte Carlo \\
+    %
+    \midrule
+    \multicolumn{3}{l}{\textsf{波函数组成与性质}} \\
+    OO & 轨道优化 & orbital-optimized \\
+    SS & 自旋相同 & same-spin \\
+    OS & 自旋相反 & opposite-spin \\
+    SCS & 自旋组分缩放 & spin-component-scaled \\
     & 正交变换不变性 & unitary invariance \\
     & 大小可延展性 & size extensivity \\
     & 正则自洽场 & canonical SCF \\
+    & (非) 限制性方法 & (un)restricted \\
     & 闭壳层 & closed-shell \\
     & 开壳层 & open-shell \\
     RDM & 约化密度矩阵 & reduced density matrix \\
     & 弛豫密度矩阵 & response/relax/Lagragian density matrix \\
+    %
+    \midrule
+    \multicolumn{3}{l}{\textsf{其他第一性方法}} \\
+    RPA & 无规相近似 & random phase approximation \\
+    QMC & 量子蒙特卡洛 & quantum Monte Carlo \\
+    DMC & 扩散蒙特卡洛 & diffusion Monte Carlo \\
+    VMC & 变分蒙特卡洛 & variational Monte Carlo \\
 \end{longtable}
 
 \endgroup
@@ -52,60 +57,55 @@
 \setlength{\LTright}{\LTleft}
 
 \begin{longtable}{lll}
-    \hline 简称 & 中文术语 & 英文术语 \\ \hline \endhead
-    \hline \endfoot
+    \toprule 简称 & 中文术语 & 英文术语 \\ \midrule \endhead
+    \bottomrule \endlastfoot
     %
+    \multicolumn{3}{l}{\textsf{密度泛函理论}} \\
     DFT & 密度泛函理论 & density functional theory \\
     DFA & 密度泛函近似 & density functional approximation \\
     post-SCF & 后自洽场 & post self-consistent field \\
     & 无 (电子) 相互作用体系 & noninteracting system \\
     & $N$ 可表示性 & $N$-representability \\
-    xc & 交换相关效应 & exchange-correlation effect \\
+    AC & 绝热路径 & adiabatic connection \\
+    GLPT2 & 二阶 G{\"o}rling-Levy 微扰 & 2\textsuperscript{nd}-order G{\"o}rling-Levy perturbation \\
+    OEP & 有效优化势 & optimized effective potential \\
+    %
+    \midrule
+    \multicolumn{3}{l}{\textsf{密度泛函近似类型}} \\
     LDA & 局域密度近似 & local density apprioximation \\
     LSDA & 局域密度近似 & local spin-density apprioximation \\
     GGA & 广义梯度近似 & generalized gradient approximation \\
     meta-GGA & 广义梯度的梯度近似 & meta-generalized gradient approximation \\
     hyb & 杂化 (泛函) & hybrid (functional) \\
-    NL & 离域 & non-local \\
-    & 半定域 & semi-local \\
     RSH & 长短程分离杂化 (泛函) & range-separate hybrid (functional) \\
-    LR & 长程效应 & long-range \\
-    SR & 短程效应 & short-range \\
     & 局域混合 (泛函) & local hybrid (functional) \\
     DH & 双杂化 (泛函) & doubly hybrid (functional) \\
     xDH & XYG3 型双杂化 (泛函) & XYG3-type doubly hybrid (functional) \\
     bDH & B2PLYP 型双杂化 (泛函) & B2PLYP-type doubly hybrid (functional) \\
     DSD & 弥散矫正的 SCS DH & dispersion corrected SCS DH \\
-    AC & 绝热路径 & adiabatic connection \\
-    GLPT2 & 二阶 G{\"o}rling-Levy 微扰 & 2\textsuperscript{nd}-order G{\"o}rling-Levy perturbation \\
-    OEP & 有效优化势 & optimized effective potential \\
+    \midrule
+    \multicolumn{3}{l}{\textsf{密度泛函组成与性质}} \\
+    LR & 长程效应 & long-range \\
+    SR & 短程效应 & short-range \\
+    NL & 离域 & non-local \\
+    & 半定域 & semi-local \\
     SP & 自旋极化的 & spin-polarized \\
     NSP & 自旋非极化的 & non-spin-polarized \\
 \end{longtable}
 
 \endgroup
     
-\section*{程序、技术、误差量标术语}
+\section*{程序与技术术语}
 
 \begingroup
 \setlength{\LTleft}{-20cm plus -1fill}
 \setlength{\LTright}{\LTleft}
 
 \begin{longtable}{lll}
-    \hline 简称 & 中文术语 & 英文术语 \\ \hline \endhead
-    \hline \endfoot
+    \toprule 简称 & 中文术语 & 英文术语 \\ \midrule \endhead
+    \bottomrule \endlastfoot
     %
-    RI & 恒等算符简化 (近似) & resolution-of-identity (approximation) \\
-    & 辅助基组 & auxiliary basis set \\
-    FPA & & focal-point analysis \\
-    CBS & 完备基组 (极限) & complete basis set (limit) \\
-    MAD/MAE & 平均绝对值误差 & mean absolute deviation/error \\
-    RMSD/RMSE & 方均根误差 & root mean squared deviation/error \\ 
-    WTMAD-2 & (GMTKN55) 第二型加权 MAD & weighted MAD (scheme 2) \\
-    MEPUB & 平均键绝对值误差 & mean unsigned error per bond \\
-    DRAM & 动态随机访问内存 & dynamic random access memory \\
-    THC & 张量超分解 & tensor hyper-contraction \\
-    & 元素乘法 & elementwise multiplication \\
+    \multicolumn{3}{l}{\textsf{电子积分及其近似}} \\
     & 重叠积分 & overlap integral \\
     & (无其他外场的) 单电子积分 & Hamiltonian core integral \\
     ERI & 电子互斥积分 (双电子积分) & electron-repulsion integral \\
@@ -113,21 +113,47 @@
     conv ERI & 传统 4c-2e ERI & conventional ERI \\
     J 积分 & 库伦积分 & Coulomb integral \\
     K 积分 & 交换积分 & exchange integral \\
-    CP & 耦合微扰 & coupled-perturbed \\
-    CP-SCF & 耦合微扰自洽场 & coupled-perturbed SCF \\
-    & 骨架导数 & skeleton/core derivative \\
+    & 规范原点 & gauge origin \\
+    GIAO & 规范不变原子轨道 & gauge-invariant atomic orbital \\
+    RI & 恒等算符 (简化近似) & resolution-of-identity (approximation) \\
+    THC & 张量超分解 & tensor hyper-contraction \\
+    %
+    \midrule
+    \multicolumn{3}{l}{\textsf{基组与基组外推}} \\
+    & 辅助基组 & auxiliary basis set \\
+    FPA & & focal-point analysis \\
+    CBS & 完备基组 (极限) & complete basis set (limit) \\
+    ETB & & even-tempered basis set \\
+    ECP & 有效内层电子势 (赝势) & effective core potential \\
+    %
+    \midrule
+    \multicolumn{3}{l}{\textsf{误差量标}} \\
+    MAD/MAE & 平均绝对值误差 & mean absolute deviation/error \\
+    RMSD/RMSE & 方均根误差 & root mean squared deviation/error \\ 
+    WTMAD-2 & (GMTKN55) 第二型加权 MAD & weighted MAD (scheme 2) \\
+    MEPUB & 平均键绝对值误差 & mean unsigned error per bond \\
+    RDF & 径向分布函数 & radial distribution function \\
+    MNAE & 归一后的绝对值误差 & median normalized absolute error \\
+    %
+    \midrule
+    \multicolumn{3}{l}{\textsf{计算机术语}} \\
+    & 元素乘法 & elementwise multiplication \\
+    FMA & 乘积累加运算 & fused-multiply-add \\
     FLOPs & 浮点运算数 & floating-point operations \\
     FLOPS & 每秒浮点运算效率 & floating-point operations per second \\
-    FMA & 乘积累加运算 & fused-multiply-add \\
+    DRAM & 动态随机访问内存 & dynamic random access memory \\
     & (CPU 的物理) 核心 & (physical) core (of CPU) \\
     & 线程 & thread \\
     NUMA nodes & 非一致内存访问节点 & non-uniform memory access nodes \\
     I/O & 输入输出 & in/out \\
     & 实际程序运行时间 & wall/elapsed time \\
     QMA & 量子计算机下非多项式的 & quantum Merlin-Arthur \\
-    RDF & 径向分布函数 & radial distribution function \\
-    MNAE & 归一后的绝对值误差 & median normalized absolute error \\
-    ETB & & even-tempered basis set \\
+    %
+    \midrule
+    \multicolumn{3}{l}{\textsf{电子结构梯度理论}} \\
+    CP & 耦合微扰 & coupled-perturbed \\
+    CP-SCF & 耦合微扰自洽场 & coupled-perturbed SCF \\
+    & 骨架导数 & skeleton/core derivative \\
 \end{longtable}
 
 \endgroup
@@ -155,73 +181,6 @@
     & 原位红外 & \emph{in situ} IR \\
     SERS & 表面增强拉曼光谱 & surface-enhanced Raman spectroscopy \\
     SEM & 扫描电化学显微镜 & scanning electron microscopy \\
-\end{longtable}
-
-\endgroup
-
-\section*{波函数方法}
-
-\begingroup
-\setlength{\LTleft}{-20cm plus -1fill}
-\setlength{\LTright}{\LTleft}
-
-\begin{longtable}{lll}
-    \hline
-    方法简称 & 方法全程 & 参考文献 \\ \hline
-    \endhead
-    \hline
-    \endfoot
-    %
-    HF & Hartree-Fock & \citenum{Hartree-Hartree.MPCPS.1928, Fock-Fock.ZfP.1930, Slater-Slater.PR.1951} \\
-    MP$n$ & $n$-th order M{\o}ller-Plesset perturbation & \citenum{Moeller-Plesset.PR.1934} \\
-    CCSD & coupled-cluster singles and doubles & \citenum{Cizek-Cizek.JCP.1966, Cizek-Cizek.Wiley.1969} \\
-    CCSD(T) & CCSD with perturbative triplets & \citenum{Raghavachari-Head-Gordon.CPL.1989} \\
-    IEPA & independent electron-pair approximation & \citenum{Sinanoǧlu-Sinanoǧlu.ACP.1964, Nesbet-Nesbet.ACP.1965} \\
-    sIEPA & screened IEPA & \citenum{Zhang-Scheffler.PRL.2016} \\
-    MP2/cr & (scheme I of) corrected MP2 & \citenum{Dykstra-Davidson.IJQC.2000} \\
-\end{longtable}
-
-\endgroup
-
-\section*{密度泛函方法}
-
-\begingroup
-\setlength{\LTleft}{-20cm plus -1fill}
-\setlength{\LTright}{\LTleft}
-
-\begin{longtable}{lll}
-    \hline
-    方法名称 & 提出年代 & 参考文献 \\ \hline
-    \endhead
-    \hline
-    \endfoot
-    %
-\end{longtable}
-
-\endgroup
-
-\section*{原子轨道基组}
-
-\begingroup
-\setlength{\LTleft}{-20cm plus -1fill}
-\setlength{\LTright}{\LTleft}
-
-\begin{longtable}{llll}
-    \hline
-    基组家族 & 基组名称 & 基组基数 $\zeta$ & 参考文献 \\ \hline
-    \endhead
-    \hline
-    \endfoot
-    %
-    Karlsruhe
-    & def2-TZVPP & 3 & \citenum{10.1007/BF01112983, 10.1007/BF00528565, 10.1063/1.1622924, 10.1063/1.1305880, 10.1007/s002149900101, 10.1016/0009-2614(96)00382-x, 10.1063/1.459993, 10.1007/bf01114537, 10.1039/b508541a, 10.1063/1.1406535, 10.1063/1.456066, 10.1021/ct300302u} \\
-    & def2-QZVPP & 4 & \citenum{10.1007/BF01112983, 10.1007/BF00528565, 10.1063/1.1622924, 10.1063/1.1305880, 10.1007/s002149900101, 10.1016/0009-2614(96)00382-x, 10.1063/1.459993, 10.1007/bf01114537, 10.1039/b508541a, 10.1063/1.1406535, 10.1063/1.456066, 10.1021/ct300302u, 10.1063/1.1627293} \\
-    & def2-QZVPPD & 4 & \citenum{10.1007/BF01112983, 10.1007/BF00528565, 10.1063/1.1622924, 10.1063/1.1305880, 10.1007/s002149900101, 10.1016/0009-2614(96)00382-x, 10.1063/1.459993, 10.1007/bf01114537, 10.1039/b508541a, 10.1063/1.1406535, 10.1063/1.456066, 10.1021/ct300302u, 10.1063/1.1627293, 10.1063/1.3484283} \\
-    & def2-universal-jkfit & (auxiliary) & \citenum{10.1021/ct300302u, 10.1002/jcc.20702} \\
-    & daug-def2-universal-jkfit & (auxiliary) & \citenum{10.1021/ct300302u, 10.1002/jcc.20702, Woon-Dunning.JCP.1994} \\
-    & def2-TZVPP-rifit & (auxiliary) & \citenum{10.1007/s00214-007-0250-5, 10.1039/b415208e, 10.1016/S0009-2614(98)00862-8} \\
-    & def2-QZVPP-rifit & (auxiliary) & \citenum{10.1007/s00214-007-0250-5, 10.1039/b415208e} \\
-    & def2-QZVPPD-rifit & (auxiliary) & \citenum{10.1039/C4CP04286G, 10.1007/s00214-007-0250-5, 10.1039/b415208e, 10.1016/S0009-2614(98)00862-8} \\
 \end{longtable}
 
 \endgroup

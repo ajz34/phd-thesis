@@ -418,7 +418,7 @@ G\"orling-Levy 微扰与波函数理论中的 M\o{}ller-Plesset 微扰有所不�
 
 本工作所使用的程序已公开\cite{dh.ajz34}，该程序基于 \textsc{PySCF} 2.2.1 实现\cite{Sun-Chan.WCMS.2018, Sun-Chan.JCP.2020}。双杂化能量泛函的计算使用 \textsc{dh} 程序 v0.1.9\footnote{https://gitee.com/ajz34/pyscf-forge/tree/dh-v0.1.9/} 与 commit 80ca9e8\footnote{https://github.com/ajz34/pyscf-forge/commit/80ca9e8c3e86943077e5802b3621118fdef73146}。在正文中出现的计算任务没有使用波函数稳定性分析，所有自旋投影 $S_z$ 为零的体系使用限制性 Kohn-Sham 轨道、而 $S_z$ 非零的体系使用非限制性 Kohn-Sham 轨道进行计算。
 
-GMTKN55 数据集计算选用的基组列于表 \ref{tab.2.basis-gmtkn55}。其中，基组 daug-def2-universal-jkfit 是针对 def2-universal-jkfit 基组，使用基于 Woon 与 Dunning 所提出的方法\cite{Woon-Dunning.JCP.1994}，在各角量子数上增加两个弥散基函数；增加弥散基函数所用的程序是 \textsc{Basis Set Exchange} 的 \textsc{Python} API\cite{Feller-Feller.JCC.1996, Schuchardt-Windus.JCIM.2007, Pritchard-Windus.JCIM.2019}。GMTKN55 计算所选用的冻核近似规则列于表 \ref{tab.2.fc-gmtkn55}。Minnesota 2015 数据集所选用的基组是 def2-QZVPP\cite{10.1007/BF01112983, 10.1007/BF00528565, 10.1063/1.1622924, 10.1063/1.1305880, 10.1007/s002149900101, 10.1016/0009-2614(96)00382-x, 10.1063/1.459993, 10.1007/bf01114537, 10.1039/b508541a, 10.1063/1.1406535, 10.1063/1.456066, 10.1021/ct300302u, 10.1063/1.1627293}，冻核近似规则为表 \ref{tab.2.fc-gmtkn55} 中的 FC-2 规则。
+GMTKN55 数据集计算选用的基组列于表 \ref{tab.2.basis-gmtkn55}。GMTKN55 计算所选用的冻核近似规则列于表 \ref{tab.2.fc-gmtkn55}。Minnesota 2015 数据集所选用的基组是 def2-QZVPP，冻核近似规则为表 \ref{tab.2.fc-gmtkn55} 中的 FC-2 规则。
 
 本工作选用 \textsc{SciPy}\cite{Virtanen-Vazquez-Baeza.NM.2020} 进行泛函参数的优化。优化算法选用 L-BFGS-B 算法\cite{Byrd-Zhu.SJSC.1995}，收敛判标是参数梯度模长 (\verb|gtol|) 小于 $10^{-5}$。本工作没有进行严格的全局优化；对于后文表 \ref{tab.2.coeff-xyg6-1-weighted-error} 的参数，优化过程是非对电子能矫正项以 XYG6 的参数、对电子能占比微扰能比例以 0.7 作为初始参数；对于 \ref{sec.2.proportion-iepa-like}、\ref{sec.2.proportion-exchange}、\ref{sec.2.propotion-dataset} 等小节中的参数优化问题与图像绘制过程，则以其对应的原始泛函参数、或图中相邻的数据点作为初始参数优化。
 
@@ -481,7 +481,7 @@ GMTKN55 数据集计算选用的基组列于表 \ref{tab.2.basis-gmtkn55}。其�
 
 \subsection{解离曲线计算细节}
 
-分子解离曲线问题的计算中，除作为参考值的 DMC 方法外，其它方法选择 cc-pV5Z 基组\cite{Dunning-Dunning.JCP.1989}。MP2、CCSD、CCSD(T) 方法使用传统四中心二电子积分计算，其它方法使用 RI-JK 与 RI-MP2 算法并使用辅助基组 cc-pV5Z-jkfit\cite{Weigend-Weigend.PCCP.2002} 与 cc-pV5Z-rifit\cite{10.1039/b415208e}。计算程序是 \textsc{PySCF} 与 \textsc{dh} commit 80ca9e8。
+分子解离曲线问题的计算中，除作为参考值的 DMC 方法外，其它方法选择 cc-pV5Z 基组。MP2、CCSD、CCSD(T) 方法使用传统四中心二电子积分计算，其它方法使用 RI-JK 与 RI-MP2 算法并使用辅助基组 cc-pV5Z-jkfit 与 cc-pV5Z-rifit。计算程序是 \textsc{PySCF} 与 \textsc{dh} commit 80ca9e8。
 
 对于 DMC 方法，首先选用 ccecp-cc-pVQZ 基组\cite{Bennett-Mitas.JCP.2017} 在 \textsc{PySCF} 下给出 CASSCF 的波函数初猜；随后在 \textsc{PyQMC} 程序\cite{Wheeler-Wagner.JCP.2023}下先进行 1000 组态数量的 15 次 VMC 过程；其次进行 10000 组态数量的 4000 次 DMC，并舍弃前 200 次运行结果作能量计算；最后将时间步长为 0.02、0.01、0.005、0.0025、0.001 Hartree 的 DMC 结果线性外推到 0 时间步长的情形。
 
