@@ -9,7 +9,7 @@
 \setlength{\LTright}{\LTleft}
 
 \begin{longtable}{lll}
-    \hline 英文简称 & 中文术语 & 英文术语 \\ \hline \endhead
+    \hline 简称 & 中文术语 & 英文术语 \\ \hline \endhead
     \hline \endfoot
     %
     & 第一性 & \emph{ab initio} \\
@@ -17,6 +17,7 @@
     SCF & 自洽场 & self-consistent field \\
     post-HF & (专指波函数理论的) 后自洽场 & post Hartree-Fock \\
     & 规范原点 & gauge origin \\
+    GIAO & 规范原点不变原子轨道 & gauge-invariant atomic orbital \\
     RPA & 无规相近似 & random phase approximation \\
     OO & 轨道优化 & orbital-optimized \\
     SS & 自旋相同 & same-spin \\
@@ -35,6 +36,11 @@
     VMC & 变分蒙特卡洛 & variational Monte Carlo \\
     & 正交变换不变性 & unitary invariance \\
     & 大小可延展性 & size extensivity \\
+    & 正则自洽场 & canonical SCF \\
+    & 闭壳层 & closed-shell \\
+    & 开壳层 & open-shell \\
+    RDM & 约化密度矩阵 & reduced density matrix \\
+    & 弛豫密度矩阵 & response/relax/Lagragian density matrix \\
 \end{longtable}
 
 \endgroup
@@ -46,7 +52,7 @@
 \setlength{\LTright}{\LTleft}
 
 \begin{longtable}{lll}
-    \hline 英文简称 & 中文术语 & 英文术语 \\ \hline \endhead
+    \hline 简称 & 中文术语 & 英文术语 \\ \hline \endhead
     \hline \endfoot
     %
     DFT & 密度泛函理论 & density functional theory \\
@@ -63,6 +69,8 @@
     NL & 离域 & non-local \\
     & 半定域 & semi-local \\
     RSH & 长短程分离杂化 (泛函) & range-separate hybrid (functional) \\
+    LR & 长程效应 & long-range \\
+    SR & 短程效应 & short-range \\
     & 局域混合 (泛函) & local hybrid (functional) \\
     DH & 双杂化 (泛函) & doubly hybrid (functional) \\
     xDH & XYG3 型双杂化 (泛函) & XYG3-type doubly hybrid (functional) \\
@@ -71,6 +79,8 @@
     AC & 绝热路径 & adiabatic connection \\
     GLPT2 & 二阶 G{\"o}rling-Levy 微扰 & 2\textsuperscript{nd}-order G{\"o}rling-Levy perturbation \\
     OEP & 有效优化势 & optimized effective potential \\
+    SP & 自旋极化的 & spin-polarized \\
+    NSP & 自旋非极化的 & non-spin-polarized \\
 \end{longtable}
 
 \endgroup
@@ -82,16 +92,37 @@
 \setlength{\LTright}{\LTleft}
 
 \begin{longtable}{lll}
-    \hline 英文简称 & 中文术语 & 英文术语 \\ \hline \endhead
+    \hline 简称 & 中文术语 & 英文术语 \\ \hline \endhead
     \hline \endfoot
     %
     RI & 恒等算符简化 (近似) & resolution-of-identity (approximation) \\
+    & 辅助基组 & auxiliary basis set \\
     FPA & & focal-point analysis \\
     CBS & 完备基组 (极限) & complete basis set (limit) \\
-    WTMAD-2 & (GMTKN55) 第二型加权平均绝对值误差 & weighted mean absolute deviation (scheme 2) \\
+    MAD & 平均绝对值误差 & mean absolute deviation \\
+    WTMAD-2 & (GMTKN55) 第二型加权 MAD & weighted MAD (scheme 2) \\
     MEPUB & 平均键绝对值误差 & mean unsigned error per bond \\
     DRAM & 动态随机访问内存 & dynamic random access memory \\
     THC & 张量超分解 & tensor hyper-contraction \\
+    & 元素乘法 & elementwise multiplication \\
+    & 重叠积分 & overlap integral \\
+    & (无其他外场的) 单电子积分 & Hamiltonian core integral \\
+    ERI & 电子互斥积分 (双电子积分) & electron-repulsion integral \\
+    $n$c-$m$e & $n$ 中性、$m$ 电子积分 & $n$-center $m$-electron integral \\
+    conv ERI & 传统 4c-2e ERI & conventional ERI \\
+    J 积分 & 库伦积分 & Coulomb integral \\
+    K 积分 & 交换积分 & exchange integral \\
+    CP & 耦合微扰 & coupled-perturbed \\
+    CP-SCF & 耦合微扰自洽场 & coupled-perturbed SCF \\
+    & 骨架导数 & skeleton/core derivative \\
+    FLOPs & 浮点运算数 & floating-point operations \\
+    FLOPS & 每秒浮点运算效率 & floating-point operations per second \\
+    FMA & 乘积累加运算 & fused-multiply-add \\
+    & (CPU 的物理) 核心 & (physical) core (of CPU) \\
+    & 线程 & thread \\
+    NUMA nodes & 非一致内存访问节点 & non-uniform memory access nodes \\
+    I/O & 输入输出 & in/out \\
+    & 实际程序运行时间 & wall/elapsed time \\
 \end{longtable}
 
 \endgroup
@@ -103,12 +134,22 @@
 \setlength{\LTright}{\LTleft}
 
 \begin{longtable}{lll}
-    \hline 英文简称 & 中文术语 & 英文术语 \\ \hline \endhead
+    \hline 简称 & 中文术语 & 英文术语 \\ \hline \endhead
     \hline \endfoot
     %
     HOMO & 最高占据分子轨道 & highest occupied molecular orbital \\
     LUMO & 最低非占分子轨道 & lowest unoccupied molecular orbital \\
     HOMO/LUMO gap & HOMO 与 LUMO 能级差 & energy gap between HOMO and LUMO \\
+    IR & 红外光谱 & infrared spectroscopy \\
+    UV-Vis & 紫外可见光光谱 & ultra-violet and visable spectroscopy \\
+    Raman & Raman 光谱 & Raman spectroscopy \\
+    NMR & 核磁共振谱 & nuclear magnetic resonance \\
+    MS & 质谱 & mass spectrometry \\
+    XRD & X 射线衍射谱 & X-ray diffraction \\
+    STM & 扫描隧道显微镜 & scanning tunneling microscopy \\
+    & 原位红外 & \emph{in situ} IR \\
+    SERS & 表面增强拉曼光谱 & surface-enhanced Raman spectroscopy \\
+    SEM & 扫描电化学显微镜 & scanning electron microscopy \\
 \end{longtable}
 
 \endgroup
