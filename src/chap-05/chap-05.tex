@@ -87,7 +87,7 @@ RelRMSD 误差多大，才认为是可以被接受或容许的范围？首先，
 
 \subsection{基组与 RI 近似}
 
-在本工作中，我们将使用 Dunning 系列基组 aV$X$Z 与 aCV$X$Z ($X = \mathrm{D, T, Q, 5}$)\cite{Dunning-Dunning.JCP.1989, Kendall-Harrison.JCP.1992, Woon-Dunning.JCP.1993, Peterson-Dunning.JCP.1994, Wilson-Dunning.JMST.1996, VanMourik-Dunning.MP.1999, Wilson-Dunning.JCP.1999, VanMourik-Dunning.IJQC.2000, Peterson-Dunning.JCP.2002, Hill-Peterson.JCP.2010}。H 与 Br 原子并不出现在 aCV$X$Z 系列基组中；对于这两个原子作 aCV$X$Z 级别计算时，将不加说明地替换为对应的 aV$X$Z 基组。RI 近似可以大幅减少 MP2 的计算耗时，并且不会产生严重的误差损耗，是性价比相当高的技术手段\cite{Vahtras-Feyereisen.CPL.1993}。本工作的解析极化率计算中，我们对 Weigend 算法实现的 RI-JK\cite{Weigend-Weigend.PCCP.2002} 与 RI-MP2 相关贡献\cite{Weigend-Haettig.JCP.2002}计算均使用等比辅助基 (ETB, \underline{E}ven-\underline{T}empered auxiliary \underline{B}asis set)\cite{Stoychev-Neese.JCTC.2017}；等比参数设为 \textsc{PySCF} 程序默认的 $\beta = 2$。由于基于 \textsc{PySCF} 的扩展程序 \textsc{dh} 的高效率实现、以及对大基组下内存的合理控制，使得本工作中所有体系都可以在 MP2/aCV5Z 下完成计算。作为自洽场的 RI-JK 方法的能量收敛精度为 $10^{-10}$ Hartree。
+在本工作中，我们将使用 Dunning 系列基组 aV$X$Z 与 aCV$X$Z。H 与 Br 原子并不出现在 aCV$X$Z 系列基组中；对于这两个原子作 aCV$X$Z 级别计算时，将不加说明地替换为对应的 aV$X$Z 基组。RI 近似可以大幅减少 MP2 的计算耗时，并且不会产生严重的误差损耗，是性价比相当高的技术手段\cite{Vahtras-Feyereisen.CPL.1993}。本工作的解析极化率计算中，我们对 Weigend 算法实现的 RI-JK\cite{Weigend-Weigend.PCCP.2002} 与 RI-MP2 相关贡献\cite{Weigend-Haettig.JCP.2002}计算均使用 ETB 自动辅助基\cite{Stoychev-Neese.JCTC.2017}；等比参数设为 \textsc{PySCF} 程序默认的 $\beta = 2$。由于基于 \textsc{PySCF} 的扩展程序 \textsc{dh} 的高效率实现、以及对大基组下内存的合理控制，使得本工作中所有体系都可以在 MP2/aCV5Z 下完成计算。作为自洽场的 RI-JK 方法的能量收敛精度为 $10^{-10}$ Hartree。
 
 \subsection{数值极化率}
 

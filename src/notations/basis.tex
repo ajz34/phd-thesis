@@ -8,33 +8,46 @@
 
 基组 daug-def2-universal-jkfit 是针对 def2-universal-jkfit 基组，使用基于 Woon 与 Dunning 所提出的方法\cite{Woon-Dunning.JCP.1994}，在各角量子数上增加两个弥散基函数；增加弥散基函数所用的程序是 \textsc{Basis Set Exchange} 的 \textsc{Python} API\cite{Feller-Feller.JCC.1996, Schuchardt-Windus.JCIM.2007, Pritchard-Windus.JCIM.2019}。
 
+本工作还使用到自动生成的 ETB 辅助基\cite{Stoychev-Neese.JCTC.2017}。
+
+下表中，Dunning 系列基组的 $X = \mathrm{D, T, Q, 5}$，对应的基组基数分别是 $\zeta = 2, 3, 4, 5$；Jensen 系列基组的 $n = 1, 2, 3, 4$，对应的基组基数分别是 $\zeta = 2, 3, 4, 5$。
+
 \begingroup
 \setlength{\LTleft}{-20cm plus -1fill}
 \setlength{\LTright}{\LTleft}
 
-\begin{longtable}{lllll}
-    \hline
-    基组家族 & 基组名称 & 基组基数 $\zeta$ & 基组简称 & 参考文献 \\ \hline
+\begin{longtable}{ll}
+    \toprule
+    基组名称 & 参考文献 \\ \midrule
     \endhead
-    \hline
+    \bottomrule
     \endfoot
     %
-    Dunning
-    & cc-pV5Z & 5 & & \citenum{Dunning-Dunning.JCP.1989} \\
-    & cc-pV5Z-jkfit & (auxiliary) & & \citenum{Weigend-Weigend.PCCP.2002} \\
-    & cc-pV5Z-rifit & (auxiliary) & & \citenum{Haettig-Haettig.PCCP.2005} \\
-    & ccecp-cc-pVQZ & (ECP) & & \citenum{Bennett-Mitas.JCP.2017} \\
+    \multicolumn{2}{l}{\textbf{Dunning} (correlation-consistent)} \\
+    cc-pV5Z & \citenum{Dunning-Dunning.JCP.1989} \\
+    cc-pV5Z-jkfit & \citenum{Weigend-Weigend.PCCP.2002} \\
+    cc-pV5Z-rifit & \citenum{Haettig-Haettig.PCCP.2005} \\
+    ccecp-cc-pVQZ & \citenum{Bennett-Mitas.JCP.2017} \\
+    aug-cc-pωCV$X$Z & \citenum{Dunning-Dunning.JCP.1989, Kendall-Harrison.JCP.1992, Peterson-Dunning.JCP.2002} \\
+    aug-cc-pV$X$Z & \citenum{Dunning-Dunning.JCP.1989, Kendall-Harrison.JCP.1992, Woon-Dunning.JCP.1993} \\
+    aug-cc-pV$X$Z-jkfit & \citenum{Weigend-Weigend.PCCP.2002} \\
+    aug-cc-pV$X$Z-rifit & \citenum{Weigend-Haettig.JCP.2002, Haettig-Haettig.PCCP.2005} \\
+    aug-cc-pCV$X$Z & \citenum{Dunning-Dunning.JCP.1989, Kendall-Harrison.JCP.1992, Peterson-Dunning.JCP.2002, Woon-Dunning.JCP.1993} \\
     %
     \midrule
-    Karlsruhe
-    & def2-TZVPP & 3 & & \citenum{Dolg-Preuss.TCA.1993, Dolg-Preuss.TCA.1989, Peterson-Dolg.JCP.2003, Metz-Dolg.JCP.2000, Metz-Liu.TCA.2000, Leininger-Bergner.CPL.1996, Kaupp-Preuss.JCP.1991, Andrae-Preuss.TCA.1990, Weigend-Ahlrichs.PCCP.2005, Cao-Dolg.JCP.2001, Dolg-Preuss.JCP.1989, Gulde-Weigend.JCTC.2012} \\
-    & def2-QZVPP & 4 & & \citenum{Dolg-Preuss.TCA.1993, Dolg-Preuss.TCA.1989, Peterson-Dolg.JCP.2003, Metz-Dolg.JCP.2000, Metz-Liu.TCA.2000, Leininger-Bergner.CPL.1996, Kaupp-Preuss.JCP.1991, Andrae-Preuss.TCA.1990, Weigend-Ahlrichs.PCCP.2005, Cao-Dolg.JCP.2001, Dolg-Preuss.JCP.1989, Gulde-Weigend.JCTC.2012, Weigend-Ahlrichs.JCP.2003} \\
-    & def2-QZVPPD & 4 & & \citenum{Dolg-Preuss.TCA.1993, Dolg-Preuss.TCA.1989, Peterson-Dolg.JCP.2003, Metz-Dolg.JCP.2000, Metz-Liu.TCA.2000, Leininger-Bergner.CPL.1996, Kaupp-Preuss.JCP.1991, Andrae-Preuss.TCA.1990, Weigend-Ahlrichs.PCCP.2005, Cao-Dolg.JCP.2001, Dolg-Preuss.JCP.1989, Gulde-Weigend.JCTC.2012, Weigend-Ahlrichs.JCP.2003, Rappoport-Furche.JCP.2010} \\
-    & def2-universal-jkfit & (auxiliary) & & \citenum{Gulde-Weigend.JCTC.2012, Weigend-Weigend.JCC.2008} \\
-    & daug-def2-universal-jkfit & (auxiliary) & & \citenum{Gulde-Weigend.JCTC.2012, Weigend-Weigend.JCC.2008, Woon-Dunning.JCP.1994} \\
-    & def2-TZVPP-rifit & (auxiliary) & & \citenum{Hellweg-Klopper.TCA.2007, Haettig-Haettig.PCCP.2005, Weigend-Ahlrichs.CPL.1998} \\
-    & def2-QZVPP-rifit & (auxiliary) & & \citenum{Hellweg-Klopper.TCA.2007, Haettig-Haettig.PCCP.2005} \\
-    & def2-QZVPPD-rifit & (auxiliary) & & \citenum{Hellweg-Rappoport.PCCP.2015, Hellweg-Klopper.TCA.2007, Haettig-Haettig.PCCP.2005, Weigend-Ahlrichs.CPL.1998} \\
+    \multicolumn{2}{l}{\textbf{Karlsruhe}} \\
+    def2-TZVPP & \citenum{Metz-Dolg.JCP.2000, Peterson-Dolg.JCP.2003, Weigend-Ahlrichs.PCCP.2005} \\
+    def2-QZVPP & \citenum{Metz-Dolg.JCP.2000, Peterson-Dolg.JCP.2003, Weigend-Ahlrichs.PCCP.2005, Weigend-Ahlrichs.JCP.2003} \\
+    def2-QZVPPD & \citenum{Metz-Dolg.JCP.2000, Peterson-Dolg.JCP.2003, Weigend-Ahlrichs.PCCP.2005, Weigend-Ahlrichs.JCP.2003, Rappoport-Furche.JCP.2010} \\
+    def2-universal-jkfit & \citenum{Weigend-Weigend.JCC.2008} \\
+    daug-def2-universal-jkfit & \citenum{Weigend-Weigend.JCC.2008, Woon-Dunning.JCP.1994} \\
+    def2-TZVPP-rifit & \citenum{Hellweg-Klopper.TCA.2007, Haettig-Haettig.PCCP.2005, Weigend-Ahlrichs.CPL.1998} \\
+    def2-QZVPP-rifit & \citenum{Hellweg-Klopper.TCA.2007, Haettig-Haettig.PCCP.2005} \\
+    def2-QZVPPD-rifit & \citenum{Hellweg-Rappoport.PCCP.2015, Hellweg-Klopper.TCA.2007, Haettig-Haettig.PCCP.2005, Weigend-Ahlrichs.CPL.1998} \\
+    %
+    \midrule
+    \multicolumn{2}{l}{\textbf{Jensen} (polarization-consistent)} \\
+    aug-pc-$n$ & \citenum{Jensen-Jensen.JCP.2001, Jensen-Jensen.JCP.2002, Jensen-Jensen.JCP.2002a, Jensen-Helgaker.JCP.2004, Jensen-Jensen.JPCA.2007} \\
 \end{longtable}
 
 \endgroup

@@ -314,7 +314,7 @@ RI-JK 是通过张量分解降低 4c-2e ERI 的计算量、将占用空间少的
 \begin{equation}
   (ia|jb) = C_{\mu i} C_{\nu a} (\mu \nu | \kappa \lambda) C_{\kappa j} C_{\lambda b}
 \end{equation}
-相比之下 4c-2e ERI 积分 $(\mu \nu | \kappa \lambda)$ 的计算耗时反而并不关键。但是，借由 RI 近似具有张量分解的特性，MP2 相关能计算得以大幅加速；这种 MP2 计算模式称为 RI-MP2\cite{Feyereisen-Komornicki.CPL.1993, 10.1016/S0009-2614(98)00862-8}。以闭壳层 RI-MP2 相关能计算为例，
+相比之下 4c-2e ERI 积分 $(\mu \nu | \kappa \lambda)$ 的计算耗时反而并不关键。但是，借由 RI 近似具有张量分解的特性，MP2 相关能计算得以大幅加速；这种 MP2 计算模式称为 RI-MP2\cite{Feyereisen-Komornicki.CPL.1993, Weigend-Ahlrichs.CPL.1998}。以闭壳层 RI-MP2 相关能计算为例，
 \begin{subequations}
 \label{eqs.ri-mp2-ecorr}
 \begin{alignat}{10}
@@ -775,7 +775,7 @@ Handy 与 Schaefer III 指出\cite{Handy-Schaefer.JCP.1984}，对于一阶梯度
 \begin{equation}
   \pmb{\mathscr{A}} \partial_{\mathbb{B}} \mathbf{Z} = \pmb{\mathscr{R}}^{\mathbb{B}}
 \end{equation}
-这意味着求取维度为 $(n_\mathrm{prop}, n_\mathrm{vir}, n_\mathrm{occ})$ 的 $\partial_{\mathbb{B}} Z_{ai}$ 矩阵导数，需要与 CP-SCF 相同的计算过程。但事实上，可以再一次使用 Z-Vector 方法避免直接求取 $\partial_{\mathbb{B}} Z_{ai}$。利用式 (\ref{eq.3.CP-SCF-matrix-form}) 的结论，
+这意味着求取维度为 $(n_\mathrm{prop}, n_\mathrm{vir}, n_\mathrm{occ})$ 的 $\partial_{\mathbb{B}} Z_{ai}$ 矩阵导数，需要与 CP-SCF 相同的计算过程。但事实上，可以再一次使用 Z-Vector 方法避免直接求取 $\partial_{\mathbb{B}} Z_{ai}$。利用式 (\ref{eq.3.CP-SCF-matrix-form}) 的结论，0
 \begin{equation*}
   \partial_{\mathbb{A}} \partial_{\mathbb{B}} E \leftarrow \partial_{\mathbb{B}} \mathbf{Z}^\dagger \mathbf{F}^{\mathbb{A}} = (\pmb{\mathscr{A}}^{-1} \pmb{\mathscr{R}}^{\mathbb{B}})^\dagger \mathbf{F}^{\mathbb{A}} = \pmb{\mathscr{R}}^{\mathbb{B}}{}^\dagger (\pmb{\mathscr{A}}^{-1} \mathbf{F}^{\mathbb{A}}) = \pmb{\mathscr{R}}^{\mathbb{B}}{}^\dagger \mathbf{U}^{\mathbb{A}}
 \end{equation*}
