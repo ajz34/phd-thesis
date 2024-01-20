@@ -6,13 +6,202 @@
 \setlength{\LTleft}{-20cm plus -1fill}
 \setlength{\LTright}{\LTleft}
 
-\begin{longtable}{lll}
-    \hline
-    方法名称 & 提出年代 & 参考文献 \\ \hline
+下述表格中，
+\begin{itemize}[nosep]
+    \item 杂化类型的交换部分中，“hyb”指交换能中掺杂部分非局域的严格交换能；“exact”指交换能全部为严格交换能；“rsh” 指交换能包含长短程分离的非局域交换能，不论其是否包含非局域短程交换。该项若非空缺，则视为杂化泛函。
+    \item 杂化类型的相关部分中，“hyb”指相关能中掺杂 MP2 型非局域相关能；“rsh”指相关能中掺杂长短程分离的 MP2 型非局域相关能。该项若非空缺，则视为双杂化泛函。
+\end{itemize}
+
+\begin{longtable}{lcccccl}
+    \toprule
+    & & & \multicolumn{3}{c}{杂化类型}\\
+    \cmidrule(lr){4-6}
+    方法名称 & 提出年代 & 组成类型 & 交换 & 相关 & xDH 型 & 参考文献 \\ \midrule
     \endhead
-    \hline
+    \bottomrule
     \endfoot
     %
+    Slater & 1974 & LDA &  &  &  & \citenum{Dirac-Dirac.MPCPS.1930, Bloch-Bloch.ZP.1929} \\
+    SVWN & 1980 & LDA &  &  &  & \citenum{Vosko-Nusair.CJP.1980, Dirac-Dirac.MPCPS.1930, Bloch-Bloch.ZP.1929} \\
+    SVWN1RPA & 1980 & LDA &  &  &  & \citenum{Vosko-Nusair.CJP.1980, Dirac-Dirac.MPCPS.1930, Bloch-Bloch.ZP.1929} \\
+    VWN1RPA & 1980 & LDA & exact &  &  & \citenum{Vosko-Nusair.CJP.1980} \\
+    VWN5 & 1980 & LDA & exact &  &  & \citenum{Vosko-Nusair.CJP.1980} \\
+    PZ81 & 1981 & LDA & exact &  &  & \citenum{Perdew-Zunger.PRB.1981} \\
+    SPZ81 & 1981 & LDA &  &  &  & \citenum{Perdew-Zunger.PRB.1981, Dirac-Dirac.MPCPS.1930, Bloch-Bloch.ZP.1929} \\
+    P86 & 1986 & GGA & exact &  &  & \citenum{Perdew-Perdew.PRB.1986} \\
+    SP86 & 1986 & GGA &  &  &  & \citenum{Perdew-Perdew.PRB.1986, Dirac-Dirac.MPCPS.1930, Bloch-Bloch.ZP.1929} \\
+    BP86 & 1986 & GGA &  &  &  & \citenum{Perdew-Perdew.PRB.1986, Becke-Becke.PRA.1988} \\
+    OP86 & 1986 & GGA &  &  &  & \citenum{Perdew-Perdew.PRB.1986, Handy-Cohen.MP.2001} \\
+    BLYP & 1988 & GGA &  &  &  & \citenum{Lee-Parr.PRB.1988, Miehlich-Preuss.CPL.1989, Becke-Becke.PRA.1988} \\
+    BPZ81 & 1988 & GGA &  &  &  & \citenum{Perdew-Zunger.PRB.1981, Becke-Becke.PRA.1988} \\
+    LYP & 1988 & GGA & exact &  &  & \citenum{Lee-Parr.PRB.1988, Miehlich-Preuss.CPL.1989} \\
+    Becke & 1988 & GGA &  &  &  & \citenum{Becke-Becke.PRA.1988} \\
+    BC & 1988 & mGGA & exact &  &  & \citenum{Becke-Becke.JCP.1996} \\
+    SLYP & 1988 & GGA &  &  &  & \citenum{Lee-Parr.PRB.1988, Miehlich-Preuss.CPL.1989, Dirac-Dirac.MPCPS.1930, Bloch-Bloch.ZP.1929} \\
+    BVWN1RPA & 1988 & GGA &  &  &  & \citenum{Vosko-Nusair.CJP.1980, Becke-Becke.PRA.1988} \\
+    BVWN & 1988 & GGA &  &  &  & \citenum{Vosko-Nusair.CJP.1980, Becke-Becke.PRA.1988} \\
+    PW91 & 1991 & GGA &  &  &  & \citenum{Perdew-Fiolhais.PRB.1993, Perdew-Fiolhais.PRB.1992} \\
+    BPW91 & 1991 & GGA &  &  &  & \citenum{Perdew-Fiolhais.PRB.1993, Perdew-Fiolhais.PRB.1992, Becke-Becke.PRA.1988} \\
+    PW91C & 1991 & GGA & exact &  &  & \citenum{Perdew-Fiolhais.PRB.1993, Perdew-Fiolhais.PRB.1992} \\
+    PW91LYP & 1991 & GGA &  &  &  & \citenum{Lee-Parr.PRB.1988, Perdew-Fiolhais.PRB.1992, Miehlich-Preuss.CPL.1989, Perdew-Fiolhais.PRB.1993} \\
+    PW91P86 & 1991 & GGA &  &  &  & \citenum{Perdew-Fiolhais.PRB.1993, Perdew-Fiolhais.PRB.1992, Perdew-Perdew.PRB.1986} \\
+    PW91PZ81 & 1991 & GGA &  &  &  & \citenum{Perdew-Fiolhais.PRB.1993, Perdew-Fiolhais.PRB.1992, Perdew-Zunger.PRB.1981} \\
+    PW91VWN & 1991 & GGA &  &  &  & \citenum{Perdew-Fiolhais.PRB.1993, Perdew-Fiolhais.PRB.1992, Vosko-Nusair.CJP.1980} \\
+    PW91X & 1991 & GGA &  &  &  & \citenum{Perdew-Fiolhais.PRB.1993, Perdew-Fiolhais.PRB.1992} \\
+    SPW91 & 1991 & GGA &  &  &  & \citenum{Bloch-Bloch.ZP.1929, Perdew-Fiolhais.PRB.1992, Perdew-Fiolhais.PRB.1993, Dirac-Dirac.MPCPS.1930} \\
+    B3LYP & 1993 & GGA & hyb &  &  & \citenum{Stephens-Frisch.JPC.1994} \\
+    B3LYPV1R & 1993 & GGA & hyb &  &  & \citenum{Stephens-Frisch.JPC.1994} \\
+    B3P86 & 1993 & GGA & hyb &  &  & \citenum{} \\
+    B3PW91 & 1993 & GGA & hyb &  &  & \citenum{Becke-Becke.JCP.1993} \\
+    BHHLYP & 1993 & GGA & hyb &  &  & \citenum{Lee-Parr.PRB.1988, Bloch-Bloch.ZP.1929, Miehlich-Preuss.CPL.1989, Vosko-Nusair.CJP.1980, Dirac-Dirac.MPCPS.1930, Becke-Becke.PRA.1988} \\
+    PBEC & 1996 & GGA & exact &  &  & \citenum{Perdew-Ernzerhof.PRL.1996, Perdew-Ernzerhof.PRL.1997} \\
+    B1B95 & 1996 & mGGA & hyb &  &  & \citenum{Becke-Becke.JCP.1996} \\
+    BPBE & 1996 & GGA &  &  &  & \citenum{Perdew-Ernzerhof.PRL.1996, Perdew-Ernzerhof.PRL.1997, Becke-Becke.PRA.1988} \\
+    PBEP86 & 1996 & GGA &  &  &  & \citenum{Perdew-Ernzerhof.PRL.1996, Perdew-Perdew.PRB.1986, Perdew-Ernzerhof.PRL.1997} \\
+    SOP & 1997 & GGA &  &  &  & \citenum{Dirac-Dirac.MPCPS.1930, Cohen-Handy.MP.2001, Bloch-Bloch.ZP.1929} \\
+    PBEX & 1997 & GGA &  &  &  & \citenum{Perdew-Ernzerhof.PRL.1996, Perdew-Ernzerhof.PRL.1997} \\
+    PW91PBE & 1997 & GGA &  &  &  & \citenum{Perdew-Fiolhais.PRB.1992, Perdew-Ernzerhof.PRL.1996, Perdew-Ernzerhof.PRL.1997, Perdew-Fiolhais.PRB.1993} \\
+    PBE & 1997 & GGA &  &  &  & \citenum{Perdew-Ernzerhof.PRL.1996, Perdew-Ernzerhof.PRL.1997} \\
+    OP & 1997 & GGA & exact &  &  & \citenum{Cohen-Handy.MP.2001} \\
+    HCTH407 & 1997 & GGA &  &  &  & \citenum{Boese-Handy.JCP.2001} \\
+    PBEVWN & 1997 & GGA &  &  &  & \citenum{Perdew-Ernzerhof.PRL.1996, Vosko-Nusair.CJP.1980, Perdew-Ernzerhof.PRL.1997} \\
+    PBEPZ81 & 1997 & GGA &  &  &  & \citenum{Perdew-Ernzerhof.PRL.1996, Perdew-Zunger.PRB.1981, Perdew-Ernzerhof.PRL.1997} \\
+    PBEPW91 & 1997 & GGA &  &  &  & \citenum{Perdew-Fiolhais.PRB.1992, Perdew-Ernzerhof.PRL.1996, Perdew-Ernzerhof.PRL.1997, Perdew-Fiolhais.PRB.1993} \\
+    PBEOP & 1997 & GGA &  &  &  & \citenum{Tsuneda-Hirao.JCP.1999a, Tsuneda-Hirao.JCP.1999, Perdew-Ernzerhof.PRL.1996, Perdew-Ernzerhof.PRL.1997} \\
+    PBELYP & 1997 & GGA &  &  &  & \citenum{Lee-Parr.PRB.1988, Perdew-Ernzerhof.PRL.1996, Miehlich-Preuss.CPL.1989, Perdew-Ernzerhof.PRL.1997} \\
+    SPBE & 1997 & GGA &  &  &  & \citenum{Perdew-Ernzerhof.PRL.1997, Perdew-Ernzerhof.PRL.1996, Dirac-Dirac.MPCPS.1930, Bloch-Bloch.ZP.1929} \\
+    revPBE & 1998 & GGA &  &  &  & \citenum{Perdew-Ernzerhof.PRL.1996, Perdew-Ernzerhof.PRL.1997, Zhang-Yang.PRL.1998} \\
+    EDF1 & 1998 & GGA &  &  &  & \citenum{Adamson-Pople.CPL.1998} \\
+    mPW1LYP & 1998 & GGA & hyb &  &  & \citenum{Lee-Parr.PRB.1988, Adamo-Barone.JCP.1998, Miehlich-Preuss.CPL.1989} \\
+    mPW1PBE & 1998 & GGA & hyb &  &  & \citenum{Adamo-Barone.JCP.1998, Perdew-Ernzerhof.PRL.1996, Perdew-Ernzerhof.PRL.1997} \\
+    mPW1PW91 & 1998 & GGA & hyb &  &  & \citenum{Adamo-Barone.JCP.1998} \\
+    mPW3PBE & 1998 & GGA & hyb &  &  & \citenum{Adamo-Barone.JCP.1998, Bloch-Bloch.ZP.1929, Perdew-Fiolhais.PRB.1992, Perdew-Fiolhais.PRB.1993, Vosko-Nusair.CJP.1980, Dirac-Dirac.MPCPS.1930} \\
+    mPWPBE & 1998 & GGA &  &  &  & \citenum{Adamo-Barone.JCP.1998, Perdew-Ernzerhof.PRL.1996, Perdew-Ernzerhof.PRL.1997} \\
+    B97-1 & 1998 & GGA & hyb &  &  & \citenum{Hamprecht-Handy.JCP.1998} \\
+    PBEh1PBE & 1998 & GGA & hyb &  &  & \citenum{Heyd-Scuseria.JCP.2004, Perdew-Ernzerhof.PRL.1996, Henderson-Scuseria.JCP.2009, Perdew-Ernzerhof.PRL.1997, Heyd-Ernzerhof.JCP.2003, Heyd-Ernzerhof.JCP.2006, Ernzerhof-Perdew.JCP.1998} \\
+    MPW91 & 1998 & GGA &  &  &  & \citenum{Perdew-Fiolhais.PRB.1992, Perdew-Fiolhais.PRB.1993, Adamo-Barone.JCP.1998} \\
+    PKZB & 1999 & mGGA &  &  &  & \citenum{Perdew-Blaha.PRL.1999} \\
+    RPBE & 1999 & GGA &  &  &  & \citenum{Perdew-Ernzerhof.PRL.1997, Perdew-Ernzerhof.PRL.1996, Hammer-Noerskov.PRB.1999} \\
+    PBE0 & 1999 & GGA & hyb &  &  & \citenum{Ernzerhof-Scuseria.JCP.1999, Adamo-Barone.JCP.1999} \\
+    MPW1K & 2000 & GGA & hyb &  &  & \citenum{Lynch-Truhlar.JPCA.2000} \\
+    O3LYP & 2001 & GGA & hyb &  &  & \citenum{Hoe-Handy.CPL.2001, Cohen-Handy.MP.2001} \\
+    B3LYP* & 2001 & GGA & hyb &  &  & \citenum{Reiher-ArturHess.TCA.2001} \\
+    B97-2 & 2001 & GGA & hyb &  &  & \citenum{Wilson-Tozer.JCP.2001} \\
+    BOP & 2001 & GGA &  &  &  & \citenum{Tsuneda-Hirao.JCP.1999, Becke-Becke.PRA.1988} \\
+    OPW91 & 2001 & GGA &  &  &  & \citenum{Perdew-Fiolhais.PRB.1993, Perdew-Fiolhais.PRB.1992, Handy-Cohen.MP.2001} \\
+    OPZ81 & 2001 & GGA &  &  &  & \citenum{Perdew-Zunger.PRB.1981, Handy-Cohen.MP.2001} \\
+    OVWN & 2001 & GGA &  &  &  & \citenum{Vosko-Nusair.CJP.1980, Handy-Cohen.MP.2001} \\
+    OVWN1RPA & 2001 & GGA &  &  &  & \citenum{Vosko-Nusair.CJP.1980, Handy-Cohen.MP.2001} \\
+    OPBE & 2001 & GGA &  &  &  & \citenum{Perdew-Ernzerhof.PRL.1996, Perdew-Ernzerhof.PRL.1997, Handy-Cohen.MP.2001} \\
+    OLYP & 2001 & GGA &  &  &  & \citenum{Lee-Parr.PRB.1988, Miehlich-Preuss.CPL.1989, Handy-Cohen.MP.2001} \\
+    OPTX & 2001 & GGA &  &  &  & \citenum{Handy-Cohen.MP.2001} \\
+    τHCTH & 2002 & mGGA &  &  &  & \citenum{Boese-Handy.JCP.2002} \\
+    τHCTHhyb & 2002 & mGGA & hyb &  &  & \citenum{Boese-Handy.JCP.2002} \\
+    TPSS & 2003 & mGGA &  &  &  & \citenum{Perdew-Scuseria.JCP.2004, Tao-Scuseria.PRL.2003} \\
+    TPSSh & 2003 & mGGA & hyb &  &  & \citenum{Staroverov-Perdew.JCP.2003} \\
+    B97-K & 2004 & GGA & hyb &  &  & \citenum{Boese-Martin.JCP.2004} \\
+    CAM-B3LYP & 2004 & GGA & rsh &  &  & \citenum{Yanai-Handy.CPL.2004} \\
+    BMK & 2004 & mGGA & hyb &  &  & \citenum{Boese-Martin.JCP.2004} \\
+    M05 & 2005 & mGGA & hyb &  &  & \citenum{Zhao-Truhlar.JCP.2005} \\
+    B97-3 & 2005 & GGA & hyb &  &  & \citenum{Keal-Tozer.JCP.2005} \\
+    PBE1KCIS & 2005 & mGGA & hyb &  &  & \citenum{Zhao-Truhlar.JCTC.2005} \\
+    PBELYP1w & 2005 & GGA &  &  &  & \citenum{Dahlke-Truhlar.JPCB.2005} \\
+    TPSSLYP1w & 2005 & mGGA &  &  &  & \citenum{Dahlke-Truhlar.JPCB.2005} \\
+    X3LYP & 2005 & GGA & hyb &  &  & \citenum{Xu-Goddard.PNAS.2004} \\
+    MOHLYP & 2005 & GGA &  &  &  & \citenum{Schultz-Truhlar.JPCA.2005} \\
+    M05-2X & 2005 & mGGA & hyb &  &  & \citenum{Zhao-Truhlar.JCTC.2006} \\
+    mPWLYP1w & 2005 & GGA &  &  &  & \citenum{Dahlke-Truhlar.JPCB.2005} \\
+    B2PLYP & 2006 & GGA & hyb & hyb &  & \citenum{Grimme-Grimme.JCP.2006} \\
+    M06-2X & 2006 & mGGA & hyb &  &  & \citenum{Zhao-Truhlar.TCA.2008} \\
+    M06 & 2006 & mGGA & hyb &  &  & \citenum{Zhao-Truhlar.TCA.2008} \\
+    HSE06 & 2006 & GGA & rsh &  &  & \citenum{Krukau-Scuseria.JCP.2006, Heyd-Ernzerhof.JCP.2003, Heyd-Ernzerhof.JCP.2006} \\
+    M06-HF & 2006 & mGGA & exact &  &  & \citenum{Zhao-Truhlar.JPCA.2006} \\
+    mPW2PLYP & 2006 & GGA & hyb & hyb &  & \citenum{Schwabe-Grimme.PCCP.2006} \\
+    M06-L & 2006 & mGGA &  &  &  & \citenum{Zhao-Truhlar.TCA.2008, Zhao-Truhlar.JCP.2006} \\
+    TPSSm & 2007 & mGGA &  &  &  & \citenum{Perdew-Scuseria.JCP.2004, Tao-Scuseria.PRL.2003, Perdew-Scuseria.PRA.2007} \\
+    B2GP-PLYP & 2008 & GGA & hyb & hyb &  & \citenum{Karton-Martin.JPCA.2008} \\
+    PBEsol & 2008 & GGA &  &  &  & \citenum{Perdew-Burke.PRL.2008} \\
+    SOGGA & 2008 & GGA &  &  &  & \citenum{Perdew-Ernzerhof.PRL.1996, Perdew-Ernzerhof.PRL.1997, Zhao-Truhlar.JCP.2008} \\
+    ωB97X & 2008 & GGA & rsh &  &  & \citenum{Chai-Head-Gordon.JCP.2008} \\
+    ωB97 & 2008 & GGA & rsh &  &  & \citenum{Chai-Head-Gordon.JCP.2008} \\
+    M08-SO & 2008 & mGGA & hyb &  &  & \citenum{Zhao-Truhlar.JCTC.2008} \\
+    M08-HX & 2008 & mGGA & hyb &  &  & \citenum{Zhao-Truhlar.JCTC.2008} \\
+    revTPSS & 2009 & mGGA &  &  &  & \citenum{Perdew-Sun.PRL.2009, Perdew-Sun.PRL.2011} \\
+    ωB97X-2-LP & 2009 & GGA & rsh & hyb &  & \citenum{Chai-Head-Gordon.JCP.2009} \\
+    XYG3 & 2009 & GGA & hyb & hyb & xDH & \citenum{Zhang-Goddard.PNAS.2009} \\
+    ωB97X-2-TQZ & 2009 & GGA & rsh & hyb &  & \citenum{Chai-Head-Gordon.JCP.2009} \\
+    PTPSS-D3Zero & 2011 & mGGA & hyb & hyb &  & \citenum{Goerigk-Grimme.JCTC.2011} \\
+    PWPB95-D3Zero & 2011 & mGGA & hyb & hyb &  & \citenum{Goerigk-Grimme.JCTC.2011} \\
+    SOGGA11 & 2011 & GGA &  &  &  & \citenum{Peverati-Truhlar.JPCL.2011} \\
+    SOGGA11X & 2011 & GGA & hyb &  &  & \citenum{Peverati-Truhlar.JCP.2011} \\
+    XYGJ-OS & 2011 & GGA & hyb & hyb & xDH & \citenum{Zhang-Goddard.PNAS.2011} \\
+    M11 & 2011 & mGGA & rsh &  &  & \citenum{Peverati-Truhlar.JPCL.2011a} \\
+    PBE0-DH & 2011 & GGA & hyb & hyb &  & \citenum{Bremond-Adamo.JCP.2011} \\
+    M11-L & 2011 & mGGA &  &  &  & \citenum{Peverati-Truhlar.JPCL.2012} \\
+    LS1DH-PBE & 2011 & GGA & hyb & hyb &  & \citenum{Toulouse-Adamo.JCP.2011} \\
+    N12 & 2012 & GGA &  &  &  & \citenum{Peverati-Truhlar.JCTC.2012} \\
+    N12-SX & 2012 & GGA & rsh &  &  & \citenum{Peverati-Truhlar.PCCP.2012a} \\
+    PBE0-2 & 2012 & GGA & hyb & hyb &  & \citenum{Ernzerhof-Scuseria.JCP.1999, Adamo-Barone.JCP.1999, Stewart-Gill.JCSFT.1995, Wigner-Wigner.TFS.1938} \\
+    MS0 & 2012 & mGGA &  &  &  & \citenum{Perdew-Sun.PRL.2009, Sun-Ruzsinszky.JCP.2012} \\
+    APFD & 2012 & GGA & hyb &  &  & \citenum{Austin-Throssell.JCTC.2012} \\
+    MN12-L & 2012 & mGGA &  &  &  & \citenum{Peverati-Truhlar.PCCP.2012} \\
+    MN12-SX & 2012 & mGGA & rsh &  &  & \citenum{Peverati-Truhlar.PCCP.2012a} \\
+    xDH-PBE0 & 2012 & GGA & hyb & hyb & xDH & \citenum{Zhang-Xu.JCP.2012} \\
+    PBE50 & 2012 & GGA & hyb &  &  & \citenum{Perdew-Ernzerhof.PRL.1996, Perdew-Ernzerhof.PRL.1997} \\
+    MS1 & 2013 & mGGA &  &  &  & \citenum{Perdew-Sun.PRL.2009, Sun-Perdew.JCP.2013} \\
+    lrc-XYG3 & 2013 & GGA & hyb & rsh & xDH & \citenum{Zhang-Xu.JPCL.2013} \\
+    DSD-PBEPBE-D3BJ & 2013 & GGA & hyb & hyb &  & \citenum{Kozuch-Martin.JCC.2013} \\
+    revPBE0-DH & 2013 & GGA & hyb & hyb &  & \citenum{Arago-Sancho-Garcia.JCTC.2013} \\
+    TPSS0-DH & 2013 & mGGA & hyb & hyb &  & \citenum{Arago-Sancho-Garcia.JCTC.2013} \\
+    DSD-PBEP86-D3BJ & 2013 & GGA & hyb & hyb &  & \citenum{Kozuch-Martin.JCC.2013} \\
+    revB3LYP & 2013 & GGA & hyb &  &  & \citenum{Lee-Parr.PRB.1988, Bloch-Bloch.ZP.1929, Miehlich-Preuss.CPL.1989, Vosko-Nusair.CJP.1980, Dirac-Dirac.MPCPS.1930, Becke-Becke.PRA.1988} \\
+    DSD-BLYP-D3BJ & 2013 & GGA & hyb & hyb &  & \citenum{Kozuch-Martin.JCC.2013} \\
+    DSD-PBEB95-D3BJ & 2013 & mGGA & hyb & hyb &  & \citenum{Kozuch-Martin.JCC.2013} \\
+    MS2 & 2013 & mGGA &  &  &  & \citenum{Perdew-Sun.PRL.2009, Sun-Perdew.JCP.2013} \\
+    TPSS-QIDH & 2014 & mGGA & hyb & hyb &  & \citenum{Bremond-Adamo.JCP.2014} \\
+    PBE-QIDH & 2014 & GGA & hyb & hyb &  & \citenum{Bremond-Adamo.JCP.2014} \\
+    mBEEF & 2014 & mGGA &  &  &  & \citenum{Perdew-Burke.PRL.2008, Wellendorff-Bligaard.JCP.2014} \\
+    PBE-CIDH & 2015 & GGA & hyb & hyb &  & \citenum{Alipour-Alipour.TCA.2015} \\
+    MVS & 2015 & mGGA &  &  &  & \citenum{Sun-Ruzsinszky.PNAS.2015, Perdew-Sun.PRL.2009} \\
+    TPSS-CIDH & 2015 & mGGA & hyb & hyb &  & \citenum{Alipour-Alipour.TCA.2015} \\
+    SCAN & 2015 & mGGA &  &  &  & \citenum{Sun-Perdew.PRL.2015} \\
+    ωB97M-V & 2016 & mGGA & hyb &  &  & \citenum{Mardirossian-Head-Gordon.JCP.2016} \\
+    MN15 & 2016 & mGGA & hyb &  &  & \citenum{Yu-Truhlar.CS.2016} \\
+    SOS0-PBE-QIDH & 2016 & GGA & hyb & hyb &  & \citenum{Alipour-Alipour.JPCA.2016} \\
+    SOS0-PBE0-DH & 2016 & GGA & hyb & hyb &  & \citenum{Alipour-Alipour.JPCA.2016} \\
+    MN15-L & 2016 & mGGA &  &  &  & \citenum{Yu-Truhlar.JCTC.2016} \\
+    SCAN0 & 2016 & mGGA & hyb &  &  & \citenum{Sun-Perdew.PRL.2015, Hui-Chai.JCP.2016} \\
+    revM06-L & 2017 & mGGA &  &  &  & \citenum{Wang-He.PNAS.2017} \\
+    RSX-QIDH & 2018 & GGA & rsh & hyb &  & \citenum{Bremond-Adamo.JCTC.2018} \\
+    revM06 & 2018 & mGGA & hyb &  &  & \citenum{Wang-He.PNAS.2018} \\
+    ωB2PLYP & 2019 & GGA & rsh & hyb &  & \citenum{Casanova-Paez-Goerigk.JCTC.2019} \\
+    revM11 & 2019 & mGGA & rsh &  &  & \citenum{Verma-Truhlar.JPCA.2019} \\
+    RSX-0DH & 2019 & GGA & rsh & hyb &  & \citenum{Bremond-Adamo.JCP.2019} \\
+    RSCAN & 2019 & mGGA &  &  &  & \citenum{Bartok-Yates.JCP.2019} \\
+    ωB2GP-PLYP & 2019 & GGA & rsh & hyb &  & \citenum{Casanova-Paez-Goerigk.JCTC.2019} \\
+    R2SCAN & 2020 & mGGA &  &  &  & \citenum{Furness-Sun.JPCL.2020, Furness-Sun.JPCL.2020a} \\
+    M06-SX & 2020 & mGGA & rsh &  &  & \citenum{Wang-He.PNAS.2020} \\
+    revXYG3 & 2021 & GGA & hyb & hyb & xDH & \citenum{Zhang-Xu.JPCL.2021} \\
+    SOS-RSX-PBE0-DH & 2021 & GGA & rsh & hyb &  & \citenum{Alipour-Karimi.JCTC.2021} \\
+    RS-PW91-PW91 & 2021 & GGA & rsh & rsh &  & \citenum{Mester-Kallay.JCTC.2021} \\
+    RS-PBE-PBE & 2021 & GGA & rsh & rsh &  & \citenum{Mester-Kallay.JCTC.2021} \\
+    RS-PBE-P86 & 2021 & GGA & rsh & rsh &  & \citenum{Mester-Kallay.JCTC.2021} \\
+    RS-B88-LYP & 2021 & GGA & rsh & rsh &  & \citenum{Mester-Kallay.JCTC.2021} \\
+    revXYGJ-OS & 2021 & GGA & hyb & hyb & xDH & \citenum{Zhang-Xu.JPCL.2021} \\
+    XYG5 & 2021 & GGA & hyb & hyb & xDH & \citenum{Zhang-Xu.JPCL.2021} \\
+    XYG-OS5 & 2021 & GGA & hyb & hyb & xDH & \citenum{Zhang-Xu.JPCL.2021} \\
+    XYG6 & 2021 & GGA & hyb & hyb & xDH & \citenum{Zhang-Xu.JPCL.2021} \\
+    XYG7 & 2021 & GGA & hyb & hyb & xDH & \citenum{Zhang-Xu.JPCL.2021} \\
+    ωPBEPP86 & 2021 & GGA & rsh & hyb &  & \citenum{Casanova-Paez-Goerigk.JCTC.2021} \\
+    SOS-RSX-PBE-QIDH & 2021 & GGA & rsh & hyb &  & \citenum{Alipour-Karimi.JCTC.2021} \\
+    ωB88PP86 & 2021 & GGA & rsh & hyb &  & \citenum{Casanova-Paez-Goerigk.JCTC.2021} \\
+    R4SCAN & 2022 & mGGA &  &  &  & \citenum{Furness-Sun.JPCL.2020a, Furness-Sun.JPCL.2020, Furness-Sun.JCP.2022} \\
+    R2SCAN50 & 2022 & mGGA & hyb &  &  & \citenum{Bursch-Grimme.JCP.2022} \\
+    R2SCAN0 & 2022 & mGGA & hyb &  &  & \citenum{Bursch-Grimme.JCP.2022} \\
+    GAS22 & 2022 & mGGA & rsh &  &  & \citenum{Ma-Li.SA.2022} \\
+    r++SCAN & 2022 & mGGA &  &  &  & \citenum{Furness-Sun.JCP.2022} \\
+    R4SCAN0 & 2022 & mGGA & hyb &  &  & \citenum{Furness-Sun.JPCL.2020a, Furness-Sun.JPCL.2020, Furness-Sun.JCP.2022} \\
+    CASE21 & 2022 & GGA & hyb &  &  & \citenum{Sparrow-DiStasio.JPCL.2022} \\
 \end{longtable}
 
 \endgroup
