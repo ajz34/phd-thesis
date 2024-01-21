@@ -108,7 +108,6 @@
 %-----其它定义-----
 \usepackage{ifthen}
 \newcommand{\Schrodinger}{Schr\"o\-dinger}
-\newcommand{\alert}[1]{{\color{red}{#1}}}
 
 % tablenotes 与表格内注释超链接 (from fdudoc.cls)
 \makeatletter
@@ -147,6 +146,10 @@
   \end{tablenotes}
   \end{threeparttable}
 \fi}
+
+% 用于分章节编译与统稿的代码
+\newcommand{\alert}[1]{{\color{red}{#1}}}
+\newcommand{\alertref}[1]{{\color{red}{#1}}}
 
 %---------设定区结束----------
 
