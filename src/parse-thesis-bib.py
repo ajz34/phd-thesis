@@ -21,6 +21,8 @@ for key, dic in bib.entries_dict.items():
     try_pop(dic, "file")
     try_pop(dic, "note")
     try_pop(dic, "abstract")
+    try_pop(dic, "shorttitle")
+    try_pop(dic, "annote")
 
 with open("thesis.bib", "w") as f:
     bibtexparser.dump(bib, f)
