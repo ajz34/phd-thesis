@@ -362,7 +362,7 @@ G\"orling-Levy 微扰与波函数理论中的 M\o{}ller-Plesset 微扰有所不�
   \toprule
   & \multicolumn{2}{c}{GMTKN55} & \multicolumn{5}{c}{Minnesota 2015\tnote{a}} & \\
   \cmidrule(lr){2-3} \cmidrule(lr){4-8}
-  Functional      &
+  计算方法      &
   \multicolumn{1}{c}{disp.\tnote{b}} & \multicolumn{1}{c}{no disp.} &
   \multicolumn{1}{c}{MR-MGM-BE4} & \multicolumn{1}{c}{MR-MGN-BE17} & \multicolumn{1}{c}{MR-TM-BE13} & \multicolumn{1}{c}{SR-MGM-BE9} & \multicolumn{1}{c}{SR-TM-BE17} &
   \multicolumn{1}{c}{Weighted Error\tnote{c}} \\
@@ -429,7 +429,7 @@ GMTKN55 数据集计算选用的基组列于表 \ref{tab.2.basis-gmtkn55}。GMTK
 \widetabular{
   \begin{tabular}{lll}
     \toprule
-    Basis Type          & Basis                     & Subsets Applied \\
+    基组类型 & 基组 & 对应的子集 \\
     \midrule
     Conventional        & def2-QZVPPD               & WATER27, RG18, IL16, G21EA, \\
                         &                           & BH76, BH76RC, AHB21, ISOL24  \\
@@ -460,7 +460,7 @@ GMTKN55 数据集计算选用的基组列于表 \ref{tab.2.basis-gmtkn55}。GMTK
     \multicolumn{2}{c}{FC-1\tnote{b}}  &
     \multicolumn{2}{c }{FC-2\tnote{c}}  \\
     \cmidrule(lr){1-2} \cmidrule(lr){3-4} \cmidrule(lr){5-6}
-    Core & Elements & Core & Elements & Core & Elements \\
+    冻结电子 & 元素 & 冻结电子 & 元素 & 冻结电子 & 元素 \\
     \midrule
     0              & H--Be    & 0              & H--Be    & 0              & H--B     \\
     2              & B--Mg    & 2              & B--Ar    & 2              & C--Si    \\
@@ -554,7 +554,7 @@ xDH@B3LYP 模型总共有 7 个可变参数。XYG7 近似泛函的参数是通�
   \toprule
   & \multicolumn{4}{c}{xDH@B3LYP} & \multicolumn{3}{c}{XYG6+1\tabnote{a}} \\
   \cmidrule(lr){2-5} \cmidrule(lr){6-8}
-  Datasest & 
+  数据集或子集 & 
   \multicolumn{1}{c}{XYG3} & \multicolumn{1}{c}{revXYG3} & \multicolumn{1}{c}{XYG6} & \multicolumn{1}{c}{XYG7} &
   \multicolumn{1}{c}{MP2/cr} & \multicolumn{1}{c}{sIEPA} & \multicolumn{1}{c}{IEPA} \\
   \midrule
@@ -743,7 +743,7 @@ XYG6+1 模型尽管可以更好地处理以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为�
   \toprule
   \multicolumn{2}{c}{MR-MGM-BE4} & \multicolumn{3}{c}{xDH@B3LYP} & \multicolumn{3}{c}{XYG6+1\tnote{a}} \\
   \cmidrule(lr){1-2} \cmidrule(lr){3-5} \cmidrule(lr){6-8}
-  System & \multicolumn{1}{c}{gap} & 
+  体系 & \multicolumn{1}{c}{gap} & 
   \multicolumn{1}{c}{XYG3} & \multicolumn{1}{c}{XYG6} & \multicolumn{1}{c}{XYG7} &
   \multicolumn{1}{c}{MP2/cr} & \multicolumn{1}{c}{sIEPA} & \multicolumn{1}{c}{IEPA} \\
   \midrule
@@ -769,7 +769,7 @@ XYG6+1 模型尽管可以更好地处理以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为�
   \toprule
   \multicolumn{2}{c}{MR-MGN-BE17} & \multicolumn{3}{c}{xDH@B3LYP} & \multicolumn{3}{c}{XYG6+1} \\
   \cmidrule(lr){1-2} \cmidrule(lr){3-5} \cmidrule(lr){6-8}
-  System\tnote{a} & \multicolumn{1}{c}{gap\tnote{b}} & 
+  体系\tnote{a} & \multicolumn{1}{c}{gap\tnote{b}} & 
   \multicolumn{1}{c}{XYG3} & \multicolumn{1}{c}{XYG6} & \multicolumn{1}{c}{XYG7} &
   \multicolumn{1}{c}{MP2/cr} & \multicolumn{1}{c}{sIEPA} & \multicolumn{1}{c}{IEPA} \\
   \midrule
@@ -812,7 +812,7 @@ XYG6+1 模型尽管可以更好地处理以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为�
   \toprule
   \multicolumn{2}{c}{MR-TM-BE13} & \multicolumn{3}{c}{xDH@B3LYP} & \multicolumn{3}{c}{XYG6+1} \\
   \cmidrule(lr){1-2} \cmidrule(lr){3-5} \cmidrule(lr){6-8}
-  System & \multicolumn{1}{c}{gap} & 
+  体系 & \multicolumn{1}{c}{gap} & 
   \multicolumn{1}{c}{XYG3} & \multicolumn{1}{c}{XYG6} & \multicolumn{1}{c}{XYG7} &
   \multicolumn{1}{c}{MP2/cr} & \multicolumn{1}{c}{sIEPA} & \multicolumn{1}{c}{IEPA} \\
   \midrule
@@ -848,7 +848,7 @@ XYG6+1 模型尽管可以更好地处理以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为�
   \toprule
   \multicolumn{2}{c}{SR-MGM-BE9} & \multicolumn{3}{c}{xDH@B3LYP} & \multicolumn{3}{c}{XYG6+1} \\
   \cmidrule(lr){1-2} \cmidrule(lr){3-5} \cmidrule(lr){6-8}
-  System & \multicolumn{1}{c}{gap} & 
+  体系 & \multicolumn{1}{c}{gap} & 
                  \multicolumn{1}{c}{XYG3} & \multicolumn{1}{c}{XYG6} & \multicolumn{1}{c}{XYG7} &
                  \multicolumn{1}{c}{MP2/cr} & \multicolumn{1}{c}{sIEPA} & \multicolumn{1}{c}{IEPA} \\
   \midrule
@@ -879,7 +879,7 @@ XYG6+1 模型尽管可以更好地处理以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为�
   \toprule
   \multicolumn{2}{c}{SR-TM-BE17} & \multicolumn{3}{c}{xDH@B3LYP} & \multicolumn{3}{c}{XYG6+1} \\
   \cmidrule(lr){1-2} \cmidrule(lr){3-5} \cmidrule(lr){6-8}
-  System & \multicolumn{1}{c}{gap} & 
+  体系 & \multicolumn{1}{c}{gap} & 
                  \multicolumn{1}{c}{XYG3} & \multicolumn{1}{c}{XYG6} & \multicolumn{1}{c}{XYG7} &
                  \multicolumn{1}{c}{MP2/cr} & \multicolumn{1}{c}{sIEPA} & \multicolumn{1}{c}{IEPA} \\
   \midrule
@@ -922,13 +922,13 @@ XYG6+1 模型尽管可以更好地处理以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为�
   \\ \toprule
   \multicolumn{2}{c}{GMTKN55} & \multicolumn{3}{c}{xDH@B3LYP} & \multicolumn{3}{c}{XYG6+1} \\
   \cmidrule(lr){1-2} \cmidrule(lr){3-5} \cmidrule(lr){6-8}
-  Subset  & Dataset   & \multicolumn{1}{c}{XYG3}  & \multicolumn{1}{c}{XYG6}  & \multicolumn{1}{c}{XYG7}  & \multicolumn{1}{c}{MP2/cr} & \multicolumn{1}{c}{sIEPA} & \multicolumn{1}{c}{IEPA}  \\ \midrule
+  子集 & 小子集 & \multicolumn{1}{c}{XYG3}  & \multicolumn{1}{c}{XYG6}  & \multicolumn{1}{c}{XYG7}  & \multicolumn{1}{c}{MP2/cr} & \multicolumn{1}{c}{sIEPA} & \multicolumn{1}{c}{IEPA}  \\ \midrule
   \endfirsthead
   \caption{(续表)}
   \\ \toprule
   \multicolumn{2}{c}{GMTKN55} & \multicolumn{3}{c}{xDH@B3LYP} & \multicolumn{3}{c}{XYG6+1} \\
   \cmidrule(lr){1-2} \cmidrule(lr){3-5} \cmidrule(lr){6-8}
-  Subset  & Dataset   & \multicolumn{1}{c}{XYG3}  & \multicolumn{1}{c}{XYG6}  & \multicolumn{1}{c}{XYG7}  & \multicolumn{1}{c}{MP2/cr} & \multicolumn{1}{c}{sIEPA} & \multicolumn{1}{c}{IEPA}  \\ \midrule
+  子集 & 小子集 & \multicolumn{1}{c}{XYG3}  & \multicolumn{1}{c}{XYG6}  & \multicolumn{1}{c}{XYG7}  & \multicolumn{1}{c}{MP2/cr} & \multicolumn{1}{c}{sIEPA} & \multicolumn{1}{c}{IEPA}  \\ \midrule
   \endhead
   %
   Sub1    & W4-11     & 2.52  & 2.08  & 2.36  & 3.24   & 2.61  & 3.03  \\

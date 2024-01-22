@@ -1,6 +1,7 @@
 % !TEX root=./dummy-05.tex
 
 \chapter{高精度基组外推方法在 CCSD(T) 静态极化率计算上的应用}
+\label{sec.5.title}
 
 \section{引言}
 
@@ -21,11 +22,13 @@
 本工作中，我们将着眼于提升 HR46 与 T145 静态极化率数据集的质量至 CCSD(T)/CBS 的精度。为此，我们首先在可以承受 aCV[Q5]Z 级别计算的小分子体系下，对 HF, MP2, CCSD 与 CCSD(T) 作详细的静态极化率基组收敛性分析。这部分工作的目标是确认对于静态极化率问题，FPA 确实可以给出与 HH132 数据集参考值相似精度的结果，即 FPA 是有效的。随后，我们将 FPA 应用于 HR46 与 T145 数据集的参考值计算上；这些参考值的精度将是 CCSD(T)/aCV[Q5]Z 级别的。我们希望这些高精度的参考值能为未来化学工作者在极化率测评，特别是对密度泛函方法的测评上，提供有效的数据来源。
 
 \section{具体方法与实现细节}
+\label{sec.5.detail}
 
 \subsection{误差测评标准}
 
 对于一个数据量为 $N$ 的数据集的参考值是 $\tilde r = \{ r_n \}$，若近似计算方法的结果是 $\tilde c = \{ c_n \}$、以及作为分母的数据 $\tilde d = \{ d_n \}$，那么数据 $\tilde c$ 的相对方均根误差 RelRMSD 定义为
 \begin{equation}
+    \label{eq.5.relrmsd}
     \text{RelRMSD} (\tilde c, \tilde r, \tilde d) = \sqrt{\frac{1}{N} \sum_{n = 1}^N \left( \frac{c_n - r_n}{d_n} \right)^2} \times 100\%
 \end{equation}
 不少情况下，参考值 $\tilde r$ 与分母值 $\tilde d$ 是相同的；此情形下将简记 $\text{RelRMSD} (\tilde c, \tilde r, \tilde d)$ 为 $\text{RelRMSD} (\tilde c, \tilde r)$。一般来说，更低的 RelRMSD 数值，意味着近似计算方法的表现统计上来看越精确。
@@ -121,6 +124,7 @@ RelRMSD 误差多大，才认为是可以被接受或容许的范围？首先，
 数值梯度计算大多使用 \textsc{Q-Chem}\cite{Shao-Head-Gordon.MP.2015}。自洽场收敛判据 (\texttt{SCF\_CONVERGENCE} 关键词) 设为 $10^{-11}$ au，CCSD 能量与振幅收敛判据 (\texttt{CC\_E\_CONV} 与 \texttt{CC\_T\_CONV}) 分别设为 $10^{-10}$ au 与 $10^{-7}$ au。作为特例，对于 \ce{^2NO} 分子，其数值梯度是通过 \textsc{PySCF} 在限制分子对称性的不可约表示而实现；其自洽场与 CCSD 收敛判据与 \textsc{Q-Chem} 设置相同。由于我们在以 aCV5Z 基组计算 \ce{SO2} 分子时遇到收敛困难，因此该情形下我们分别降低 \textsc{Q-Chem} 的收敛判据 \texttt{SCF\_CONVERGENCE}, \texttt{CC\_E\_CONV}, \texttt{CC\_T\_CONV} 为 $10^{-10}$ au, $10^{-9}$ au, $10^{-6}$ au。
 
 \subsection{CBS 外推}
+\label{sec.5.cbs}
 
 CBS 外推方法通常被认为在计算资源不足、以及有限基组不充分大时，可以有效地提升计算精度以更接近完备基组极限的手段。关于具体的 CBS 外推方法与策略，目前已有许多文献对此作说明与讨论\cite{Nyden-Petersson.JCP.1981, Petersson-Mantzaris.JCP.1988, Dunning-Dunning.JCP.1989, Peterson-Dunning.JCP.1994, Jensen-Jensen.TCA.2005, Karton-Martin.TCA.2006, Truhlar-Truhlar.CPL.1998, Klopper-Kutzelnigg.JMST.1986, Kutzelnigg-Morgan.JCP.1992, Martin-Martin.CPL.1996, Helgaker-Noga.JCP.1997, Halkier-Wilson.CPL.1998, Halkier-Olsen.CPL.1999}。HH132 数据集的原始工作使用的 CBS 策略是三次外推式\cite{Hait-Head-Gordon.PCCP.2018}
 \begin{equation}
@@ -234,7 +238,7 @@ CBS 外推方法通常被认为在计算资源不足、以及有限基组不充�
 \widetabular{
     \begin{tabular}{cld{2.4}d{2.4}d{2.4}d{2.4}}
     \toprule
-          &              & \multicolumn{4}{c}{RelRMSD / \%}                \\ \cline{3-6}
+          &              & \multicolumn{4}{c}{RelRMSD / \%}                \\ \cmidrule(lr){3-6}
     基组基数 & \multicolumn{1}{c}{基组}    &
       \multicolumn{1}{c}{$\tilde \gamma_\textsf{HF}$\tnote{b}}  &
       \multicolumn{1}{c}{$\symup{\Delta} \tilde \gamma_\textsf{(2)}$\tnote{b}}  &
@@ -345,6 +349,7 @@ CBS 外推方法通常被认为在计算资源不足、以及有限基组不充�
 尽管我们对 FPA-aV[$XY$]Z 模型应用于异性极化率 $\gamma$ 在自旋非极化体系 (如 \ce{^3O2}, \ce{^3SO}, \ce{^2NO}) 下的计算，是否其精度达到目标需求，这个问题上我们报以保留的态度；但在我们关心的 HR46 与 T144 数据集中，仅有 3 个分子是自旋极化、且它们足够小以至于可以通过最高精度的 FPA-aV[Q5]Z 计算。而 HR46 与 T144 数据集剩下的所有分子均为自旋非极化的；对于这些体系可以应用 FPA 模型作高精度计算。因此，对于提升数据集精度的目的而言，表 \ref{tab.5.4} 的策略是完全有效的。通过 FPA-aV[$XY$]Z 模型提升精度后的、具体的 HR46 与 T144 极化率数据列于表 \ref{tab.5.s1}, \ref{tab.5.s2}, \ref{tab.5.s3}, \ref{tab.5.s4}。
 
 \subsection{对 HF、MP2 与 CCSD 的极化率测评}
+\label{sec.5.bench-wft-polar}
 
 如前所述，参考值的极化率计算中，HF 方法通过 aCV5Z 给出、MP2 相关部分通过 aCV[Q5]Z 给出。对于 CCSD 方法，我们使用了与 CCSD(T) 相同的 FPA 模型给出结果，具体的情形总结在表 \ref{tab.5.4} 中。CCSD 方法在部分子集、不同 FPA 模型下的误差比较也列于表 \ref{tab.5.s5} 与表 \ref{tab.5.s6} ；这些表格可以与 CCSD(T) 情形的表 \ref{tab.5.5} 与表 \ref{tab.5.6} 作对照。CCSD 的基组收敛性与 CBS 外推误差分析也在表 \ref{tab.5.2} 与表 \ref{tab.5.3} 呈现。我们认为，CCSD 方法在基组误差上与 CCSD(T) 有近乎相似的表现；因此，所有针对 CCSD(T) 的分析，应可用于 CCSD 的计算上。
 
@@ -355,7 +360,7 @@ CBS 外推方法通常被认为在计算资源不足、以及有限基组不充�
 \widetabular{
     \begin{tabular}{ld{2.4}d{2.4}d{2.4}}
     \toprule
-    & \multicolumn{3}{c}{RelRMSD / \%} \\ \cline{2-4}
+    & \multicolumn{3}{c}{RelRMSD / \%} \\ \cmidrule(lr){2-4}
     数据集 & 
     \multicolumn{1}{c}{$\tilde \alpha_\textsf{HF}$} &
     \multicolumn{1}{c}{$\tilde \alpha_\textsf{MP2}$} &
@@ -377,7 +382,7 @@ CBS 外推方法通常被认为在计算资源不足、以及有限基组不充�
 \widetabular{
     \begin{tabular}{ld{2.4}d{2.4}d{2.4}}
     \toprule
-    & \multicolumn{3}{c}{RelRMSD / \%} \\ \cline{2-4}
+    & \multicolumn{3}{c}{RelRMSD / \%} \\ \cmidrule(lr){2-4}
     数据集 & 
     \multicolumn{1}{c}{$\tilde \gamma_\textsf{HF}$} &
     \multicolumn{1}{c}{$\tilde \gamma_\textsf{MP2}$} &

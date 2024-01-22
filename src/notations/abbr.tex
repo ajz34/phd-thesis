@@ -2,8 +2,6 @@
 
 \chapter{术语表}
 
-\section*{波函数理论与近似}
-
 \begingroup
 \setlength{\LTleft}{-20cm plus -1fill}
 \setlength{\LTright}{\LTleft}
@@ -46,20 +44,8 @@
     QMC & 量子蒙特卡洛 & quantum Monte Carlo \\
     DMC & 扩散蒙特卡洛 & diffusion Monte Carlo \\
     VMC & 变分蒙特卡洛 & variational Monte Carlo \\
-\end{longtable}
-
-\endgroup
-    
-\section*{密度泛函理论与近似}
-
-\begingroup
-\setlength{\LTleft}{-20cm plus -1fill}
-\setlength{\LTright}{\LTleft}
-
-\begin{longtable}{lll}
-    \toprule 简称 & 中文术语 & 英文术语 \\ \midrule \endhead
-    \bottomrule \endlastfoot
     %
+    \midrule
     \multicolumn{3}{l}{\textsf{密度泛函理论}} \\
     DFT & 密度泛函理论 & density functional theory \\
     DFA & 密度泛函近似 & density functional approximation \\
@@ -91,20 +77,8 @@
     & 半定域 & semi-local \\
     SP & 自旋极化的 & spin-polarized \\
     NSP & 自旋非极化的 & non-spin-polarized \\
-\end{longtable}
-
-\endgroup
-    
-\section*{程序与技术术语}
-
-\begingroup
-\setlength{\LTleft}{-20cm plus -1fill}
-\setlength{\LTright}{\LTleft}
-
-\begin{longtable}{lll}
-    \toprule 简称 & 中文术语 & 英文术语 \\ \midrule \endhead
-    \bottomrule \endlastfoot
     %
+    \midrule
     \multicolumn{3}{l}{\textsf{电子积分与计算近似方法}} \\
     & 重叠积分 & overlap integral \\
     & (无其他外场的) 单电子积分 & Hamiltonian core integral \\
@@ -126,6 +100,11 @@
     CBS & 完备基组 (极限) & complete basis set (limit) \\
     ETB & & even-tempered basis set \\
     ECP & 有效内层电子势 (赝势) & effective core potential \\
+    BSIE & 基组不完备性误差 & basis set incomplete error \\
+    MW & 多重小波 & multi-wavelet \\
+    GTO & Gaussian 型原子轨道 & Gaussian-type atomic orbital \\
+    CGTO & 缩并的 Gaussian 型原子轨道 & contracted GTO \\
+    & 原始函数 & primitive function \\
     %
     \midrule
     \multicolumn{3}{l}{\textsf{误差量标}} \\
@@ -135,6 +114,8 @@
     MEPUB & 平均键绝对值误差 & mean unsigned error per bond \\
     RDF & 径向分布函数 & radial distribution function \\
     MNAE & 归一后的绝对值误差 & median normalized absolute error \\
+    RMSRE & (HH132 数据集) 方均根相对误差 & root mean square relative error \\
+    WTRE & 加权平均相对误差 & weighted relative error \\
     %
     \midrule
     \multicolumn{3}{l}{\textsf{计算机术语}} \\
@@ -155,23 +136,16 @@
     CP & 耦合微扰 & coupled-perturbed \\
     CP-SCF & 耦合微扰自洽场 & coupled-perturbed SCF \\
     & 骨架导数 & skeleton/core derivative \\
-\end{longtable}
-
-\endgroup
-    
-\section*{化学概念术语}
-
-\begingroup
-\setlength{\LTleft}{-20cm plus -1fill}
-\setlength{\LTright}{\LTleft}
-
-\begin{longtable}{lll}
-    \hline 简称 & 中文术语 & 英文术语 \\ \hline \endhead
-    \hline \endfoot
     %
+    \midrule
+    \multicolumn{3}{l}{\textsf{化学概念术语}} \\
+    & 静态极化率 & static polarizability \\
+    & 同性极化率 & isotropic polarizability \\
+    & 异性极化率 & anisotropic polarizability \\
     HOMO & 最高占据分子轨道 & highest occupied molecular orbital \\
     LUMO & 最低非占分子轨道 & lowest unoccupied molecular orbital \\
     HOMO/LUMO gap & HOMO 与 LUMO 能级差 & energy gap between HOMO and LUMO \\
+    IP & 电离能 & ionization potential \\
     IR & 红外光谱 & infrared spectroscopy \\
     UV-Vis & 紫外可见光光谱 & ultra-violet and visable spectroscopy \\
     Raman & Raman 光谱 & Raman spectroscopy \\
