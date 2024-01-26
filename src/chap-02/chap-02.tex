@@ -14,217 +14,86 @@
 
 基于这些认识，在本章工作中，将实现掺杂 IEPA 型相关能的双杂化泛函，并进行理论合理性说明与测评。\ref{sec.2.iepa-gl-perturb} 节将回顾 G\"orling-Levy 微扰理论，进一步详细地阐述其与波函数理论之间的关系，以及在密度泛函近似中引入波函数方法相关能的合理性。\ref{sec.2.iepa-theory} 节将回顾作为波函数理论的 IEPA 型相关能近似理论与计算实现。\ref{sec.2.iepa-results} 节将通过参数拟合的方式给出掺杂 IEPA 型相关能的双杂化泛函，并对部分主族化学、过渡金属体系、多参考问题进行测评，以及对参数优化过程进行讨论。
 
-\section{理论背景：密度泛函方法}
-\label{sec.2.iepa-gl-perturb}
+\section{理论背景}
 
-\subsection{绝热路径与耦合系数}
+\subsection{GLPT2 的理论框架}
 
-波函数理论下的 post-HF 理论可以在 CI、CC 等理论框架下，通过引入更多的多电子波函数，以更大代价、但切实有效地逼近真实能量。不同于波函数理论近似，密度泛函近似发展的困难之一，在于难以找到一条逼近真实泛函的路径。绝热路径理论联系起波函数理论与密度泛函理论两者。一方面，通过借鉴与引入波函数理论的一些内容，可以进一步发展密度泛函理论；另一方面，绝热路径也提供了一种路径，使得数值上逼近真实泛函成为可能。
+目前的双杂化泛函，大多数选用 GLPT2 作为其理论框架的支撑依据。我们也将使用 GLPT2 作为理论基础，并对此作简要的讨论。
 
-考虑下述关于耦合常数 $\lambda$ (coupling constant) 与有效势 $v(\bm{r})$\footnote{这一小节中，$v(\bm{r})$ 记号不表示体系外势，而是任意势函数。这与绪论的行文有记号上的冲突。外势函数在这记为 $v_\mathrm{ext} (\bm{r})$。} 的算符 $\hat H_\lambda [v]$： 
+密度泛函理论，相比于波函数理论，通常被认为可以以更低的计算代价实现较为准确的计算；但普适泛函 $F[\rho]$ 的获得途径并不清晰，因此如何系统性地逼近真实泛函，成为密度泛函发展的瓶颈之一。
+
+对于易于求得、但需要借助于确切值的普适泛函 $F[\rho]$ 的 Kohn-Sham 波函数，与计算量巨大、但可以严格逼近确切值求得的真实波函数，绝热路径理论可以通过耦合常数 $\lambda$ 将两种波函数联系起来。该耦合常数 $\lambda$，以及其对应的 Hamiltonian 量定义如下：
 \begin{equation}
-  \label{eq.2.H-lambda}
-  \hat H_\lambda [v] = \hat T + \lambda \hat V_\mathrm{ee} + \sum_i^{n_\mathrm{elec}} v(\bm{r}_i)
+  \label{eq.2.H-lambda-ac}
+  \hat H_\lambda = \hat T + \lambda \hat V_\mathrm{ee} + \sum_i^{n_\mathrm{elec}} v_{\lambda}(\bm{r}_i)
 \end{equation}
-定义下述关于耦合常数 $\lambda$ 与有效势 $v(\bm{r})$ 的能量泛函\footnote{这里的许多记号不严谨，因泛函必须要在合理的函数空间下才能有定义；并且存在许多极值问题无法用最小 (min)、最大值 (max) 定义，而需要用函数收敛的上界 (sup)、下界 (inf) 定义。我们在这里通常只考虑 $N$ 可表示密度、无简并基态的情形。依据 Lieb 工作\cite{Lieb-Lieb.IJQC.1983}中定理 3.3 的证明，这类情形下许多下界可以取到最小、上界可以取到最大；且由于不考虑简并情况，泛函最小、最大值及其对应的自变量都是唯一的。}
-\begin{equation}
-  \label{eq.2.E-lambda}
-  E_\lambda [v] = \min_{\Psi} \langle \Psi | \hat H_\lambda [v] | \Psi \rangle 
-\end{equation}
-这里我们不考虑简并的情况。我们定义在势函数 $v(\bm{r})$、耦合常数 $\lambda$ 下，波函数 $\Psi_\lambda [v]$ 为
-\begin{equation}
-  \label{eq.2.E-lambda-psi}
-  \Psi_\lambda [v] = \arg \min_{\Psi} \langle \Psi | \hat H_\lambda [v] | \Psi \rangle
-\end{equation}
-作为特殊情况
-\begin{itemize}[nosep]
-  \item 当 $\lambda = 1$ 且 $v(\bm{r})$ 是体系外势 $v_\mathrm{ext} (\bm{r})$ 时，$E_{\lambda=1} [v_\mathrm{ext}]$ 就是体系的基态能量，$\Psi_{\lambda=1}$ 即体系的真实波函数。
+其中，$v_{\lambda}(\bm{r})$ 是随耦合常数 $\lambda$ 改变而不同的势函数；其作用是用于保持在不同的 $\lambda$ 下，$\hat H_\lambda$ 所给出的波函数的密度都等同于真实体系密度 $\rho(\bm{r})$。
 
-  \item $\lambda = 0$ 且 $v(\bm{r})$ 为库伦势
-  $$v_\mathrm{J} (\bm{r}) = \frac{\delta J[\rho]}{\delta \rho(\bm{r})}, \quad J[\rho] = \int \frac{\rho(\bm{r}) \rho(\bm{r}')}{|\bm{r} - \bm{r}'|} \, \mathrm{d} \bm{r} \, \mathrm{d} \bm{r}'$$
-  交换相关势
-  \begin{equation*}
-    v_\mathrm{xc} (\bm{r}) = \frac{\delta E_\mathrm{xc}[\rho]}{\delta \rho(\bm{r})}, \quad E_\mathrm{xc} [\rho] = (T[\rho] - T_\mathrm{s} [\rho]) + (F_{\lambda=1} [\rho] - J[\rho])
-  \end{equation*}
-  与体系外势 $v_\mathrm{ext} (\bm{r})$ 之和时，$E_{\lambda=0} [v]$ 所给出的基态波函数 $\Psi_{\lambda=0}$ 对应的密度等于 $E_{\lambda=1} [v_\mathrm{ext}]$ 体系的密度\footnote{需要注意到一般地，当 $v = v_\mathrm{xc} + v_\mathrm{J} + v_\mathrm{ext}$ 时，$E_{\lambda=0} [v] \neq E_{\lambda=1} [v_\mathrm{ext}]$。即尽管 $\lambda = 0$ 与 $\lambda = 1$ 时的密度 $\rho(\bm{r})$ 相同，但对应的能量不同。}。由于 $\hat H_{\lambda=0} [v] = \hat T + \sum_{i} v(\bm{r}_i)$ 是单电子算符，因此若不考虑简并情况，其基态波函数必然可以通过行列式表达 (该情形也称为无相互作用体系)\footnote{如第一章所述，对于 $\lambda = 0$ 的情形，基态波函数 $\Psi_{\lambda = 0}$ 也可以通过占据轨道的 Hartree 连乘积的形式给出。Hartree 乘积波函数、与作为连乘积线性组合的行列式波函数，在 $\hat H_{\lambda=0} [v]$ 下的期望相等，表达的是相同的物理状态。但出于后续定义 $E_\mathrm{x}^\text{exact}$ 的便利，在此我们定义 $\Psi_{\lambda = 0}$ 为行列式。}；依据 Kohn-Sham 方程的表达式，当 $v = v_\mathrm{xc} + v_\mathrm{J} + v_\mathrm{ext}$ 时，这样的行列式是通过 Kohn-Sham 轨道构成的。
-\end{itemize}
-因此可以说从概念上，泛函 $E_\lambda [v]$ 通过耦合常数联系起了体系真实波函数 $\Psi_{\lambda = 1}$ 与 Kohn-Sham 轨道行列式 $\Psi_{\lambda = 0}$。
-
-为了将 $E_\lambda [v]$ 与电子密度 $\rho$ 联系起来，依据 Legendre-Fenchel 变换，势函数泛函 $E_\lambda [v]$ 存在对应的密度泛函 $F_\lambda [\rho]$\cite{Lieb-Lieb.IJQC.1983, Teale-Helgaker.JCP.2009}：
+如同波函数理论从 Hartree-Fock 波函数出发，经过微扰处理可以得到精确波函数；依耦合常数 $\lambda$ 展开的绝热路径上的微扰，也可以得到精确波函数；后者也称为 G\"orling-Levy 微扰框架\cite{Goerling-Levy.PRB.1993, Goerling-Levy.PRA.1994}。在该微扰框架下，定义 $\hat H_\lambda$ 对应的本征态为 $| \Psi_\lambda \rangle$；作为特例，真实波函数为 $| \Psi_{\lambda = 1} \rangle$，Kohn-Sham 波函数为 $| \Psi_{\lambda = 0} \rangle$；这两个波函数成功地通过耦合常数 $\lambda$ 得以联系。定义绝热路径上的被积函数
 \begin{align}
-  \label{eq.2.F-lambda}
-  F_\lambda [\rho] &= \max_v \left( E_\lambda [v] - \int \rho(\bm{r}) v(\bm{r}) \, \mathrm{d} \bm{r} \right) \\
-  \label{eq.2.constrained-search-extended}
-  E_\lambda [v] &= \min_\rho \left( F_\lambda [\rho] + \int \rho(\bm{r}) v(\bm{r}) \, \mathrm{d} \bm{r} \right)
+  \mathcal{W}_{\lambda} [\rho] &= \langle \Psi_\lambda | \hat V_\mathrm{ee} | \Psi_\lambda \rangle \\
+  \mathcal{W}_{\mathrm{c}, \lambda} [\rho] &= \mathcal{W}_{\lambda} [\rho] - E_\mathrm{x}^\mathrm{exact} [\rho] = \mathcal{W}_{\lambda} [\rho] - \langle \Psi_{\lambda = 0} | \hat V_\mathrm{ee} | \Psi_{\lambda = 0} \rangle
 \end{align}
-假使我们知道真实的电子密度 $\rho(\bm{r})$，那么联立 (\ref{eq.2.E-lambda}, \ref{eq.2.constrained-search-extended}) 两式，可得密度泛函 $F_\lambda [\rho]$ 满足下述条件：
+则普适泛函 $F[\rho]$ 中，唯一无法由 Kohn-Sham 波函数简单给出的相关能 $E_\mathrm{c} [\rho] = E_{\mathrm{c}, \lambda=1} [\rho]$，则由 Hellmann-Feynman 定理，可以展开为对耦合常数 $\lambda$ 的积分
 \begin{equation}
-  \label{eq.2.constrained-search}
-  F_\lambda[\rho] = \min_{\Psi \rightarrow \rho} \langle \Psi | \hat H_\lambda [0] | \Psi \rangle
-\end{equation}
-特别地，当 $\lambda = 1$ 即真实体系时，$F_{\lambda=1} [\rho]$ 等价于普适泛函 $F[\rho]$；此情形下求取普适泛函数值的过程也称为 Levy 限制性搜索\cite{Levy-Levy.PNAS.1979}。我们定义在特定的密度 $\rho(\bm{r})$、耦合常数 $\lambda$ 下，波函数 $\Psi_\lambda [\rho]$ 为
-\begin{equation}
-  \Psi_\lambda [\rho] = \arg \min_{\Psi \rightarrow \rho} \langle \Psi | \hat H_\lambda [0] | \Psi \rangle
-\end{equation}
-对比式 (\ref{eq.2.E-lambda-psi}) 的定义，若密度 $\rho(\bm{r})$ 与势函数 $v(\bm{r})$ 相互满足式 (\ref{eq.2.F-lambda}, \ref{eq.2.constrained-search-extended})，那么 $\Psi_\lambda [\rho]$ 与 $\Psi_\lambda [v]$ 等价。
-
-尽管 Levy 限制性搜索 (\ref{eq.2.constrained-search}) 从原理上是可行的，但目前其在实际应用中非常罕见。现实中，许多波函数方法的算法是在给定势函数 $v(\bm{r})$、而非给定电子密度函数 $\rho(\bm{r})$ 下，搜索波函数空间得到近似的能量极小值。当 $\lambda=1$ 时，式 (\ref{eq.2.E-lambda}) 所述的 $E_{\lambda=1} [v]$ 下确界计算，在一定的近似下，是现今计算化学程序已经实现的功能；对程序作较少的改动，可以实现对任意 $\lambda \geqslant 0$ 下 $E_\lambda [v]$ 能量极小的近似计算。因此，在给定密度 $\rho (\bm{r})$ 的前提下，对于任意 $\lambda \geqslant 0$，将式 (\ref{eq.2.E-lambda}) 所计算得到的 $E_\lambda [v]$ 代入式 (\ref{eq.2.F-lambda})，并在 $v(\bm{r})$ 所在函数空间下求得上确界得到 $F_\lambda[\rho]$，是可以实现的\cite{Teale-Helgaker.JCP.2009}。换而言之，绝热参数 $\lambda$ 不仅在理论上使得 $\lambda = 1$ 的真实波函数与 $\lambda = 0$ 的 Kohn-Sham 行列式得以联系；在数值上，通过高精度波函数方法计算结果，也可以导出任意 $\lambda \geqslant 0$ 下的 $F_\lambda [\rho]$ 以及 $\lambda = 0$ 时的 Kohn-Sham 波函数。
-
-\subsection{绝热路径的结构细节}
-
-这一部分的行文大量参考 Teale 等人的工作\cite{Teale-Helgaker.JCP.2009,Teale-Helgaker.JCP.2010}。绝热路径上的不变量事实上有多种选择；作为密度泛函问题，绝热路径 $\lambda \in [0, 1]$ 上密度 $\rho(\bm{r})$ 将始终保持为基态密度，而势函数随着 $\lambda$ 的不同而变化：
-\begin{equation}
-  v_\lambda (\bm{r}) = \arg \max_v \left( E_\lambda [v] - \int \rho(\bm{r}) v(\bm{r}) \, \mathrm{d} \bm{r} \right)
+  E_{\mathrm{c}, \lambda} [\rho] = \int_0^\lambda \mathcal{W}_{\mathrm{c}, \lambda} [\rho] \, \mathrm{d} \bm{r}
 \end{equation}
 
-回顾到在 Kohn-Sham 框架下，密度泛函是分两步走的流程：
-\begin{enumerate}[nosep]
-  \item 通过 Kohn-Sham 方程进行自洽场计算，求取真实体系即 $E_{\lambda=1} [v_\mathrm{ext}]$ 下变分最小时的基态密度 $\rho (\bm{r})$：
-  \begin{equation*}
-    \rho(\bm{r}) = \arg \min_\rho \big( E_{\lambda=1} [v_\mathrm{ext}] \big) = \arg \min_\rho \left( F_{\lambda = 1} [\rho] + \int v_\mathrm{ext} (\bm{r}) \rho (\bm{r}) \, \mathrm{d} \bm{r} \right)
-  \end{equation*}
-  \item 将基态密度 $\rho (\bm{r})$ 代入 $F_{\lambda = 1} [\rho]$ 计算，并进而给出体系基态能量 $E_{\lambda=1} [\rho]$ 的数值结果。
-\end{enumerate}
-但在现实的计算中，由于泛函 $F_{\lambda = 1} [\rho]$ 作为真实的普适泛函，其形式是未知的，因此上面两步都是近似。
-
-现在假设已经通过第一步获取了基态密度 $\rho(\bm{r})$；后文将着重讨论第二步的能量计算。为解构 $F_{\lambda=1} [\rho]$ 以用更多已知量描述这个未知的普适泛函，我们先考虑 $F_{\lambda} [\rho]$ 在不同的耦合常数 $\lambda$ 下的行为。注意到 $\lambda=0$ 时，$F_{\lambda=0} [\rho]$ 是容易求得的、其对应的波函数 $\Psi_{\lambda=0}$ 即 Kohn-Sham 轨道行列式的数学结构也非常简单清晰。回顾式 (\ref{eq.2.constrained-search})，对于 $\lambda = 0$ 的情形，$\hat H_{\lambda=0} [0] = \hat T$，因此
-\begin{equation*}
-  F_{\lambda=0} [\rho] = \langle \Psi_{\lambda=0} | \hat T | \Psi_{\lambda=0} \rangle = T_\mathrm{s} [\rho]
-\end{equation*}
-即 $F_{\lambda=0} [\rho]$ 表示无相互作用体系动能 $T_\mathrm{s} [\rho]$。
-
-在考虑 $\lambda=0$ 的情形后，再考虑 $\lambda \geqslant 0$ 的情形。根据微积分的定义，
-\begin{equation}
-  F_\lambda [\rho] = F_{\lambda=0} [\rho] + \int_0^\lambda \frac{\mathrm{d} F_{\lambda} [\rho]}{\mathrm{d} \lambda} \, \mathrm{d} \lambda
-\end{equation}
-若定义
-\begin{equation}
-  \mathcal{W}_\lambda [\rho] = \langle \Psi_\lambda | \hat V_\mathrm{ee} | \Psi_\lambda \rangle
-\end{equation}
-那么依据 Hellmann-Feynman 定理，联系式 (\ref{eq.2.H-lambda}) 式 (\ref{eq.2.constrained-search})，上述定义的 $\mathcal{W}_\lambda [\rho] = \frac{\mathrm{d}}{\mathrm{d} \lambda} F_\lambda [\rho]$，故而
-\begin{equation}
-  F_\lambda [\rho] = F_{\lambda=0} [\rho] + \int_0^\lambda \mathcal{W}_{\lambda} [\rho] \, \mathrm{d} \lambda
-\end{equation}
-对于 $\lambda=0$ 的情形，由于波函数是行列式，因此 $\mathcal{W}_{\lambda=0} [\rho]$ 就是库伦作用能与严格交换能的和：
-\begin{equation}
-  \mathcal{W}_{\lambda=0} [\rho] = J[\rho] + E_\mathrm{x}^\mathrm{exact} [\rho]
-\end{equation}
-随后定义相关效应
-\begin{align}
-  \mathcal{W}_{\mathrm{c}, \lambda} [\rho] &= \mathcal{W}_\mathrm{\lambda} [\rho] - \mathcal{W}_{\lambda=0} [\rho] \\
-  \label{eq.2.E-c-lambda}
-  E_\mathrm{c, \lambda} [\rho] &= \int_0^\lambda \mathcal{W}_\mathrm{c, \lambda} [\rho] \, \mathrm{d} \lambda
-\end{align}
-在此定义下，容易知道
-\begin{align}
-  \label{eq.2.F-with-lambda}
-  F_\lambda [\rho] &= F_{\lambda=0} [\rho] + \lambda \mathcal{W}_{\lambda=0} [\rho] + \int_0^\lambda \mathcal{W}_\mathrm{c, \lambda} [\rho] \, \mathrm{d} \lambda \notag\\
-  &= T_\mathrm{s} [\rho] + \lambda J[\rho] + \lambda E_\mathrm{x}^\mathrm{exact} [\rho] + E_\mathrm{c, \lambda} [\rho]
-\end{align}
-特别地，$\lambda = 0$ 即无相互作用体系下，没有相关效应即 $\mathcal{W}_{\mathrm{c}, \lambda=0} [\rho] = E_\mathrm{c, \lambda=0} [\rho] = 0$；$\lambda = 1$ 即 $F_{\lambda=1} [\rho]$ 是普适泛函时，交换相关能可以表示为 $E_\mathrm{xc} [\rho] = E_\mathrm{x}^\mathrm{exact} [\rho] + E_\mathrm{c, \lambda=1} [\rho]$。我们称 $\mathcal{W}_\mathrm{\lambda}[\rho]$ 或 $\mathcal{W}_\mathrm{c, \lambda}[\rho]$ 作为关于 $\lambda$ 的函数为绝热路径曲线；这些曲线在耦合常数 $\lambda \in [0, 1]$ 下的积分面积即是交换相关能 $E_\mathrm{xc}[\rho]$ 或 $E_\mathrm{c, \lambda=1}[\rho]$。除此之外，容易知道 $\Psi_{\lambda=0}$ 作为行列式波函数，因此
-\begin{equation*}
-  \langle \Psi_{\lambda=0} | \hat H_\lambda [0] | \Psi_{\lambda=0} \rangle = T_\mathrm{s} [\rho] + \lambda J[\rho] + \lambda E_\mathrm{x}^\mathrm{exact} [\rho]
-\end{equation*}
-因此，$E_\mathrm{c, \lambda} [\rho]$ 还可以通过下式给出：
-\begin{align}
-  \label{eq.2.E-c-lambda-by-wavefunc}
-  E_\mathrm{c, \lambda} [\rho] &= F_{\lambda} [\rho] - \langle \Psi_{\lambda=0} | \hat H_\lambda [0] | \Psi_{\lambda=0} \rangle \notag\\
-  &= \langle \Psi_{\lambda} | \hat H_\lambda [v_\mathrm{\lambda}] | \Psi_{\lambda} \rangle - \langle \Psi_{\lambda=0} | \hat H_\lambda [v_\mathrm{\lambda}] | \Psi_{\lambda=0} \rangle
-\end{align}
-
-\subsection{G\"orling-Levy 微扰理论}
-
-需要留意到作为关于 $\lambda$ 的函数，$E_{\mathrm{c}, \lambda} [\rho]$ 并不能简单地求取。假使 $E_{\mathrm{c}, \lambda} [\rho]$ 在以 $\lambda=0$ 为中心的邻域 $(0, 1]$ 下 Taylor 级数收敛，那么我们用下述记号表示该 Taylor 展开：
+假使 $E_{\mathrm{c}, \lambda} [\rho]$ 在以 $\lambda=0$ 为中心的邻域 $(0, 1]$ 下 Taylor 级数收敛，那么我们用下述记号表示该 Taylor 展开：
 \begin{equation}
   \label{eq.2.e-c-lambda}
   E_{\mathrm{c}, \lambda} [\rho] = \sum_{n=2}^{\infty} \lambda^n E_\mathrm{GL}^{(n)} [\rho]
 \end{equation}
-其中，$E_\mathrm{GL}^{(n)} [\rho]$ 称为 $n$ 阶 G\"orling-Levy 微扰能量\cite{Goerling-Levy.PRB.1993, Goerling-Levy.PRA.1994}。依据定义，其最低阶展开是二阶；这是因为 $F_\lambda[\rho]$ 的一阶量已经由库伦能 $J[\rho]$ 与严格交换能 $E_\mathrm{x}^\mathrm{exact}[\rho]$ 给出\footnote{事实上，在密度缩放 $\rho_\lambda(\bm{r}) = \lambda^3 \rho(\lambda \bm{r})$ 下，可以表明 $E_{\mathrm{c}, \lambda} [\rho] = \lambda^2 E_{\mathrm{c}, \lambda=1} [\rho_{\lambda^{-1}}]$\cite{Levy-Perdew.PRA.1985, Levy-Parr.JCP.1985}。当 $\lambda \rightarrow 0$ 时，$E_{\mathrm{c}, \lambda=1} [\rho_{\lambda^{-1}}]$ 趋于常数且为 G\"orling-Levy 二阶微扰能量\cite{Goerling-Levy.PRB.1993}。}。
-
-为了给出 $E_\mathrm{GL}^{(n)} [\rho]$ 的具体展开结果，在 Rayleigh-Schr\"odinger 微扰的框架下，需要写出算符 $\hat H_\lambda [v_\lambda]$ 在绝热曲线上 (密度 $\rho(\bm{r})$ 始终为基态密度的前提下) 随 $\lambda$ 变化的具体表达式。依式 (\ref{eq.2.constrained-search-extended})，由于基态密度 $\rho(\bm{r})$ 取到了 $E_\lambda[v_\lambda]$ 的变分极小，因此
-\begin{equation*}
-  \frac{\delta E_\lambda[v_\lambda]}{\delta \rho(\bm{r})} = \frac{\delta F_\lambda [\rho]}{\delta \rho(\bm{r})} + v_{\lambda}(\bm{r}) = \mu_\lambda
-\end{equation*}
-其中 $\mu_\lambda$ 是变分时引入的 Lagrange 常数；在处理一阶或以上微扰问题时，该常数可以不予考虑，或将该常数纳入 $v_\lambda(\bm{r})$ 中。那么 $v_\lambda(\bm{r})$ 满足下述条件：
-\begin{equation}
-  v_\lambda(\bm{r}) = - \frac{\delta F_\lambda [\rho]}{\delta \rho(\bm{r})}
-\end{equation}
-回顾到式 (\ref{eq.2.F-with-lambda})，若定义动能势 $v_\mathrm{s} (\bm{r})$、局域交换势 $v_\mathrm{x} (\bm{r})$ 与相关势 $v_{\mathrm{c}, \lambda} (\bm{r})$ 为
+作为具体的结果，G\"orling-Levy 微扰展开到第二阶时，其能量 $E_\mathrm{GL}^{(2)}$ 具有较为简单的形式：
 \begin{align}
-  v_\mathrm{s}(\bm{r}) &= \frac{\delta T_\mathrm{s} [\rho]}{\delta \rho(\bm{r})} = \frac{\delta F_{\lambda=0} [\rho]}{\delta \rho(\bm{r})} = - v_{\lambda=0}(\bm{r}) \\
-  \label{eq.2.v-x}
-  v_\mathrm{x} (\bm{r}) &= \frac{\delta E_\mathrm{x}^\mathrm{exact} [\rho]}{\delta \rho(\bm{r})} \\
-  \label{eq.2.v-c-lambda}
-  v_{\mathrm{c}, \lambda} (\bm{r}) &= \frac{\delta E_{\mathrm{c}, \lambda} [\rho]}{\delta \rho(\bm{r})}
+  \label{eq.2.GL2-W}
+  E_\mathrm{GL}^{(2)} &= \frac{1}{2} \lim_{\lambda \rightarrow 0} \frac{\mathrm{d}^2}{\mathrm{d}^2 \lambda} E_{\mathrm{c}, \lambda} [\rho] = \frac{1}{2} \lim_{\lambda \rightarrow 0} \frac{\mathrm{d}}{\mathrm{d} \lambda} \mathcal{W}_{\mathrm{c}, \lambda} [\rho] \\
+  \label{eq.2.GL2-def}
+  &= \sum_{ia} \frac{\big| \langle i | \hat v_\mathrm{x}^\mathrm{NL} - v_\mathrm{x} | a \rangle \big|^2}{\varepsilon_i - \varepsilon_a} + \frac{1}{4} \sum_{ijab} \frac{\big| \langle ij || ab \rangle \big|^2}{\varepsilon_i + \varepsilon_j - \varepsilon_a - \varepsilon_b}
 \end{align}
-对于 $\lambda = 1$ 的特殊情况，
-\begin{equation}
-  v_{\lambda=1}(\bm{r}) = - \frac{F_{\lambda=1} [\rho]}{\delta \rho(\bm{r})} = - v_\mathrm{s}(\bm{r}) - v_\mathrm{J}(\bm{r}) - v_\mathrm{x}(\bm{r}) - v_{\mathrm{c}, \lambda=1}(\bm{r}) = v_\mathrm{ext}(\bm{r})
-\end{equation}
-因此，动能势函数可以写为
-\begin{align}
-  v_\mathrm{s}(\bm{r}) = - v_{\lambda=0} (\bm{r}) &= - v_\mathrm{ext}(\bm{r}) - v_\mathrm{J}(\bm{r}) - v_\mathrm{x}(\bm{r}) - v_{\mathrm{c}, \lambda=1}(\bm{r}) \notag\\
-  &= - v_\mathrm{ext}(\bm{r}) - v_\mathrm{J}(\bm{r}) - v_\mathrm{xc}(\bm{r})
-\end{align}
+上式的 $v_\mathrm{x}^\mathrm{NL}$ 是非局域交换势算符。
 
-现在考虑任意 $\lambda$ 的情形：
-\begin{equation}
-  v_{\lambda} (\bm{r}) = - \frac{\delta F_\lambda [\rho]}{\delta \rho(\bm{r})} = - v_\mathrm{s} (\bm{r}) - \lambda v_\mathrm{J}(\bm{r}) - \lambda v_\mathrm{x}(\bm{r}) - v_{\mathrm{c}, \lambda} (\bm{r})
-\end{equation}
-依照式 (\ref{eq.2.v-c-lambda}) 与 (\ref{eq.2.e-c-lambda}) 的定义，构建下述 Taylor 展开的势函数级数 $\{ v_\mathrm{c}^{(n)} \}$：
-\begin{equation}
-  v_\mathrm{c}^{(n)} = \frac{\delta E_\mathrm{GL}^{(n)} [\rho]}{\delta \rho}, \quad v_{\mathrm{c}, \lambda} = \sum_{n=2}^\infty \lambda^n v_\mathrm{c}^{(n)}
-\end{equation}
-那么，算符 $\hat H_\lambda [v_\lambda]$ 对耦合常数 $\lambda$ 展开后的表达式为
-\begin{equation}
-  \hat H_\lambda[v_\lambda] = \left( \hat T - \sum_i^{n_\mathrm{elec}} v_\mathrm{s} (\bm{r}_i) \right) + \lambda \left( \hat V_\mathrm{ee} - \sum_i^{n_\mathrm{elec}} \big( v_\mathrm{J} (\bm{r}_i) + v_\mathrm{x} (\bm{r}_i) \big) \right) - \sum_{n=2}^\infty \lambda^n \sum_{i}^{n_\mathrm{elec}} v_\mathrm{c}^{(n)} (\bm{r}_i)
-\end{equation}
-依据 Rayleigh-Schr\"odinger 微扰理论，以式 (\ref{eq.2.E-c-lambda-by-wavefunc}) 定义的 $E_{\mathrm{c}, \lambda} [\rho]$ 可以通过微扰的方式展开。
-
-以二阶微扰即 GLPT2 为例，其贡献是
-\begin{equation}
-  E_\mathrm{GL}^{(2)} = \sum_{k \neq 0} \frac{\displaystyle \left| \langle \Phi_0 | \hat V_\mathrm{ee} - \sum_i^{n_\mathrm{elec}} \big( v_\mathrm{J} (\bm{r}_i) + v_\mathrm{x} (\bm{r}_i) \big) | \Phi_k \rangle \right|^2}{E_0 - E_k}
-\end{equation}
-上式中，$\Phi_{0} = \Psi_{\lambda=0}$ 是 $\lambda = 0$ 时的基态波函数即 Kohn-Sham 占据轨道构成的行列式，$\Phi_{k}$ 为 $\Phi_{0}$ 在算符 $\hat H_{\lambda=0} [v_{\lambda=0}]$ 下的第 $k$ 阶激发态。由于二阶微扰能 $E_\mathrm{GL}^{(2)}$ 表达式中没有 $v_\mathrm{c, \lambda}$ 的存在，因此在给定基态密度以及其对应 Kohn-Sham 轨道的前提下，$E_\mathrm{GL}^{(2)}$ 的求取不需要先验地知道相关能的信息。用 Kohn-Sham 轨道的表达式展开行列式波函数 $\Phi_0$、$\{\Phi_k\}$，可以得到
-\begin{equation}
-  E_\mathrm{GL}^{(2)} = \sum_{ia} \frac{\big| \langle i | \hat v_\mathrm{x}^\mathrm{NL} - v_\mathrm{x} | a \rangle \big|^2}{\varepsilon_i - \varepsilon_a} + \frac{1}{4} \sum_{ijab} \frac{\big| \langle ij || ab \rangle \big|^2}{\varepsilon_i + \varepsilon_j - \varepsilon_a - \varepsilon_b}
-\end{equation}
-其中，$i, j$ 表示占据轨道，$a, b$ 表示非占轨道；$\hat v_\mathrm{x}^\mathrm{NL}$ 表示非局域交换势算符。尽管 $E_\mathrm{GL}^{(2)}$ 的表达式相比于 MP2 能量 $E_\mathrm{c}^\mathrm{MP2}$ 多出了单电子贡献项；但一般来说单电子贡献非常小\cite{DellaSala-Goerling.JCP.2001}，同时 $v_\mathrm{x}$ 在实际计算中需要代价昂贵的响应函数方法\cite{Goerling-Goerling.PRL.1999}、或存在数值不稳定可能性的 KLI 方法\cite{Krieger-Iafrate.PRA.1992, DellaSala-Goerling.JCP.2001}或 OEP 方法\cite{Mori-Sanchez-Yang.JCP.2005}；因此忽略上式的第一项，即单电子项，通常是可接受的。从而，$E_\mathrm{GL}^{(2)}$ 可以仅由第二项近似得到：
-\begin{equation}
-  E_\mathrm{GL}^{(2)} \simeq E_\mathrm{c}^\mathrm{MP2}
-\end{equation}
-
-G\"orling-Levy 微扰与波函数理论中的 M\o{}ller-Plesset 微扰有所不同：
-\begin{itemize}[nosep]
-  \item G\"orling-Levy 微扰的基态波函数是 Kohn-Sham 轨道行列式，而 M\o{}ller-Plesset 微扰使用 Hartree-Fock 轨道行列式；在实际计算中，Kohn-Sham 轨道只能通过近似获得，而较低的计算量下 Hartree-Fock 轨道行列式是可以精确获得的；
-  \item G\"orling-Levy 微扰在算符中存在有多于二阶的算符项，而 M\o{}ller-Plesset 的微扰算符阶数最高仅有一阶；
-  \item G\"orling-Levy 的高阶 (3 阶或以上) 微扰存在未知的 $v_\mathrm{c}^{(n)} (\bm{r})$ 的贡献；因此若要准确求取高阶微扰，除了计算量大外，还有难于给出高阶微扰的显式表达式的困难；
-  \item 目前通过高精度方法计算给出的关于 $\lambda$ 的绝热路径曲线 $\mathcal{W}_{\lambda} [\rho]$ 都是凸曲线\cite{Teale-Helgaker.JCP.2009,Teale-Helgaker.JCP.2010}；以此可以推知 $E_\mathrm{c, \lambda} [\rho] > E_\mathrm{GL}^{(2)}$ 即 G\"orling-Levy 二阶微扰能相对于真实的相关能一般总是负误差\cite{Seidl-Gori-Giorgi.JCP.2018}；但需要指出的是，$\mathcal{W}_{\lambda} [\rho]$ 的凸曲线性质尚未得以证明\cite{Crisostomo-Burke.LMP.2023}。而对于 M\o{}ller-Plesset 微扰，已经有案例表明其绝热路径曲线可以是凸也可以是凹的\cite{Seidl-Gori-Giorgi.JCP.2018}，因此 MP2 二阶微扰能量可以小于、也可以大于真实相关能。该问题将在下一段中具体展开说明。
-\end{itemize}
-
-\subsection{GLPT2 与双杂化泛函}
-
-现在回到近似泛函的问题上。尽管从理论上，我们可以获得 $\lambda=0$ 处各阶微扰能量；但由于算符 $\hat V_\mathrm{ee}$ 的存在、同时算符 $\hat H_\lambda [v_\lambda]$ 关于耦合常数 $\lambda$ 的展开是无穷阶而非 M\o{}ller-Plesset 的一阶，因此 G\"orling-Levy 高阶微扰能的计算量不会低于 M\o{}ller-Plesset 高阶微扰。由于近年来近似算法 (特别是 RI 近似算法)、以及计算硬件 (特别是 DRAM 内存容量) 发展，MP2 相关能的计算在数十原子体系以内耗时不多于引入交换效应的 Kohn-Sham 自洽场计算；因此，在密度泛函中引入 GLPT2 相关能 (近似为 MP2 相关能) 不会增加太多计算资源负担。现在有针对 MP3 相关能的计算所提出或适用的近似算法；这类算法通常基于 THC 或其它张量分解与缩并方法\cite{Hohenstein-Martinez.JCP.2012, Parrish-Sherrill.JCP.2012, Lee-Head-Gordon.JCTC.2020, Matthews-Matthews.JCTC.2020}，但目前的效率仍然无法达到与自洽场计算齐平的程度\cite{Matthews-Matthews.JCP.2021}。考虑到密度泛函近似近年来的巨大成功，得益于可以在较低自洽场级别的计算代价下获得相对精确的结果；其中计算代价小是非常重要的因素。因此，若 MP3 相关能的计算效率难以进一步提升，那么在可见的未来，基于 G\"orling-Levy 微扰理论所开发的实用的密度泛函，很可能不会引入\textsf{完整的}三阶或更高阶微扰能量。
-
-因此，若以 G\"orling-Levy 为基础发展泛函方法，仅引入 GLPT2 从计算资源消耗与精度平衡的角度上，是非常自然的想法。作为最基本的泛函模型，
-\begin{equation}
-  E_{\mathrm{xc}, \lambda} [\rho] = \lambda E_\mathrm{x}^\mathrm{exact}[\rho] + \lambda^2 E_\mathrm{GL}^{(2)} [\rho] + o(\lambda^3) \simeq E_\mathrm{x}^\mathrm{exact}[\rho] + E_\mathrm{GL}^{(2)} [\rho]
-\end{equation}
-当 $\lambda = 1$ 时，上述的 $E_{\mathrm{xc}, \lambda} [\rho]$ 就是真实体系的交换相关能 $E_{\mathrm{xc}} [\rho]$。但事实上，当相关能若仅引入 GLPT2 时，测评表现并不好\cite{Su-Xu.JCP.2014}。事实上，依据微扰结论，
-\begin{align}
-  \lim_{\lambda \rightarrow 0} \mathcal{W}_{\lambda} &= E_\mathrm{x}^\mathrm{exact} \\
-  \lim_{\lambda \rightarrow 0} \frac{\mathrm{d}}{\mathrm{d} \lambda} \mathcal{W}_{\lambda} &= \lim_{\lambda \rightarrow 0} \frac{\mathrm{d}^2}{\mathrm{d} \lambda^2} E_{\mathrm{c}, \lambda} = 2 E_\mathrm{GL}^{(2)}
-\end{align}
-即微扰理论只能描述取到极限 $\lambda \rightarrow 0$ 时绝热路径曲线行为。若 $E_{\mathrm{c}, \lambda}$ 作为关于 $\lambda$ 的函数在 $(0, 1]$ 邻域上 Taylor 级数收敛，那么精确地描述 $\lambda \rightarrow 0$ 处越热路径曲线的行为 (可以精确计算 $\lambda \rightarrow 0$ 的各阶导数)，也能给出正确的 $\lambda \in (0, 1]$ 下 $\mathcal{W}_{\lambda}$ 的结果；从而对 $\mathcal{W}_{\lambda}$ 作关于 $\lambda$ 的积分得到准确的 $E_\mathrm{xc}$。但在计算资源的限制下，如图 \ref{fig.2.adiabatic-curve} 所示，如果无法引入三阶或更高阶微扰能量，即只能相对精确地计算 $\mathcal{W}_{\lambda}$ 在 $\lambda = 0$ 处的函数值与斜率，我们只能得到非常粗糙的对 $\lambda \in [0, 1]$ 范围内 $\mathcal{W}_{\lambda}$ 的整体认识，那么仅引入 GLPT2 的测评精度自然无法得以满足。
+对于式 (\ref{eq.2.GL2-W})，从更直观的角度来看，$\mathcal{W}_{\mathrm{c}, \lambda} [\rho]$ 作为关于 $\lambda$ 的函数，其在 $\lambda = 0$ 处的曲线斜率恰是 $2 E_\mathrm{GL}^{(2)}$；同时参考图 \ref{fig.2.adiabatic-curve}。而若进一步假设曲线 $\mathcal{W}_{\mathrm{c}, \lambda} [\rho]$ 关于 $\lambda$ 近似为直线，那么相关能就可以近似为 GLPT2 微扰能，即 $E_\mathrm{c} [\rho] \simeq E_\mathrm{GL}^{(2)}$。
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.5\textwidth]{assets/adiabatic-curve.jpg}
-  \caption{绝热路径曲线示意图。下图取自文献\cite{Su-Xu.JCP.2014}。图中的 $W_{xc}^{\lambda}$ 即本文中的 $\mathcal{W}_{\lambda}$。图中的 $W'_{xc}{}^{0}$ 数值上等于 $2 E_\mathrm{GL}^{(2)}$。}
+  \caption{绝热路径曲线示意图。下图取自文献\cite{Su-Xu.JCP.2014}。图中的 $W_{xc}^{\lambda}$ 即本文中的 $\mathcal{W}_{\lambda}$。图中的 $W'_{xc}{}^{0}$ 数值上等于本文中的 $2 E_\mathrm{GL}^{(2)}$。}
   \label{fig.2.adiabatic-curve}
 \end{figure}
 
-为提升测评精度，其中一种有效且理论上相对严格的策略，是结合 G\"orling-Levy 微扰与传统的低阶密度泛函近似，对 $\mathcal{W}_{\lambda}$ 作合理的参数化。尽管传统的低阶 (在“Jacob 阶梯”的第四阶或以下，即杂化泛函或以下的) 泛函未必能正确地描述 $\mathcal{W}_{\lambda}$ 在 $\lambda \rightarrow 0$ 时的行为，但却因为对 $\mathcal{W}_{\lambda}$ 在 $\lambda \in [0, 1]$ 整体有良好的描述，传统泛函的 $E_\mathrm{xc} [\rho]$ 的结果通常相比于 GLPT2 要来地更精确。如果在构造绝热路径曲线 $\mathcal{W}_{\lambda}$ 的过程中，在 $\lambda \rightarrow 0$ 时偏重 G\"orling-Levy 微扰理论、而在 $\lambda \rightarrow 1$ 时偏重传统泛函，那么可以取两者所长，获得比传统泛函近似或 GLPT2 更为精确的泛函。在这种新的泛函形式中，交换相关能同时有严格交换能 $E_\mathrm{x}^\mathrm{exact}$ 与二阶微扰相关能 $E_\mathrm{GL}^{(2)}$ 的掺杂：
+而对于式 (\ref{eq.2.GL2-def})，尽管 $E_\mathrm{GL}^{(2)}$ 的表达式相比于 MP2 相关能 $E_\mathrm{c}^\mathrm{MP2}$ 多出了关于 $v_\mathrm{x}^\mathrm{NL}$ 的单电子贡献项；但一般来说单电子贡献非常小\cite{DellaSala-Goerling.JCP.2001}，同时 $v_\mathrm{x}$ 在实际计算中需要代价昂贵的响应函数方法\cite{Goerling-Goerling.PRL.1999}、或存在数值不稳定可能性的 KLI 方法\cite{Krieger-Iafrate.PRA.1992, DellaSala-Goerling.JCP.2001}或 OEP 方法\cite{Mori-Sanchez-Yang.JCP.2005}；因此忽略上式的第一项，即单电子项，通常是可接受的。从而，$E_\mathrm{GL}^{(2)}$ 可以仅由第二项近似得到：
+\begin{equation}
+  E_\mathrm{GL}^{(2)} \simeq E_\mathrm{c}^\mathrm{MP2}
+\end{equation}
+这里 $E_\mathrm{c}^\mathrm{MP2}$ 是指基于 Kohn-Sham 波函数所给出的 MP2 相关能。
+
+\subsection{GLPT2 与双杂化泛函}
+
+现在回到近似泛函的问题上。上一小节通过分析给出了 Kohn-Sham 相关能泛函与 MP2 相关能，在 $\mathcal{W}_{\mathrm{c}, \lambda} [\rho]$ 关于 $\lambda$ 接近线性、以及 $\hat v_\mathrm{x}^\mathrm{NL} - v_\mathrm{x}$ 算符效果接近于零的假设下，是非常相似的结论；即 $E_\mathrm{c} [\rho] \simeq E_\mathrm{GL}^{(2)} \simeq E_\mathrm{c}^\mathrm{MP2}$。当然现实情况下，$\mathcal{W}_{\mathrm{c}, \lambda} [\rho]$ 关于 $\lambda$ 并非严格线性，因此上述近似一般不能直接使用；但将 $E_\mathrm{c}^\mathrm{MP2}$ 作为杂化项掺入泛函，仍然是有所帮助的。这就构成了一般的 MP2 型双杂化泛函。但 MP2 相关能仅仅是最初步的其中一种引入 G\"orling-Levy 微扰方式；从具体实现上，如何引入 G\"orling-Levy 微扰、引入多大程度的近似能得到较精确地结果，都是值得讨论的话题。
+
+理论上，我们可以获得依式 (\ref{eq.2.e-c-lambda}) 定义的 $\lambda=0$ 处各阶微扰能量；从而在 $\lambda$ 的级数收敛区间内给出最终的 $E_{\mathrm{c}, \lambda} [\rho]$。显然，若可以求得更高阶数的 G\"orling-Levy 微扰能 $E_\mathrm{GL}^{(n)}$ ($n > 2$)，那么相关能的结果就更为精确。但如果对 G\"orling-Levy 微扰作更多分析，那么算符 $\hat H_\lambda$ 对耦合常数 $\lambda$ 的展开表达式为
+\begin{equation}
+  \hat H_\lambda = \left( \hat T - \sum_i^{n_\mathrm{elec}} v_\mathrm{s} (\bm{r}_i) \right) + \lambda \left( \hat V_\mathrm{ee} - \sum_i^{n_\mathrm{elec}} \big( v_\mathrm{J} (\bm{r}_i) + v_\mathrm{x} (\bm{r}_i) \big) \right) - \sum_{n=2}^\infty \lambda^n \sum_{i}^{n_\mathrm{elec}} v_\mathrm{c}^{(n)} (\bm{r}_i)
+\end{equation}
+其中，上式中出现的势函数是一些能量项对密度的函数变分：
+\begin{equation*}
+  v_\mathrm{s} (\bm{r}) = \frac{\delta T_\mathrm{s} [\rho]}{\delta \rho(\bm{r})} , \;
+  v_\mathrm{J} (\bm{r}) = \frac{\delta J [\rho]}{\delta \rho(\bm{r})}, \;
+  v_\mathrm{x} (\bm{r}) = \frac{\delta E_\mathrm{x}^\mathrm{exact} [\rho]}{\delta \rho(\bm{r})}, \;
+  v_\mathrm{c}^{(n)} (\bm{r}) = \frac{\delta E_\mathrm{GL}^{(n)} [\rho]}{\delta \rho (\bm{r})}
+\end{equation*}
+由于在算符 $\hat H_\lambda$ 中存在算符 $\hat V_\mathrm{ee}$，因此，$n$ 阶的 G\"orling-Levy 计算量至少不会低于 M\o{}ller-Plesset 对应 $n$ 阶的微扰。
+
+可以预见，G\"orling-Levy 微扰的计算代价是相当高的。但也需要指出，由于近年来近似算法 (特别是 RI 近似算法)、以及计算硬件 (特别是 DRAM 内存容量) 发展，MP2 相关能的计算在数十原子体系以内耗时不多于引入交换效应的 Kohn-Sham 自洽场计算；因此，对于 $n = 2$ 阶 G\"orling-Levy 微扰即 GLPT2，若近似为 MP2 相关则不会增加太多计算资源负担。而对于 $n = 3$ 阶的情形，现在确实有针对 MP3 相关能的计算所提出或适用的近似算法；这类算法通常基于 THC 或其它张量分解与缩并方法\cite{Hohenstein-Martinez.JCP.2012, Parrish-Sherrill.JCP.2012, Lee-Head-Gordon.JCTC.2020, Matthews-Matthews.JCTC.2020}，但目前的效率仍然无法达到与自洽场计算齐平的程度\cite{Matthews-Matthews.JCP.2021}。考虑到杂化密度泛函近似近年来的巨大成功，得益于可以在较低自洽场级别的计算代价下获得相对精确的结果；其中计算代价小是非常重要的因素。因此，若 MP3 相关能的计算效率难以进一步提升，那么在可见的未来，基于 G\"orling-Levy 微扰理论所开发的实用的密度泛函，很可能不会引入\textbf{完整的} $n = 3$ 阶或更高阶微扰能量。
+
+因此，若以 G\"orling-Levy 为基础发展泛函方法，仅引入 GLPT2 从计算资源消耗与精度平衡的角度上，是非常自然的想法。作为最基本的泛函模型，$\mathcal{W}_{\lambda}$ 若依 $\lambda$ 接近线性，则
+\begin{equation}
+  E_{\mathrm{xc}, \lambda} [\rho] = \lambda E_\mathrm{x}^\mathrm{exact}[\rho] + \lambda^2 E_\mathrm{GL}^{(2)} [\rho] + o(\lambda^3) \simeq E_\mathrm{x}^\mathrm{exact}[\rho] + E_\mathrm{GL}^{(2)} [\rho]
+\end{equation}
+当 $\lambda = 1$ 时，上述的 $E_{\mathrm{xc}, \lambda} [\rho]$ 就是真实体系的交换相关能 $E_{\mathrm{xc}} [\rho]$。但事实上，当相关能若仅引入 GLPT2 时，测评表现并不好\cite{Su-Xu.JCP.2014}。事实上，重新回顾式 (\ref{eq.2.GL2-W}) 的结论，微扰理论只能描述取到极限 $\lambda \rightarrow 0$ 时绝热路径曲线行为。若 $E_{\mathrm{c}, \lambda} [\lambda]$ 作为关于 $\lambda$ 的函数在 $(0, 1]$ 邻域上 Taylor 级数收敛，那么精确地描述 $\lambda \rightarrow 0$ 处越热路径曲线的行为 (可以精确计算 $\lambda \rightarrow 0$ 的各阶导数)，也能给出正确的 $\lambda \in (0, 1]$ 下 $\mathcal{W}_{\lambda}$ 的结果；从而对 $\mathcal{W}_{\lambda}$ 作关于 $\lambda$ 的积分得到准确的 $E_\mathrm{xc}$。但在计算资源的限制下，如图 \ref{fig.2.adiabatic-curve} 所示，如果无法引入三阶或更高阶微扰能量，即只能相对精确地计算 $\mathcal{W}_{\lambda}$ 在 $\lambda = 0$ 处的函数值与斜率，我们只能得到非常粗糙的对 $\lambda = 0$ 附近 $\mathcal{W}_{\lambda}$ 的局部认识、而无法对整体形状有所把握；大多数分子的 $\mathcal{W}_{\lambda}$ 并不非常接近线性，那么若仅近似 $E_\mathrm{c} [\rho] \simeq E_\mathrm{GL}^{(2)} [\rho]$，自然无法给出好的测评表现。
+
+为提升测评精度，也为了更好地对大多数类型分子的 $\mathcal{W}_{\lambda}$ 作合理建模以更好地逼近真实的 $E_\mathrm{xc} [\rho]$，其中一种有效且理论上相对严格的策略，是结合 G\"orling-Levy 微扰与传统的低阶密度泛函近似，对 $\mathcal{W}_{\lambda}$ 作合理的参数化。尽管传统的低阶泛函\footnote{低阶泛函 (low-rung functional) 指在“Jacob 阶梯”的第四阶或以下，即杂化泛函或以下的泛函。后文也经常使用该称法。}未必能正确地描述 $\mathcal{W}_{\lambda}$ 在 $\lambda \rightarrow 0$ 时的行为，但却因为对 $\mathcal{W}_{\lambda}$ 在 $\lambda \in [0, 1]$ 整体有良好的描述，传统泛函的 $E_\mathrm{xc} [\rho]$ 的结果通常相比于仅近似 $E_\mathrm{c} [\rho] \simeq E_\mathrm{GL}^{(2)} [\rho]$ 的 GLPT2 要更精确。如果在构造绝热路径曲线 $\mathcal{W}_{\lambda}$ 的过程中，在 $\lambda \rightarrow 0$ 时偏重 G\"orling-Levy 微扰理论、而在 $\lambda \rightarrow 1$ 时偏重传统泛函，那么可以取两者所长，获得比传统泛函近似或 GLPT2 更为精确的泛函。在这种新的泛函形式中，交换相关能同时有严格交换能 $E_\mathrm{x}^\mathrm{exact}$ 与二阶微扰相关能 $E_\mathrm{GL}^{(2)}$ 的掺杂：
 \begin{equation}
   E_\mathrm{xc} = \int_0^\lambda \mathcal{W}_{\lambda} \, \mathrm{d} \lambda = E_\mathrm{xc}^\text{low-rung} + c_\mathrm{x} E_\mathrm{x}^\mathrm{exact} + c_\mathrm{c} E_\mathrm{GL}^{(2)}
 \end{equation}
@@ -232,11 +101,11 @@ G\"orling-Levy 微扰与波函数理论中的 M\o{}ller-Plesset 微扰有所不�
 
 许多在测评结果上有优异表现的双杂化泛函，譬如 B2PLYP、XYG3 等，通过上述策略对将双杂化泛函近似合理化\cite{Grimme-Grimme.JCP.2006, Zhang-Goddard.PNAS.2009}；但在实践中，则是直接对 $E_\mathrm{xc} [\rho]$ 中的参数 $c_\mathrm{x}, c_\mathrm{c}$ 在数据集下作拟合，而没有直接构造 $\mathcal{W}_{\lambda}$ 本身。以 PBE-ACDH\cite{Su-Xu.JCP.2014} 为代表的一类泛函，则是使用参数或模型构造 $\mathcal{W}_{\lambda}$ 并对 $\lambda$ 作积分，得到 $E_\mathrm{xc} [\rho]$。
 
-需要指出，对绝热路径曲线 $\mathcal{W}_{\lambda}$ 作参数化或模型化后积分，从而在 $E_\mathrm{xc}$ 中引入 GLPT2 相关能，是双杂化泛函的其中一种理论基础。以 PBE0-DH\cite{Toulouse-Adamo.JCP.2011} 为代表的双杂化泛函，其理论基础并非构建于 $\lambda = 0$ 的 Kohn-Sham 轨道行列式下 G\"orling-Levy 微扰，而是构建于 $0 < \lambda < 1$ 下杂化泛函轨道行列式下的二阶微扰基础上\cite{Sharkas-Savin.JCP.2011}；该理论不需要引入绝热路径。
+需要指出，对绝热路径曲线 $\mathcal{W}_{\lambda}$ 作参数化或模型化后积分，从而在 $E_\mathrm{xc}$ 中引入 GLPT2 相关能，是双杂化泛函的其中一种理论基础。以 PBE0-DH\cite{Toulouse-Adamo.JCP.2011} 为代表的双杂化泛函，其理论基础并非构建于 $\lambda = 0$ 的 Kohn-Sham 轨道行列式下 G\"orling-Levy 微扰，而是构建于 $0 < \lambda < 1$ 下杂化泛函轨道行列式下的二阶微扰基础上\cite{Sharkas-Savin.JCP.2011}；该理论引入绝热路径给出相关能的方式，与 G\"orling-Levy 微扰有些许不同。
 
-不论是使用绝热路径、还是使用杂化泛函波函数下的微扰理论，都可以构造出双杂化泛函。但与低阶泛函中纯粹以理论模型驱动所构造 PBE、TPSS、SCAN 或他们对应的杂化泛函在诸多数据集下测评表现，相对于同等级参数拟合方法仍然有不少优势\cite{Goerigk-Grimme.PCCP.2017, Medvedev-Lyssenko.S.2017}的情况不同，存在经验参数的双杂化泛函近似通常要比纯理论模型驱动构造的泛函有更优异的测评表现\cite{Mehta-Goerigk.PCCP.2018}。因此，理论模型通常在双杂化泛函中扮演的角色，很可能是对双杂化泛函的合理化。若要提升双杂化泛函的测评数值表现，参数优化非常重要。
+不论是使用绝热路径、还是使用杂化泛函波函数下的微扰理论，都可以构造出双杂化泛函。但与低阶泛函中纯粹以理论模型驱动所构造 PBE、TPSS、SCAN 或他们对应的杂化泛函，在诸多数据集下测评表现相对于同等级参数拟合方法仍然有不少优势\cite{Goerigk-Grimme.PCCP.2017, Medvedev-Lyssenko.S.2017}的情况不同，存在经验参数的双杂化泛函近似通常要比纯理论模型驱动构造的泛函有更优异的测评表现\cite{Mehta-Goerigk.PCCP.2018}。因此，理论模型通常在双杂化泛函中扮演的角色，很可能是对双杂化泛函的合理化。若要提升双杂化泛函的测评数值表现，参数优化非常重要。
 
-但理论模型仍然可以指导双杂化密度泛函的发展。目前在数值计算上的迹象表明，绝热路径曲线通常是凸曲线\cite{Frydel-Burke.JCP.2000, Fuchs-Burke.JCP.2005, Teale-Helgaker.JCP.2009,Teale-Helgaker.JCP.2010, Carrascal-Burke.JPCM.2015} (但目前没有确切的证明\cite{Crisostomo-Burke.LMP.2023})：
+但理论模型仍然可以指导双杂化密度泛函的发展。目前在数值计算上的迹象表明，对于绝大多数体系，绝热路径曲线是凸曲线\cite{Frydel-Burke.JCP.2000, Fuchs-Burke.JCP.2005, Teale-Helgaker.JCP.2009,Teale-Helgaker.JCP.2010, Carrascal-Burke.JPCM.2015} (但该结论目前没有对任意体系成立的确切证明\cite{Crisostomo-Burke.LMP.2023})：
 \begin{equation}
   \frac{\mathrm{d}^2}{\mathrm{d} \lambda^2} \mathcal{W}_{\lambda} \geqslant 0, \quad \lambda \in [0, 1] \quad \text{(conjecture)}
 \end{equation}
@@ -250,7 +119,7 @@ G\"orling-Levy 微扰与波函数理论中的 M\o{}ller-Plesset 微扰有所不�
 \end{equation}
 作为具体的例子，在低阶密度泛函近似所给出的能量相对精确、且所给出的 Kohn-Sham 轨道足够精确的前提下，若要在能量计算中引入 GLPT2 相关能，那么对于下述泛函模型
 \begin{equation*}
-  E_\mathrm{xc}^\mathrm{DH} = c_\mathrm{x} E_\mathrm{x}^\mathrm{exact} + c_\mathrm{x}^\text{low-rung} E_\mathrm{x}^\text{low-rung} + c_\mathrm{c} E_\mathrm{GL}^{(2)} + c_\mathrm{c}^\text{low-rung} E_\mathrm{c, \lambda=1}^\text{low-rung}
+  E_\mathrm{xc}^\mathrm{DH} = c_\mathrm{x} E_\mathrm{x}^\mathrm{exact} + c_\mathrm{x}^\text{low-rung} E_\mathrm{x}^\text{low-rung} + c_\mathrm{c} E_\mathrm{GL}^{(2)} + c_\mathrm{c}^\text{low-rung} E_{\mathrm{c}, \lambda=1}^\text{low-rung}
 \end{equation*}
 我们应当预期
 \begin{equation*}
@@ -329,7 +198,7 @@ G\"orling-Levy 微扰与波函数理论中的 M\o{}ller-Plesset 微扰有所不�
                 & Sub2        & 大体系反应能与异构能  & 243 &  \\
                 & Sub3        & 反应势垒        & 194 &  \\
                 & Sub4        & 分子间非共价相互作用  & 291 &  \\
-                & Sub5        & 分子内非共价相互作用  & 304 &  \\ \hdashline
+                & Sub5        & 分子内非共价相互作用  & 304 &  \\ \midrule
   Minnesota 2015 & MR-MGM-BE4  & 多参考主族金属键能   & 4 & 12\% \\
                 & MR-MGN-BE17 & 多参考主族非金属键能  & 17 & 8\% \\
                 & MR-TM-BE13  & 多参考过渡金属键能   & 13 & 12\%  \\
@@ -383,7 +252,7 @@ G\"orling-Levy 微扰与波函数理论中的 M\o{}ller-Plesset 微扰有所不�
   & 4.47\tnote{e} & 6.50\tnote{e} & 3.64       & 9.90        & 7.27       & 3.66       & 12.21      & 6.00     \\
   TPSS0-DH        
   & 5.86\tnote{e} & 9.77\tnote{e} & 8.05       & 14.08       & 6.46       & 4.69       & 9.92       & 7.25     \\
-  wB97X-2(TQZ)
+  ωB97X-2(TQZ)
   & 3.06\tnote{f} & 2.80\tnote{f} & 4.65       & 2.99        & 6.77       & 1.47       & 10.15      & 4.41     \\
   RS-PBE-P86      
   & -               & -               & 2.77       & 4.20        & 7.44       & 3.30       & 15.91      & -        \\
@@ -435,11 +304,11 @@ GMTKN55 数据集计算选用的基组列于表 \ref{tab.2.basis-gmtkn55}。GMTK
                         &                           & BH76, BH76RC, AHB21, ISOL24  \\
                         & def2-TZVPP                & C60ISO, UPU23 \\
                         & def2-QZVPP                & other 45 subsets of GMTKN55 \\
-    \hdashline
+    \midrule
     Auxiliary  & daug-def2-universal-jkfit & WATER27, RG18, IL16, G21EA, \\
     (RI-JK)    &                           & BH76， BH76RC, AHB21, ISOL24 \\
                         & def2-universal-jkfit      & other 47 subsets of GMTKN55 \\
-    \hdashline
+    \midrule
     Auxiliary & def2-QZVPPD-rifit         & WATER27, RG18, IL16, G21EA, \\
     (RI-MP2)  &                           & BH76， BH76RC, AHB21, ISOL24 \\
                         & def2-TZVPP-rifit          & C60ISO, UPU23 \\
@@ -492,7 +361,7 @@ GMTKN55 数据集计算选用的基组列于表 \ref{tab.2.basis-gmtkn55}。GMTK
 
 \subsection{XYG6+1 模型双杂化近似泛函的参数优化}
 
-本工作将基于 xDH@B3LYP 模型\cite{Zhang-Xu.JPCL.2021}，进行新泛函的拟合。回顾到 xDH@B3LYP 模型定义为
+本工作将基于 xDH@B3LYP 模型\cite{Zhang-Xu.JPCL.2021}，作新泛函的拟合。回顾到 xDH@B3LYP 模型定义为
 \begin{align}
   E_\mathrm{xc}^\text{xDH@B3LYP} &= a_1 E_\mathrm{x}^\mathrm{exact} + a_2 E_\mathrm{x}^\mathrm{S} + a_3 E_\mathrm{x}^\mathrm{B88} + a_4 E_\mathrm{c}^\mathrm{VWN3} + a_5 E_\mathrm{c}^\mathrm{LYP} \notag \\
   &\quad + a_6 E_\mathrm{c}^\text{OS-MP2} + a_7 E_\mathrm{c}^\text{SS-MP2}
@@ -564,13 +433,13 @@ xDH@B3LYP 模型总共有 7 个可变参数。XYG7 近似泛函的参数是通�
   Sub3        & 1.71  & 2.25  & 2.11  & 1.82  & 2.22      & 3.28         & 2.57        \\
   Sub4        & 5.15  & 2.94  & 2.83  & 2.86  & 3.38      & 3.70         & 6.97        \\
   Sub5        & 4.25  & 2.80  & 2.43  & 2.10  & 2.59      & 3.11         & 6.60        \\
-  All         & 3.39  & 2.38  & 2.18  & 2.01  & 2.36      & 2.94         & 4.41        \\ \hdashline
+  All         & 3.39  & 2.38  & 2.18  & 2.01  & 2.36      & 2.94         & 4.41        \\ \midrule
   \textbf{Minnesota 2015} &&&&&&& \\
   MR-MGM-BE4  & 16.93 & 21.73 & 22.85 & 17.81 & 3.24      & 3.62         & 2.62        \\
   MR-MGN-BE17 & 1.81  & 3.27  & 3.97  & 2.63  & 1.65      & 2.42         & 3.97        \\
   MR-TM-BE13  & 10.67 & 13.88 & 13.20 & 12.12 & 7.40      & 7.75         & 5.30        \\
   SR-MGM-BE9  & 1.59  & 1.82  & 1.78  & 2.55  & 1.97      & 1.87         & 2.03        \\
-  SR-TM-BE17  & 5.56  & 7.37  & 7.23  & 6.75  & 4.86      & 5.61         & 4.59        \\ \hdashline
+  SR-TM-BE17  & 5.56  & 7.37  & 7.23  & 6.75  & 4.86      & 5.61         & 4.59        \\ \midrule
   Weighted Error & 5.88  & 6.71  & 6.70  & 5.78  & 3.28      & 3.79         & 4.10        \\
   \bottomrule
   \end{tabular}
@@ -590,7 +459,7 @@ xDH@B3LYP 模型总共有 7 个可变参数。XYG7 近似泛函的参数是通�
 \subsection{参数优化讨论：IEPA-like 相关能占比}
 \label{sec.2.proportion-iepa-like}
 
-构造新的 XYG6+1 型泛函时，相对于没有引入 IEPA-like 相关能的 xDH@B3LYP 模型，有三个重要的变化：
+构造 XYG6+1 型泛函时，相对于未引入 IEPA-like 相关能的 xDH@B3LYP 模型，有三个重要的变化：
 \begin{enumerate}[nosep]
   \item 引入 IEPA-like 相关能；
   \item 引入 Minnesota 2015 数据子集；
@@ -646,7 +515,7 @@ xDH@B3LYP 模型总共有 7 个可变参数。XYG7 近似泛函的参数是通�
 
 Yu 等\cite{Yu-Truhlar.CS.2016} 认为，Hartree-Fock 交换能通常可以提升碳水化合物、弱相互作用、反应能垒等问题上有较好的表现 (这些也是 GMTKN55 数据集着重关心的问题)，但会破坏多参考体系问题的表现。尽管 Yu 等的主张是针对杂化泛函所提，但图 \ref{fig.2.plot-seq} 表明在 $c_\mathrm{x} > 0.5$ 的情形下表明基于 B3LYP 轨道的双杂化泛函也有相同的结论。
 
-XYG6+1 模型尽管可以更好地处理以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为代表的 HOMO/LUMO gap 较小的计算问题，但需要指出的是，尽管引入了 IEPA-like 型相关能的 XYG6+1 模型一定程度上减少了 MR-TM-BE13 的误差，但减小幅度远小于降低 $c_\mathrm{x}$ 所带来的收益；类如 \ce{TiCl}、\ce{NiCH2+}、\ce{VO}、\ce{CoH}、\ce{FeH}、\ce{FeCl} 等困难的计算问题，一定程度地降低 $c_\mathrm{x}$ 尽管能有更好的计算表现，但同时会推高 GMTKN55 为代表的主族化学问题的误差。因此需要承认，为要更好地解决这两类问题，仅使用引入 IEPA-like 相关能的 XYG6+1 框架仍然是不够的。
+XYG6+1 模型尽管对以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为代表的 HOMO/LUMO gap 较小的计算问题有更好的处理，但需要指出的是，尽管引入了 IEPA-like 型相关能的 XYG6+1 模型一定程度上减少了 MR-TM-BE13 的误差，但减小幅度远小于降低 $c_\mathrm{x}$ 所带来的收益；类如 \ce{TiCl}、\ce{NiCH2+}、\ce{VO}、\ce{CoH}、\ce{FeH}、\ce{FeCl} 等困难的计算问题，一定程度地降低 $c_\mathrm{x}$ 尽管能有更好的计算表现，但同时会推高 GMTKN55 为代表的主族化学问题的误差。因此需要承认，为要更好地解决这两类问题，仅使用引入 IEPA-like 相关能的 XYG6+1 框架仍然是不够的。
 
 \subsection{参数优化讨论：数据集的影响}
 \label{sec.2.propotion-dataset}
@@ -948,7 +817,7 @@ XYG6+1 模型尽管可以更好地处理以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为�
           & BH76RC    & 1.03  & 0.93  & 0.86  & 0.90   & 0.93  & 1.15  \\
           & FH51      & 1.09  & 0.87  & 0.71  & 1.03   & 1.30  & 1.75  \\
           & TAUT15    & 0.49  & 0.56  & 0.38  & 0.49   & 0.69  & 0.58  \\
-          & DC13      & 5.70  & 4.26  & 3.32  & 1.98   & 1.86  & 2.91  \\ \hdashline
+          & DC13      & 5.70  & 4.26  & 3.32  & 1.98   & 1.86  & 2.91  \\ \midrule
   Sub2    & MB16-43   & 24.12 & 17.85 & 23.55 & 17.06  & 22.47 & 18.13 \\
           & DARC      & 2.82  & 0.64  & 0.59  & 1.19   & 2.03  & 1.32  \\
           & RSE43     & 0.25  & 0.24  & 0.21  & 0.22   & 0.47  & 0.22  \\
@@ -957,14 +826,14 @@ XYG6+1 模型尽管可以更好地处理以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为�
           & ISO34     & 0.80  & 0.43  & 0.40  & 0.42   & 0.53  & 0.63  \\
           & ISOL24    & 2.67  & 1.20  & 1.07  & 0.95   & 0.87  & 1.67  \\
           & C60ISO    & 9.86  & 13.07 & 11.15 & 1.78   & 4.79  & 3.19  \\
-          & PArel     & 0.56  & 0.41  & 0.40  & 0.40   & 0.35  & 0.62  \\ \hdashline
+          & PArel     & 0.56  & 0.41  & 0.40  & 0.40   & 0.35  & 0.62  \\ \midrule
   Sub3    & BH76      & 0.71  & 1.02  & 0.69  & 0.75   & 1.33  & 0.82  \\
           & BHPERI    & 0.59  & 0.45  & 0.55  & 1.15   & 2.37  & 1.09  \\
           & BHDIV10   & 1.40  & 1.06  & 0.87  & 1.03   & 1.44  & 1.08  \\
           & INV24     & 0.68  & 0.62  & 0.66  & 0.84   & 0.99  & 1.11  \\
           & BHROT27   & 0.20  & 0.16  & 0.14  & 0.24   & 0.23  & 0.34  \\
           & PX13      & 0.50  & 0.93  & 1.39  & 1.43   & 0.92  & 1.81  \\
-          & WCPT18    & 0.66  & 1.41  & 1.75  & 1.19   & 0.82  & 1.62  \\ \hdashline
+          & WCPT18    & 0.66  & 1.41  & 1.75  & 1.19   & 0.82  & 1.62  \\ \midrule
   Sub4    & RG18      & 0.15  & 0.07  & 0.08  & 0.08   & 0.09  & 0.29  \\
           & ADIM6     & 1.24  & 0.42  & 0.35  & 0.67   & 0.65  & 0.84  \\
           & S22       & 0.57  & 0.14  & 0.14  & 0.35   & 0.37  & 0.77  \\
@@ -976,7 +845,7 @@ XYG6+1 模型尽管可以更好地处理以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为�
           & HAL59     & 0.30  & 0.33  & 0.30  & 0.31   & 0.28  & 0.41  \\
           & AHB21     & 0.39  & 0.39  & 0.40  & 0.36   & 0.56  & 1.21  \\
           & CHB6      & 1.26  & 1.14  & 1.00  & 1.28   & 1.52  & 1.49  \\
-          & IL16      & 0.87  & 0.32  & 0.80  & 0.47   & 0.41  & 0.37  \\ \hdashline
+          & IL16      & 0.87  & 0.32  & 0.80  & 0.47   & 0.41  & 0.37  \\ \midrule
   Sub5    & IDISP     & 2.73  & 0.51  & 0.49  & 1.09   & 1.47  & 3.18  \\
           & ICONF     & 0.25  & 0.12  & 0.11  & 0.13   & 0.12  & 0.26  \\
           & ACONF     & 0.24  & 0.08  & 0.08  & 0.09   & 0.14  & 0.25  \\
