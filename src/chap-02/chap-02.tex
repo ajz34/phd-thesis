@@ -8,15 +8,16 @@
 
 但密度泛函近似仍然存在一些困难。目前主流的密度泛函可以依据开发模式分为两类：经验参数拟合的、与纯理论模型的。一般来说，纯理论模型的泛函在测评数据集上的表现通常稍逊色\cite{Goerigk-Grimme.PCCP.2017}；但对于经验参数拟合的泛函，可能在拟合范围外产生比较严重误差，即可泛化性通常较差\cite{Medvedev-Lyssenko.S.2017}。目前流行的大多数双杂化泛函，为保证一定的泛化能力，可以采用的策略是使用较少的参数数量，如 XYG$n$\cite{Zhang-Xu.JPCL.2021} 或 DSD 系列\cite{Kozuch-Martin.JCC.2013}等泛函；或者采用复杂的参数拟合策略，如 ωB97X-2\cite{Chai-Head-Gordon.JCP.2009} 或 ωB97M(2)\cite{Mardirossian-Head-Gordon.JCP.2018}等泛函。这些泛函的参数通常是针对主族化学体系的反应能与弱相互作用能数据集上拟合得到；但目前的测评中，这些泛函确实在原子密度\cite{Su-Xu.PNAS.2018}、偶极矩与极化率\cite{Hait-Head-Gordon.JCTC.2018, Hait-Head-Gordon.PCCP.2018}、化学位移\cite{Stoychev-Neese.JCTC.2018}等问题上有良好的结果，即表现出不错的泛化能力。但同时需要注意到，这些泛函仍然在以过渡金属为代表的一些计算问题上，数值表现通常还有提升的空间。
 
-目前流行的双杂化泛函中，通常引入了 MP2 型相关能 $E_\mathrm{c}^\mathrm{MP2}$。若分子体系的 HOMO/LUMO gap 较小，则 $E_\mathrm{c}^\mathrm{MP2}$ 会产生严重的负误差。由于一部分过渡金属与多参考问题具有 HOMO/LUMO gap 较小的特性，因此双杂化泛函在这类问题上表现较差。波函数理论中，与 MP2 计算量相仿的电子对方法 IEPA\cite{Sinanoǧlu-Sinanoǧlu.ACP.1964, Nesbet-Nesbet.ACP.1965}、sIEPA\cite{Zhang-Scheffler.PRL.2016}、MP2/cr\cite{Dykstra-Davidson.IJQC.2000}\footnote{在 Dykstra and Davidson 原文\cite{Dykstra-Davidson.IJQC.2000}中提出了两种 MP2/cr 形式。原文的 MP2/cr-II 的计算需要自旋相同且同占据轨道角标的激发系数 $t_{i \bar i}^{a \bar b}$；这在 $\alpha, \beta$ 占据数不同的情形下难以合理地定义。在正文中，我们仅介绍与使用原文的 MP2/cr-I，并将其指代为 MP2/cr。} 等可以一定程度地避免 $E_\mathrm{c}^\mathrm{MP2}$ 型相关能的负误差。在双杂化泛函中引入这类相关能，有望在不加大计算量的同时，提高 HOMO/LUMO gap 较小体系问题的计算精度。这三类近似方法在本工作中统称为 IEPA 型相关能。
+目前流行的双杂化泛函中，通常引入了 MP2 型相关能 $E_\mathrm{c}^\mathrm{MP2}$。若分子体系的 HOMO/LUMO gap 较小，则 $E_\mathrm{c}^\mathrm{MP2}$ 会产生严重的负误差。由于一部分过渡金属与多参考问题具有 HOMO/LUMO gap 较小的特性，因此双杂化泛函在这类问题上表现较差。波函数理论中，与 MP2 计算量相仿的电子对方法 IEPA\cite{Sinanoǧlu-Sinanoǧlu.ACP.1964, Nesbet-Nesbet.ACP.1965}、sIEPA\cite{Zhang-Scheffler.PRL.2016}、MP2/cr\cite{Dykstra-Davidson.IJQC.2000}\footnote{在 Dykstra and Davidson 原文\cite{Dykstra-Davidson.IJQC.2000}中提出了两种 MP2/cr 形式。原文的 MP2/cr-II 的计算需要自旋相同且同占据轨道角标的激发系数 $t_{i \bar i}^{a \bar b}$；这在 $\alpha, \beta$ 占据数不同的情形下难以合理地定义。在正文中，我们仅介绍与使用原文的 MP2/cr-I，并将其指代为 MP2/cr。} 等可以一定程度地避免 $E_\mathrm{c}^\mathrm{MP2}$ 型相关能的负误差。在双杂化泛函中引入这类相关能，有望在不加大计算量的同时，提高 HOMO/LUMO gap 较小体系问题的计算精度。这三类近似方法在本工作中统称为 EP 型相关能。
 
 在理论层面，掺杂 MP2 型相关能的双杂化泛函基础，一般认为是 G\"orling-Levy 微扰理论的二阶近似。事实上，G\"orling-Levy 微扰理论建立起了密度泛函方法与波函数理论之间的联系，而这层联系不仅仅局限于二阶微扰、还可以与更高级的方法产生联系。从这个角度来看，在密度泛函中引入不同于 MP2 的其它波函数理论下的相关能，在 G\"orling-Levy 微扰理论的角度下是可以立足的。
 
-基于这些认识，在本章工作中，将实现掺杂 IEPA 型相关能的双杂化泛函，并进行理论合理性说明与测评。\ref{sec.2.iepa-gl-perturb} 节将回顾 G\"orling-Levy 微扰理论，进一步详细地阐述其与波函数理论之间的关系，以及在密度泛函近似中引入波函数方法相关能的合理性。\ref{sec.2.iepa-theory} 节将回顾作为波函数理论的 IEPA 型相关能近似理论与计算实现。\ref{sec.2.iepa-results} 节将通过参数拟合的方式给出掺杂 IEPA 型相关能的双杂化泛函，并对部分主族化学、过渡金属体系、多参考问题进行测评，以及对参数优化过程进行讨论。
+基于这些认识，在本章工作中，将实现掺杂 IEPA 型相关能的双杂化泛函，并进行理论合理性说明与测评。\ref{sec.2.glpt2-theory}--\ref{sec.2.glpt2-dh} 小节将回顾 G\"orling-Levy 微扰理论，进一步详细地阐述其与波函数理论之间的关系，以及在密度泛函近似中引入波函数方法相关能的合理性。\ref{sec.3.ep} 节将回顾作为波函数理论的 IEPA 型相关能近似理论与计算实现。\ref{sec.2.iepa-results} 节将通过参数拟合的方式给出掺杂 IEPA 型相关能的双杂化泛函，并对部分主族化学、过渡金属体系、多参考问题进行测评，以及对参数优化过程进行讨论。
 
 \section{理论背景}
 
 \subsection{GLPT2 的理论框架}
+\label{sec.2.glpt2-theory}
 
 目前的双杂化泛函，大多数选用 GLPT2 作为其理论框架的支撑依据。我们也将使用 GLPT2 作为理论基础，并对此作简要的讨论。
 
@@ -69,6 +70,7 @@
 这里 $E_\mathrm{c}^\mathrm{MP2}$ 是指基于 Kohn-Sham 波函数所给出的 MP2 相关能。
 
 \subsection{GLPT2 与双杂化泛函}
+\label{sec.2.glpt2-dh}
 
 现在回到近似泛函的问题上。上一小节通过分析给出了 Kohn-Sham 相关能泛函与 MP2 相关能，在 $\mathcal{W}_{\mathrm{c}, \lambda} [\rho]$ 关于 $\lambda$ 接近线性、以及 $\hat v_\mathrm{x}^\mathrm{NL} - v_\mathrm{x}$ 算符效果接近于零的假设下，是非常相似的结论；即 $E_\mathrm{c} [\rho] \simeq E_\mathrm{GL}^{(2)} \simeq E_\mathrm{c}^\mathrm{MP2}$。当然现实情况下，$\mathcal{W}_{\mathrm{c}, \lambda} [\rho]$ 关于 $\lambda$ 并非严格线性，因此上述近似一般不能直接使用；但将 $E_\mathrm{c}^\mathrm{MP2}$ 作为杂化项掺入泛函，仍然是有所帮助的。这就构成了一般的 MP2 型双杂化泛函。但 MP2 相关能仅仅是最初步的其中一种引入 G\"orling-Levy 微扰方式；从具体实现上，如何引入 G\"orling-Levy 微扰、引入多大程度的近似能得到较精确地结果，都是值得讨论的话题。
 
@@ -125,12 +127,14 @@
 \begin{equation*}
   c_\mathrm{c} + c_\mathrm{c}^\text{low-rung} \leqslant 1 \quad \text{(conjecture)}
 \end{equation*}
-事实上，在 xDH@B3LYP 模型下的诸多泛函的优化结果印证了这个结论\cite{Zhang-Xu.JPCL.2021}。因此，要求 $c_\mathrm{c}, c_\mathrm{c}^\mathrm{low-rung}$ 等相关能参数之和小于 1，是其中一种引入 GLPT2 相关能以构造双杂化泛函的限制条件。
+事实上，在 xDH@B3LYP 模型下的诸多泛函的优化结果印证了这个结论\cite{Zhang-Xu.JPCL.2021}。因此，要求 $c_\mathrm{c}, c_\mathrm{c}^\text{low-rung}$ 等相关能参数之和小于 1，是其中一种引入 GLPT2 相关能以构造双杂化泛函的限制条件。
 
 同时，G\"orling-Levy 微扰理论本身是类似于波函数方法、通过微扰阶数增加而逐步逼近真实泛函的理论框架；因为微扰阶数的增加会导致计算资源的巨量消耗，现在的密度泛函近似避免使用更高阶的 G\"orling-Levy 微扰相关能而仅考虑 GLPT2。但注意到波函数理论中存在一些近似方法：它们在 M\o{}ller-Plesset 微扰或耦合簇理论的框架下，基于较低阶的近似，引入一部分计算量较小的高阶贡献。对应于 MP2 的计算消耗，介于 MP2 到 CCSD 的经典波函数方法有 IEPA\cite{Sinanoǧlu-Sinanoǧlu.ACP.1964, Nesbet-Nesbet.ACP.1965}、MP2/cr\cite{Dykstra-Davidson.IJQC.2000}、CC2\cite{Christiansen-Joergensen.CPL.1995} 等。在下一节中，我们将会回顾 IEPA 与 MP2/cr 方法，并表明这类方法的相关能将大于 MP2 的相关能。由于 GLPT2 相关能通常近似为基于 Kohn-Sham 轨道行列式的 MP2 相关能，而 GLPT2 相关能相对于真实体系的相关能 $E_\mathrm{c, \lambda=1}$ 总是负误差；同时，由于 G\"orling-Levy 微扰中包含 $\hat V_\mathrm{ee}$ 算符，因而一部分表达式预期与 M\o{}ller-Plesset 微扰有着同样的结构，在能量计算中引入高阶的基于 Kohn-Sham 轨道行列式的 M\o{}ller-Plesset 微扰能量是合理的；因此，在双杂化泛函近似中引入 IEPA 或 MP2/cr 等相关能，预期一定程度上可以化解 GLPT2 的负误差，并且是理论上合理的。
 
-\section{理论背景：电子对方法}
-\label{sec.2.iepa-theory}
+\subsection{电子对方法}
+\label{sec.3.ep}
+
+本工作考虑的 IEPA 方法与 MP2/cr 方法，从计算过程而言，都是基于占据电子成对效应而实现；因此我们统称这两类方法为电子对或 EP 方法。在将这类电子对方法引入密度泛函前，这里将在波函数理论下，介绍电子对方法的部分理论基础与性质。
 
 若参考态为 Hartree-Fock 基态 $| 0 \rangle$，且依据 Brillouin 定理的推论认为在 Fock 算符下的一次激发态可以近似忽略，那么真实的、含有相关效应的波函数可以写为
 \begin{equation}
@@ -145,11 +149,11 @@
 在本工作中，我们涉及的电子对方法是 IEPA 及其变种 sIEPA、以及 MP2/cr。大体来说，这些方法可以通过精确的方法一步一步近似得到。依照精度与计算消耗从大到小的排序，
 \begin{itemize}[nosep]
   \item \textbf{Full-CI。}该方法将所有基于 Fock 算符下基态下的激发态作为变分空间，对分子体系的 Hamilton 算符 $\hat H$ 求取变分极小。在有限基组下，若不考虑溶剂化、分子振动、精细光谱以及其它实验化学影响下，该方法是最精确的计算化学方法；
-  \item \textbf{CCD}\cite{Coester-Coester.NPB.1958, Coester-Kuemmel.NPB.1960, Cizek-Cizek.JCP.1966, Cizek-Paldus.IJQC.1971}\textbf{。}将高次 Hartree-Fock 激发态 (在 Fock 算符下的激发) 近似为二次簇算符的耦合。该方法满足正交不变性 (unitary invariance) 与大小延展性 (size extensivity) 等重要的物理条件，且计算精度相对较高；但需要多次 $O(n_\mathrm{occ}^2 n_\mathrm{vir}^4)$ 复杂度的计算、且内存资源消耗巨大。
+  \item \textbf{CCD}\cite{Coester-Coester.NPB.1958, Coester-Kuemmel.NPB.1960, Cizek-Cizek.JCP.1966, Cizek-Paldus.IJQC.1971}\textbf{。}将高次 Hartree-Fock 激发态 (在 Fock 算符下的激发) 近似为二次簇算符的耦合。该方法满足正交不变性与大小延展性等重要的物理条件，且计算精度相对较高；但需要多次 $O(n_\mathrm{occ}^2 n_\mathrm{vir}^4)$ 复杂度的计算、且内存资源消耗巨大。
   \item \textbf{CEPA}\cite{Ahlrichs-Ahlrichs.CPC.1979}\textbf{。}将 CCD 簇算符系数方程中的部分项近似为零，以对计算过程中复杂度为 $O(n_\mathrm{occ}^2 n_\mathrm{vir}^4)$ 的巨量计算与内存消耗的项作非占轨道的解耦，从而仅耦合占据电子对。该方法以牺牲一定的精度与正交不变性为代价，换取计算效率的改善、并仍然保证大小延展性的性质。由于解耦非占轨道的方式不唯一，CEPA 存在四种不同的近似形式。
-  \item \textbf{CPF}\cite{Ahlrichs-Ehrhardt.JCP.1985}\textbf{。}该方法是基于 CID (\underline{C}onfiguration \underline{I}nteraction \underline{D}oubles) 的改善。CPF 方法中，变分所涉及到的分母不同于波函数归一化量 $\langle \Psi | \Psi \rangle$，而是电子对的相关波函数的归一化量。该方法也具有大小延展性，且与 CEPA(1) 方法有所联系。
+  \item \textbf{CPF}\cite{Ahlrichs-Ehrhardt.JCP.1985}\textbf{。}该方法是基于 CID 的改善。CPF 方法中，变分所涉及到的分母不同于波函数归一化量 $\langle \Psi | \Psi \rangle$，而是电子对的相关波函数的归一化量。该方法也具有大小延展性，且与 CEPA(1) 方法有所联系。
   \item \textbf{IEPA}\cite{Sinanoǧlu-Sinanoǧlu.ACP.1964, Nesbet-Nesbet.ACP.1965}\textbf{。}以 CEPA(2) 为基础，进一步地解耦成对占据轨道。
-  \item \textbf{MP2/cr}\cite{Dykstra-Davidson.IJQC.2000}\textbf{。}以 CPF 方法为基础，忽略部分残差项近似而来。亦可以 CEPA(1) 为基础，通过激进近似给出。
+  \item \textbf{MP2/cr}\cite{Dykstra-Davidson.IJQC.2000}\textbf{。}以 CPF 为基础，忽略部分残差项近似而来。亦可以 CEPA(1) 为基础，通过激进的近似给出。
   \item \textbf{MP2}\cite{Moeller-Plesset.PR.1934}\textbf{。}对于所有上述涉及到的方法，在求取激发系数 $t_{ij}^{ab}$ 时忽略所有二阶及以上的微扰项、或在求取相关能时忽略所有三阶及以上的微扰项。
 \end{itemize}
 
@@ -169,10 +173,12 @@
 
 对于 MP2/cr 方法，它相对于 MP2 方法而言，电子对相关能缩放了一个比例 $N_{ij}$：
 \begin{equation}
+  \label{eq.2.eij-MP2cr}
   e_{ij} = \frac{1}{2} \sum_{ab} \frac{1}{N_{ij}} \frac{|\langle ij || ab \rangle|^2}{D_{ij}^{ab}} \quad \text{(MP2/cr)}
 \end{equation}
 其中，比例系数定义为
 \begin{equation}
+  \label{eq.2.Nij-MP2cr}
   N_{ij} = 1 + \frac{1}{2} \sum_{kab} \big( (t_{ik}^{ab})^2 + (t_{jk}^{ab})^2 \big) \quad \text{(MP2/cr)}
 \end{equation}
 从程序实现的角度，MP2/cr 与 MP2 方法一样，可以一次性地给出电子对能量。对于 HOMO/LUMO gap 较小的体系，由于置于分母中的比例系数 $N_{ij}$ 中包含较大的激发张量平方 $(t_{ij}^{ab})^2$，因此也可以避免 $e_{ij}$ 过快地区域负无穷大的趋势。该方法同样在分子解离曲线上，相比于 MP2 有更好的表现\cite{Dykstra-Davidson.IJQC.2000}。
@@ -900,6 +906,169 @@ XYG6+1 模型尽管对以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为代表的 HOMO/LUMO
 \end{figure}
 
 \newpage
+
+\section{附录：电子对方法不具有正交不变性的说明}
+
+对分子轨道的正交变换，会使得 Hartree-Fock 参考态对应分子轨道基的 Fock 矩阵并非对角矩阵。与 MP2 方法不同，本工作所考虑的电子对方法 MP2/cr 与 IEPA，其定义须基于正则 Hartree-Fock 轨道。因此，从定义上，MP2/cr 与 IEPA 方法等电子对方法，无法对非正则 Hartree-Fock 作计算，故而不存在正交不变性。
+
+但是，对于正则 Hartree-Fock 能级简并的分子轨道，正交变换后的分子轨道仍然是正则的。对于这类情形，我们将作简单的讨论与分析，并将表明本工作所考虑的电子对方法 (MP2/cr、IEPA) 依情况并非正交不变；同时，因简并分子轨道正交变换而导致的能量变化不严重。由于从表达式上，sIEPA 与 IEPA 具有相似的形式；因此，若 IEPA 并非正交不变，那么容易知道 sIEPA 也同样并非正交不变。
+
+这一小节的讨论将基于自旋轨道。
+
+\subsection{MP2/cr 方法在完全分离体系下的正交变换不变性}
+
+对于完全分离体系，即距离无穷远的分子 $A$ 与分子 $B$ 的复合物 $AB$，严格的复合物电子对方法相关能 $E_\mathrm{c} (AB)$ 等于两个单体分子的能量之和 $E_\mathrm{c} (A) + E_\mathrm{c} (B)$。该性质在本工作中称为大小一致性。特别地，若 $A$ 与 $B$ 体系完全等价，那么就会因为完全分离的体系而产生成对的简并轨道，这些简并轨道的能量与单体 $A$ 或 $B$ 的轨道能量一致；在这些简并轨道的正交变换下，电子对相关能应当是不变的。
+
+作为近似的相关能计算方法，对于这类完全分离体系问题，在 M{\o}ller-Plesset 微扰收敛的前提下，MP2 是大小一致且正交变换不变的\cite{Szabo-Ostlund.Dover.1996, Shavitt-Bartlett.Cambridge.2009}；而 IEPA 方法依占据轨道的选取并非正交不变 (因此不是严格的大小一致)，但仍然是大小可延展的\cite{Szabo-Ostlund.Dover.1996, Zhang-Scheffler.NJP.2016}，即随着分离体系中的独立子体系的增多、相关能大致线性地增加。
+
+这一小节将表明，对于 $A$ 与 $B$ 完全等价的情形，在特定的局域基下，它们构成的完全分离体系的复合物 $AB$ 的 MP2/cr 方法相关能 $E_\mathrm{c}^\textmt{MP2/cr} (AB)$ 确实等于单体相关能之和 $E_\mathrm{c}^\textmt{MP2/cr} (A) + E_\mathrm{c}^\textmt{MP2/cr} (B)$。同时，在假定 $A, B$ 分子各自没有简并的占据轨道情形下，复合物 $AB$ 的一对占据简并轨道正交变换下能量不变。
+
+\subsubsection{MP2/cr 方法因完全分离体系而简并的轨道下正交不变性}
+
+令 $i, j, \cdots$ 与 $a, b, \cdots$ 为\textbf{单体} $A$ 或 $B$ 的占据与未占轨道。使用下角标 $A$ 与 $B$ 以区分轨道所在的分离单体。对于复合物 $AB$，若其分子轨道基选取为 $i_A, j_A, \cdots, \allowbreak a_A, b_A, \allowbreak i_B, j_B, \cdots, \allowbreak a_B, b_B$，则称其为\textbf{局域基}。由于 $A$ 与 $B$ 完全分离，因此局域基是 Hartree-Fock 的正则轨道。
+
+为简化记号表述，这里省去成对电子能量 $e_{ij}^\textmt{MP2/cr}$ 与相关能 $E_\mathrm{c}^\textmt{MP2/cr}$ 的上标 $\textmt{MP2/cr}$。
+
+对于分子 $A$ 上的占据轨道 $l_A$ 与分子 $B$ 上的占据轨道 $l_B$，定义正交变换后的分子轨道 $\mathscr{l}_1$ 与 $\mathscr{l}_2$ 为
+\begin{align}
+  \label{eq.2.invariance-general}
+  \begin{aligned}
+    \mathscr{l}_1 &= \cos(\theta) l_A - \sin(\theta) l_B \\
+    \mathscr{l}_2 &= \sin(\theta) l_A + \cos(\theta) l_B
+  \end{aligned}
+\end{align}
+我们称 $\theta$ 为正交变换相位。特别地，在该段落中，我们仅对 $\theta = - \pi/4$ 的情形作讨论：
+\begin{align}
+  \label{eq.2.invariance-specific}
+  \mathscr{l}_1 = \frac{1}{\sqrt{2}} (l_A + l_B), \quad \mathscr{l}_2 = \frac{1}{\sqrt{2}} (l_A - l_B)
+\end{align}
+除了 $l_A$ 与 $l_B$ 轨道作正交变换外，其余轨道均与局域基相同。这里称其为\textbf{离域基}。
+
+首先简要表明 MP2/cr 方法在局域基下是大小一致的。简记分子轨道基的 ERI 张量 $\langle ij | ab \rangle$ 为 $g_{ij}^{ab}$，则对于分离的单体而言，对应式 (\ref{eq.2.eij-MP2cr})，成对电子 $ij$ 的相关能为
+\begin{equation*}
+  e_{ij} = \frac{1}{2} \sum_{ab} \frac{1}{N_{ij}} \frac{\big( g_{ij}^{ab} - g_{ij}^{ba} \big)^2}{D_{ij}^{ab}} = \frac{1}{2} \sum_{ab} \frac{1}{N_{ij}} \big( t_{ij}^{ab} \big)^2 D_{ij}^{ab}
+\end{equation*}
+MP2 激发张量 $t_{ij}^{ab}$ 是
+\begin{equation*}
+  t_{ij}^{ab} = \frac{g_{ij}^{ab} - g_{ij}^{ba}}{D_{ij}^{ab}}
+\end{equation*}
+MP2/cr 缩放比例 $N_{ij}$ 定义式在 (\ref{eq.2.Nij-MP2cr}) 已有表述。
+
+对于复合物 $AB$ 的局域基，首先注意到 ERI 张量中，若有轨道分属于不同的原子，那么该张量元的值为零；即仅有类似于 $g_{i_A j_A}^{a_A b_A}$ 或 $g_{i_B j_B}^{a_B b_B}$ 的元素非零。可以得知的推论是，MP2 激发张量也仅有类似于 $t_{i_A j_A}^{a_A b_A}$ 或 $t_{i_B j_B}^{a_B b_B}$ 的元素非零；进而
+\begin{gather*}
+  N_{i_A j_A} = N_{i_B j_B} = N_{ij}, \quad N_{i_A j_B} = N_{i_A j_B} = 0 \quad (\forall i, j) \\
+  e_{i_A j_A} = e_{i_B j_B} = e_{ij}, \quad e_{i_A j_B} = e_{i_A j_B} = 0 \quad (\forall i, j) \\
+  E_\mathrm{c} (AB) = \frac{1}{2} \sum_{i_A j_A} e_{i_A j_A} + \frac{1}{2} \sum_{i_B j_B} e_{i_B j_B} = \sum_{ij} e_{ij} = E_\mathrm{c} (A) + E_\mathrm{c} (B) \quad \text{(localized basis)}
+\end{gather*}
+因此容易表明，MP2/cr 在局域基下是大小一致的。
+
+随后需要说明 MP2/cr 在离域基下的相关能与局域基是相同的。首先，$l_A$ 与 $l_B$ 的轨道能均为 $\varepsilon_l$；因此，对这两根轨道的正交变换后，得到的 $\mathscr{l}_1$ 与 $\mathscr{l}_2$ 轨道能仍然有
+\begin{equation*}
+  \varepsilon_{\mathscr{l}_1} = \varepsilon_{\mathscr{l}_2} = \varepsilon_l
+\end{equation*}
+对于离域基，占据轨道中并非 $\mathscr{l}_1$ 与 $\mathscr{l}_2$ 的部分，其结果与局域基完全一致；这部分的结果显然是相等的。因此，我们仅讨论涉及 $\mathscr{l}_1$ 与 $\mathscr{l}_2$ 的部分。对于 ${i_A \mathscr{l}_1}$ 电子对的情形 ($\forall i \neq l$)，注意到对于 $\forall a, b$，
+\begin{align*}
+  g_{i_A \mathscr{l}_1}^{a_A b_A} &= \frac{1}{\sqrt{2}} g_{i_A l_A}^{a_A b_A} + \frac{1}{\sqrt{2}} g_{i_A l_B}^{a_A b_A} = \frac{1}{\sqrt{2}} g_{il}^{ab} \\
+  t_{i_A \mathscr{l}_1}^{a_A b_A} &= \frac{1}{\sqrt{2}} \frac{g_{i_A l_A}^{a_A b_A} - g_{i_A l_A}^{b_A a_A}}{D_{il}^{ab}} = \frac{1}{\sqrt{2}} t_{il}^{ab}
+\end{align*}
+对于 $g_{i_A \mathscr{l}_2}^{a_A b_A}$ 与 $t_{i_A \mathscr{l}_2}^{a_A b_A}$ 有同样的结论。对于 $\mathscr{l}_1 \mathscr{l}_2$ 电子对的情形，注意到 ERI 张量的对称性 $g_{l_A l_A}^{a_A b_A} = g_{l_A l_A}^{b_A a_A}$，因此
+\begin{align*}
+  g_{\mathscr{l}_1 \mathscr{l}_2}^{a_A b_A} &= \frac{1}{2} g_{l_A l_A}^{a_A b_A} \\
+  t_{\mathscr{l}_1 \mathscr{l}_2}^{a_A b_A} &= \frac{1}{2} \frac{g_{l_A l_A}^{a_A b_A} - g_{l_A l_A}^{b_A a_A}}{D_{il}^{ab}} = 0
+\end{align*}
+对于分子 $B$ 的情况也是类似的：
+\begin{gather*}
+  t_{i_B \mathscr{l}_1}^{a_B b_B} = - t_{i_B \mathscr{l}_2}^{a_B b_B} = \frac{1}{\sqrt{2}} t_{ij}^{ab} , \quad
+  t_{\mathscr{l}_1 \mathscr{l}_2}^{a_B b_B} = 0
+\end{gather*}
+
+因此，对于 $\forall i, j \neq l$，
+\begin{align*}
+  N_{i_A j_A} &= 1 + \frac{1}{2} \sum_{\substack{k_A \neq l_A \\ a_A b_A}} \left( \big( t_{i_A k_A}^{a_A b_A} \big)^2 + \big( t_{j_A k_A}^{a_A b_A} \big)^2 \right) \\
+  &\quad + \frac{1}{2} \left( \big( t_{i_A \mathscr{l}_1}^{a_A b_A} \big)^2 + \big( t_{i_A \mathscr{l}_2}^{a_A b_A} \big)^2 + \big( t_{j_A \mathscr{l}_1}^{a_A b_A} \big)^2 + \big( t_{j_A \mathscr{l}_2}^{a_A b_A} \big)^2 \right) \\
+  &= 1 + \frac{1}{2} \sum_{\substack{k \neq l \\ ab}} \left( \big( t_{ik}^{ab} \big)^2 + \big( t_{jk}^{ab} \big)^2 \right) \\
+  &\quad + \frac{1}{2} \left( \frac{1}{2} \big( t_{il}^{ab} \big)^2 + \frac{1}{2} \big( t_{il}^{ab} \big)^2 + \frac{1}{2} \big( t_{jl}^{ab} \big)^2 + \frac{1}{2} \big( t_{jl}^{ab} \big)^2 \right) \\
+  &= 1 + \frac{1}{2} \sum_{kab} \left( \big( t_{ik}^{ab} \big)^2 + \big( t_{jk}^{ab} \big)^2 \right) \quad \text{(delocalized basis)}
+\end{align*}
+即对于 $\forall i, j \neq l$，缩放系数 $N_{i_A j_A}$ 不论是局域基还是离域基下，结果均相同。因此，可以证明成对电子 $i_A j_A$ 相关能也是一致的：
+\begin{equation*}
+  e_{i_A j_A} = \frac{1}{2} \sum_{ab} \frac{1}{N_{i_A j_A}} \big( t_{i_A j_A}^{a_A b_A} \big)^2 D_{ij}^{ab} = \frac{1}{2} \sum_{ab} \frac{1}{N_{ij}} \big( t_{ij}^{ab} \big)^2 D_{ij}^{ab} = e_{ij} \quad \text{(delocalized basis)}
+\end{equation*}
+上述结论对于分子 $B$ 同理。
+
+对于 $\forall i \neq l$，首先注意到 MP2 激发张量中，相同占据轨道的元素是零，举例而言即 $t_{i_A i_A}^{a_A b_A} = 0$ 或 $t_{\mathscr{l}_1 \mathscr{l}_1}^{a_A b_A} = 0$ ($\forall i, a, b$)；但同时需要注意到，回顾式 (\ref{eq.2.Nij-MP2cr})，对于 $AB$ 复合物而言，被求和的指标包括 $A$ 分子与 $B$ 分子的所有轨道，因此
+\begingroup
+\allowdisplaybreaks
+\begin{align*}
+  N_{i_A \mathscr{l}_1} &= 1 + \frac{1}{2} \sum_{\substack{k_A \neq l_A \\ a_A b_A}} \big( t_{i_A k_A}^{a_A b_A} \big)^2 + \frac{1}{2} \big( t_{i_A \mathscr{l}_1}^{a_A b_A} \big)^2 + \frac{1}{2} \big( t_{i_A \mathscr{l}_2}^{a_A b_A} \big)^2 \\
+  &\quad + \frac{1}{2} \sum_{\substack{k_A \neq l_A \\ a_A b_A}} \big( t_{\mathscr{l}_1 k_A}^{a_A b_A} \big)^2 + \frac{1}{2} \sum_{\substack{k_B \neq l_B \\ a_B b_B}} \big( t_{\mathscr{l}_1 k_B}^{a_B b_B} \big)^2 + \frac{1}{2} \big( t_{\mathscr{l}_1 \mathscr{l}_1}^{a_A b_A} \big)^2 + \frac{1}{2} \big( t_{\mathscr{l}_1 \mathscr{l}_2}^{a_A b_A} \big)^2 \\
+  &= 1 + \frac{1}{2} \sum_{\substack{k \neq l \\ ab}} \big( t_{ik}^{ab} \big)^2 + \frac{1}{4} \big( t_{il}^{ab} \big)^2 + \frac{1}{4} \big( t_{il}^{ab} \big)^2 \\
+  &\quad + \frac{1}{4} \sum_{\substack{k \neq l \\ ab}} \big( t_{lk}^{ab} \big)^2 + \frac{1}{4} \sum_{\substack{k \neq l \\ ab}} \big( t_{lk}^{ab} \big)^2 + 0 + 0 \\
+  &= 1 + \frac{1}{2} \sum_{kab} \left( \big( t_{ik}^{ab} \big)^2 + \big( t_{lk}^{ab} \big)^2 \right) \quad \text{(delocalized basis)}
+\end{align*}
+\endgroup
+因此，对于 $\forall i \neq l$，缩放系数离域基下的 $N_{i_A \mathscr{l}_1}$ 与局域基下的 $N_{i_A l_A}$ 的结果、或者 $A$ 或 $B$ 单体的 $N_{ij}$ 相等。因此，
+\begin{equation*}
+  e_{i_A \mathscr{l}_1} = \sum_{a_A b_A} \frac{1}{N_{i_A \mathscr{l}_1}} \big( t_{i_A \mathscr{l}_1}^{a_A b_A} \big)^2 D_{il}^{ab} = \frac{1}{2} \sum_{ab} \frac{1}{N_{il}} \big( t_{il}^{ab} \big)^2 D_{il}^{ab} = \frac{1}{2} e_{il} \quad \text{(delocalized basis)}
+\end{equation*}
+从而，离域基下的成对电子能 $e_{i_A \mathscr{l}_1}$ 是单个分子的 $e_{il}$ 的一半。类似地可以表明，离域基下，
+\begin{equation*}
+  e_{i_A \mathscr{l}_2} = e_{i_B \mathscr{l}_1} = e_{i_B \mathscr{l}_2} = \frac{1}{2} e_{il} \quad \text{(delocalized basis)}
+\end{equation*}
+
+对于离域基下的占据电子对 $\mathscr{l}_1 \mathscr{l}_2$，注意到先前已表明 $t_{\mathscr{l}_1 \mathscr{l}_2}^{a_B b_B} = 0$ ($\forall a, b$)，因此容易知道 $e_{\mathscr{l}_1 \mathscr{l}_2} = 0$。
+
+因此，可以推知离域基下，复合物 $AB$ 的 MP2/cr 相关能为
+\begin{align*}
+  E_\mathrm{c} (AB) &= \frac{1}{2} \sum_{i_A j_A \neq l_A} e_{i_A j_A} + \sum_{i_A \neq l_A} \big( e_{i_A \mathscr{l}_1} + e_{i_A \mathscr{l}_2} \big) \\
+  &\quad + \frac{1}{2} \sum_{i_B j_B \neq l_B} e_{i_B j_B} + \sum_{i_B \neq l_B} \big( e_{i_B \mathscr{l}_1} + e_{i_B \mathscr{l}_2} \big) + e_{\mathscr{l}_1 \mathscr{l}_2} \\
+  &= \frac{1}{2} \sum_{ij \neq l} e_{ij} + \sum_{i \neq l} e_{il} \\
+  &\quad + \frac{1}{2} \sum_{ij \neq l} e_{ij} + \sum_{i \neq l} e_{il} + 0 \\
+  &= \sum_{ij} e_{ij} = E_\mathrm{c} (A) + E_\mathrm{c} (B) \quad \text{(delocalized basis)}
+\end{align*}
+该离域基下的复合物 $AB$ 相关能与 $A$、$B$ 单体的相关能之和完全相等。
+
+上述讨论表明，尽管离域基与局域基并不等价；但复合物 $AB$ 的能量，在相同能级轨道的式 (\ref{eq.2.invariance-specific}) 定义下的正交变换下是不变的。
+
+尽管我们仅仅针对式 (\ref{eq.2.invariance-specific}) 的特殊情况，作正交不变性的说明；但可以预期，若针对因等同分离体系而简并的占据或非占轨道，作式 (\ref{eq.2.invariance-general}) 下各种角度 $\theta$ 的正交变换，相关能 $E_\mathrm{c} (AB)$ 仍然不变。
+
+\subsubsection{接近完全分离体系的正交变换误差数值表现}
+
+这部分计算使用 cc-pVDZ 基组，程序使用 \textsc{PySCF} 与 \textsc{dh}。与式 (\ref{eq.2.invariance-general}) 相同地，对于两个独立体系 $A$ 与 $B$，构造轨道 $\mathscr{i}_1, \mathscr{i}_2$ 为分子轨道 $i_A, i_B$ 的线性组合
+\begin{align*}
+  \mathscr{i}_1 &= \cos(\theta) i_A - \sin(\theta) i_B \\
+  \mathscr{i}_2 &= \sin(\theta) i_A + \cos(\theta) i_B
+\end{align*}
+当正交变换相位 $\theta$ 变换到 $\pi/2$ 时，则恰好交换了 $i_A$ 与 $i_B$；因此我们仅需要考察 $\theta \in [0, \pi/2]$ 的区间。由于 MP2 容易被证明、MP2/cr 已经由上文说明在当前的正交变换下是不变的，因此可以预期这两种方法的正交变换误差严格为零。
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.6\textwidth]{assets/invar-sep-Ne.pdf}
+  \caption{距离 100 \AA 的 \ce{Ne2} 的相关能随正交变换相位 $\theta$ 变化产生的误差。}
+  \label{fig.2.invar-sep-Ne}
+\end{figure}
+
+对于原子之间距离 100 \AA 的 \ce{Ne2} 体系，成对电子型相关能 $E_\mathrm{c}^\textmt{EP}$ 依正交变换相位 $\theta$ 的变化情况展示于图 \ref{fig.2.invar-sep-Ne}。对于该体系，100 \AA 的距离可以看作相互没有影响 (复合物 MP2 相关能相比于两个 \ce{Ne} 原子相关能之和的误差是 \num{6e-8} eV，接近于自洽场能量收敛限)。对于该复合物的轨道正交变换，其导致的能量误差不超过 0.005 eV 或 0.1 kcal/mol；这种程度的影响并不是很大。作为比较，CISD 方法尽管是正交不变、但却是大小不可延展的；对于当前体系，距离 100 \AA 的 \ce{Ne2} 体系相关能与两个单独的 \ce{Ne} 原子相关能相差 0.246 eV。
+
+注意到 sIEPA 在两个 \ce{Ne} 原子体系下接近于正交变换不变。这是因为 sIEPA 在 HOMO/LUMO gap 较大的情形下迅速退化到 MP2 (对于当前体系，sIEPA 与 MP2 能量的误差在机器精度即 $2^{-53}$ Hartree 量级)。因此，尽管 sIEPA 与 IEPA 有相似的表达形式、显然不是正交变换不变的，但其误差在 HOMO/LUMO gap 较大时，sIEPA 的正交变换误差会远小于 IEPA。
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.6\textwidth]{assets/invar-sep-N2-1.pdf}
+  \caption{距离 100 \AA 的 \ce{N2} 的相关能随正交变换相位 $\theta$ 变化产生的误差。\ce{N2} 键长为 HF/cc-pVDZ 下平衡键长 1.077 \AA。}
+  \label{fig.2.invar-sep-N2-1}
+\end{figure}
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.6\textwidth]{assets/invar-sep-N2-2.pdf}
+  \caption{距离 100 \AA 的 \ce{N2} 的相关能随正交变换相位 $\theta$ 变化产生的误差。\ce{N2} 键长为 2.0 \AA。}
+  \label{fig.2.invar-sep-N2-2}
+\end{figure}
+
+如 Szabo 与 Ostlund 在 5.1.1 小节中对模型体系的讨论\cite{Szabo-Ostlund.Dover.1996}，影响 IEPA 方法正交变换误差，受轨道能量差与双电子积分的共同影响。其中，轨道能差的影响较为关键；且被变换轨道与分子的 HOMO 或 LUMO 越接近，正交变换的误差就越大。对于两个 \ce{Ne} 原子体系而言，$2p$ 轨道的能级相比于 $2s$ 更高、与 LUMO 能级更接近，因此有更大的正交变换误差。从图 \ref{fig.2.invar-sep-N2-1} 与图 \ref{fig.2.invar-sep-N2-2} 上可以看出，对于两个 \ce{N2} 原子体系，若对其 HOMO 轨道作正交变换，该情形更为明显。当 \ce{N2} 键长较短时，IEPA 的正交变换误差是较小的 $-0.019$ eV；但当 \ce{N2} 键长较长时，IEPA 的正交变换误差是较大的 $-0.635$ eV。同时，键长较长时，由于 HOMO/LUMO gap 也同时较小；因此 sIEPA 不再与 MP2 有相似的数值，从而显现出较大的正交变换误差。
+
+\subsection{因对称性而简并的分子轨道}
 
 \section{附录：电子对方法的前置理论}
 
