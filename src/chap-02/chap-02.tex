@@ -911,9 +911,34 @@ XYG6+1 模型尽管对以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为代表的 HOMO/LUMO
 
 对分子轨道的正交变换，会使得 Hartree-Fock 参考态对应分子轨道基的 Fock 矩阵并非对角矩阵。与 MP2 方法不同，本工作所考虑的电子对方法 MP2/cr 与 IEPA，其定义须基于正则 Hartree-Fock 轨道。因此，从定义上，MP2/cr 与 IEPA 方法等电子对方法，无法对非正则 Hartree-Fock 作计算，故而不存在正交不变性。
 
-但是，对于正则 Hartree-Fock 能级简并的分子轨道，正交变换后的分子轨道仍然是正则的。对于这类情形，我们将作简单的讨论与分析，并将表明本工作所考虑的电子对方法 (MP2/cr、IEPA) 依情况并非正交不变；同时，因简并分子轨道正交变换而导致的能量变化不严重。由于从表达式上，sIEPA 与 IEPA 具有相似的形式；因此，若 IEPA 并非正交不变，那么容易知道 sIEPA 也同样并非正交不变。
+但是，对于正则 Hartree-Fock 能级简并的分子轨道，正交变换后的分子轨道仍然是正则的。此时，IEPA 或 MP2/cr 等电子对方法仍然是可以被定义的；从而，对简并分子轨道的正交变换不变性是可以讨论的。简并轨道可能源于下述四种情况：
+\begin{enumerate}[nosep]
+  \item 距离无穷远的两个完全等价体系产生的成对简并轨道；
+  \item 因分子点群对称性而在二维不可约表示下产生的二重简并轨道；
+  \item 因分子点群对称性而在三维不可约表示下产生的三重简并轨道；
+  \item 偶然的能级简并。
+\end{enumerate}
+对于这些情形，我们将作简单的讨论与分析，并将表明本工作所考虑的电子对方法 (MP2/cr、IEPA) 依情况并非正交不变；同时，因简并分子轨道正交变换而导致的能量变化通常不严重，但也存在正交变换误差大于 0.5 eV 的情形。由于从表达式上，sIEPA 与 IEPA 具有相似的形式；因此，若 IEPA 并非正交不变，那么容易知道 sIEPA 也同样并非正交不变。但由于 sIEPA 引入了 erfc 形式的放缩函数，因此正交变换误差通常小于 IEPA。
 
-这一小节的讨论将基于自旋轨道。
+这一小节的公式推演将基于自旋轨道；数值结果展现将基于闭壳层轨道。一些结论展示于表 \ref{tab.2.invariance-mp2cr-iepa}。该节的数值计算使用 cc-pVDZ 基组，程序使用 \textsc{PySCF} 与 \textsc{dh}。
+
+\begin{table}[!ht]
+\centering
+\caption{MP2/cr 与 IEPA 在不同情形下能级简并轨道间的正交变换不变性}
+\label{tab.2.invariance-mp2cr-iepa}
+\widetabular{
+  \begin{tabular}{cccl}
+  \toprule
+  情形 & MP2/cr & IEPA & 情形描述   \\
+  \midrule
+  1  & 满足 & 不满足 & 无穷远两分子 \\
+  2  & 满足 & 满足 & 二维不可约  \\
+  3  & 满足 & 不满足 & 三维不可约  \\
+  4  & 不满足 & 不满足 & 偶然简并  \\
+  \bottomrule
+  \end{tabular}
+}{}
+\end{table}
 
 \subsection{MP2/cr 方法在完全分离体系下的正交变换不变性}
 
@@ -1034,7 +1059,7 @@ MP2/cr 缩放比例 $N_{ij}$ 定义式在 (\ref{eq.2.Nij-MP2cr}) 已有表述。
 
 \subsubsection{接近完全分离体系的正交变换误差数值表现}
 
-这部分计算使用 cc-pVDZ 基组，程序使用 \textsc{PySCF} 与 \textsc{dh}。与式 (\ref{eq.2.invariance-general}) 相同地，对于两个独立体系 $A$ 与 $B$，构造轨道 $\mathscr{i}_1, \mathscr{i}_2$ 为分子轨道 $i_A, i_B$ 的线性组合
+与式 (\ref{eq.2.invariance-general}) 相同地，对于两个独立体系 $A$ 与 $B$，构造轨道 $\mathscr{i}_1, \mathscr{i}_2$ 为分子轨道 $i_A, i_B$ 的线性组合
 \begin{align*}
   \mathscr{i}_1 &= \cos(\theta) i_A - \sin(\theta) i_B \\
   \mathscr{i}_2 &= \sin(\theta) i_A + \cos(\theta) i_B
@@ -1044,7 +1069,7 @@ MP2/cr 缩放比例 $N_{ij}$ 定义式在 (\ref{eq.2.Nij-MP2cr}) 已有表述。
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=0.6\textwidth]{assets/invar-sep-Ne.pdf}
-  \caption{距离 100 \AA 的 \ce{Ne2} 的相关能随正交变换相位 $\theta$ 变化产生的误差。}
+  \caption{距离 100 \AA 的 \ce{Ne2} 的相关能随正交变换相位 $\theta$ 变化产生的误差。右下角图例表示被正交变换对应的单体分子轨道。该情形下 MP2、MP2/cr、sIEPA 的误差均为零或极其接近零，图上的曲线重合。}
   \label{fig.2.invar-sep-Ne}
 \end{figure}
 
@@ -1055,206 +1080,88 @@ MP2/cr 缩放比例 $N_{ij}$ 定义式在 (\ref{eq.2.Nij-MP2cr}) 已有表述。
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=0.6\textwidth]{assets/invar-sep-N2-1.pdf}
-  \caption{距离 100 \AA 的 \ce{N2} 的相关能随正交变换相位 $\theta$ 变化产生的误差。\ce{N2} 键长为 HF/cc-pVDZ 下平衡键长 1.077 \AA。}
+  \caption{距离 100 \AA 的 \ce{N2} 的相关能随正交变换相位 $\theta$ 变化产生的误差。\ce{N2} 键长为 HF/cc-pVDZ 下平衡键长 1.077 \AA。右下角图例表示被正交变换对应的单体分子轨道。该情形下 MP2、MP2/cr、sIEPA 的误差均为零或极其接近零，图上的曲线重合。}
   \label{fig.2.invar-sep-N2-1}
 \end{figure}
 
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=0.6\textwidth]{assets/invar-sep-N2-2.pdf}
-  \caption{距离 100 \AA 的 \ce{N2} 的相关能随正交变换相位 $\theta$ 变化产生的误差。\ce{N2} 键长为 2.0 \AA。}
+  \caption{距离 100 \AA 的 \ce{N2} 的相关能随正交变换相位 $\theta$ 变化产生的误差。\ce{N2} 键长为 2.0 \AA。右下角图例表示被正交变换对应的单体分子轨道。该情形下 MP2、MP2/cr 的误差均为零，图上的曲线重合。}
   \label{fig.2.invar-sep-N2-2}
 \end{figure}
 
-如 Szabo 与 Ostlund 在 5.1.1 小节中对模型体系的讨论\cite{Szabo-Ostlund.Dover.1996}，影响 IEPA 方法正交变换误差，受轨道能量差与双电子积分的共同影响。其中，轨道能差的影响较为关键；且被变换轨道与分子的 HOMO 或 LUMO 越接近，正交变换的误差就越大。对于两个 \ce{Ne} 原子体系而言，$2p$ 轨道的能级相比于 $2s$ 更高、与 LUMO 能级更接近，因此有更大的正交变换误差。从图 \ref{fig.2.invar-sep-N2-1} 与图 \ref{fig.2.invar-sep-N2-2} 上可以看出，对于两个 \ce{N2} 原子体系，若对其 HOMO 轨道作正交变换，该情形更为明显。当 \ce{N2} 键长较短时，IEPA 的正交变换误差是较小的 $-0.019$ eV；但当 \ce{N2} 键长较长时，IEPA 的正交变换误差是较大的 $-0.635$ eV。同时，键长较长时，由于 HOMO/LUMO gap 也同时较小；因此 sIEPA 不再与 MP2 有相似的数值，从而显现出较大的正交变换误差。
+如 Szabo 与 Ostlund 在 5.1.1 小节中对模型体系的讨论\cite{Szabo-Ostlund.Dover.1996}，影响 IEPA 方法正交变换误差，受轨道能量差与双电子积分的共同影响。其中，轨道能差的影响较为关键；且被变换轨道与分子的 HOMO 或 LUMO 越接近，正交变换的误差就越大。对于两个 \ce{Ne} 原子体系而言，$2p$ 轨道的能级相比于 $2s$ 更高、与 LUMO 能级更接近，因此有更大的正交变换误差。从图 \ref{fig.2.invar-sep-N2-1} 与图 \ref{fig.2.invar-sep-N2-2} 上可以看出，对于两个 \ce{N2} 原子体系，若对其 HOMO 轨道 ($1 \symup{\Pi}_u$) 作正交变换，该情形更为明显。当 \ce{N2} 键长较短时，IEPA 的正交变换误差是较小的 $-0.019$ eV；但当 \ce{N2} 键长较长时，IEPA 的正交变换误差是较大的 $-0.635$ eV。同时，键长较长时，由于 HOMO/LUMO gap 也同时较小；因此 sIEPA 不再与 MP2 有相似的数值，从而显现出较大的正交变换误差。
 
-\subsection{因对称性而简并的分子轨道}
+\subsection{因点群对称性而简并的轨道下正交不变性}
 
-\section{附录：电子对方法的前置理论}
+\subsubsection{MP2/cr 该情形下正交不变性的简要说明}
 
-\subsection{组态相互作用方法 CI}
+MP2/cr 方法在数值计算结果上，对于因点群对称性而简并的轨道，显现出正交不变性。这里对 MP2/cr 方法在该情形下的正交不变性作不严格的说明。
 
-电子对方法来源于精确波函数方法的近似。这里将简要地回顾两类典型的波函数方法：组态相互作用方法 CI 与耦合簇方法 CC。
-
-Hartree-Fock 参考态与 Hartree-Fock 算符下的激发态所构成的函数空间，可以认为是完备的多电子波函数。CI 方法的思路是在这个完备的函数空间下，对分子体系的Hamilton 算符 $\hat H$ 求取变分极小以获得基态能量。若 Hartree-Fock 基态记为 $| 0 \rangle$\footnote{出于讨论简化，仅考虑 Hartree-Fock 基态非简并的情形，且所有占据、非占轨道相互正交 (即满足 canonical Hartree-Fock 条件)。}、占据轨道角标为 $i, j, k, l, \cdots$、非占轨道角标为 $a, b, c, d, \cdots$，那么 Hartree-Fock 算符下的激发态可以表示为
-\begin{equation}
-  | {}_{ijk\cdots}^{abc\cdots} \rangle = a_a^\dagger a_b^\dagger a_c^\dagger \cdots a_k a_j a_i | 0 \rangle
-\end{equation}
-上式中的 $a_i$ 与 $a_a^\dagger$ 分别代表对占据轨道 $i$ 的湮灭算符与对非占轨道 $a$ 的生成算符。那么，令 CI 波函数为
-\begin{align}
-  | \Psi^\text{CI} \rangle &= | 0 \rangle + \hat C_1 | 0 \rangle + \hat C_2 | 0 \rangle + \hat C_3 | 0 \rangle + \cdots \notag\\
-  &= | 0 \rangle + \sum_{ia} c_i^a a_a^\dagger a_i | 0 \rangle + \sum_{ijab} c_{ij}^{ab} a_a^\dagger a_b^\dagger a_j a_i | 0 \rangle + \sum_{ijkabc} c_{ijk}^{abc} a_a^\dagger a_b^\dagger a_c^\dagger a_k a_j a_i | 0 \rangle + \cdots \notag\\
-  &= | 0 \rangle + \sum_{ia} c_i^a | {}_i^a \rangle + \sum_{ijab} c_{ij}^{ab} | {}_{ij}^{ab} \rangle  + \sum_{ijkabc} c_{ijk}^{abc} | {}_{ijk}^{abc} \rangle + \cdots
-\end{align}
-其中，上式的 $\hat C_1, \hat C_2, \hat C_3, \cdots$ 表示 Hartree-Fock 算符下的一次、二次、三次等激发算符；$c_i^a, c_{ij}^{ab}, c_{ijk}^{abc}, \cdots$ 为 CI 波函数 $| \Psi^\text{CI} \rangle$ 的变分系数\footnote{记号不严谨。我们经常用 $c_{ij}^{ab}$ 表示所有二次激发系数的集合 $\{ c_{ij}^{ab} \}_{ijab}$；但为表达式简洁，就仅用其中一个系数代表所有激发系数集合。对于一次、三次等其它阶次激发同理。}：
-\begin{equation}
-  \label{eq.2.CI-variation}
-  E_\mathrm{c}^\mathrm{CI} = \min_{c_i^a, c_{ij}^{ab}, c_{ijk}^{abc}, \cdots} \frac{\langle \Psi^\mathrm{CI} | \hat H - E_0 | \Psi^\mathrm{CI} \rangle}{\langle \Psi^\mathrm{CI} | \Psi^\mathrm{CI} \rangle}
-\end{equation}
-其中，$E_0 = \langle 0 | \hat H | 0 \rangle$ 表示 Hartree-Fock 基态能量。
-
-若将所有 Hartree-Fock 的激发态系数纳入变分计算，则称为 Full-CI 方法。Full-CI 的计算量为大约是基函数的阶乘 $O(C_{n_\mathrm{basis}}^{n_\mathrm{occ}})$，对于实际分子体系是不可接受的。如果不考虑三次或以上 Hartree-Fock 激发态，那么该方法称为 CISD；若进一步地，由 Brillouin 定理的推论，单次和三次 Hartree-Fock 激发态对波函数的贡献较小，从而可以将 $c_i^a$ 近似为零，则该方法称为 CID：
-\begin{align}
-  | \Psi^\text{CID} \rangle &= | 0 \rangle + \sum_{ijab} c_{ij}^{ab} | {}_{ij}^{ab} \rangle \\
-  E_\mathrm{c}^\mathrm{CID} &= \min_{c_i^a, c_{ij}^{ab}} \frac{\langle \Psi^\mathrm{CID} | \hat H - E_0 | \Psi^\mathrm{CID} \rangle}{\langle \Psi^\mathrm{CID} | \Psi^\mathrm{CID} \rangle}
-\end{align}
-类似地，若仅考虑贡献较大的二次与四次 Hartree-Fock 激发态，那么该方法称为 CIDQ。这类以排除特定 Hartree-Fock 激发次数的 CI 近似方法称为截断的 CI (Truncated CI)。在后文中，我们经常将二次与四次 Hartree-Fock 激发态记为 $| \chi_\mathrm{D} \rangle$ 与 $| \chi_\mathrm{Q} \rangle$：
-\begin{align}
-  \label{eq.2.ci-chi-d}
-  | \chi_\mathrm{D} \rangle &= \sum_{ijab} c_{ij}^{ab} | {}_{ij}^{ab} \rangle \\
-  \label{eq.2.ci-chi-q}
-  | \chi_\mathrm{Q} \rangle &= \sum_{ijklabcd} c_{ijkl}^{abcd} | {}_{ijkl}^{abcd} \rangle
-\end{align}
-那么，对于 CID 与 CIDQ 近似，式 (\ref{eq.2.CI-variation}) 所表示的变分条件可以转化为下述的本征方程\footnote{记号不严谨。需要注意到，CID 与 CIDQ 的变分条件并不相同，因此 CID 方法下的 $\chi_\mathrm{D}$ 与 CIDQ 方法下的 $\chi_\mathrm{D}$ 的激发系数 $c_{ij}^{ab}$ 并不相同。出于公式的表达简洁，我们不会在 $\chi_\mathrm{D}$ 或 $\chi_\mathrm{Q}$ 上标具体的方法近似。后文的其它波函数近似方法也存在类似记号。}：
-\begin{align}
-  \label{eq.2.CID-eigen}
-  (\hat H - E_0) | 0 + \chi_\mathrm{D} \rangle &= E_\mathrm{c}^\mathrm{CID} | 0 + \chi_\mathrm{D} \rangle \quad \text{(CID)} \\
-  \label{eq.2.CIDQ-eigen}
-  (\hat H - E_0) | 0 + \chi_\mathrm{D} + \chi_\mathrm{Q} \rangle &= E_\mathrm{c}^\mathrm{CIDQ} | 0 + \chi_\mathrm{D} + \chi_\mathrm{Q} \rangle \quad \text{(CIDQ)}
-\end{align}
-
-需要指出，这类截断的 CI 近似能量满足轨道正交变换的不变性 (unitary invariance)，但不满足大小延展性 (size extensivity)。以独立 \ce{He}$_{N}$ 体系为例，CID 相关能随体系中 \ce{He} 原子的数量 $N$ 增加而表现为非线性的渐进性质\cite{Ahlrichs-Ahlrichs.CPC.1979, Szabo-Ostlund.Dover.1996}：
-\begin{equation}
-  E_\mathrm{c}^\mathrm{CID} \propto \sqrt{N}
-\end{equation}
-这意味着，截断的 CI 方法在较大的体系下，其相关能存在非常严重的正误差。而同时，CID 方法的计算量为 $O(n_\mathrm{occ}^2 n_\mathrm{vir}^4)$，即六次方标度，相比于 Hartree-Fock 或 MP2 是非常巨大的计算消耗。因此，这类截断的 CI 方法并非在计算量与精度上有很好的平衡。但同时，CI 理论非常简洁明了，因此它是几乎所有 post-HF 方法的理论基础。
-
-\subsection{耦合簇方法 CC}
-
-CC 理论来源于核物理问题\cite{Coester-Coester.NPB.1958,Coester-Kuemmel.NPB.1960}，而后引入到化学问题中\cite{Cizek-Cizek.JCP.1966, Cizek-Paldus.IJQC.1971}。与 CI 方法针对激发算符 $\hat C_1, \hat C_2, \cdots$ 对应的激发系数 $c_i^a, c_{ij}^{ab}$ 进行变分优化不同，一方面，CC 方法的波函数是通过簇算符给出：
-\begin{gather}
-  \hat T = \hat T_1 + \hat T_2 + \cdots = \sum_{ia} t_i^a a_a^\dagger a_i + \sum_{ij}^{ab} a_a^\dagger a_b^\dagger a_j a_i + \cdots \\
-  | \Psi^\text{CC} \rangle = \mathrm{e}^{\hat T} | 0 \rangle
-\end{gather}
-其中，$\hat T_1, \hat T_2, \cdots$ 表示一次、二次等簇算符，对应的 $t_i^a, t_{ij}^{ab}, \cdots$ 是簇激发系数。簇算符给出波函数的优势是，可以使用低次 CC 簇算符近似高次激发的 CI 激发算符；若 CI 算符与 CC 算符都没有截断，那么
-\begin{alignat}{10}
-  \label{eq.2.compare-ci-cc-operator}
-  \mathrm{e}^{\hat T} &= 1 &&+ \hat T_1 &&+ \frac{1}{2} \hat T_1^2 + \hat T_2 &&+ \frac{1}{6} \hat T_1^3 + \hat T_1 \hat T_2 + \hat T_3 &&+ \frac{1}{24} T_1^4 + \frac{1}{2} \hat T_1^2 \hat T_2 + \hat T_1 \hat T_3 + \frac{1}{2} \hat T_2^2 + \hat T_4 &&+ \cdots \notag\\
-  &= 1 &&+ \hat C_1 &&+ \hat C_2 &&+ \hat C_3 &&+ \hat C_4 &&+ \cdots
-\end{alignat}
-四次激发问题为例，CC 一次、二次的簇算符 $\frac{1}{24} T_1^4 + \frac{1}{2} \hat T_1^2 \hat T_2 + \frac{1}{2} \hat T_2^2$ 往往已经是对 CI 四次激发算符 $\hat C_4$ 比较良好的近似了；忽略 $\hat T_1 \hat T_3 + \hat T_4$ 在数值上误差较小\cite{Si̇nanoglu-Si̇nanoglu.JCP.1962}。因此，在截断到二次簇算符的情况下，CC 理论近似 CCSD 仍然能对 CI 四次激发有较好的估计；但在计算量上，截断到二次簇算符的 CCSD 计算复杂度是 $O(n_\mathrm{occ}^2 n_\mathrm{vir}^4)$ 即六次方复杂度，与 CISD 在复杂度上是一致的。因此，相对于 CISD 而言，CCSD 在同等级的计算量下预期可以达到更高的精度\cite{Cizek-Cizek.JCP.1966, Crawford-Schaefer.RCC.2007}。同时，类如 CCSD 等截断的簇算符方法的展开避免了 CISD 等截断的激发算符方法下大小延展性不能满足的缺陷\cite{Cizek-Cizek.JCP.1966}。
-
-另一方面，目前通常使用的类如 CCSD 等截断的 CC 方法，并非是变分方法。以 CCSD 为例，出于公式简便与计算效益的考量 (在 $\mathrm{e}^{-\hat T} \hat H_\mathrm{N} \mathrm{e}^{\hat T}$ 的 \underline{B}aker-\underline{C}ampbell-\underline{H}ausdorff 展开或称 BCH 展开下关于 $\hat T$ 的阶数不超过四阶)，其求取簇算符系数 $t_i^a, t_{ij}^{ab}$ 的方程为
-\begin{align}
-  \langle {}_i^a | \mathrm{e}^{-\hat T} \hat H_\mathrm{N} \mathrm{e}^{\hat T} | 0 \rangle &= 0 \\
-  \label{eq.2.ccsd-t2amplitude}
-  \langle {}_{ij}^{ab} | \mathrm{e}^{-\hat T} \hat H_\mathrm{N} \mathrm{e}^{\hat T} | 0 \rangle &= 0
-\end{align}
-上式中的 $\hat T$ 是指截断后的簇算符 $\hat T_1 + \hat T_2$；$\hat H_\mathrm{N} = \hat H - E_0$ 是以 Wick 定理在 Fermi 真空态 (Fermi vacuum) 即 $| 0 \rangle$ 为零态的正规 Hamilton 算符\footnote{这里的“正规”是指二次量子化算符的排序。以 Fermi 真空态为基准，定义准生成算符 (quasi-creation operator) 为非占轨道生成算符 $a_a^\dagger, a_b^\dagger, \cdots$ 与占据轨道湮灭算符 $a_i, a_j, \cdots$；定义准湮灭算符 (quasi-annihilation operator) 为非占轨道湮灭算符 $a_a, a_b, \cdots$ 与占据轨道生成算符 $a_i^\dagger, a_j^\dagger, \cdots$。正如湮灭算符对空态 $| \rangle$ 作用下得到零值一样，准湮灭算符作用于 Fermi 真空态 $| 0 \rangle$ 作用下也得到零值。以 Fermi 真空态为基准，二次量子化的正规 (normal) 排序总是将准湮灭算符置于左边、准生成算符置于右边。正规排序的算符使用花括号记号表示；例如 $\{a_i^\dagger a_a^\dagger\} = - a_a^\dagger a_i^\dagger$}；其具体表达式为
-\begin{alignat}{10}
-  \label{eq.2.norm-hamiltonian}
-  \hat H_\mathrm{N} &= \hat F_\mathrm{N} &&+ \hat V_\mathrm{N} \notag\\
-  &= \sum_{pq} f_{pq} \{ a_p^\dagger a_q \} &&+ \sum_{pqrs} g_{pqrs} \{ a_p^\dagger a_q^\dagger a_s a_r \}
-\end{alignat}
-其中，$\hat F_\mathrm{N}$ 与 $\hat V_\mathrm{N}$ 分别是 $\hat H_\mathrm{N}$ 中的单电子与双电子正规算符；$f_{pq}$ 与 $g_{pqrs}$ 分别是 Fock 矩阵元与双电子积分：
-\begin{align}
-  f_{pq} &= \langle p | \hat f | q \rangle \\
-  g_{pqrs} &= \langle pq || rs \rangle
-\end{align}
-截断的 CCSD 方法所给出的能量定义为
-\begin{equation}
-  \label{eq.2.ccsd-energy}
-  E_\mathrm{c}^\mathrm{CCSD} = \langle 0 | \mathrm{e}^{-\hat T} \hat H_\mathrm{N} \mathrm{e}^{\hat T} | 0 \rangle
-\end{equation}
-注意到 $\mathrm{e}^{- \hat T} \neq \mathrm{e}^{\hat T^\dagger}$，该能量并非 CCSD 波函数 $\mathrm{e}^{\hat T} | 0 \rangle$ 对算符 $\hat H_\mathrm{N}$ 的期望，且不是真实基态相关能的上界。
-
-由于截断的 CCSD 方法计算量是 $O(n_\mathrm{occ}^2 n_\mathrm{vir}^4)$ 即六次方复杂度，对于较小的体系可以接受；同时满足正交不变性与大小延展性，测评表明具有很高的精度；因此，CCSD 方法至今仍然是广受欢迎的波函数方法。目前有许多基于 CCSD 方法所开发的其它波函数方法。其中，最有名的波函数方法之一，CCSD(T)，是 CCSD 方法基础上的微扰矫正方法\cite{Raghavachari-Head-Gordon.CPL.1989}；该方法的计算消耗是代价较小的 $O(n_\mathrm{occ}^3 n_\mathrm{vir}^4)$ 即七次方复杂度，而测评误差通常可以达到 1 kcal/mol 左右，被认为是最接近“化学精度”的“金标准”近似方法。
-
-但正由于 CCSD 的计算量与内存资源耗费较大，即使可以应用于数十个原子的体系，通常也需要使用较小的基组避免巨额计算消耗、并使用多节点并行以分散内存资源\cite{Shen-Scheffler.JCTC.2019}；这意味着 CCSD 等耦合簇方法难以应用于大规模高通量计算场景。目前也有以 DLPNO (\underline{D}omain-based \underline{L}ocal \underline{P}air \underline{N}atural \underline{O}rbital) 为代表的较为成功的对 CCSD 或 CCSD(T) 降低计算复杂度的数值近似方法\cite{Riplinger-Neese.JCP.2013, Riplinger-Neese.JCP.2013a, Guo-Neese.JCP.2018}，但这类方法在以 Diels-Alder 反应势垒为代表的一系列计算问题中，仍然存在不可忽略数值误差\cite{Sandler-Ho.JPCA.2021}；因此目前还无法期待数值近似的 CCSD 或 CCSD(T) 方法既有较低计算量又有稳定的数值表现。除此之外，CCSD 的计算结果已经有较好的表现了；因此不论于计算量而言、还是于提升测评精度表现而言，在密度泛函近似中引入 CCSD 级别方法的意义比较有限。
-
-\subsection{CCD 簇算符系数方程}
-
-后续将讨论的众多方法都可以看作对 CCD 簇算符系数方程的近似方法；因此，这里对 CCD 方程作更细致的讨论。在 CCD 近似下，截断的簇算符 $\hat T$ 仅有二次项贡献 $\hat T_2$；其指数展开是
-\begin{align*}
-  \mathrm{e}^{\hat T_2} &= 1 + \hat T_2 + \frac{1}{2} \hat T_2^2 + \frac{1}{6} \hat T_2^3 + \cdots \\
-  \mathrm{e}^{- \hat T_2} &= 1 - \hat T_2 + \frac{1}{2} \hat T_2^2 - \frac{1}{6} \hat T_2^3 + \cdots
-\end{align*}
-在 BCH 展开下，
-\begin{equation}
-  \hat{\mathcal{H}} = \mathrm{e}^{-\hat T_2} \hat H_\mathrm{N} \mathrm{e}^{\hat T_2} = \hat H_\mathrm{N} + [\hat H_\mathrm{N}, \hat T_2] + \frac{1}{2} [[\hat H_\mathrm{N}, \hat T_2], \hat T_2] + \cdots \quad \text{(CCD)}
-\end{equation}
-上式的 $\hat{\mathcal{H}}$ 称为有效 Hamilton 算符。在 CC 图像理论中\footnote{本工作将不详细展开 CC 图像理论，但后续会引用一些图像理论的结论。关于图像理论，主要参考的工作是 Shavitt and Bartlett\cite{Shavitt-Bartlett.Cambridge.2009} 与 Crawford and Schaefer\cite{Crawford-Schaefer.RCC.2007} 的综述。}，BCH 展开后的图像都是相连的 (connected diagram 或 linked diagram)；从而在图像理论下，类似于 $[[\hat H_\mathrm{N}, \hat T_2], \hat T_2]$ 的对易算符可以简化为 $(\hat H_\mathrm{N} \hat T_2^2)_\mathrm{C}$，其中下标 $\mathrm{C}$ 表示该算符所对应的相连图像。
-
-对于 CCD 相关能，依据图形理论，可以知道 $\hat{\mathcal{H}}$ 中仅有 $[\hat H_\mathrm{N}, \hat T_2]$ 对能量计算产生贡献：
-\begin{align}
-  \label{eq.2.ccd-corr-energy}
-  E_\mathrm{c}^\mathrm{CCD} &= \langle 0 | \hat{\mathcal{H}} | 0 \rangle = \langle 0 | [\hat H_\mathrm{N}, \hat T_2] | 0 \rangle \notag\\
-  &= \langle 0 | \hat H_\mathrm{N} \hat T_2 | 0 \rangle - \langle 0 | \hat T_2 \hat H_\mathrm{N} | 0 \rangle = \langle 0 | \hat H_\mathrm{N} \hat T_2 | 0 \rangle \notag\\
-  &= \sum_{ijab} t_{ij}^{ab} \langle ij || ab \rangle \quad \text{(CCD)}
-\end{align}
-其中，上式利用到了 $\langle 0 | \hat T_2 = 0$ 的条件，即激发算符作用在左矢上结果为零\footnote{转换到右矢下的表达是 $\hat T_2^\dagger | 0 \rangle = \sum_{ijab} a_i^\dagger a_j^\dagger a_b a_a | 0 \rangle$；由于涉及到的全部是准湮灭算符，作用在 Fermi 真空态 $| 0 \rangle$ 上为零，因此 $\hat T_2^\dagger | 0 \rangle = 0$。将该式转换到左矢空间自然得到 $\langle 0 | \hat T_2 = 0$。}。从上式中，可以看出 CCD 能量是二次簇算符系数 $t_{ij}^{ab}$ 与 Hamilton 算符在分子轨道空间下的元素 $\langle ij || ab \rangle$ 的乘积总和。事实上，MP2、CEPA、IEPA 等方法都具有类似于上式的相关能表达式；区别仅仅在于系数 $t_{ij}^{ab}$ 的数值如何确定。
-
-进一步考察用于确定 CCD 簇算符系数 $t_{ij}^{ab}$ 的表达式。依据图形理论，可以知道$\hat{\mathcal{H}}$ 中仅有二阶或以下的 $\hat T_2^2$ 算符项对激发算符表达式产生贡献：
-\begin{equation}
-  \label{eq.2.ccd-amplitude-connect}
-  0 = \langle {}_{ij}^{ab} | \hat{\mathcal{H}} | 0 \rangle = \langle {}_{ij}^{ab} | \hat H_\mathrm{N} | 0 \rangle + \langle {}_{ij}^{ab} | [\hat H_\mathrm{N}, \hat T_2] | 0 \rangle + \frac{1}{2} \langle {}_{ij}^{ab} | [[\hat H_\mathrm{N}, \hat T_2], \hat T_2] | 0 \rangle \quad \text{(CCD)}
-\end{equation}
-对上式作对易子的展开：
-\begin{align}
-  0 &= \langle {}_{ij}^{ab} | \hat H_\mathrm{N} | 0 \rangle + \langle {}_{ij}^{ab} | \hat H_\mathrm{N} \hat T_2 | 0 \rangle - \langle {}_{ij}^{ab} | \hat T_2 \hat H_\mathrm{N} | 0 \rangle \notag\\
-  &\quad + \frac{1}{2} \langle {}_{ij}^{ab} | \hat H_\mathrm{N} \hat T_2^2 | 0 \rangle + \frac{1}{2} \langle {}_{ij}^{ab} | \hat T_2^2 \hat H_\mathrm{N} | 0 \rangle - \langle {}_{ij}^{ab} | \hat T_2 \hat H_\mathrm{N} \hat T_2 | 0 \rangle \quad \text{(CCD)}
-\end{align}
-容易知道，作为左矢的 $\langle {}_{ij}^{ab} | \hat T_2$，其贡献项只有 $t_{ij}^{ab} \langle {}_{ij}^{ab} | a_a^\dagger a_b^\dagger a_j a_i = t_{ij}^{ab} \langle 0 |$。而同时，由于算符 $\hat T_2^2$ 中基于 Fermi 真空态的准生成算符有 8 项，无法抵消 $\langle {}_{ij}^{ab} | = \langle 0 | a_i^\dagger a_j^\dagger a_a a_b$ 的准湮灭算符 4 项，故 $\langle {}_{ij}^{ab} | \hat T_2^2 = 0$。因此上式化简为
+首先，定义其中一种分子轨道基为 $i, j, \cdots, a, b, \cdots$。当前我们仅考虑占据轨道上的实正交变换；变换后的基为 $i', j', \cdots, a, b, \cdots$；变换后的张量上标波浪号。占据轨道的正交变换矩阵记为 $U_{i' i}$；若变换前的分子轨道到原子轨道线性组合的系数矩阵是 $C_{\mu i}$，则变换后的系数矩阵 $\tilde{C}_{\mu i'}$ 是
 \begin{equation*}
-  0 = \langle {}_{ij}^{ab} | \hat H_\mathrm{N} | 0 \rangle + \langle {}_{ij}^{ab} | \hat H_\mathrm{N} \hat T_2 | 0 \rangle - t_{ij}^{ab} \langle 0 | \hat H_\mathrm{N} | 0 \rangle + \frac{1}{2} \langle {}_{ij}^{ab} | \hat H_\mathrm{N} \hat T_2^2 | 0 \rangle + 0 - t_{ij}^{ab} \langle 0 | \hat H_\mathrm{N} \hat T_2 | 0 \rangle \quad \text{(CCD)}
+  \tilde{C}_{\mu i'} = \sum_{i} C_{\mu i} U_{i' i}
+  \quad \text{or} \quad
+  \tilde{\mathbf{C}} = \mathbf{C} \mathbf{U}^\dagger
 \end{equation*}
-再注意到式 (\ref{eq.2.ccd-corr-energy}) 所给出的 CCD 相关能 $E_\mathrm{c}^\mathrm{CCD} = \langle 0 | \hat H_\mathrm{N} \hat T_2 | 0 \rangle$，以及 $\hat H_\mathrm{N} = \hat H - E_0$ 的定义 (可以导出 $\langle 0 | \hat H_\mathrm{N} | 0 \rangle = 0$)，因此上式进一步化简为
-\begin{align}
-  \label{eq.2.ccd-amplitude}
-  t_{ij}^{ab} E_\mathrm{c}^\mathrm{CCD} &= \langle {}_{ij}^{ab} | \hat H_\mathrm{N} | 0 \rangle + \langle {}_{ij}^{ab} | \hat H_\mathrm{N} \hat T_2 | 0 \rangle + \frac{1}{2} \langle {}_{ij}^{ab} | \hat H_\mathrm{N} \hat T_2^2 | 0 \rangle \notag\\
-  &= \langle {}_{ij}^{ab} | \hat H_\mathrm{N} \left( 1 + \hat T_2 + \frac{1}{2} \hat T_2^2 \right) | 0 \rangle \quad \text{(CCD)}
-\end{align}
-回顾式 (\ref{eq.2.compare-ci-cc-operator})，对于 CCD 近似而言由于 $\hat T_1, \hat T_3, \hat T_4$ 被近似为零，因此 CI 激发算符 $\hat C_2$ 被近似为簇算符 $\hat T_2$；从而在 CI 理论下依式 (\ref{eq.2.ci-chi-d}) 所定义的二次、四次激发波函数 $| \chi_\mathrm{D} \rangle, | \chi_\mathrm{Q} \rangle$ 在 CCD 近似下是
-\begin{align}
-  | \chi_\mathrm{D} \rangle &= \hat C_2 | 0 \rangle = \hat T_2 | 0 \rangle \quad \text{(CCD)} \\
-  | \chi_\mathrm{Q} \rangle &= \hat C_4 | 0 \rangle = \frac{1}{2} \hat T_2^2 | 0 \rangle \quad \text{(CCD)}
-\end{align}
-因此，式 (\ref{eq.2.ccd-amplitude}) 可以写为与 CI 方程形式比较相似的形式：
-\begin{equation}
-  \label{eq.2.ccd-amplitude-by-ci}
-  \langle {}_{ij}^{ab} | \hat H_\mathrm{N} | 0 + \chi_\mathrm{D} + \chi_\mathrm{Q} \rangle = t_{ij}^{ab} E_\mathrm{c}^\mathrm{CCD} \quad \text{(CCD)}
-\end{equation}
+由于我们仅考虑因点群对称性而简并的轨道，因此 $U_{i' i}$ 矩阵除了简并轨道外，其余部分是单位矩阵。由于 ERI 张量对轨道的变换是线性的，因此容易表明对于下述定义的矩阵 $\mathscr{G}_{ij}$
+\begin{equation*}
+  \mathscr{G}_{ij} = \sum_{kab} g_{ik}^{ab} g_{jk}^{ab}
+\end{equation*}
+轨道变换后的矩阵有
+\begin{equation*}
+  \tilde{\mathscr{G}}_{i'j'} = \sum_{ij} U_{i' i} \mathscr{G}_{ij} U_{j' j}
+  \quad \text{or} \quad
+  \tilde{\symbfscr{G}} = \mathbf{U} \symbfscr{G} \mathbf{U}^\dagger
+\end{equation*}
+由于轨道变换不影响能级，因此对于下述定义的矩阵 $\mathscr{T}_{ij}$
+\begin{equation*}
+  \mathscr{T}_{ij} = \sum_{kab} t_{ik}^{ab} t_{jk}^{ab}
+\end{equation*}
+同样容易验证有
+\begin{equation*}
+  \tilde{\mathscr{T}}_{i'j'} = \sum_{ij} U_{i' i} \mathscr{T}_{ij} U_{j' j}
+  \quad \text{or} \quad
+  \tilde{\symbfscr{T}} = \mathbf{U} \symbfscr{T} \mathbf{U}^\dagger
+\end{equation*}
 
-对比 CI 方程的类似表达式，即将左矢 $\langle {}_{ij}^{ab} |$ 作用于式 (\ref{eq.2.CID-eigen}, \ref{eq.2.CIDQ-eigen})，得到
-\begin{align}
-  \label{eq.2.cid-amplitude-by-ci}
-  \langle {}_{ij}^{ab} | \hat H_\mathrm{N} | 0 + \chi_\mathrm{D} \rangle &= c_{ij}^{ab} E_\mathrm{c}^\mathrm{CID} \quad \text{(CID)} \\
-  \label{eq.2.cidq-amplitude-by-ci}
-  \langle {}_{ij}^{ab} | \hat H_\mathrm{N} | 0 + \chi_\mathrm{D} + \chi_\mathrm{Q} \rangle &= c_{ij}^{ab} E_\mathrm{c}^\mathrm{CIDQ} \quad \text{(CIDQ)}
-\end{align}
-这里简单总结 CCD 方法与其它近似方法之间的关联。
-\begin{itemize}[nosep]
-  \item \textbf{CCD 与 CID 的关系}　对比式 (\ref{eq.2.ccd-amplitude-by-ci}) 与式 (\ref{eq.2.cid-amplitude-by-ci})，可以发现在处理二次激发系数 (或二次簇算符系数) 时，CCD 方法相比于 CID 方法进一步地考虑了四次激发波函数 $| \chi_Q \rangle$ 的贡献；或者说从式 (\ref{eq.2.ccd-amplitude}) 来看，CCD 方法比 CID 方法多考虑 $\frac{1}{2} \langle {}_{ij}^{ab} | \hat H_\mathrm{N} \hat T_2^2 | 0 \rangle$ 的贡献。从这个角度而言，CID 方法可以看作 CCD 方法的近似。
-  \item \textbf{CCD 与 CIDQ 的关系}　式 (\ref{eq.2.ccd-amplitude-by-ci}) 与式 (\ref{eq.2.cidq-amplitude-by-ci}) 的表达式非常相似；它们的区别在于四次激发波函数 $| \chi_\mathrm{Q} \rangle = \hat C_4 | 0 \rangle$ 是如何被近似的。CCD 的处理方式是将 $\hat C_4$ 近似为 $\frac{1}{2} \hat T_2^2$；但 CIDQ 方法预期能给出相对更精确的 $\hat C_4 \simeq \frac{1}{2} \hat T_2^2 + \hat T_4$ 的结果；因此，CCD 方法可以看作 CIDQ 方法的近似。但同时要指出，CIDQ 不满足大小延展性，意味着 CIDQ 的相关能无法定性正确地随体系增大而线性增大；而 CCD 方法是满足大小延展性的。因此，CCD 方法相对于 CIDQ 方法所对 $\hat T_4$ 的近似有利有弊。
-  \item \textbf{CCD 与 MP2 的关系}　CCD 方程对式 (\ref{eq.2.ccd-amplitude}) 近似展开到一阶微扰，可以得到 MP2 激发系数方程。具体来说，从式 (\ref{eq.2.norm-hamiltonian}) 回顾到正规算符 $\hat H_\mathrm{N}$ 可以具体地写为单电子正规算符 $\hat F_\mathrm{N}$ 与双电子正规算符 $\hat V_\mathrm{N}$ 之和。令 $\hat F_\mathrm{N}$ 是零阶微扰算符、$\hat V_\mathrm{N}$ 与 $\hat T_2$ 是一阶微扰算符，那么对式 (\ref{eq.2.ccd-amplitude}) 展开到一阶微扰近似，得到
-  \begin{equation}
-    \label{eq.2.mp2-amplitude}
-    0 = \langle {}_{ij}^{ab} | \hat H_\mathrm{N} | 0 \rangle + \langle {}_{ij}^{ab} | \hat F_\mathrm{N} \hat T_2 | 0 \rangle \quad \text{(MP2)}
-  \end{equation}
-  需要补充的是，式 (\ref{eq.2.ccd-corr-energy}) 所定义的相关能由于没有 $\hat F_\mathrm{N}$ 的参与，即
-  \begin{equation*}
-    E_\mathrm{c}^\mathrm{CCD} = \langle 0 | \hat H_\mathrm{N} \hat T_2 | 0 \rangle = \langle 0 | \hat V_\mathrm{N} \hat T_2 | 0 \rangle \quad \text{(CCD)}
-  \end{equation*}
-  因此，相关能 $E_\mathrm{c}^\mathrm{CCD}$ 被视为二阶微扰量；对于 MP2 相关能 $E_\mathrm{c}^\mathrm{MP2}$ 同理。从而在考虑 MP2 微扰的激发系数时，式 (\ref{eq.2.ccd-amplitude}) 左边的 $t_{ij}^{ab} E_\mathrm{c}^\mathrm{CCD}$ 作为三阶微扰量超过一阶而被忽略。由于 $\langle {}_{ij}^{ab} | \hat H_\mathrm{N} | 0 \rangle = \langle ij || ab \rangle$，$\langle {}_{ij}^{ab} | \hat F_\mathrm{N} \hat T_2 | 0 \rangle = \varepsilon_i + \varepsilon_j - \varepsilon_a - \varepsilon_b$，因此通过式 (\ref{eq.2.mp2-amplitude}) 容易得到 MP2 激发系数
-  \begin{equation}
-    t_{ij}^{ab} = \frac{\langle ij || ab \rangle}{\varepsilon_i + \varepsilon_j - \varepsilon_a - \varepsilon_b} \quad \text{(MP2)}
-  \end{equation}
-\end{itemize}
+回顾到 MP2/cr 的定义，式 (\ref{eq.2.Nij-MP2cr}) 所给出的缩放系数 $N_{ij}$ 同样可以写为
+\begin{equation*}
+  N_{ij} = 1 + \frac{1}{2} \big( \mathscr{T}_{ii} + \mathscr{T}_{jj} \big)
+\end{equation*}
+因此，尽管缩放系数的指标是成对电子 $ij$，但实际上仅由单指标的对角元 $\mathscr{T}_{ii}$ 确定。注意到我们变换的是二维或三维不可约表示下简并轨道；这些轨道之间在对称性上相互正交，因此 $\symbfscr{T}$ 矩阵在被变换的轨道上非对角元为零。同时，这些简并轨道出于相同的对称性，矩阵 $\symbfscr{T}$ 在这些简并轨道上的对角元数值相等，即是单位矩阵的倍数。在正交变换下，单位矩阵不变；因此，变换后的矩阵对角元 $\tilde{\mathscr{T}}_{i'i'}$ 对于被变换的简并轨道并未改变。对于没有被变换的轨道，正交变换矩阵 $U_{i'i}$ 在这些轨道上是单位矩阵，因此变换后的 $\tilde{\mathscr{T}}_{i' j'}$ 与变换前的 $\mathscr{T}_{ij}$ 相同。从而，正交变换后的 $\tilde{N}_{i'j'}$ 与变换前的 $N_{ij}$ 完全相同。
 
-总结来说，而对于 MP2 方法，其相对于 CCD 所作的近似是及其激进的；它将所有 CCD 系数方程 (\ref{eq.2.ccd-amplitude}) 的二阶量完全忽略。但 CCD 系数方程中，$\frac{1}{2} \langle | [[\hat H_\mathrm{N}, \hat T_2], \hat T_2] | \rangle$ 中包含计算量为 $O(n_\mathrm{occ}^2 n_\mathrm{vir}^4)$ 且需要大量中间内存的计算问题 (例如 Shavitt and Bartlett\cite{Shavitt-Bartlett.Cambridge.2009} Fig.\ 9.2 图像 $D_\mathrm{3c} = \frac{1}{2} \hat P(ij) \sum_{klcd} \langle kl || cd \rangle t_{ik}^{dc} t_{lj}^{ab}$)。因此，CCD 尽管有更精确的能量数值与更符合物理直觉的大小延展性质，但这是以计算资源消耗为代价的。
-  
-\subsection{耦合电子对方法 CEPA}
+这里不对总相关能 $E_\mathrm{c}^\textmt{MP2/cr}$ 的正交不变性作证明，但作补充说明与推测。成对电子能量 $e_{ij}^\textmt{MP2/cr}$ 在上述正交变换下，\textbf{并非}与 $\tilde{e}_{i'j'}^\textmt{MP2/cr}$ 相等；但对于 $i$ 代表被正交变换的基、$j$ 代表能级相同但未被正交变换的另一组基，那么对这些特定占据轨道的 $\sum_{ij} e_{ij}^\textmt{MP2/cr}$ 正交变换前后是不变的。从而，总相关能 $E_\mathrm{c}^\textmt{MP2/cr}$ 在当前的正交变换下，也是不变的。
 
-在介绍独立电子对方法前，我们将过渡性地介绍耦合电子对方法 (CEPA, \underline{C}oupled \underline{E}lectron \underline{P}air \underline{A}pproximation)\cite{Ahlrichs-Ahlrichs.CPC.1979}。CEPA 方法可以看作是介于 CISD 与 CCSD、CISDQ 之间的方法；如果不考虑单次激发贡献，那么 CEPA 方法是介于 CID 与 CCD、CIDQ 之间的方法。回顾到从式 (\ref{eq.2.ccd-amplitude}) 来看，CID 方法相对于 CCD 方法完全忽略了 $\frac{1}{2} \langle {}_{ij}^{ab} | \hat H_\mathrm{N} \hat T_2^2 | 0 \rangle$ 的贡献。但同时需要注意到，$\langle {}_{ij}^{ab} | \hat H_\mathrm{N} \hat T_2^2 | 0 \rangle$ 项的计算代价较大。
+\subsubsection{点群对称性下简并轨道正交变换误差数值表现}
 
-CEPA 的推导的基本思路是
-\begin{itemize}[nosep]
-  \item 为补偿 CID 方法的误差，引入 $\frac{1}{2} \langle {}_{ij}^{ab} | [[\hat H_\mathrm{N}, \hat T_2], \hat T_2] | 0 \rangle$ 的一部分子项纳入计算；
-  \item 为避免 CID 方法的大小延展性误差，CEPA 的激发系数方程中应只有相连图像的贡献\cite{Brueckner-Brueckner.PR.1955, Goldstone-Goldstone.PRSLA.1957}；
-  \item 为避免较大的计算量，对于 $\frac{1}{2} \langle {}_{ij}^{ab} | [[\hat H_\mathrm{N}, \hat T_2], \hat T_2] | 0 \rangle$ 所引入的项，解耦虚轨道、而只有占据轨道是相互耦合的；由于占据轨道通常以二次激发的形式成对出现，因此被相互耦合的通常是占据轨道电子对，因此得名耦合电子对方法。
-\end{itemize}
+数值计算的体系选用 \ce{C4H4} 模型体系；该体系为 $T_d$ 点群，碳原子之间构成正四面体且键长为 2 \AA；氢原子与临近碳原子的键长为 2 \AA。该体系的电子共 14 对，占据排布是
+$$
+(1 A_1)^2 (1 T_2)^6 (2 A_1)^2 (2 T_2)^6 (3 A_1)^2 (3 T_2)^6 (1 E)^4
+$$
+我们分别考察 $3 T_d$ 和 $1 E$ 内部的电子正交变换。对于 $1E$ 的占据轨道，对其正交变换的方式在式 (\ref{eq.2.invariance-general}) 中定义；对于 $3 T_d$ 的占据轨道，我们仅旋转其中的两组，旋转过程也与式 (\ref{eq.2.invariance-general}) 一致。
 
-注意到 CCD 簇算符系数方程 (\ref{eq.2.ccd-amplitude}) 的等式左右并非全部是相连图像，因此这里考察式 (\ref{eq.2.ccd-amplitude-connect}) 所定义的 CCD 簇算符系数方程；其简化后的结果是
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.6\textwidth]{assets/invar-sep-C4H4-1.pdf}
+  \caption{$T_d$ 点群下 \ce{C4H4} 的相关能随相同不可约表示简并轨道下正交变换相位 $\theta$ 变化产生的误差。右下角图例表示被正交变换对应的分子轨道。该情形下 MP2、MP2/cr 的误差，以及 $1E$ 轨道下所有方法的误差均为零，图上的曲线重合。}
+  \label{fig.2.invar-sep-C4H4-1}
+\end{figure}
 
+对于当前情形，正交变换的相关能误差展示于图 \ref{fig.2.invar-sep-C4H4-1}。可以看到，对于二维不可约表示 $E$，所有方法都表现出了正交变换的不变性。但对于 $T_2$ 不可约表示，IEPA 与 sIEPA 方法存在一定的正交变换误差；其中，IEPA 方法误差最大为 $-0.0013$ eV，对于当前体系是相当小的数值。
 
+\subsection{偶然能级简并的正交不变性}
 
+这里仅使用数值表现，表明 MP2/cr 与 IEPA 均在偶然能级简并的轨道正交变换下存在误差。这里考察键长为 1.82116696109 \AA 的 \ce{CO} 分子。该分子的占据排布是
+$$
+(1 \symup{\Sigma}^+)^2 (2 \symup{\Sigma}^+)^2 (3 \symup{\Sigma}^+)^2 (4 \symup{\Sigma}^+)^2 (1 \symup{\Pi})^4 (5 \symup{\Sigma}^+)^2
+$$
+RHF/cc-pVDZ 基组下以能量 \num{1e-13} Hartree、轨道梯度 \num{1e-11} Hartree 为收敛限时，$1 \symup{\Pi}$ 轨道与 $5 \symup{\Sigma}^+$ 轨道的能级差小于 \num{1e-11} Hartree；在当前的分析中，该能极差可以认为接近于零，即这两种轨道是简并的。我们对其中一根 $1 \symup{\Pi}$ 轨道与 $5 \symup{\Sigma}^+$ 轨道作正交变换，变换相位在式 (\ref{eq.2.invariance-general}) 中定义。对于该情形，MP2/cr 与 IEPA 方法都展现出一定的正交变换误差，但误差数值不大于 0.005 eV。尽管在完全分离体系、以及二维或三维不可约简并轨道正交变换下，MP2/cr 展现出正交不变性；但该例子可以表明，MP2/cr 一般而言不具有正交不变性。
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.6\textwidth]{assets/invar-sep-CO.pdf}
+  \caption{\ce{CO} 分子的相关能在能级偶然简并的 $1 \symup{\Pi}$ 轨道与 $5 \symup{\Sigma}^+$ 轨道间依正交变换相位 $\theta$ 变化产生的误差。该情形下 MP2 的误差为零。}
+  \label{fig.2.invar-sep-CO}
+\end{figure}
