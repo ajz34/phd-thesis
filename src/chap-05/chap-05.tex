@@ -39,7 +39,7 @@ RelRMSD 误差多大，才认为是可以被接受或容许的范围？首先，
 
 \subsection{电子结构方法与软件}
 
-本工作的极化率同时使用数值与解析的方式计算。MP2 与 HF 解析极化率是通过 \textsc{PySCF} (commit 3d592b0)\cite{Sun-Chan.WCMS.2018, Sun-Chan.JCP.2020}的扩展程序脚本 \textsc{dh} (ver 0.1.3)\cite{dh-0.1.ajz34} 所实现。正因为该程序可以高效地实现包括双杂化泛函在内的 MP2 型相关能解析极化率，因此本工作中涉及到的所有分子的 MP2 极化率，在引入 RI 近似的前提下，都可以以最精确的 CBS 外推模式 aCV[Q5]Z 实现。对于 CCSD 与 CCSD(T) 方法，本工作使用 \textsc{Q-Chem} (ver 5.1.1)\cite{Shao-Head-Gordon.MP.2015, Kaliman-Krylov.JCC.2017}作数值极化率计算。这部分计算将不引入 RI 近似。本工作不对 post-HF 计算过程引入冻核近似。自由基与其他开壳层体系的 HF 自洽场参考态通过自旋非限制性计算给出。
+本工作的极化率同时使用数值与解析的方式计算。MP2 与 HF 解析极化率是通过 \textsc{PySCF} (commit 3d592b0)的扩展程序脚本 \textsc{dh} (ver 0.1.3) 所实现。正因为该程序可以高效地实现包括双杂化泛函在内的 MP2 型相关能解析极化率，因此本工作中涉及到的所有分子的 MP2 极化率，在引入 RI 近似的前提下，都可以以最精确的 CBS 外推模式 aCV[Q5]Z 实现。对于 CCSD 与 CCSD(T) 方法，本工作使用 \textsc{Q-Chem} (ver 5.1.1)作数值极化率计算。这部分计算将不引入 RI 近似。本工作不对 post-HF 计算过程引入冻核近似。自由基与其他开壳层体系的 HF 自洽场参考态通过自旋非限制性计算给出。
 
 本工作将在 \ref{sec.5.3.1} 小节对极化率的数值与解析之间的误差、RI 近似所导致的误差、以及基组误差进行分析。最终汇报的极化率数值中，HF 与 MP2 是通过 RI 近似下解析给出 (这两个方法将分别记为 RI-JK 与 RI-MP2)；CCSD 与 CCSD(T) 的结果将是 RI-MP2 解析极化率、以及更高阶贡献的数值极化率的加和。为更清晰明了地表示极化率数值的构成，本文将使用简记记号；这些记号列于表 \ref{tab.5.1}。该表格的所有记号是针对单个分子或自由基体系的；对于一个数据集合，我们将上标波浪号。举例而言，$\text{RelRMSD} (\symup{\Delta} \tilde \alpha_{\textsf{(2)}/\text{aVTZ}}, \symup{\Delta} \tilde \alpha_{\textsf{(2)}/\text{ref}}, \tilde \alpha_{\textsf{CCSD(T)}/\text{ref}})$ 代表 MP2/aVTZ 同性极化率相对于高精度 MP2 参考值的相对方均根误差；该相对误差计算所用的分母，是高精度 CCSD(T) 参考值。
 
@@ -91,7 +91,7 @@ RelRMSD 误差多大，才认为是可以被接受或容许的范围？首先，
 
 \subsection{基组与 RI 近似}
 
-在本工作中，我们将使用 Dunning 系列基组 aV$X$Z 与 aCV$X$Z。H 与 Br 原子并不出现在 aCV$X$Z 系列基组中；对于这两个原子作 aCV$X$Z 级别计算时，将不加说明地替换为对应的 aV$X$Z 基组。RI 近似可以大幅减少 MP2 的计算耗时，并且不会产生严重的误差损耗，是性价比相当高的技术手段\cite{Vahtras-Feyereisen.CPL.1993}。本工作的解析极化率计算中，我们对 Weigend 算法实现的 RI-JK\cite{Weigend-Weigend.PCCP.2002} 与 RI-MP2 相关贡献\cite{Weigend-Haettig.JCP.2002}计算均使用 ETB 自动辅助基\cite{Stoychev-Neese.JCTC.2017}；等比参数设为 \textsc{PySCF} 程序默认的 $\beta = 2$。由于基于 \textsc{PySCF} 的扩展程序 \textsc{dh} 的高效率实现、以及对大基组下内存的合理控制，使得本工作中所有体系都可以在 MP2/aCV5Z 下完成计算。作为自洽场的 RI-JK 方法的能量收敛精度为 $10^{-10}$ Hartree。
+在本工作中，我们将使用 Dunning 系列基组 aV$X$Z 与 aCV$X$Z。H 与 Br 原子并不出现在 aCV$X$Z 系列基组中；对于这两个原子作 aCV$X$Z 级别计算时，将不加说明地替换为对应的 aV$X$Z 基组。RI 近似可以大幅减少 MP2 的计算耗时，并且不会产生严重的误差损耗，是性价比相当高的技术手段\cite{Vahtras-Feyereisen.CPL.1993}。本工作的解析极化率计算中，我们对 Weigend 算法实现的 RI-JK\cite{Weigend-Weigend.PCCP.2002} 与 RI-MP2 相关贡献\cite{Weigend-Haettig.JCP.2002}计算均使用 ETB 自动辅助基；等比参数设为 \textsc{PySCF} 程序默认的 $\beta = 2$。由于基于 \textsc{PySCF} 的扩展程序 \textsc{dh} 的高效率实现、以及对大基组下内存的合理控制，使得本工作中所有体系都可以在 MP2/aCV5Z 下完成计算。作为自洽场的 RI-JK 方法的能量收敛精度为 $10^{-10}$ Hartree。
 
 \subsection{数值极化率}
 

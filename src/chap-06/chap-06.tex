@@ -25,7 +25,7 @@
 
 \subsection{电子结构计算}
 
-本工作测评的极化率是解析梯度计算得到的结果。程序通过 \textsc{PySCF} (介于 2.1.0 到 2.4.0 版本)\cite{Sun-Chan.WCMS.2018, Sun-Chan.JCP.2020}以及扩展程序脚本 \textsc{dh} (commit 80ca9e8)\cite{dh.ajz34} 实现。对于所有泛函，DFT 积分所使用的密度格点为第 4 级 (默认修剪、第一周期 (60, 434)、第二周期 (90, 590)、第三周期 (95, 590))。辅助基组均使用 ETB 自动生成基组\cite{Stoychev-Neese.JCTC.2017}。在极化率测评中，基组统一使用 aug-pc-3；在基组误差分析中，我们将使用 aCV$X$Z ($X = \mathrm{D, T, Q, 5}$) 与 aug-pc-$n$ ($n = 1, 2, 3, 4$) 基组；所使用到的 CBS 模型与 \alertref{sec.5.cbs} 节相同，且 CBS 外推仅针对相关贡献部分、而对自洽场部分不作外推。后续文段中，我们将简记基组 aug-pc-$n$ 为 apc$n$ ($n = 1, 2, 3, 4$)。
+本工作测评的极化率是解析梯度计算得到的结果。程序通过 \textsc{PySCF} (介于 2.1.0 到 2.4.0 版本)以及扩展程序脚本 \textsc{dh} (commit 80ca9e8) 实现。对于所有泛函，DFT 积分所使用的密度格点为第 4 级 (默认修剪、第一周期 (60, 434)、第二周期 (90, 590)、第三周期 (95, 590))。辅助基组均使用 ETB 自动生成基组。在极化率测评中，基组统一使用 aug-pc-3；在基组误差分析中，我们将使用 aCV$X$Z ($X = \mathrm{D, T, Q, 5}$) 与 aug-pc-$n$ ($n = 1, 2, 3, 4$) 基组；所使用到的 CBS 模型与 \alertref{sec.5.cbs} 节相同，且 CBS 外推仅针对相关贡献部分、而对自洽场部分不作外推。后续文段中，我们将简记基组 aug-pc-$n$ 为 apc$n$ ($n = 1, 2, 3, 4$)。
 
 本工作测评并汇报 62 个密度泛函近似的极化率误差结果。被测评泛函分布如图 \ref{fig.6.pol-functionals-distribution} 所示。我们尽可能对目前流行的、且在 \textsc{dh} 程序中实现的双杂化泛函做极化率测评；涉及到 B95 的双杂化泛函由于部分体系存在收敛问题，本工作暂不纳入 \textsc{dh} 程序已经实现的 DSD-PBEB95-D3BJ 与 PWPB95-D3Zero 泛函；对于 ωB97X-2 泛函，我们仅测评其 TQZ 版本。本工作所涉及到的低阶泛函包括
 \begin{itemize}[nosep]
@@ -492,7 +492,7 @@ B2PLYP 是典型的双杂化泛函；其他各式各色双杂化泛函的严格�
     \bottomrule
     \end{tabular}
 }{
-    \item[a] 该表格的分析中，去除了表 \ref{tab.6.supp.symm-broken} 所涉及的 13 个分子。计算模型是 MP2/aCVTZ。\textsc{dh} 程序计算结果使用 ETB 辅助基组\cite{Stoychev-Neese.JCTC.2017}。
+    \item[a] 该表格的分析中，去除了表 \ref{tab.6.supp.symm-broken} 所涉及的 13 个分子。计算模型是 MP2/aCVTZ。\textsc{dh} 程序计算结果使用 ETB 辅助基组。
     \item[b] 解析极化率由 \textsc{Gaussian 16} (rev B01)\cite{Gaussian16} 计算。
     \item[c] 相对误差是 \textsc{dh} 计算得到的解析极化率、相对于 \textsc{Gaussian 16} 计算得到的解析极化率的比值误差。
 }
@@ -570,7 +570,7 @@ Hait 与 Head-Gordon 在 HH132 数据集上测评了双杂化泛函\cite{Hait-He
     \end{tabular}
 }{
     \raggedright
-    \item[a] 该表格的分析中，去除了表 \ref{tab.6.supp.symm-broken} 所涉及的 13 个分子和表 \ref{tab.6.supp.mp2-hait-g16} 所涉及的 5 个分子；即总共涉及 HH132 数据集中的 114 个分子，其中自旋极化分子数为 44 个。\textsc{dh} 程序计算结果使用 ETB 辅助基组\cite{Stoychev-Neese.JCTC.2017}。
+    \item[a] 该表格的分析中，去除了表 \ref{tab.6.supp.symm-broken} 所涉及的 13 个分子和表 \ref{tab.6.supp.mp2-hait-g16} 所涉及的 5 个分子；即总共涉及 HH132 数据集中的 114 个分子，其中自旋极化分子数为 44 个。\textsc{dh} 程序计算结果使用 ETB 辅助基组。
     \item[b] 解析极化率由 \textsc{Gaussian 16} (rev B01)\cite{Gaussian16} 计算。基组为 aCVTZ、DFT 积分格点选用程序默认的格点。
     \item[c] 相对误差是指 HH132 数值极化率相对于 \textsc{Gaussian 16} 计算得到的解析极化率的比值误差。
 }

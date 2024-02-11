@@ -291,7 +291,7 @@
 
 \subsection{数据集计算细节}
 
-本工作所使用的程序已公开\cite{dh.ajz34}，该程序基于 \textsc{PySCF} 2.2.1 实现\cite{Sun-Chan.WCMS.2018, Sun-Chan.JCP.2020}。双杂化能量泛函的计算使用 \textsc{dh} 程序 v0.1.9\footnote{https://gitee.com/ajz34/pyscf-forge/tree/dh-v0.1.9/} 与 commit 80ca9e8\footnote{https://github.com/ajz34/pyscf-forge/commit/80ca9e8c3e86943077e5802b3621118fdef73146}。在正文中出现的计算任务没有使用波函数稳定性分析，所有自旋投影 $S_z$ 为零的体系使用限制性 Kohn-Sham 轨道、而 $S_z$ 非零的体系使用非限制性 Kohn-Sham 轨道进行计算。
+双杂化能量泛函的计算使用 \textsc{dh} 程序 v0.1.9 与 commit 80ca9e8；该程序的基础框架是 \textsc{PySCF} (ver 2.2.1)。在正文中出现的计算任务没有使用波函数稳定性分析，所有自旋投影 $S_z$ 为零的体系使用限制性 Kohn-Sham 轨道、而 $S_z$ 非零的体系使用非限制性 Kohn-Sham 轨道进行计算。
 
 GMTKN55 数据集计算选用的基组列于表 \ref{tab.2.basis-gmtkn55}。GMTKN55 计算所选用的冻核近似规则列于表 \ref{tab.2.fc-gmtkn55}。Minnesota 2015 数据集所选用的基组是 def2-QZVPP，冻核近似规则为表 \ref{tab.2.fc-gmtkn55} 中的 FC-2 规则。
 
@@ -358,7 +358,7 @@ GMTKN55 数据集计算选用的基组列于表 \ref{tab.2.basis-gmtkn55}。GMTK
 
 分子解离曲线问题的计算中，除作为参考值的 DMC 方法外，其它方法选择 cc-pV5Z 基组。MP2、CCSD、CCSD(T) 方法使用传统四中心二电子积分计算，其它方法使用 RI-JK 与 RI-MP2 算法并使用辅助基组 cc-pV5Z-jkfit 与 cc-pV5Z-rifit。计算程序是 \textsc{PySCF} 与 \textsc{dh} commit 80ca9e8。
 
-对于 DMC 方法，首先选用 ccecp-cc-pVQZ 基组在 \textsc{PySCF} 下给出 CASSCF 的波函数初猜；随后在 \textsc{PyQMC} 程序\cite{Wheeler-Wagner.JCP.2023}下先进行 1000 组态数量的 15 次 VMC 过程；其次进行 10000 组态数量的 4000 次 DMC，并舍弃前 200 次运行结果作能量计算；最后将时间步长为 0.02、0.01、0.005、0.0025、0.001 Hartree 的 DMC 结果线性外推到 0 时间步长的情形。
+对于 DMC 方法，首先选用 ccecp-cc-pVQZ 基组在 \textsc{PySCF} 下给出 CASSCF 的波函数初猜；随后在 \textsc{PyQMC} 程序下先进行 1000 组态数量的 15 次 VMC 过程；其次进行 10000 组态数量的 4000 次 DMC，并舍弃前 200 次运行结果作能量计算；最后将时间步长为 0.02、0.01、0.005、0.0025、0.001 Hartree 的 DMC 结果线性外推到 0 时间步长的情形。
 
 本工作的分子解离曲线势能面取用相对能量，且在正文中，所有计算限制使用闭壳层波函数。
 

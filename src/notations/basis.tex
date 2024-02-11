@@ -1,13 +1,15 @@
 % !TEX root=./notations.tex
 
-\chapter{原子轨道基组表}
+\chapter{原子轨道基组与程序}
+
+\section{原子轨道基组}
 \label{sec.A.basis-set}
 
 下述表格列出本工作所使用的基组、基组基数、基组简称，以及其对应的参考文献。
 
 部分基组的不同元素是由不同参考文献所定义。这里所列举的参考文献，仅针对本工作所涉及的原子。
 
-基组 daug-def2-universal-jkfit 是针对 def2-universal-jkfit 基组，使用基于 Woon 与 Dunning 所提出的方法\cite{Woon-Dunning.JCP.1994}，在各角量子数上增加两个弥散基函数；增加弥散基函数所用的程序是 \textsc{Basis Set Exchange} 的 \textsc{Python} API\cite{Feller-Feller.JCC.1996, Schuchardt-Windus.JCIM.2007, Pritchard-Windus.JCIM.2019}。
+基组 daug-def2-universal-jkfit 是针对 def2-universal-jkfit 基组，使用基于 Woon 与 Dunning 所提出的方法\cite{Woon-Dunning.JCP.1994}，在各角量子数上增加两个弥散基函数；增加弥散基函数所用的程序是 \textsc{Basis Set Exchange} 的 \textsc{Python} API。
 
 本工作还使用到自动生成的 ETB 辅助基\cite{Stoychev-Neese.JCTC.2017}。
 
@@ -51,4 +53,66 @@
     aug-pc-$n$ & \citenum{Jensen-Jensen.JCP.2001, Jensen-Jensen.JCP.2002, Jensen-Jensen.JCP.2002a, Jensen-Helgaker.JCP.2004, Jensen-Jensen.JPCA.2007} \\
 \end{longtable}
 
+\endgroup
+
+\section{软件与程序}
+
+本工作所使用到的重要程序列表如下：
+
+\begingroup
+\setlength{\LTleft}{-20cm plus -1fill}
+\setlength{\LTright}{\LTleft}
+
+\begin{longtable}{ll}
+    \toprule
+    软件或程序 & 参考文献 \\
+    \midrule
+    \textsc{PySCF} & \citenum{Sun-Chan.WCMS.2018, Sun-Chan.JCP.2020} \\
+    \textsc{Libcint} & \citenum{Sun-Sun.JCC.2015} \\
+    \textsc{Gaussian 09} & \citenum{Gaussian09} \\
+    \textsc{Gaussian 16} & \citenum{Gaussian16} \\
+    \textsc{LibXC} & \citenum{Lehtola-Marques.S.2018} \\
+    \textsc{Basis Set Exchange} & \citenum{Feller-Feller.JCC.1996, Schuchardt-Windus.JCIM.2007, Pritchard-Windus.JCIM.2019} \\
+    \textsc{Q-Chem} & \citenum{Shao-Head-Gordon.MP.2015} \\
+    \textsc{PyQMC} & \citenum{Wheeler-Wagner.JCP.2023} \\
+    \textsc{dh} ($< 0.1.9$) & \citenum{dh-0.1.ajz34} \\
+    \textsc{dh} ($\geqslant 0.1.9$) & \citenum{dh.ajz34} \\
+    \bottomrule
+\end{longtable}
+
+上述程序中，部分有必要引用的关键性功能列举如下：
+
+\begingroup
+\setlength{\LTleft}{-20cm plus -1fill}
+\setlength{\LTright}{\LTleft}
+
+\begin{longtable}{lll}
+    \toprule
+    软件或程序 & 关键性功能 & 参考文献 \\
+    \midrule
+    \textsc{PySCF} & ETB 自动辅助基生成 & \citenum{Stoychev-Neese.JCTC.2017} \\
+    \textsc{Q-Chem} & CCSD(T) 能量计算 & \citenum{Kaliman-Krylov.JCC.2017} \\
+    \bottomrule
+\end{longtable}
+
+未录入本工作，但在课题早期发展过程中使用、对课题推进有较大帮助的程序与关键性功能列举如下：
+
+\begingroup
+\setlength{\LTleft}{-20cm plus -1fill}
+\setlength{\LTright}{\LTleft}
+
+\begin{longtable}{lll}
+    \toprule
+    软件或程序 & 关键性功能 & 参考文献 \\
+    \midrule
+    \textsc{NWChem} & & \citenum{Valiev-Jong.CPC.2010} \\
+    \textsc{NWChem} & xDH 一阶梯度 & \citenum{Su-Xu.JCC.2013} \\
+    \textsc{Gaussian 09} & xDH 能量 & \citenum{Zhang-Goddard.PNAS.2009} \\
+    \textsc{Gaussian 09} & xDH 二阶梯度 & \citenum{Gu-Xu.JCTC.2021} \\
+    \textsc{XCFun} & DFT 格点函数四阶梯度 & \citenum{Ekstroem-Ruud.JCTC.2010} \\
+    \textsc{Multiwfn} & & \citenum{Lu-Chen.JCC.2012} \\
+    \bottomrule
+\end{longtable}
+
+    
 \endgroup

@@ -35,7 +35,7 @@ DFT 在 Hohenberg-Kohn 定理\cite{Hohenberg-Kohn.PR.1964}的框架下，是原�
 
 本工作所涉及的体系是 14 个原子或离子体系 (\ce{Be^0}, \ce{B^+}, \ce{B^3+}, \ce{C^2+}, \ce{C^4+}, \ce{N^3+}, \ce{N^5+}, \ce{O^4+}, \ce{O^6+}, \ce{F^5+}, \ce{F^7+}, \ce{Ne^0}, \ce{Ne^6+}, \ce{Ne^8+}) 的电子云密度与能量。这些体系均为 2 ($1s^2$)、4 ($1s^2 2s^2$)、10 ($1s^2 2s^2 2p^6$) 电子体系。
 
-与 Medvedev 等人的工作\cite{Medvedev-Lyssenko.S.2017}一致地，对于非变分方法，电子云密度 $\rho (\bm{r})$ 均使用弛豫密度生成 (对于 xDH 型泛函弛豫密度以 $D_{\mu \nu}^\textsf{PT2}$ 表示\alert{第三章公式})。测评过程所选用的基组是 aug-cc-pωCV5Z；对于使用到 RI 近似的情形，其辅助基组使用 PySCF 默认的自动生成方案\cite{Stoychev-Neese.JCTC.2017}。所有双杂化密度泛函选用经 PySCF 默认简化的 (120, 770) 格点积分，测评所用程序为 PySCF (2.4.0)\cite{Sun-Chan.WCMS.2018, Sun-Chan.JCP.2020} 与 dh (commit 80ca9e8)；密度泛函计算使用到 LibXC (commit 2a8caee)\cite{Lehtola-Marques.S.2018}。对于 CCSD 方法，其自洽场能量收敛限是 $10^{-11} \ \text{Hartree}$、CCSD 能量收敛限是 $10^{-9} \ \text{Hartree}$；其余方法的能量收敛限均为 $10^{-9} \ \text{Hartree}$。本工作中其他 post-HF 方法 (MP4(sdq)、MP3) 计算使用 Gaussian 09 实现\cite{Gaussian09, Su-Xu.PNAS.2018}。
+与 Medvedev 等人的工作\cite{Medvedev-Lyssenko.S.2017}一致地，对于非变分方法，电子云密度 $\rho (\bm{r})$ 均使用弛豫密度生成 (对于 xDH 型泛函弛豫密度以 $D_{\mu \nu}^\textsf{PT2}$ 表示\alert{第三章公式})。测评过程所选用的基组是 aug-cc-pωCV5Z；对于使用到 RI 近似的情形，其辅助基组使用 PySCF 默认的自动生成方案。所有双杂化密度泛函选用经 PySCF 默认简化的 (120, 770) 格点积分，测评所用程序为 PySCF (ver 2.4.0) 与 dh (commit 80ca9e8)；密度泛函计算使用到 LibXC (commit 2a8caee)。对于 CCSD 方法，其自洽场能量收敛限是 $10^{-11} \ \text{Hartree}$、CCSD 能量收敛限是 $10^{-9} \ \text{Hartree}$；其余方法的能量收敛限均为 $10^{-9} \ \text{Hartree}$。本工作中其他 post-HF 方法 (MP4(sdq)、MP3) 计算使用 Gaussian 09 实现\cite{Su-Xu.PNAS.2018}。
 
 密度测评的参考值是 CCSD/aug-cc-pωCV5Z 下的弛豫密度；$1s^2 2s^2 \rightarrow 1s^2$ 过程电离能测评的参考值是经 HF 方法下 Douglas-Kroll 近似对相对论效应作矫正后的实验值\cite{Kepp-Kepp.S.2017, Douglas-Kroll.APY.1974, NIST.Atomic}。本工作也会对基组依赖性、RI 近似精度等问题作讨论；其具体的计算方法将在具体的讨论中展开。
 
@@ -174,7 +174,7 @@ Medvedev 等人的工作也已经表明，除了少数特定的泛函，泛函�
 
 我们对 HF 与 MP2 方法的 RI 近似在密度径向函数上的误差作简要的评测与分析。在本评测中，参考值取为非 RI 近似 (传统 ERI 积分) 的情形，而非以 CCSD 精确地密度作为参考。我们仅针对 aug-cc-pV$X$Z 与 aug-cc-pωCV$X$Z ($X=\mathrm{D,T,Q,5}$) 作测评。该小节不考察 Be 原子，即总共考察 13 个原子或离子体系。
 
-HF 方法的 RI 近似也即 RI-JK 方法。我们分别考察了 aug-cc-pV$X$Z-jkfit 辅助基与自动生成辅助基 ETB\cite{Stoychev-Neese.JCTC.2017}的表现。在图 \ref{fig.4.HF-RI-err} 与 \ref{fig.4.HF-RI-mean} 中，可以看出，RI 近似对于 HF 方法的密度径向函数所引入的误差，在所有体系下 MNAE 最大不超过 $2 \times 10^{-3}$。由于泛函近似或 post-HF 方法与与 CCSD 之间的密度径向函数误差通常大于 0.1，因此 RI 所引入的误差完全可以忽略。同时，我们注意到普遍来说，通过对库伦与交换能作数值优化的 aug-cc-pV$X$Z-jkfit 基组尽管大小较小，但误差相比于自动生成的 ETB 基组要更大一些。ETB 基组的误差通常随着基组的增大 (基数 $X$ 的增大) 而减小。
+HF 方法的 RI 近似也即 RI-JK 方法。我们分别考察了 aug-cc-pV$X$Z-jkfit 辅助基与自动生成辅助基 ETB的表现。在图 \ref{fig.4.HF-RI-err} 与 \ref{fig.4.HF-RI-mean} 中，可以看出，RI 近似对于 HF 方法的密度径向函数所引入的误差，在所有体系下 MNAE 最大不超过 $2 \times 10^{-3}$。由于泛函近似或 post-HF 方法与与 CCSD 之间的密度径向函数误差通常大于 0.1，因此 RI 所引入的误差完全可以忽略。同时，我们注意到普遍来说，通过对库伦与交换能作数值优化的 aug-cc-pV$X$Z-jkfit 基组尽管大小较小，但误差相比于自动生成的 ETB 基组要更大一些。ETB 基组的误差通常随着基组的增大 (基数 $X$ 的增大) 而减小。
 
 \begin{figure}[t]
   \centering
@@ -190,7 +190,7 @@ HF 方法的 RI 近似也即 RI-JK 方法。我们分别考察了 aug-cc-pV$X$Z-
   \label{fig.4.HF-RI-mean}
 \end{figure}
 
-对于 MP2 方法而言，我们也分别考察了 aug-cc-pV$X$Z-rifit 辅助基、aug-cc-pωCV$X$Z 辅助基与自动辅助基 ETB\cite{Stoychev-Neese.JCTC.2017}的表现。这里自洽场部分使用传统 ERI 积分实现，以保证 RI 近似误差仅出现在 MP2 的相关贡献部分。在图 \ref{fig.4.MP2-RI-err} 与 \ref{fig.4.MP2-RI-mean} 中，可以看出，采用对 MP2 相关能作优化的 aug-cc-pV$X$Z-rifit 辅助基或 aug-cc-pωCV$X$Z 辅助基时，密度梯度径向函数 GRD 与二阶梯度径向函数 LR 的误差会较大；对于 GRD，其最大的 MNAE 误差可以达到 0.9；这将会影响泛函或方法在密度径向函数上的评测准确性。相较而言，自动生成辅助基 ETB 方案将给出小于 $10^{-3}$ 的密度径向函数误差；这个误差不会影响测评表现。
+对于 MP2 方法而言，我们也分别考察了 aug-cc-pV$X$Z-rifit 辅助基、aug-cc-pωCV$X$Z 辅助基与自动辅助基 ETB的表现。这里自洽场部分使用传统 ERI 积分实现，以保证 RI 近似误差仅出现在 MP2 的相关贡献部分。在图 \ref{fig.4.MP2-RI-err} 与 \ref{fig.4.MP2-RI-mean} 中，可以看出，采用对 MP2 相关能作优化的 aug-cc-pV$X$Z-rifit 辅助基或 aug-cc-pωCV$X$Z 辅助基时，密度梯度径向函数 GRD 与二阶梯度径向函数 LR 的误差会较大；对于 GRD，其最大的 MNAE 误差可以达到 0.9；这将会影响泛函或方法在密度径向函数上的评测准确性。相较而言，自动生成辅助基 ETB 方案将给出小于 $10^{-3}$ 的密度径向函数误差；这个误差不会影响测评表现。
 
 \begin{figure}[t]
   \centering
