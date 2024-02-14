@@ -1,8 +1,9 @@
 % !TEX root=./dummy-01.tex
 
 \chapter{绪论}
+\label{sec.1.title}
 
-本工作所涉及的记号、重要公式与约定俗成，在附录 \alertref{sec.app.equation} 中定义。本论文正文将基于这些定义展开。
+本工作所涉及的记号、重要公式与约定俗成，在 \alertref{sec.3.notations} 节中定义。本论文正文将基于这些定义展开。
 
 \section{密度泛函理论}
 
@@ -27,6 +28,7 @@
 
 本工作中，$\hat H$ 包含四部分算符贡献，即动能算符 $\hat T$、库伦排斥算符 $\hat V_\mathrm{ee}$、外势算符 $\hat V_\mathrm{ext}$ 与非电子参与的算符 $\hat V_\text{non-elec}$：
 \begin{equation}
+  \label{eq.1.def.hamiltonian}
   \hat H = \hat T + \hat V_\mathrm{ee} + \hat V_\mathrm{ext} + \hat V_\text{non-elec}
 \end{equation}
 若没有其它外加势场作用在分子体系上 (如电场或磁场等)，$\hat V_\mathrm{ext}$ 表征原子核对电子的库伦吸引作用、$\hat V_\text{non-elec}$ 表征原子核间的库伦互斥作用。在此情形下，四部分算符贡献的具体表达式是
@@ -44,8 +46,10 @@
 
 本论文的工作涉及到偶极电场对分子体系的作用。对于电中性体系，该电场对分子的影响是规范不变的；我们始终规定规范原点为原点。在此情形下，$\hat T$ 与 $\hat V_\mathrm{ee}$ 没有发生变化。在强度为 $\symbfcal{E}^\dagger = (\varepsilon_x, \varepsilon_y, \varepsilon_z)$ 的偶极电场下 \cite{Atkins-Friedman.Oxford.2011}\footnote{事实上，电场是依频率而随时间变化的场；本工作中，不考虑含频率情形，或认为频率为 0，从而外势电场随时间是恒定的。本工作仅考虑电场多级展开的最低阶展开；因此我们仅考察偶极电场，而不考察更高阶的四极、八极等电场。}，
 \begin{align}
-  v (\bm{r}) &= - \sum_{A}^{n_\mathrm{atom}} \frac{Z_A}{| \bm{r} - \bm{R}_A |} - \mathbfcal{E}^\dagger \bm{r} \quad \text{(偶极电场外势)} \\
-  \hat V_\text{non-elec} &= \frac{1}{2} \sum_{A \neq B}^{n_\mathrm{atom}} \frac{Z_A Z_B}{| \bm{R}_A  - \bm{R}_B |} + \sum_{A}^{n_\mathrm{atom}} Z_A \mathbfcal{E}^\dagger \bm{R}_A \quad \text{(偶极电场外势)}
+  \label{eq.1.dipole-v-r}
+  v (\bm{r}) &= - \sum_{A}^{n_\mathrm{atom}} \frac{Z_A}{| \bm{r} - \bm{R}_A |} - \mathbfcal{E}^\dagger \bm{r} \quad \text{(dipole field)} \\
+  \label{eq.1.dipole-nonelec-r}
+  \hat V_\text{non-elec} &= \frac{1}{2} \sum_{A \neq B}^{n_\mathrm{atom}} \frac{Z_A Z_B}{| \bm{R}_A  - \bm{R}_B |} + \sum_{A}^{n_\mathrm{atom}} Z_A \mathbfcal{E}^\dagger \bm{R}_A \quad \text{(dipole field)}
 \end{align}
 
 定态 \Schrodinger 方程求解的困难至少来自于两方面。一者，从应用的角度，对计算化学的精度要求非常高。以化学反应为例，若速率方程满足 Arrhenius 公式 $k = A \exp \big( - \frac{E_\mathrm{a}}{R T} \big)$，又自由能 $E_a$ 计算若存在 1 kcal/mol 的误差，那么反应速率 $k$ 在 298 K 下就会有约 5 倍的误差。而目前密度泛函近似声称的最佳精度在 1.2 -- 2.0 kcal/mol \cite{Zhang-Xu.JPCL.2021, Santra-Martin.JPCL.2021}，还有可以提升的空间。二者，从表达式来看，由于库伦排斥算符 $\hat V_\mathrm{ee}$ 的存在，无法通过变量分离等技巧快速求解 \Schrodinger 方程。

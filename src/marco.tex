@@ -102,7 +102,6 @@
 
 %-----数学记号----
 \usepackage[ntheorem]{empheq}
-\newcommand{\bm}{\symbfit}
 \allowdisplaybreaks[1]
 
 %-----其它定义-----
@@ -153,6 +152,9 @@
 
 % 用于表示方法的格式
 \newcommand{\textmt}[1]{\textsf{#1}}
+
+% 向量加粗的简记
+\newcommand{\bm}[1]{\ifthenelse{\equal{#1}{0}}{\mathbf{#1}}{\symbfit{#1}}}
 
 %---------设定区结束----------
 
