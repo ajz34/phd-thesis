@@ -35,7 +35,7 @@ DFT 在 Hohenberg-Kohn 定理\cite{Hohenberg-Kohn.PR.1964}的框架下，是原�
 
 本工作所涉及的体系是 14 个原子或离子体系 (\ce{Be^0}, \ce{B^+}, \ce{B^3+}, \ce{C^2+}, \ce{C^4+}, \ce{N^3+}, \ce{N^5+}, \ce{O^4+}, \ce{O^6+}, \ce{F^5+}, \ce{F^7+}, \ce{Ne^0}, \ce{Ne^6+}, \ce{Ne^8+}) 的电子云密度与能量。这些体系均为 2 ($1s^2$)、4 ($1s^2 2s^2$)、10 ($1s^2 2s^2 2p^6$) 电子体系。
 
-与 Medvedev 等人的工作\cite{Medvedev-Lyssenko.S.2017}一致地，对于非变分方法，电子云密度 $\rho (\bm{r})$ 均使用弛豫密度生成 (对于 xDH 型泛函弛豫密度以 $D_{\mu \nu}^\textsf{PT2}$ 表示\alert{第三章公式})。测评过程所选用的基组是 aug-cc-pωCV5Z；对于使用到 RI 近似的情形，其辅助基组使用 PySCF 默认的自动生成方案。所有双杂化密度泛函选用经 PySCF 默认简化的 (120, 770) 格点积分，测评所用程序为 PySCF (ver 2.4.0) 与 dh (commit 80ca9e8)；密度泛函计算使用到 LibXC (commit 2a8caee)。对于 CCSD 方法，其自洽场能量收敛限是 $10^{-11} \ \text{Hartree}$、CCSD 能量收敛限是 $10^{-9} \ \text{Hartree}$；其余方法的能量收敛限均为 $10^{-9} \ \text{Hartree}$。本工作中其他 post-HF 方法 (MP4(sdq)、MP3) 计算使用 Gaussian 09 实现\cite{Su-Xu.PNAS.2018}。
+与 Medvedev 等人的工作\cite{Medvedev-Lyssenko.S.2017}一致地，对于非变分方法，电子云密度 $\rho (\bm{r})$ 均使用弛豫密度生成 (对于 xDH 型泛函弛豫密度以 $D_{\mu \nu}^\textsf{DH}$ 表示，参考式 (\alertref{eq.3.def.dh-resp-dm}))。测评过程所选用的基组是 aug-cc-pωCV5Z；对于使用到 RI 近似的情形，其辅助基组使用 PySCF 默认的自动生成方案。所有双杂化密度泛函选用经 PySCF 默认简化的 (120, 770) 格点积分，测评所用程序为 PySCF (ver 2.4.0) 与 dh (commit 80ca9e8)；密度泛函计算使用到 LibXC (commit 2a8caee)。对于 CCSD 方法，其自洽场能量收敛限是 $10^{-11} \ \text{Hartree}$、CCSD 能量收敛限是 $10^{-9} \ \text{Hartree}$；其余方法的能量收敛限均为 $10^{-9} \ \text{Hartree}$。本工作中其他 post-HF 方法 (MP4(sdq)、MP3) 计算使用 Gaussian 09 实现\cite{Su-Xu.PNAS.2018}。
 
 密度测评的参考值是 CCSD/aug-cc-pωCV5Z 下的弛豫密度；$1s^2 2s^2 \rightarrow 1s^2$ 过程电离能测评的参考值是经 HF 方法下 Douglas-Kroll 近似对相对论效应作矫正后的实验值\cite{Kepp-Kepp.S.2017, Douglas-Kroll.APY.1974, NIST.Atomic}。本工作也会对基组依赖性、RI 近似精度等问题作讨论；其具体的计算方法将在具体的讨论中展开。
 
@@ -239,7 +239,7 @@ HF 方法的 RI 近似也即 RI-JK 方法。我们分别考察了 aug-cc-pV$X$Z-
     \label{fig.4.basisdep-RDF}
 \end{figure}
 
-王颖等人\cite{Wang-He.JCTC.2017}的工作指出，Medvedev 等人\cite{Medvedev-Lyssenko.S.2017}测评所使用的标准，在部分泛函上对基组的过于敏感。若测评所选用的基组从 aug-cc-pωCV5Z 降级为 aug-cc-pV5Z，尽管对大多数泛函不产生显著影响，但对部分泛函、特别是 Minnesota 系列泛函，其误差将显著降低。在图 \ref{fig.4.basisdep-RDF} 中\footnote{该图中的数据较多，但不适合放在论文的正文中。\alert{我们将会在 github 的仓库中展示绘制该图的具体数据。}}，我们对所有泛函在这两个基组下的表现作测评。在该图中，若散点接近黑色虚线，则意味着泛函的密度径向函数误差不随基组的降级而产生明显变化。从该图中，我们可以看到的信息有
+王颖等人\cite{Wang-He.JCTC.2017}的工作指出，Medvedev 等人\cite{Medvedev-Lyssenko.S.2017}测评所使用的标准，在部分泛函上对基组的过于敏感。若测评所选用的基组从 aug-cc-pωCV5Z 降级为 aug-cc-pV5Z，尽管对大多数泛函不产生显著影响，但对部分泛函、特别是 Minnesota 系列泛函，其误差将显著降低。在图 \ref{fig.4.basisdep-RDF} 中，我们对所有泛函在这两个基组下的表现作测评。在该图中，若散点接近黑色虚线，则意味着泛函的密度径向函数误差不随基组的降级而产生明显变化。从该图中，我们可以看到的信息有
 \begin{itemize}[nosep]
     \item 对于 $\text{maxMNAE}_\text{RHO}$ 与 $\text{maxMNAE}_\text{GRD}$ 的测评，绝大多数泛函在 aug-cc-pωCV5Z 与 aug-cc-pV5Z 基组的误差表现较为接近。
     \item 对于 $\text{maxMNAE}_\text{LR}$ 的测评，许多泛函，特别是 Minnesota 系列泛函的 aug-cc-pV5Z 误差显著地小于 aug-cc-pωCV5Z。从实用的角度上来说，Minnesota 系列泛函的适用情形是中等到大型分子体系的反应，主要关注电子的价层效应、而通常不必要使用专注于内核电子效应的 aug-cc-pωCV$X$Z 基组。因此，对于这类泛函，包括 Minnesota 系列泛函，使用 aug-cc-pV5Z 基组确实有其合理性。
