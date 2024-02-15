@@ -154,7 +154,10 @@
 \newcommand{\textmt}[1]{\textsf{#1}}
 
 % 向量加粗的简记
-\newcommand{\bm}[1]{\ifthenelse{\equal{#1}{0}}{\mathbf{#1}}{\symbfit{#1}}}
+\newcommand{\bm}{\symbfit}
+
+% 保证 mathbb 被花括号包含
+\renewcommand{\mathbb}[1]{{\symbb{#1}}}
 
 %---------设定区结束----------
 
