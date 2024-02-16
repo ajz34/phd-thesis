@@ -72,6 +72,20 @@
 { \thechapter . \__fdu_arabic:n { table } }
 \ExplSyntaxOff
 
+% expl3 在 tabulararray 包的冲突
+% https://tex.stackexchange.com/a/463283
+\usepackage{expl3}
+\ExplSyntaxOn
+\int_new:N \g__tblr_defined_hdash_styles_prop
+\int_new:N \g__tblr_defined_vdash_styles_prop
+\int_new:N \g__tblr_initial_rows_prop
+\int_new:N \g__tblr_initial_columns_prop
+\int_new:N \g__tblr_initial_table_prop
+\int_new:N \g__tblr_initial_cells_prop
+\int_new:N \g__tblr_initial_hlines_prop
+\int_new:N \g__tblr_initial_vlines_prop
+\ExplSyntaxOff
+
 %-----图表设置-----
 \usepackage{siunitx}
 \usepackage{enumitem}
