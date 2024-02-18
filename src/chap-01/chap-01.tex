@@ -247,7 +247,7 @@ xDH 型泛函的能量泛函是第五阶泛函，相比于杂化泛函包含更�
   
   \item \textbf{对自旋相同与自旋相反 MP2 型相关能的分离与参数化。}基于 SCS 在 MP2 方法应用上的成功 \cite{Grimme-Grimme.JCP.2003}，大量实用的经验参数化双杂化泛函使用该方法计算 G\"{o}rling-Levy 微扰相关能。Head-Gordon 课题组以 B97 泛函作为基础进行多参数优化，得到 $\omega$B97X-2\cite{Chai-Head-Gordon.JCP.2009} 与 $\omega$B97M(2)\cite{Mardirossian-Head-Gordon.JCP.2018}。Martin 课题组进一步引入弥散矫正，发展了一系列参数化的 DSD 泛函，并对基底泛函的组成作了大量系统性地测评；提出了 DSD-PBEP86-D3BJ\cite{Kozuch-Martin.JCC.2013} 等双杂化泛函。徐昕课题组对以 B3LYP 为基底的 XYG3 泛函作更为仔细的参数优化，提出了 XYG7\cite{Zhang-Xu.JPCL.2021} 等双杂化泛函。由于对大多数计算化学软件来说容易实现、同时在主族化学与主流测评集上有良好的表现，这类泛函是目前应用最广泛的双杂化泛函。
   
-  除此之外，OS-MP2 的计算量在 Laplace-Transform 近似下比 MP2 本身要小一个数量级\cite{Almloef-Almloef.CPL.1991}，这也意味着例如 XYGJ-OS\cite{Zhang-Goddard.PNAS.2011}、xDH-PBE0\cite{Zhang-Xu.JCP.2012} 为代表的 OS-MP2 型泛函在计算量上小于一般的双杂化泛函。这些泛函的测评结果并不明显劣于其它 MP2 型泛函；在本工作中，我们还会表明 OS-MP2 型泛函在极化率性质上的计算表现经常优于其它双泛函。因此，这类泛函兼备良好精度与高效率。
+  除此之外，OS-MP2 的计算量在 Laplace-Transform 近似下比 MP2 本身要小一个数量级\cite{Almloef-Almloef.CPL.1991}，这也意味着例如 XYGJ-OS\cite{Zhang-Goddard.PNAS.2011}、xDH-PBE0\cite{Zhang-Xu.JCP.2012} 为代表的 OS-MP2 型泛函在计算量上小于一般的双杂化泛函。这些泛函的测评结果并不明显劣于其它 MP2 型泛函；在本工作中，我们还会表明 OS-MP2 型泛函在极化率性质上的计算表现经常优于其它双杂化泛函。因此，这类泛函兼备良好精度与高效率。
   
   \item \textbf{少参数化的泛函。}多参数的泛函通常是针对特定的反应与性质数据集进行优化的。一般来说，参数越多，过拟合的情况会越严重、在拟合集之外的反应与性质表现上越有可能产生不可预料的误差\cite{Medvedev-Lyssenko.S.2017}。以 Adamo 课题组代表的研究者，基于绝热路径提出了 PBE0-DH 等无参数优化的泛函\cite{Toulouse-Adamo.JCP.2011}。这些泛函通过理论依据推导或验证泛函参数、特别是交换系数 $c_\mathrm{x}$ 与相关系数 $c_\mathrm{c}$ 的数值范围，避免了重度经验参数拟合泛函所可能产生的问题。
   
