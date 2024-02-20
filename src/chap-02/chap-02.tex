@@ -150,12 +150,12 @@
 在本工作中，我们涉及的电子对方法是 IEPA 及其变种 sIEPA、以及 MP2/cr。大体来说，这些方法可以通过精确的方法一步一步近似得到。依照精度与计算消耗从大到小的排序，
 \begin{itemize}[nosep]
   \item \textbf{Full-CI。}该方法将所有基于 Fock 算符下基态下的激发态作为变分空间，对分子体系的 Hamilton 算符 $\hat H$ 求取变分极小。在有限基组下，若不考虑溶剂化、分子振动、精细光谱以及其它实验化学影响下，该方法是最精确的计算化学方法；
-  \item \textbf{CCD}\cite{Coester-Coester.NPB.1958, Coester-Kuemmel.NPB.1960, Cizek-Cizek.JCP.1966, Cizek-Paldus.IJQC.1971}\textbf{。}将高次 Hartree-Fock 激发态 (在 Fock 算符下的激发) 近似为二次簇算符的耦合。该方法满足正交不变性与大小延展性等重要的物理条件，且计算精度相对较高；但需要多次 $O(n_\mathrm{occ}^2 n_\mathrm{vir}^4)$ 复杂度的计算、且内存资源消耗巨大。
-  \item \textbf{CEPA}\cite{Ahlrichs-Ahlrichs.CPC.1979}\textbf{。}将 CCD 簇算符系数方程中的部分项近似为零，以对计算过程中复杂度为 $O(n_\mathrm{occ}^2 n_\mathrm{vir}^4)$ 的巨量计算与内存消耗的项作非占轨道的解耦，从而仅耦合占据电子对。该方法以牺牲一定的精度与正交不变性为代价，换取计算效率的改善、并仍然保证大小延展性的性质。由于解耦非占轨道的方式不唯一，CEPA 存在四种不同的近似形式。
-  \item \textbf{CPF}\cite{Ahlrichs-Ehrhardt.JCP.1985}\textbf{。}该方法是基于 CID 的改善。CPF 方法中，变分所涉及到的分母不同于波函数归一化量 $\langle \Psi | \Psi \rangle$，而是电子对的相关波函数的归一化量。该方法也具有大小延展性，且与 CEPA(1) 方法有所联系。
-  \item \textbf{IEPA}\cite{Sinanoǧlu-Sinanoǧlu.ACP.1964, Nesbet-Nesbet.ACP.1965}\textbf{。}以 CEPA(2) 为基础，进一步地解耦成对占据轨道。
-  \item \textbf{MP2/cr}\cite{Dykstra-Davidson.IJQC.2000}\textbf{。}以 CPF 为基础，忽略部分残差项近似而来。亦可以 CEPA(1) 为基础，通过激进的近似给出。
-  \item \textbf{MP2}\cite{Moeller-Plesset.PR.1934}\textbf{。}对于所有上述涉及到的方法，在求取激发系数 $t_{ij}^{ab}$ 时忽略所有二阶及以上的微扰项、或在求取相关能时忽略所有三阶及以上的微扰项。
+  \item \textbf{CCD。}将高次 Hartree-Fock 激发态 (在 Fock 算符下的激发) 近似为二次簇算符的耦合。该方法满足正交不变性与大小延展性等重要的物理条件，且计算精度相对较高；但需要多次 $O(n_\mathrm{occ}^2 n_\mathrm{vir}^4)$ 复杂度的计算、且内存资源消耗巨大。
+  \item \textbf{CEPA。}将 CCD 簇算符系数方程中的部分项近似为零，以对计算过程中复杂度为 $O(n_\mathrm{occ}^2 n_\mathrm{vir}^4)$ 的巨量计算与内存消耗的项作非占轨道的解耦，从而仅耦合占据电子对。该方法以牺牲一定的精度与正交不变性为代价，换取计算效率的改善、并仍然保证大小延展性的性质。由于解耦非占轨道的方式不唯一，CEPA 存在四种不同的近似形式。
+  \item \textbf{CPF。}该方法是基于 CID 的改善。CPF 方法中，变分所涉及到的分母不同于波函数归一化量 $\langle \Psi | \Psi \rangle$，而是电子对的相关波函数的归一化量。该方法也具有大小延展性，且与 CEPA(1) 方法有所联系。
+  \item \textbf{IEPA。}以 CEPA(2) 为基础，进一步地解耦成对占据轨道。
+  \item \textbf{MP2/cr。}以 CPF 为基础，忽略部分残差项近似而来。亦可以 CEPA(1) 为基础，通过激进的近似给出。
+  \item \textbf{MP2。}对于所有上述涉及到的方法，在求取激发系数 $t_{ij}^{ab}$ 时忽略所有二阶及以上的微扰项、或在求取相关能时忽略所有三阶及以上的微扰项。
 \end{itemize}
 
 简要回顾 IEPA 与 MP2/cr 的具体表达式。对于 IEPA 方法，其能量可以拆解为成对占据电子的贡献总和：

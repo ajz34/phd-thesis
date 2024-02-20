@@ -17,7 +17,7 @@
 
 基于前人的工作\cite{Gerratt-Mills.JCP.1968, Gerratt-Mills.JCP.1968a, Pople-Binkley.IJQC.1979, Dykstra-Jasien.CPL.1984, Handy-Schaefer.JCP.1984, Handy-Simandiras.CPL.1985, Pulay-Saeboe.TCA.1986, Trucks-Bartlett.CPL.1988, Frisch-Pople.CP.1990, Frisch-Pople.CPL.1990, Frisch-Pople.CPL.1990a, Gauss-Bartlett.JCP.1992, Stanton-Bartlett.CPL.1992, Johnson-Frisch.CPL.1993, Head-Gordon-Head-Gordon.CPL.1994, Yamaguchi-Schaefer.Oxford.1994, Weigend-Haeser.TCA.1997, Aikens-Gordon.TCA.2003, Cammi-Frisch.TCA.2004, Distasio-Head-Gordon.JCC.2007, Neese-Grimme.JCP.2007, Biczysko-Barone.JCTC.2010, Su-Xu.JCC.2013, Ji-Jung.JCTC.2013, Bykov-Neese.MP.2015, Stoychev-Neese.JCTC.2018, Gu-Xu.JCTC.2021, Yan-Xu.JCTC.2022}，将以电性质外场微扰为前提下，进行双杂化二阶梯度梯度的理论推演、与基于原子轨道基的程序化。本章节的内容自成完整的篇章。本章的理论推演部分是其他科研工作者已有成果的总结与重新复述；程序编写在 \textsc{PySCF} 程序的基础上独立完成。为清晰地表述程序实现思路与原则，在复述电性质二阶梯度理论时，本文着重于
 \begin{itemize}[nosep]
-    \item 一般不使用波函数，避免大量使用矩阵或张量记号、尽量使用展开了指标的矩阵或张量元素记号 (同时参见文献 \cite{Aikens-Gordon.TCA.2003})，并一定程度地规范指标记号 (参见 \ref{sec.3.notations} 节)；
+    \item 一般不使用波函数，避免大量使用矩阵或张量记号、尽量使用展开了指标的矩阵或张量元素记号 (同时参见文献 \citenum{Aikens-Gordon.TCA.2003})，并一定程度地规范指标记号 (参见 \ref{sec.3.notations} 节)；
     \item 对于 DFT 格点计算，也尽量使用张量记号展开密度在空间坐标上的数值；
     \item 文段自成篇章，尽可能展示诸多张量的定义，减少未定义记号的出现；
     \item 强调现有流行的密度泛函、其能量泛函 $E^\textmt{DH}$ 及其导出量的可加和性，即它是诸多能量贡献项的线性加和；在初步的理论推演中，弱化每个能量项的表达细节以求适用性更宽泛的表达式；在程序实现中，这些能量贡献具体展开为可扩展的实例列表。
