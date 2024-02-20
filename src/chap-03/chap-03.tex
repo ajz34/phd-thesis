@@ -1406,7 +1406,7 @@ $\symscr{T}_{pq}$ 与 $\symscr{T}_{pq}^\mathbb{A}$ 是容易求得的。$A_{ai, 
 
 对于链状烷烃 \ce{C_{n}H_{2n+2}}，\textsc{dh} (commit 80ca9e8) 与 \textsc{ORCA} (ver 5.0.4) 程序 RI-MP2/def2-QZVPPD 下极化率的程序效率测评结果展示于图 \ref{fig.3.timing-polar-chain}。最大的体系是 \ce{C10H22}，其基组数 $n_\mathrm{basis} = 1356$。
 
-计算设备为 Intel Xeon 6150 (36 cores)，允许使用的内存设定为 320 GB。\textsc{dh} 程序使用链接了 Intel oneAPI MKL 2022.2 的数学库 \textsc{NumPy}、并用 \textsc{gcc} (ver 12.2.0) 编译了 \textsc{PySCF} (ver 2.1.0)。\textsc{ORCA} 软件是公开方式可得的、多平台适用的二进制文件。由于程序的编译方式不同，因此该效率测评无法保证程序在最优化的条件下运行。尽管如此，\textsc{dh} 程序总体效率比 \textsc{ORCA} 快大约 2 倍；这至少可以表明 \textsc{dh} 程序，作为纯 \textsc{Python} 的 \textsc{PySCF} 扩展，在计算 RI-MP2 静态极化率问题时，有不亚于其他主流程序的较高计算效率。由于 DH 极化率计算的效率瓶颈在 RI-MP2 的极化率计算，因此可以预期我们的程序对 DH 的极化率计算也有可观的效率；同时，该程序的效率也将助力第 \alertref{sec.5.title} 章的高精度、大基组的 RI-MP2 静态极化率，以及第 \alertref{sec.6.title} 章的双杂化泛函极化率测评。
+计算设备为 Intel Xeon Gold 6150 (36 cores, 2.3--2.5 GHz with AVX512)，允许使用的内存设定为 320 GB。\textsc{dh} 程序使用链接了 \textsc{MKL} (Intel \textsc{oneAPI} 2022.2) 的数学库 \textsc{NumPy}、并用 \textsc{GCC} (ver 12.2.0) 编译了 \textsc{PySCF} (ver 2.1.0)。\textsc{ORCA} 软件是公开方式可得的、多平台适用的二进制文件。由于程序的编译方式不同，因此该效率测评无法保证程序在最优化的条件下运行。尽管如此，\textsc{dh} 程序总体效率比 \textsc{ORCA} 快大约 2 倍；这至少可以表明 \textsc{dh} 程序，作为纯 \textsc{Python} 的 \textsc{PySCF} 扩展，在计算 RI-MP2 静态极化率问题时，有不亚于其他主流程序的较高计算效率。由于 DH 极化率计算的效率瓶颈在 RI-MP2 的极化率计算，因此可以预期我们的程序对 DH 的极化率计算也有可观的效率；同时，该程序的效率也将助力第 \alertref{sec.5.title} 章的高精度、大基组的 RI-MP2 静态极化率，以及第 \alertref{sec.6.title} 章的双杂化泛函极化率测评。
 
 \begin{figure}[!ht]
     \centering
