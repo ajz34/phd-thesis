@@ -5,7 +5,7 @@
 
 \section{引言}
 
-表征技术是实验科学问题的重要分支之一。对于化学而言，经典的 IR、UV-Vis、Raman、NMR 等表征手段被合称为“四大光谱”\footnote{“四大光谱”的说法并不是正式的。也有将其中一类谱替换为 MS 或 XRD 等。正文中说道计算化学对谱学问题有所帮助；但并不是所有谱学问题都与电子结构有紧密的关系、基于第一性的计算化学也未必能解决或解释所有谱学问题。例如 MS 与分子构型关联度更大、XRD 与晶格本身更有关、通过计算化学难以给出色谱的保留时间等。}，在以有机化学为代表的分支学科中是必要的佐证手段。近年来，STM、\emph{in situ} IR、SERS、SEM 等众多新兴表征手段兴起。由于其中的许多表征问题可以归结为电子结构或分子振动效应，因此可以或有希望通过第一性的计算化学方法计算得到，从而实验与理论或计算可以相互印证，推动化学学科的发展。%\alert{可以引用一些近期文献}
+表征技术是实验科学问题的重要分支之一。对于化学而言，经典的 IR、UV-Vis、Raman、NMR 等表征手段被合称为“四大光谱”\footnote{“四大光谱”的说法并不是正式的。也有将其中一类谱替换为 MS 或 XRD 等。正文中说道计算化学对谱学问题有所帮助；但并不是所有谱学问题都与电子结构有紧密的关系、基于第一性的计算化学也未必能解决或解释所有谱学问题。例如 MS 与分子构型关联度更大、XRD 与晶格本身更有关、通过计算化学难以给出色谱的保留时间等。}，在以有机化学为代表的分支学科中是必要的佐证手段。近年来，STM、\emph{in situ} IR、SERS、SEM 等众多新兴表征手段兴起。由于其中的许多表征问题可以归结为电子结构或分子振动效应，因此可以或有希望通过第一性的计算化学方法计算得到，从而实验与理论或计算可以相互印证，推动化学学科的发展。
 
 在第 \alertref{sec.1.title}、\alertref{sec.2.title} 章中已经表明密度泛函方法，特别是双杂化密度泛函近似，在基态能量计算上有较好的表现。我们预期在谱学计算上，双杂化密度泛函方法也能有良好的表现。为此，我们需要发展双杂化泛函的谱学计算方法。由于较多光谱问题 (包括 IR、Raman、NMR 等) 可以归结为偶极电场或磁场 $\symbfscr{E}$ 下平衡态分子的基态能量 $E(\symbfscr{E})$ 扰动问题，其中 $\symbfscr{E}$ 为微扰外场；那么光谱的强度经常取决于导数量
 \begin{equation}
@@ -35,7 +35,7 @@
 
 \begin{table}[!ht]
 \centering
-\caption{字母记号与指标约定俗成}
+\caption[字母记号与指标约定俗成]{字母记号与指标约定俗成。}
 \label{tab.A.notation-suxscript}
 \widetabular{
     \begin{tabular}{llcll}
@@ -488,7 +488,7 @@ $c_\mathrm{x}$ 特指严格交换系数 (区别于其它 DFA 交换能分量的�
 \begin{figure}
     \centering
     \includegraphics[width=0.5\textwidth]{assets/NumDipole-z.pdf}
-    \caption{能量在外场下的变化情况 $E(\symbfscr{E})$。图中的体系是键长 0.9914 \AA、键角 116.10$^\circ$ 的 \ce{NH_3} 体系；$C_3$ 旋转轴与 $z$ 轴重合；计算模型为 HF/6-31G；外场沿 $z$ 轴即外场强度向量 $\symbfscr{E}^\dagger = (0, 0, \mathcal{E}_z)$。蓝色曲线绘制了 $E(\symbfscr{E})$ 关于 $\mathcal{E}_z$ 的函数。橙色曲线绘制了 $\mathcal{E}_z = 0$ 时 $\partial_{\mathcal{E}_z} E$ 的导数值；该导数值等于偶极矩在 $z$ 轴上的分量 $\mu_z$。}
+    \caption[能量在外加偶极电场下的变化情况]{能量在外场下的变化情况 $E(\symbfscr{E})$。图中的体系是键长 0.9914 \AA、键角 116.10$^\circ$ 的 \ce{NH_3} 体系；$C_3$ 旋转轴与 $z$ 轴重合；计算模型为 HF/6-31G；外场沿 $z$ 轴即外场强度向量 $\symbfscr{E}^\dagger = (0, 0, \mathcal{E}_z)$。蓝色曲线绘制了 $E(\symbfscr{E})$ 关于 $\mathcal{E}_z$ 的函数。橙色曲线绘制了 $\mathcal{E}_z = 0$ 时 $\partial_{\mathcal{E}_z} E$ 的导数值；该导数值等于偶极矩在 $z$ 轴上的分量 $\mu_z$。}
     \label{fig.3.NumDipole-z}
 \end{figure}
 
@@ -1411,7 +1411,7 @@ $\symscr{T}_{pq}$ 与 $\symscr{T}_{pq}^\mathbb{A}$ 是容易求得的。$A_{ai, 
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=0.8\textwidth]{assets/timing-polar-chain.pdf}
-    \caption{\textsc{dh} 与 \textsc{ORCA} 程序计算 RI-MP2 静态极化率的效率测评。}
+    \caption[\textsc{dh} 与 \textsc{ORCA} 程序计算 RI-MP2 静态极化率的效率测评]{\textsc{dh} 与 \textsc{ORCA} 程序计算 RI-MP2 静态极化率的效率测评。}
     \label{fig.3.timing-polar-chain}
 \end{figure}
 

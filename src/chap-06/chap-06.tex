@@ -69,13 +69,13 @@ $$
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.6\textwidth]{assets/pol-functionals-distribution.pdf}
-    \caption{本工作测评泛函的大致分类与数量示意图。}
+    \caption[静态极化率测评泛函的大致分类与数量示意图]{本工作测评泛函的大致分类与数量示意图。}
     \label{fig.6.pol-functionals-distribution}
 \end{figure}
 
 \begin{table}[!ht]
 \centering
-\caption{极化率测评权重表。}
+\caption[静态极化率测评权重表]{静态极化率测评权重表。}
 \label{tab.6.benchmark-weight}
 \widetabular{
     \begin{tabular}{lld{3.8}}
@@ -125,7 +125,7 @@ HR46 与 T144 大多数分子为有机分子、且分子大小较大，两个数
 
 \begin{table}[!ht]
 \centering
-\caption{B2PLYP 在数据集 HR46 与 T144 下同性极化率 $\alpha$ 的基组相对方均根误差 (RelRMSD / \%)${}^a$。}
+\caption[B2PLYP 在 HR46 与 T144 下同性极化率 $\alpha$ 的基组 RelRMSD]{B2PLYP 在数据集 HR46 与 T144 下同性极化率 $\alpha$ 的基组相对方均根误差 (RelRMSD / \%)${}^a$。}
 \label{tab.6.b2p-conv-hr46-t144-iso}
 \widetabular{
     \begin{tabular}{cld{1.3}d{1.3}d{1.3}d{1.3}d{1.3}d{1.3}}
@@ -161,7 +161,7 @@ HR46 与 T144 大多数分子为有机分子、且分子大小较大，两个数
 
 \begin{table}[!ht]
 \centering
-\caption{B2PLYP 在数据集 HR46 与 T144 下异性极化率 $\gamma$ 的基组相对方均根误差 (RelRMSD / \%)${}^a$。}
+\caption[B2PLYP 在 HR46 与 T144 下异性极化率 $\gamma$ 的基组 RelRMSD]{B2PLYP 在数据集 HR46 与 T144 下异性极化率 $\gamma$ 的基组相对方均根误差 (RelRMSD / \%)${}^a$。}
 \label{tab.6.b2p-conv-hr46-t144-aniso}
 \widetabular{
     \begin{tabular}{cld{1.3}d{1.3}d{1.3}d{1.3}d{1.3}d{1.3}}
@@ -209,7 +209,7 @@ HH101 数据集包含的分子或原子较小、且有机分子很少；其数�
 
 \begin{table}[!ht]
 \centering
-\caption{B2PLYP 在数据集 HH101 下同性极化率 $\alpha$ 的基组相对方均根误差 (RelRMSD / \%)${}^a$。}
+\caption[B2PLYP 在 HH101 下同性极化率 $\alpha$ 的基组 RelRMSD]{B2PLYP 在数据集 HH101 下同性极化率 $\alpha$ 的基组相对方均根误差 (RelRMSD / \%)${}^a$。}
 \label{tab.6.b2p-conv-hh101-iso}
 \widetabular{
     \begin{tabular}{cld{1.3}d{1.3}d{1.3}d{1.3}d{1.3}d{1.3}}
@@ -266,7 +266,7 @@ B2PLYP 是典型的双杂化泛函；其他各式各色双杂化泛函的严格�
 \begin{figure}[!hp]
     \centering
     \includegraphics[width=0.8\textwidth]{assets/benchmark-compare-dh-low.pdf}
-    \caption{诸双杂化泛函 (DH) 与诸低阶泛函 (low-rung DFA) 泛函极化率数据集相对方均根误差 (RelRMSD) 测评表现图。小提琴图的数据密度建模方式是 Gaussian 核，参数 \texttt{bw\_method} 设为 0.2。箱型图展示了密度泛函测评误差的 1/4 位次、中位次、3/4 位次误差。图例中括号数字表示其对应分类被测评的泛函数量。}
+    \caption[诸泛函极化率 RelRMSD 测评表现图]{诸双杂化泛函 (DH) 与诸低阶泛函 (low-rung DFA) 泛函极化率数据集相对方均根误差 (RelRMSD) 测评表现图。小提琴图的数据密度建模方式是 Gaussian 核，参数 \texttt{bw\_method} 设为 0.2。箱型图展示了密度泛函测评误差的 1/4 位次、中位次、3/4 位次误差。图例中括号数字表示其对应分类被测评的泛函数量。}
     \label{fig.6.benchmark-compare-dh-low}
 \end{figure}
 
@@ -305,7 +305,7 @@ B2PLYP 是典型的双杂化泛函；其他各式各色双杂化泛函的严格�
 \begin{figure}[hp]
     \centering
     \includegraphics[width=0.8\textwidth]{assets/benchmark-compare-xdh-bdh.pdf}
-    \caption{诸 XYG3 型双杂化泛函 (xDH) 与诸 B2PLYP 型双杂化泛函 (bDH) 泛函极化率数据集相对方均根误差 (RelRMSD) 测评表现图。图例参考图 \ref{fig.6.benchmark-compare-dh-low}。}
+    \caption[xDH 与 bDH 极化率 RelRMSD 测评表现与对比图]{诸 XYG3 型双杂化泛函 (xDH) 与诸 B2PLYP 型双杂化泛函 (bDH) 泛函极化率数据集相对方均根误差 (RelRMSD) 测评表现图。图例参考图 \ref{fig.6.benchmark-compare-dh-low}。}
     \label{fig.6.benchmark-compare-xdh-bdh}
 \end{figure}
 
@@ -316,7 +316,7 @@ B2PLYP 是典型的双杂化泛函；其他各式各色双杂化泛函的严格�
 \begin{figure}[hp]
     \centering
     \includegraphics[width=0.8\textwidth]{assets/benchmark-compare-dh-rsh.pdf}
-    \caption{诸 bDH 型双杂化泛函依交换部分是否为 RSH 型泛函而分类的极化率数据集相对方均根误差 (RelRMSD) 测评表现图。图例参考图 \ref{fig.6.benchmark-compare-dh-low}。}
+    \caption[bDH 依 RSH 分类的极化率 RelRMSD 测评表现图]{诸 bDH 型双杂化泛函依交换部分是否为 RSH 型泛函而分类的极化率数据集相对方均根误差 (RelRMSD) 测评表现图。图例参考图 \ref{fig.6.benchmark-compare-dh-low}。}
     \label{fig.6.benchmark-compare-dh-rsh}
 \end{figure}
 
@@ -333,7 +333,7 @@ B2PLYP 是典型的双杂化泛函；其他各式各色双杂化泛函的严格�
 
 \begin{sidewaystable}
 \centering
-\caption{以 WTRE 误差量标优化的 xDH@B3LYP 模型静态极化率参数，及各静态极化率数据集误差结果${}^3$。}
+\caption[以静态极化率 WTRE 量标优化的 xDH@B3LYP 参数与测评结果]{以 WTRE 误差量标优化的 xDH@B3LYP 模型静态极化率参数，及各静态极化率数据集误差结果${}^a$。}
 \label{tab.6.xdh-b3lyp-polar-opt}
 \widetabular{
     \begin{tabular}{lld{2.7}d{2.7}d{2.7}d{2.7}d{2.7}d{2.7}d{2.7}d{2.7}}
@@ -409,7 +409,7 @@ B2PLYP 是典型的双杂化泛函；其他各式各色双杂化泛函的严格�
 
 \begin{table}[!ht]
 \centering
-\caption{HH132 数据集中存在对称性破缺问题的分子及极化率结果${}^a$。}
+\caption[HH132 中存在对称性破缺问题的体系]{HH132 数据集中存在对称性破缺问题的分子及极化率结果${}^a$。}
 \label{tab.6.supp.symm-broken}
 \widetabular{
     \begin{tabular}{lld{4.4}d{2.3}d{2.3}d{2.3}d{2.3}d{2.3}}
@@ -450,7 +450,7 @@ B2PLYP 是典型的双杂化泛函；其他各式各色双杂化泛函的严格�
 
 \begin{table}[!ht]
 \centering
-\caption{HH132 数据集解析与数值极化率相对误差超过 2\% 的体系、及其极化率数值与误差${}^a$。}
+\caption[HH132 解析与数值极化率误差大的体系]{HH132 数据集解析与数值极化率相对误差超过 2\% 的体系、及其极化率数值与误差${}^a$。}
 \label{tab.6.supp.mp2-hait-g16}
 \widetabular{
     \begin{tabular}{ld{3.3}d{3.3}d{3.3}d{4.4}d{4.4}d{4.4}}
@@ -475,7 +475,7 @@ B2PLYP 是典型的双杂化泛函；其他各式各色双杂化泛函的严格�
 
 \begin{table}[!ht]
 \centering
-\caption{HH132 数据集不同程序 (\textsc{dh} 与 \textsc{Gaussian 16}) 解析极化率相对误差超过 0.5\% 的体系、及其极化率数值与误差${}^a$。}
+\caption[HH132 不同程序解析极化率误差大的体系]{HH132 数据集不同程序 (\textsc{dh} 与 \textsc{Gaussian 16}) 解析极化率相对误差超过 0.5\% 的体系、及其极化率数值与误差${}^a$。}
 \label{tab.6.supp.mp2-dh-g16}
 \widetabular{
     \begin{tabular}{ld{3.3}d{3.3}d{3.3}d{3.3}d{3.3}d{3.3}}
@@ -500,7 +500,7 @@ B2PLYP 是典型的双杂化泛函；其他各式各色双杂化泛函的严格�
 
 \begin{table}[!htp]
 \centering
-\caption{HH132 数据集部分双杂化泛函 aCVTZ 数据与解析极化率相对误差超过 2\% 的体系、及其极化率数值与误差${}^a$。}
+\caption[HH132 双杂化泛函 aCVTZ 数值与解析极化率误差大体系]{HH132 数据集部分双杂化泛函 aCVTZ 数值与解析极化率相对误差超过 2\% 的体系、及其极化率数值与误差${}^a$。}
 \label{tab.6.supp.double-hybrid-hh132-g16}
 \widetabular{
     \begin{tabular}{llld{1.3}d{1.3}d{1.3}d{3.3}d{3.3}d{3.3}}
@@ -551,7 +551,7 @@ Hait 与 Head-Gordon 在 HH132 数据集上测评了双杂化泛函\cite{Hait-He
 
 \begin{table}[!htp]
 \centering
-\caption{HH132 数据集部分双杂化泛函 aCVTZ 数据不同程序 (\textsc{dh} 与 \textsc{Gaussian 16}) 解析极化率相对误差超过 0.2\% 的体系、及其极化率数值与误差${}^a$。}
+\caption[HH132 双杂化泛函 aCVTZ 数据不同程序解析极化率误差大的体系]{HH132 数据集部分双杂化泛函 aCVTZ 数据不同程序 (\textsc{dh} 与 \textsc{Gaussian 16}) 解析极化率相对误差超过 0.2\% 的体系、及其极化率数值与误差${}^a$。}
 \label{tab.6.supp.double-hybrid-dh-g16}
 \widetabular{
     \begin{tabular}{llld{2.3}d{2.3}d{2.3}d{2.3}d{2.3}d{2.3}}
@@ -576,11 +576,11 @@ Hait 与 Head-Gordon 在 HH132 数据集上测评了双杂化泛函\cite{Hait-He
 
 总地来说，自旋极化体系的极化率计算结果容易因对称性破缺、收敛问题、波函数稳定性问题、外加电场合理性问题等等，而导致不同程序、不同计算策略会给出不同的结果。表 \ref{tab.6.supp.double-hybrid-hh132-g16} 涉及到的自旋极化体系的数量有 13 个；加上表 \ref{tab.6.supp.symm-broken} 涉及到的 13 个对称性破缺体系、与表 \ref{tab.6.supp.mp2-hait-g16} 涉及到的 5 个 MP2 极化率误差超过 2\% 的体系，总共有 31 个自旋极化体系的计算存在困难。这占到 HH132 数据集中 57 个自旋极化体系的 54\%。
 
-一方面，为尽可能保证测评的公平，我们将在 HH132 数据集的计算中，排除上述计算上有困难的 31 个自旋极化体系；即对 HH132 数据集总共测评 101 个分子，其中自旋非极化体系为 75 个保持不变、自旋极化体系为 26 个。具体计算的体系如 \ref{tab.6.supp.HH101-species} 所示。另一方面，由于排除的自旋极化体系过多，很大程度上改变了原先数据集自旋极化与非极化体系的平衡；因此与 HH132 测评工作\cite{Hait-Head-Gordon.PCCP.2018}不同，本工作的测评结果将对自旋极化与非极化体系分别作测评，而不测评两类体系的总误差。
+一方面，为尽可能保证测评的公平，我们将在 HH132 数据集的计算中，排除上述计算上有困难的 31 个自旋极化体系；即对 HH132 数据集总共测评 101 个分子，记为 HH101 数据集；其中自旋非极化体系为 75 个保持不变、自旋极化体系为 26 个。具体计算的体系如 \ref{tab.6.supp.HH101-species} 所示。另一方面，由于排除的自旋极化体系过多，很大程度上改变了原先数据集自旋极化与非极化体系的平衡；因此与 HH132 测评工作\cite{Hait-Head-Gordon.PCCP.2018}不同，本工作的测评结果将对自旋极化与非极化体系分别作测评，而不测评两类体系的总误差。
 
 \begin{table}[!htp]
 \centering
-\caption{本工作所测评的 HH132 数据集体系；其中自旋极化体系 75 个、自旋极化体系 26 个。}
+\caption[本工作所测评的 HH101 数据集体系]{本工作所测评的 HH101 数据集体系；其中自旋极化体系 75 个、自旋极化体系 26 个。}
 \label{tab.6.supp.HH101-species}
 \widetabular{
     \begin{tabular}{llllllll}
@@ -611,7 +611,7 @@ Hait 与 Head-Gordon 在 HH132 数据集上测评了双杂化泛函\cite{Hait-He
 
 \begin{table}[!ht]
 \centering
-\caption{B2PLYP 在数据集 HH101 下极化率分量 $\alpha_{xx}, \alpha_{yy}, \alpha_{zz}$ 的基组相对方均根误差 (RelRMSD / \%)${}^a$。}
+\caption[B2PLYP 在数据集 HH101 下极化率分量基组 RelRMSD]{B2PLYP 在数据集 HH101 下极化率分量 $\alpha_{xx}, \alpha_{yy}, \alpha_{zz}$ 的基组相对方均根误差 (RelRMSD / \%)${}^a$。}
 \label{tab.6.b2p-conv-hh101-rmsre}
 \widetabular{
     \begin{tabular}{cld{1.3}d{1.3}d{1.3}d{1.3}d{1.3}d{1.3}}
@@ -658,7 +658,7 @@ Hait 与 Head-Gordon 在 HH132 数据集上测评了双杂化泛函\cite{Hait-He
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=0.9\textwidth]{assets/basis_exponent_plot.pdf}
-    \caption{aCV$X$Z ($X=\mathrm{T,Q,5}$) 与 apc$n$ ($n=2,3,4$) 碳原子基函数构成。线条对应的横坐标是 GTO 的指数。实线对应的是作为基函数的原始 GTO。虚线对应的是 CGTO 中被缩并的原始 GTO；单根虚线不构成基。缩并系数信息未展示于该图。图例括号中的数字代表该基组碳原子的基函数数量。}
+    \caption[aCV$X$Z 与 apc$n$ 碳原子基函数构成]{aCV$X$Z ($X=\mathrm{T,Q,5}$) 与 apc$n$ ($n=2,3,4$) 碳原子基函数构成。线条对应的横坐标是 GTO 的指数。实线对应的是作为基函数的原始 GTO。虚线对应的是 CGTO 中被缩并的原始 GTO；单根虚线不构成基。缩并系数信息未展示于该图。图例括号中的数字代表该基组碳原子的基函数数量。}
     \label{fig.6.basis-exponent-plot}
 \end{figure}
 
@@ -667,7 +667,7 @@ Hait 与 Head-Gordon 在 HH132 数据集上测评了双杂化泛函\cite{Hait-He
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=0.4\textwidth]{assets/basis_exponent_plot_compare.pdf}
-    \caption{aCV5Z 与 apc$n$ ($n=2,3,4$) 碳原子基函数构成。图例参考图 \ref{fig.6.basis-exponent-plot}。}
+    \caption[aCV5Z 与 apc$n$ 碳原子基函数构成]{aCV5Z 与 apc$n$ ($n=2,3,4$) 碳原子基函数构成。图例参考图 \ref{fig.6.basis-exponent-plot}。}
     \label{fig.6.basis-exponent-plot-compare}
 \end{figure}
 
@@ -680,7 +680,7 @@ Hait 与 Head-Gordon 在 HH132 数据集上测评了双杂化泛函\cite{Hait-He
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=0.9\textwidth]{assets/converg-b2p-scf-aCV5Z.pdf}
-    \caption{B2PLYP 同性极化率的自洽场贡献部分 $\alpha_\textsf{SCF}$ 不同基组相对于 aCV5Z 的相对误差。对于 HH101 非自旋极化数据集 (NSP)，氢原子未纳入该图的分析 (下同)。}
+    \caption[B2PLYP $\alpha_\textsf{SCF}$ 不同基组相对于 aCV5Z 的相对误差]{B2PLYP 同性极化率的自洽场贡献部分 $\alpha_\textsf{SCF}$ 不同基组相对于 aCV5Z 的相对误差。对于 HH101 非自旋极化数据集 (NSP)，氢原子未纳入该图的分析 (下同)。}
     \label{fig.6.converg-b2p-scf-aCV5Z}
 \end{figure}
 
@@ -695,7 +695,7 @@ Hait 与 Head-Gordon 在 HH132 数据集上测评了双杂化泛函\cite{Hait-He
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=0.9\textwidth]{assets/converg-b2p-scf-apc4.pdf}
-    \caption{B2PLYP 同性极化率的自洽场贡献部分 $\alpha_\textsf{SCF}$ 不同基组相对于 apc4 的相对误差。}
+    \caption[B2PLYP $\alpha_\textsf{SCF}$ 不同基组相对于 apc4 的相对误差]{B2PLYP 同性极化率的自洽场贡献部分 $\alpha_\textsf{SCF}$ 不同基组相对于 apc4 的相对误差。}
     \label{fig.6.converg-b2p-scf-apc4}
 \end{figure}
 
@@ -706,14 +706,14 @@ Hait 与 Head-Gordon 在 HH132 数据集上测评了双杂化泛函\cite{Hait-He
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=0.9\textwidth]{assets/converg-b2p-pt2-aCV5Z.pdf}
-    \caption{B2PLYP 同性极化率的自洽场贡献部分 $\symup{\Delta} \alpha_\textsf{PT2}$ 不同基组相对于 aCV[Q5]Z 的相对误差。}
+    \caption[B2PLYP $\symup{\Delta} \alpha_\textsf{PT2}$ 不同基组相对于 aCV[Q5]Z 的相对误差]{B2PLYP 同性极化率的自洽场贡献部分 $\symup{\Delta} \alpha_\textsf{PT2}$ 不同基组相对于 aCV[Q5]Z 的相对误差。}
     \label{fig.6.converg-b2p-pt2-aCV5Z}
 \end{figure}
 
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=0.9\textwidth]{assets/converg-b2p-pt2-apc4.pdf}
-    \caption{B2PLYP 同性极化率的自洽场贡献部分 $\symup{\Delta} \alpha_\textsf{PT2}$ 不同基组相对于 apc[34] 的相对误差。}
+    \caption[B2PLYP $\symup{\Delta} \alpha_\textsf{PT2}$ 不同基组相对于 apc[34] 的相对误差]{B2PLYP 同性极化率的自洽场贡献部分 $\symup{\Delta} \alpha_\textsf{PT2}$ 不同基组相对于 apc[34] 的相对误差。}
     \label{fig.6.converg-b2p-pt2-apc4}
 \end{figure}
 
@@ -729,7 +729,7 @@ Hait 与 Head-Gordon 在 HH132 数据集上测评了双杂化泛函\cite{Hait-He
 
 \begin{table}[!ht]
 \centering
-\caption{B2PLYP 泛函 apc[34] 与 aCV[Q5]Z 外推模型间同性极化率 $\alpha$ 的基组相对方均根误差 (RelRMSD / \%)。}
+\caption[B2PLYP 泛函 apc\text{[34]} 与 aCV\text{[Q5]}Z 同性极化率的基组 RelRMSD]{B2PLYP 泛函 apc[34] 与 aCV[Q5]Z 外推模型间同性极化率 $\alpha$ 的基组相对方均根误差 (RelRMSD / \%)。}
 \label{tab.6.b2p-conv-5zeta}
 \widetabular{
     \begin{tabular}{ld{2.4}d{2.4}d{2.4}}
@@ -752,7 +752,7 @@ Hait 与 Head-Gordon 在 HH132 数据集上测评了双杂化泛函\cite{Hait-He
 
 \begin{table}[!ht]
 \centering
-\caption{B2PLYP apc3 与 apc[34] 间极化率的基组相对方均根误差 (RelRMSD / \%)。}
+\caption[B2PLYP 泛函 apc3 与 aCV\text{[34]}Z 同性极化率的基组 RelRMSD]{B2PLYP apc3 与 apc[34] 间极化率的基组相对方均根误差 (RelRMSD / \%)。}
 \label{tab.6.b2p-conv-apc3}
 \widetabular{
     \begin{tabular}{lld{2.4}d{2.4}d{2.4}}
@@ -798,7 +798,7 @@ Hait 与 Head-Gordon 在 HH132 数据集上测评了双杂化泛函\cite{Hait-He
 
 \begin{landscape}
 \begin{longtable}[c]{lcccccrrrrrrrrc}
-\caption{诸密度泛函近似在数据集 HR46、T144 与 HH101 上的极化率测评表现。除 WTRE 为无量纲量外，其余误差以 RelRMSD (\%) 计算${}^a$。}
+\caption[诸密度泛函近似极化率测评表现]{诸密度泛函近似在数据集 HR46、T144 与 HH101 上的极化率测评表现。除 WTRE 为无量纲量外，其余误差以 RelRMSD (\%) 计算${}^a$。}
 \label{tab.6.full-benchmark}
 \\ \toprule
 & & & \multicolumn{3}{c}{杂化类型} & \multicolumn{4}{c}{同性极化率} & \multicolumn{2}{c}{异性极化率} & \multicolumn{2}{c}{极化率分量} & \\
@@ -807,7 +807,7 @@ Hait 与 Head-Gordon 在 HH132 数据集上测评了双杂化泛函\cite{Hait-He
 \cmidrule(lr){9-10} \cmidrule(lr){13-14}
 & & & & & & & & \multicolumn{1}{c}{NSP} & \multicolumn{1}{c}{SP} & & & \multicolumn{1}{c}{NSP} & \multicolumn{1}{c}{SP} & \\ \midrule
 \endfirsthead
-\caption{(续表)}
+\caption[]{(续表)}
 \\ \toprule
 & & & \multicolumn{3}{c}{杂化类型} & \multicolumn{4}{c}{同性极化率} & \multicolumn{2}{c}{异性极化率} & \multicolumn{2}{c}{极化率分量} & \\
 \cmidrule(lr){4-6} \cmidrule(lr){7-10} \cmidrule(lr){11-12} \cmidrule(lr){13-14}

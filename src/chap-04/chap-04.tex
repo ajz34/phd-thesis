@@ -40,14 +40,12 @@ DFT 在 Hohenberg-Kohn 定理\cite{Hohenberg-Kohn.PR.1964}的框架下，是原�
 
 密度测评的参考值是 CCSD/aug-cc-pωCV5Z 下的弛豫密度；$1s^2 2s^2 \rightarrow 1s^2$ 过程电离能测评的参考值是经 HF 方法下 Douglas-Kroll 近似对相对论效应作矫正后的实验值\cite{Kepp-Kepp.S.2017, Douglas-Kroll.APY.1974, NIST.Atomic}。本工作也会对基组依赖性、RI 近似精度等问题作讨论；其具体的计算方法将在具体的讨论中展开。
 
-\alert{这里有对本工作原文的引用。在盲审阶段，这里的文段需要修改。}
-
 本工作对 Medvedev 等人的工作\cite{Medvedev-Lyssenko.S.2017}和苏乃强等人的工作\cite{Su-Xu.PNAS.2018}所测评的泛函作重新计算与验证、并补充目前流行的双杂化泛函。由于 PySCF 目前不支持含 $\nabla^2 \rho(\bm{r})$ 的 meta-GGA，因此未对 B98 作测评；同时不支持多长短程参数的泛函，因此不对 HISS 作测评。出于收敛困难，因此未对含有 G96 交换的泛函 (包括 Gill, GLYP, GOP, GP86, GPBE, GPW91, GPZ81, GVWN, GVWN1RPA)、以及 MVS 和 SCAN 泛函作测评。出于实现方式不一致，本工作不展示 X$\alpha$ 的测评结果。因此，在 Medvedev 等人测评的 128 个泛函中，本工作测评并汇报其中 114 个泛函。同时，我们将引入 15 个 2015 年以后发展的低阶 (“Jacob 阶梯”上 1--4 阶) 新泛函、以及 44 个双杂化泛函，即总共 173 个泛函近似，如图 \ref{fig.4.functionals-distribution} 所示。由于不同程序的实现差异，BC, M05, M05-2X, M06-2X, M06-HF, M06-L, M08-SO, M11-L, MN12-L, SOGGA11, SOP, τHTCH, xDH-PBE0 等泛函的结果与早先文献有数值上的略微差异，但不影响总体结论。
 
 \begin{figure}[hp]
     \centering
     \includegraphics[width=0.6\textwidth]{assets/functionals-distribution.pdf}
-    \caption{本工作测评泛函的大致分类与数量示意图。}
+    \caption[原子体系电子云密度与能量测评的泛函分类与数量示意]{本工作测评泛函的大致分类与数量示意图。}
     \label{fig.4.functionals-distribution}
 \end{figure}
 
@@ -90,7 +88,7 @@ DFT 在 Hohenberg-Kohn 定理\cite{Hohenberg-Kohn.PR.1964}的框架下，是原�
 \begin{figure}[tp]
     \centering
     \includegraphics[width=0.8\textwidth]{assets/maxMNAE-against-year.pdf}
-    \caption{诸泛函密度径向函数最大均值数归一方均误差 (maxMNAE) 对其年代的散点图。实线表示的平均值曲线是通过对年代作 5 年为期的二次平均所得，因此反映的是前后 10 年左右的总体趋势变化。交换泛函中，局域部分所对应的泛函类型 (LDA、GGA、meta-GGA 或 mGGA) 以散点形状 (三角、叉号、加号) 区分；非局域部分 (无非局域、杂化、双杂化) 以颜色 (蓝色、橙色、绿色) 区分。由于部分数据点误差较大，在 GRD 图中 M11-L, N12, N12-SX, MN15, MN15-L 五个泛函、以及 LR 图中 M11-L, MN12-L, MN12-SX, MN15, MN15-L 五个泛函未展示在图中。}
+    \caption[径向函数 maxMNAE 对年代的散点图]{诸泛函密度径向函数最大均值数归一方均误差 (maxMNAE) 对其年代的散点图。实线表示的平均值曲线是通过对年代作 5 年为期的二次平均所得，因此反映的是前后 10 年左右的总体趋势变化。交换泛函中，局域部分所对应的泛函类型 (LDA、GGA、meta-GGA 或 mGGA) 以散点形状 (三角、叉号、加号) 区分；非局域部分 (无非局域、杂化、双杂化) 以颜色 (蓝色、橙色、绿色) 区分。由于部分数据点误差较大，在 GRD 图中 M11-L, N12, N12-SX, MN15, MN15-L 五个泛函、以及 LR 图中 M11-L, MN12-L, MN12-SX, MN15, MN15-L 五个泛函未展示在图中。}
     \label{fig.4.maxMNAE-against-year}
 \end{figure}
 
@@ -100,12 +98,12 @@ Medvedev 等人工作的 Fig.\ 1 中，展现了随着年代的发展，泛函�
 
 与此同时注意到，对于图 \ref{fig.4.maxMNAE-against-year}，局域、杂化与双杂化泛函三个层级之间有较为明显的差别；但在每个层级内部，对于泛函是否掺杂 LDA、GGA 或 meta-GGA 形式的近似，影响不是非常显著。这表明，总体上来说，相比于引入局域信息仔细程度的多寡而言，泛函包含多少程度的非局域信息，将比较显著地影响泛函近似在密度上的测评结果。由于双杂化泛函同时包含了交换与相关两者的非局域效应，因此更有可能给出更好的密度表现。但同时需要指出，Medvedev 等人 Fig.\ 2 附近的讨论中，表明对于交换能，并非引入愈多的非局域杂化效应，密度上的表现愈好；引入适当的非局域效应才能正确描述密度性质。
 
-除了密度性质外，在图 \ref{fig.4.MAE-etot-against-year} 中，我们也对诸泛函在离子体系的 $1s^2 2s^2 \rightarrow 1s^2$ 过程的电离能问题的表现作依年代发展的测评。从年代的发展趋势来看，泛函近似的误差走势在原子电离能测评上与密度测评近乎一致，但细节的结构上有比较明显的不同。相比于密度的测评表现，对于原子的电离能，尽管一般来说包含愈多的非局域信息 (即泛函从“Jacob 阶梯”的第 1--3 阶爬升到第 4 到第 5 阶) 通常有愈稳定且愈低的误差，但这种优势并非是绝对的。事实上，如果仅从表现最优异的泛函来看，甚至结论是相反的：不含任何杂化的 PBELYP (MAD 误差 0.12 eV) 比杂化泛函 M06-2X (MAD 误差 0.23 eV) 比双杂化泛函 revXYG3 (MAD 误差 0.31 eV) 要更为精确。但一方面，误差较大的泛函通常是低阶泛函、而高阶泛函在电离能上的表现可以保证稳定地好于 HF 方法。而另一方面，对于低阶泛函，不少情形下可以对能量或密度的其中一者有良好的描述，但往往难以同时对两者都有出色的表现。以上面列举的三个泛函为例，若以 RHO、GRD、LR 三者的 maxMNAE 取最大值作为密度径向函数的测评标准，则 revXYG3 (1.113) 比 PBELYP (3.710) 比 M06-2X (4.214) 要更为出色。双杂化泛函则确实可以在平衡能量和密度误差的同时，对两者同时有显著的提升。
+除了密度性质外，在图 \ref{fig.4.MAE-etot-against-year} 中，我们也对诸泛函在离子体系的 $1s^2 2s^2 \rightarrow 1s^2$ 过程的电离能问题的表现作依年代发展的测评。从年代的发展趋势来看，泛函近似的误差走势在原子电离能测评上与密度测评近乎一致，但细节的结构上有比较明显的不同。相比于密度的测评表现，对于原子的电离能，尽管一般来说包含愈多的非局域信息 (即泛函从“Jacob 阶梯”的第 1--3 阶爬升到第 4 到第 5 阶) 通常有愈稳定且愈低的误差，但这种优势并非是绝对的。事实上，如果仅从表现最优异的泛函来看，甚至结论是相反的：不含任何杂化的 PBELYP (MAE 误差 0.12 eV) 比杂化泛函 M06-2X (MAE 误差 0.23 eV) 比双杂化泛函 revXYG3 (MAE 误差 0.31 eV) 要更为精确。但一方面，误差较大的泛函通常是低阶泛函、而高阶泛函在电离能上的表现可以保证稳定地好于 HF 方法。而另一方面，对于低阶泛函，不少情形下可以对能量或密度的其中一者有良好的描述，但往往难以同时对两者都有出色的表现。以上面列举的三个泛函为例，若以 RHO、GRD、LR 三者的 maxMNAE 取最大值作为密度径向函数的测评标准，则 revXYG3 (1.113) 比 PBELYP (3.710) 比 M06-2X (4.214) 要更为出色。双杂化泛函则确实可以在平衡能量和密度误差的同时，对两者同时有显著的提升。
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.7\textwidth]{assets/MAE-etot-against-year.pdf}
-    \caption{诸泛函密度电离能平均误差 MAE 对其年代的散点图。图例参考图 \ref{fig.4.maxMNAE-against-year}。}
+    \caption[电离能平均误差 MAE 对年代的散点图]{诸泛函电离能平均误差 MAE 对其年代的散点图。图例参考图 \ref{fig.4.maxMNAE-against-year}。}
     \label{fig.4.MAE-etot-against-year}
 \end{figure}
 
@@ -118,7 +116,7 @@ Medvedev 等人工作的 Fig.\ 1 中，展现了随着年代的发展，泛函�
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.6\textwidth]{assets/compare-err-RHO-GRD.pdf}
-    \caption{诸泛函密度径向函数测评的 $\text{maxMNAE}_\text{RHO}$ 与 $\text{maxMNAE}_\text{GRD}$ 对照图。}
+    \caption[密度径向函数 $\text{maxMNAE}_\text{RHO}$ 与 $\text{maxMNAE}_\text{GRD}$ 对照图]{诸泛函密度径向函数测评的 $\text{maxMNAE}_\text{RHO}$ 与 $\text{maxMNAE}_\text{GRD}$ 对照图。}
     \label{fig.4.compare-err-RHO-GRD}
 \end{figure}
 
@@ -127,7 +125,7 @@ Medvedev 等人工作的 Fig.\ 1 中，展现了随着年代的发展，泛函�
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.6\textwidth]{assets/compare-err-maxMNAE-MAEIP.pdf}
-    \caption{诸泛函密度径向函数测评的 $\text{maxMNAE}$ 与电离能的平均绝对值误差 (MAE) 对照图。这里的 maxMNAE 是指三个密度测评指标 $\text{maxMNAE}_\text{RHO}$、$\text{maxMNAE}_\text{GRD}$、$\text{maxMNAE}_\text{LR}$ 的最大值。}
+    \caption[诸泛函密度径向函数 $\text{maxMNAE}$ 与电离能 MAE 对照图]{诸泛函密度径向函数测评的 $\text{maxMNAE}$ 与电离能的平均绝对值误差 (MAE) 对照图。这里的 maxMNAE 是指三个密度测评指标 $\text{maxMNAE}_\text{RHO}$、$\text{maxMNAE}_\text{GRD}$、$\text{maxMNAE}_\text{LR}$ 的最大值。}
     \label{fig.4.compare-err-maxMNAE-MAEIP}
 \end{figure}
 
@@ -136,7 +134,7 @@ Medvedev 等人工作的 Fig.\ 1 中，展现了随着年代的发展，泛函�
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.6\textwidth]{assets/compare-err-maxMNAE-MAEIP-dh.pdf}
-    \caption{双杂化泛函密度径向函数测评的 $\text{maxMNAE}$ 与电离能的平均绝对值误差 (MAE) 对照图。这里的 maxMNAE 是指三个密度测评指标 $\text{maxMNAE}_\text{RHO}$、$\text{maxMNAE}_\text{GRD}$、$\text{maxMNAE}_\text{LR}$ 的最大值。}
+    \caption[双杂化泛函密度径向函数 $\text{maxMNAE}$ 与电离能的 MAE 对照图]{双杂化泛函密度径向函数测评的 $\text{maxMNAE}$ 与电离能的平均绝对值误差 (MAE) 对照图。这里的 maxMNAE 是指三个密度测评指标 $\text{maxMNAE}_\text{RHO}$、$\text{maxMNAE}_\text{GRD}$、$\text{maxMNAE}_\text{LR}$ 的最大值。}
     \label{fig.4.compare-err-maxMNAE-MAEIP-dh}
 \end{figure}
 
@@ -147,7 +145,7 @@ Medvedev 等人工作的 Fig.\ 1 中，展现了随着年代的发展，泛函�
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.9\textwidth]{assets/compare-err-relative.pdf}
-    \caption{部分泛函的密度径向函数最大误差 maxMNAE 与电离能平均绝对误差 MAD 测评表现示意图。线图 (maxMNAE) 的误差是指三个密度测评指标 $\text{maxMNAE}_\text{RHO}$、$\text{maxMNAE}_\text{GRD}$、$\text{maxMNAE}_\text{LR}$ 的最大值。柱状图 (电离能误差) 的零点选取为 MP2 的误差 (0.973 eV)。对于特定泛函近似，只有其在图上对应的条形柱与散点都在红色五角星标识的 MP2 误差的情形下，该方法才能被认为同时在电离能与密度径向函数的表现上都优于 MP2 方法。}
+    \caption[部分泛函密度径向函数 maxMNAE 与电离能 MAE 测评表现示意图]{部分泛函的密度径向函数最大误差 maxMNAE 与电离能平均绝对误差 MAE 测评表现示意图。线图 (maxMNAE) 的误差是指三个密度测评指标 $\text{maxMNAE}_\text{RHO}$、$\text{maxMNAE}_\text{GRD}$、$\text{maxMNAE}_\text{LR}$ 的最大值。柱状图 (电离能误差) 的零点选取为 MP2 的误差 (0.973 eV)。对于特定泛函近似，只有其在图上对应的条形柱与散点都在红色五角星标识的 MP2 误差的情形下，该方法才能被认为同时在电离能与密度径向函数的表现上都优于 MP2 方法。}
     \label{fig.4.compare-err-relative}
 \end{figure}
 
@@ -180,14 +178,14 @@ HF 方法的 RI 近似也即 RI-JK 方法。我们分别考察了 aug-cc-pV$X$Z-
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.7\textwidth]{assets/HF-RI-err.pdf}
-  \caption{HF 方法 RI 近似下的 maxMNAE 误差。}
+  \caption[HF 方法 RI 近似下的 maxMNAE 误差]{HF 方法 RI 近似下的 maxMNAE 误差。}
   \label{fig.4.HF-RI-err}
 \end{figure}
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.7\textwidth]{assets/HF-RI-mean.pdf}
-  \caption{HF 方法 RI 近似下的 meanMNAE 误差。}
+  \caption[HF 方法 RI 近似下的 meanMNAE 误差]{HF 方法 RI 近似下的 meanMNAE 误差。}
   \label{fig.4.HF-RI-mean}
 \end{figure}
 
@@ -196,14 +194,14 @@ HF 方法的 RI 近似也即 RI-JK 方法。我们分别考察了 aug-cc-pV$X$Z-
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.7\textwidth]{assets/MP2-RI-err.pdf}
-  \caption{MP2 方法相关贡献 RI 近似下的 maxMNAE 误差。}
+  \caption[MP2 方法相关贡献 RI 近似下的 maxMNAE 误差]{MP2 方法相关贡献 RI 近似下的 maxMNAE 误差。}
   \label{fig.4.MP2-RI-err}
 \end{figure}
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.7\textwidth]{assets/MP2-RI-mean.pdf}
-  \caption{MP2 方法相关贡献 RI 近似下的 meanMNAE 误差。}
+  \caption[MP2 方法相关贡献 RI 近似下的 meanMNAE 误差]{MP2 方法相关贡献 RI 近似下的 meanMNAE 误差。}
   \label{fig.4.MP2-RI-mean}
 \end{figure}
 
@@ -218,14 +216,14 @@ HF 方法的 RI 近似也即 RI-JK 方法。我们分别考察了 aug-cc-pV$X$Z-
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.7\textwidth]{assets/HF-RI-eng.pdf}
-    \caption{HF 方法 RI 近似下电离能最大误差。}
+    \caption[HF 方法 RI 近似下电离能最大误差]{HF 方法 RI 近似下电离能最大误差。}
     \label{fig.4.HF-RI-eng}
 \end{figure}
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.7\textwidth]{assets/MP2-RI-eng.pdf}
-    \caption{MP2 方法相关贡献 RI 近似下电离能最大误差。}
+    \caption[MP2 方法相关贡献 RI 近似下电离能最大误差]{MP2 方法相关贡献 RI 近似下电离能最大误差。}
     \label{fig.4.MP2-RI-eng}
 \end{figure}
 
@@ -236,7 +234,7 @@ HF 方法的 RI 近似也即 RI-JK 方法。我们分别考察了 aug-cc-pV$X$Z-
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.95\textwidth]{assets/basisdep-RDF.pdf}
-    \caption{诸泛函的密度径向函数在 aug-cc-pωCV5Z 与 aug-cc-pV5Z 基组下 maxMNAE 误差的比较。该图对横纵坐标使用对数坐标。}
+    \caption[aug-cc-pωCV5Z 与 aug-cc-pV5Z 基组下 maxMNAE 误差的比较]{诸泛函的密度径向函数在 aug-cc-pωCV5Z 与 aug-cc-pV5Z 基组下 maxMNAE 误差的比较。该图对横纵坐标使用对数坐标。}
     \label{fig.4.basisdep-RDF}
 \end{figure}
 
@@ -260,14 +258,14 @@ HF 方法的 RI 近似也即 RI-JK 方法。我们分别考察了 aug-cc-pV$X$Z-
 
 \begin{landscape}
 \begin{longtable}{lcccccrrrrrrrrr}
-    \caption{诸泛函近似与波函数方法的原子密度径向函数与 $1s^2 2s^2 \rightarrow 1s^2$ 电离能测评详细数据。}
+    \caption[密度径向函数与 $1s^2 2s^2 \rightarrow 1s^2$ 电离能测评详细数据]{诸泛函近似与波函数方法的原子密度径向函数与 $1s^2 2s^2 \rightarrow 1s^2$ 电离能测评详细数据。}
     \label{tab.4.full-atom-benchmark}
     \\ \toprule
     & & & \multicolumn{3}{c}{杂化类型} & \multicolumn{3}{c}{密度 maxMNAE 误差} & \multicolumn{3}{c}{密度 meanMNAE 误差} & \multicolumn{3}{c}{IP / eV} \\
     \cmidrule(lr){4-6} \cmidrule(lr){7-9} \cmidrule(lr){10-12} \cmidrule(lr){13-15}
     计算方法 & 年代 & 组成\tabnote{a} & 交换\tabnote{b} & 相关\tabnote{c} & xDH & RHO & GRD & LR & RHO & GRD & LR & RMSE & MAE & MaxE \\ \midrule
     \endfirsthead
-    \caption{(续表)}
+    \caption[]{(续表)}
     \\ \toprule
     & & & \multicolumn{3}{c}{杂化类型} & \multicolumn{3}{c}{密度 maxMNAE 误差} & \multicolumn{3}{c}{密度 meanMNAE 误差} & \multicolumn{3}{c}{IP / eV} \\
     \cmidrule(lr){4-6} \cmidrule(lr){7-9} \cmidrule(lr){10-12} \cmidrule(lr){13-15}
@@ -469,27 +467,27 @@ HF 方法的 RI 近似也即 RI-JK 方法。我们分别考察了 aug-cc-pV$X$Z-
 \begin{figure}[hp]
     \centering
     \includegraphics[width=0.95\textwidth]{assets/supp-fig-s1.pdf}
-    \caption{部分双杂化泛函与 MP2 方法的密度径向函数在 Be、Ne 原子上相对于 CCSD 方法的误差图。}
+    \caption[部分双杂化泛函与 MP2 方法密度径向函数在 Be、Ne 原子的误差]{部分双杂化泛函与 MP2 方法的密度径向函数在 Be、Ne 原子上相对于 CCSD 方法的误差图。}
     \label{fig.4.supp-fig-s1}
 \end{figure}
 
 \begin{figure}[hp]
     \centering
     \includegraphics[width=0.95\textwidth]{assets/supp-fig-s2.pdf}
-    \caption{部分低阶泛函与 HF 方法的密度径向函数在 Be、Ne 原子上相对于 CCSD 方法的误差图。B3LYPV1R 指使用 VWN1RPA 作为 LDA 相关能部分的 B3LYP 方法。SVWN 的相关能部分是 VWN5。}
+    \caption[部分低阶泛函密度径向函数在 Be、Ne 原子的误差]{部分低阶泛函与 HF 方法的密度径向函数在 Be、Ne 原子上相对于 CCSD 方法的误差图。B3LYPV1R 指使用 VWN1RPA 作为 LDA 相关能部分的 B3LYP 方法。SVWN 的相关能部分是 VWN5。}
     \label{fig.4.supp-fig-s2}
 \end{figure}
 
 \begin{figure}[hp]
     \centering
     \includegraphics[width=0.95\textwidth]{assets/supp-fig-s3.pdf}
-    \caption{以 B3LYP 作为自洽场参考态的部分双杂化泛函 (XYG3, XYGJ-OS, revXYG3)、以及 B3LYP 的密度径向函数在 Be、Ne 原子上相对于 CCSD 方法的误差图。B3LYPV1R 指使用 VWN1RPA 作为 LDA 相关能部分的 B3LYP 方法，也是 XYG3 及其衍生泛函使用的自洽场参考态。}
+    \caption[B3LYP 参考态泛函密度径向函数在 Be、Ne 原子的误差]{以 B3LYP 作为自洽场参考态的部分双杂化泛函 (XYG3, XYGJ-OS, revXYG3)、以及 B3LYP 的密度径向函数在 Be、Ne 原子上相对于 CCSD 方法的误差图。B3LYPV1R 指使用 VWN1RPA 作为 LDA 相关能部分的 B3LYP 方法，也是 XYG3 及其衍生泛函使用的自洽场参考态。}
     \label{fig.4.supp-fig-s3}
 \end{figure}
 
 \begin{figure}[hp]
     \centering
     \includegraphics[width=0.95\textwidth]{assets/supp-fig-s4.pdf}
-    \caption{以 PBE0 作为自洽场参考态的部分双杂化泛函 (xDH-PBE0)、以及 PBE0 的密度径向函数在 Be、Ne 原子上相对于 CCSD 方法的误差图。}
+    \caption[PBE0 参考态泛函密度径向函数在 Be、Ne 原子的误差]{以 PBE0 作为自洽场参考态的部分双杂化泛函 (xDH-PBE0)、以及 PBE0 的密度径向函数在 Be、Ne 原子上相对于 CCSD 方法的误差图。}
     \label{fig.4.supp-fig-s4}
 \end{figure}

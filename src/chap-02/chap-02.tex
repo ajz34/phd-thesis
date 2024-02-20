@@ -60,7 +60,7 @@
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.5\textwidth]{assets/adiabatic-curve.jpg}
-  \caption{绝热路径曲线示意图。下图取自文献\cite{Su-Xu.JCP.2014}。图中的 $W_{xc}^{\lambda}$ 即本文中的 $\mathcal{W}_{\lambda}$。图中的 $W'_{xc}{}^{0}$ 数值上等于本文中的 $2 E_\textmt{GL}^{(2)}$。}
+  \caption[绝热路径曲线示意图]{绝热路径曲线示意图。下图取自文献\cite{Su-Xu.JCP.2014}。图中的 $W_{xc}^{\lambda}$ 即本文中的 $\mathcal{W}_{\lambda}$。图中的 $W'_{xc}{}^{0}$ 数值上等于本文中的 $2 E_\textmt{GL}^{(2)}$。}
   \label{fig.2.adiabatic-curve}
 \end{figure}
 
@@ -194,7 +194,7 @@
 
 \begin{table}[h]
 \centering
-\caption{测评数据集概况与参数拟合权重。}
+\caption[测评数据集概况与参数拟合权重]{测评数据集概况与参数拟合权重。}
 \label{tab.2.subset-detail}
 \widetabular{
   \begin{tabular}{llllr}
@@ -231,7 +231,7 @@
 
 \begin{sidewaystable}
 \centering
-\caption{现有泛函在 GMTKN55 全数据集与 Minnesota 2015 部分子集的测评结果。单位 \si{kcal.mol^{-1}}。}
+\caption[现有泛函在 GMTKN55 与 Minnesota 2015 部分子集的测评误差]{现有双杂化泛函在 GMTKN55 全数据集与 Minnesota 2015 部分子集的测评结果。单位 \si{kcal.mol^{-1}}。}
 \label{tab.2.bench-current-gmtkn55-minnesota}
 \widetabular{
   \begin{tabular}{ld{1.3}d{1.3}d{2.2}d{2.2}d{2.2}d{2.2}d{2.2}d{2.2}}
@@ -300,7 +300,7 @@ GMTKN55 数据集计算选用的基组列于表 \ref{tab.2.basis-gmtkn55}。GMTK
 
 \begin{table}[h]
 \centering
-\caption{GMTKN55 数据集计算所使用的基组}
+\caption[GMTKN55 数据集计算所使用的基组]{GMTKN55 数据集计算所使用的基组}
 \label{tab.2.basis-gmtkn55}
 \widetabular{
   \begin{tabular}{lll}
@@ -327,7 +327,7 @@ GMTKN55 数据集计算选用的基组列于表 \ref{tab.2.basis-gmtkn55}。GMTK
 
 \begin{table}[h]
 \centering
-\caption{GMTKN55 数据集计算所使用的冻核近似规则 (Rn 前元素)}
+\caption[GMTKN55 数据集计算所使用的冻核近似规则]{GMTKN55 数据集计算所使用的冻核近似规则 (Rn 前元素)}
 \label{tab.2.fc-gmtkn55}
 \widetabular{
   \begin{tabular}{cccccc}
@@ -395,7 +395,7 @@ xDH@B3LYP 模型总共有 7 个可变参数。XYG7 近似泛函的参数是通�
 
 \begin{table}[h]
 \centering
-\caption{XYG6+1 模型泛函在 GMTKN55 全集与 Minnesota 2015 五个子集下参数优化结果。}
+\caption[XYG6+1 模型泛函的参数优化结果]{XYG6+1 模型泛函在 GMTKN55 全集与 Minnesota 2015 五个子集下参数优化结果。}
 \label{tab.2.coeff-xyg6-1-weighted-error}
 \widetabular{
   \begin{tabular}{lrd{3.8}d{3.8}d{3.8}}
@@ -423,7 +423,7 @@ xDH@B3LYP 模型总共有 7 个可变参数。XYG7 近似泛函的参数是通�
 
 \begin{table}[h]
 \centering
-\caption{部分 xDH@B3LYP 模型与 XYG6+1 模型近似泛函在数据集下的测评表现。误差单位 \si{kcal.mol^{-1}}。}
+\caption[部分 xDH@B3LYP 模型与 XYG6+1 模型的测评表现]{部分 xDH@B3LYP 模型与 XYG6+1 模型近似泛函在数据集下的测评表现。误差单位 \si{kcal.mol^{-1}}。}
 \label{tab.2.bench-xyg6-1}
 \widetabular{
   \begin{tabular}{ld{2.2}d{2.2}d{2.2}d{2.2}d{2.2}d{2.2}d{2.2}}
@@ -477,7 +477,7 @@ xDH@B3LYP 模型总共有 7 个可变参数。XYG7 近似泛函的参数是通�
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.6\textwidth]{assets/plot-seq-cr-proportion.pdf}
-  \caption{XYG6+1/cr 在限制参数 $a_8$ 下对加权误差的拟合后数据集误差表现。}
+  \caption[XYG6+1/cr 在限制参数 $E_\mathrm{c}^\textmt{EP}$ 占比系数下的参数优化误差表现]{XYG6+1/cr 在限制参数 $a_8$ 下对加权误差的拟合后数据集误差表现。}
   \label{fig.2.plot-seq-cr-proportion}
 \end{figure}
 
@@ -492,7 +492,7 @@ xDH@B3LYP 模型总共有 7 个可变参数。XYG7 近似泛函的参数是通�
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.6\textwidth]{assets/plot-seq-cr-against-cx.pdf}
-  \caption{XYG6+1/cr 在限制参数 $a_8$ 下对加权误差的拟合后 MR-TM-BE13、MR-MGN-BE17 数据集的 MUEPB 误差表现、以及参数 $c_\mathrm{x} = a_1$ 在给定参数 $a_8$ 下的变化情况。}
+  \caption[XYG6+1/cr 在限制参数 $E_\mathrm{c}^\textmt{EP}$ 占比系数下误差与 $E_\mathrm{x}^\textmt{exact}$ 系数表现]{XYG6+1/cr 在限制参数 $a_8$ 下对加权误差的拟合后 MR-TM-BE13、MR-MGN-BE17 数据集的 MUEPB 误差表现、以及参数 $c_\mathrm{x} = a_1$ 在给定参数 $a_8$ 下的变化情况。}
   \label{fig.2.plot-seq-cr-against-cx}
 \end{figure}
 
@@ -516,7 +516,7 @@ xDH@B3LYP 模型总共有 7 个可变参数。XYG7 近似泛函的参数是通�
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.9\textwidth]{assets/plot-seq.pdf}
-  \caption{诸参数模型在限制参数 $c_\mathrm{x} = a_1$ 下对加权误差的拟合后数据集的误差表现。}
+  \caption[诸参数模型在限制 $E_\mathrm{x}^\textmt{exact}$ 系数下参数优化后误差]{诸参数模型在限制参数 $c_\mathrm{x} = a_1$ 下对加权误差的拟合后数据集的误差表现。}
   \label{fig.2.plot-seq}
 \end{figure}
 
@@ -536,7 +536,7 @@ XYG6+1 模型尽管对以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为代表的 HOMO/LUMO
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.9\textwidth]{assets/plot-seq-cr.pdf}
-  \caption{XYG6+1/cr 模型在限制参数 $c_\mathrm{x} = a_1$ 下对数据集拟合后数据集的误差表现。左图针对 GMTKN55 的 WTMAD-2 误差量标优化，右图针对 GMTKN55 与 Minnesota 2015 五个子集的加权误差量标优化。点划线表示在对应误差量标下 $c_\mathrm{x}$ 的最佳取值。}
+  \caption[XYG6+1/cr 模型在限制 $E_\mathrm{x}^\textmt{exact}$ 系数下不同参数优化策略测评误差]{XYG6+1/cr 模型在限制参数 $c_\mathrm{x} = a_1$ 下对数据集拟合后数据集的误差表现。左图针对 GMTKN55 的 WTMAD-2 误差量标优化，右图针对 GMTKN55 与 Minnesota 2015 五个子集的加权误差量标优化。点划线表示在对应误差量标下 $c_\mathrm{x}$ 的最佳取值。}
   \label{fig.2.plot-seq-xyg7}
 \end{figure}
 
@@ -551,7 +551,7 @@ XYG6+1 模型尽管对以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为代表的 HOMO/LUMO
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.7\textwidth]{assets/curve-N2.pdf}
-  \caption{各方法在 \ce{N2} 解离曲线的表现。}
+  \caption[\ce{N2} 解离曲线表现]{各方法在 \ce{N2} 解离曲线的表现。}
   \label{fig.2.curve-N2}
 \end{figure}
 
@@ -560,7 +560,7 @@ XYG6+1 模型尽管对以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为代表的 HOMO/LUMO
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.7\textwidth]{assets/curve-F2.pdf}
-  \caption{各方法在 \ce{F2} 解离曲线的表现。}
+  \caption[\ce{F2} 解离曲线表现]{各方法在 \ce{F2} 解离曲线的表现。}
   \label{fig.2.curve-F2}
 \end{figure}
 
@@ -569,14 +569,14 @@ XYG6+1 模型尽管对以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为代表的 HOMO/LUMO
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.7\textwidth]{assets/curve-H2O.pdf}
-  \caption{各方法在 \ce{H2O} 解离曲线的表现。}
+  \caption[\ce{H2O} 解离曲线表现]{各方法在 \ce{H2O} 解离曲线的表现。}
   \label{fig.2.curve-H2O}
 \end{figure}
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.7\textwidth]{assets/curve-H2O-part.pdf}
-  \caption{各方法在 \ce{H2O} 解离曲线 1.4--2.25 \AA 段的表现。}
+  \caption[\ce{H2O} 解离曲线 1.4--2.25 \AA 段表现]{各方法在 \ce{H2O} 解离曲线 1.4--2.25 \AA 段的表现。}
   \label{fig.2.curve-H2O-part}
 \end{figure}
 
@@ -585,7 +585,7 @@ XYG6+1 模型尽管对以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为代表的 HOMO/LUMO
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.7\textwidth]{assets/curve-H6.pdf}
-  \caption{各方法在 \ce{H6} 解离曲线的表现。}
+  \caption[\ce{H6} 解离曲线表现]{各方法在 \ce{H6} 解离曲线的表现。}
   \label{fig.2.curve-H6}
 \end{figure}
 
@@ -612,7 +612,7 @@ XYG6+1 模型尽管对以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为代表的 HOMO/LUMO
 
 \begin{table}[ht]
 \centering
-\caption{部分 xDH@B3LYP 模型与 XYG6+1 模型近似泛函在 MR-MGM-BE4 子集上误差。\\反应能与 MUEPB 单位 \si{kcal.mol^{-1}}；HOMO/LUMO gap 单位 eV。}
+\caption[MR-MGM-BE4 子集测评误差]{部分 xDH@B3LYP 模型与 XYG6+1 模型近似泛函在 MR-MGM-BE4 子集上误差。\\反应能与 MUEPB 单位 \si{kcal.mol^{-1}}；HOMO/LUMO gap 单位 eV。}
 \label{tab.2.supp.MR-MGM-BE4}
 \widetabular{
   \begin{tabular}{ld{1.2}d{3.2}d{3.2}d{3.2}d{3.2}d{3.2}d{3.2}}
@@ -638,7 +638,7 @@ XYG6+1 模型尽管对以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为代表的 HOMO/LUMO
 
 \begin{table}[ht]
 \centering
-\caption{部分 xDH@B3LYP 模型与 XYG6+1 模型近似泛函在 MR-MGN-BE17 子集上误差。\\反应能与 MUEPB 单位 \si{kcal.mol^{-1}}；HOMO/LUMO gap 单位 eV。}
+\caption[MR-MGN-BE17 子集测评误差]{部分 xDH@B3LYP 模型与 XYG6+1 模型近似泛函在 MR-MGN-BE17 子集上误差。\\反应能与 MUEPB 单位 \si{kcal.mol^{-1}}；HOMO/LUMO gap 单位 eV。}
 \label{tab.2.supp.MR-MGN-BE17}
 \widetabular{
   \begin{tabular}{ld{2.2}d{3.2}d{3.2}d{3.2}d{3.2}d{3.2}d{3.2}}
@@ -681,7 +681,7 @@ XYG6+1 模型尽管对以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为代表的 HOMO/LUMO
 
 \begin{table}[ht]
 \centering
-\caption{部分 xDH@B3LYP 模型与 XYG6+1 模型近似泛函在 MR-TM-BE13 子集上误差。\\反应能与 MUEPB 单位 \si{kcal.mol^{-1}}；HOMO/LUMO gap 单位 eV。}
+\caption[MR-TM-BE13 子集测评误差]{部分 xDH@B3LYP 模型与 XYG6+1 模型近似泛函在 MR-TM-BE13 子集上误差。\\反应能与 MUEPB 单位 \si{kcal.mol^{-1}}；HOMO/LUMO gap 单位 eV。}
 \label{tab.2.supp.MR-TM-BE13}
 \widetabular{
   \begin{tabular}{ld{1.2}d{3.2}d{3.2}d{3.2}d{3.2}d{3.2}d{3.2}}
@@ -717,7 +717,7 @@ XYG6+1 模型尽管对以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为代表的 HOMO/LUMO
 
 \begin{table}[ht]
 \centering
-\caption{部分 xDH@B3LYP 模型与 XYG6+1 模型近似泛函在 SR-MGM-BE9 子集上误差。\\反应能与 MUEPB 单位 \si{kcal.mol^{-1}}；HOMO/LUMO gap 单位 eV。}
+\caption[SR-MGM-BE9 子集测评误差]{部分 xDH@B3LYP 模型与 XYG6+1 模型近似泛函在 SR-MGM-BE9 子集上误差。\\反应能与 MUEPB 单位 \si{kcal.mol^{-1}}；HOMO/LUMO gap 单位 eV。}
 \label{tab.2.supp.SR-MGM-BE9}
 \widetabular{
   \begin{tabular}{ld{1.2}d{3.2}d{3.2}d{3.2}d{3.2}d{3.2}d{3.2}}
@@ -748,7 +748,7 @@ XYG6+1 模型尽管对以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为代表的 HOMO/LUMO
 
 \begin{table}[ht]
 \centering
-\caption{部分 xDH@B3LYP 模型与 XYG6+1 模型近似泛函在 SR-TM-BE17 子集上误差。\\反应能与 MUEPB 单位 \si{kcal.mol^{-1}}；HOMO/LUMO gap 单位 eV。}
+\caption[SR-TM-BE17 子集测评误差]{部分 xDH@B3LYP 模型与 XYG6+1 模型近似泛函在 SR-TM-BE17 子集上误差。\\反应能与 MUEPB 单位 \si{kcal.mol^{-1}}；HOMO/LUMO gap 单位 eV。}
 \label{tab.2.supp.SR-TM-BE17}
 \widetabular{
   \begin{tabular}{ld{1.2}d{3.2}d{3.2}d{3.2}d{3.2}d{3.2}d{3.2}}
@@ -793,14 +793,14 @@ XYG6+1 模型尽管对以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为代表的 HOMO/LUMO
 
 \begin{ThreePartTable}
 \begin{longtable}{lld{2.2}d{2.2}d{2.2}d{2.2}d{2.2}d{2.2}}
-  \caption{部分 xDH@B3LYP 模型与 XYG6+1 模型近似泛函在 SR-TM-BE17 子集上误差。\\小子集误差以 MAD 为量标，子集与总误差以 WTMAD-2 为量标，单位 \si{kcal.mol^{-1}}。}
+  \caption[SR-TM-BE17 子集测评误差]{部分 xDH@B3LYP 模型与 XYG6+1 模型近似泛函在 SR-TM-BE17 子集上误差。\\小子集误差以 MAD 为量标，子集与总误差以 WTMAD-2 为量标，单位 \si{kcal.mol^{-1}}。}
   \label{tab.2.supp.GMTKN55}
   \\ \toprule
   \multicolumn{2}{c}{GMTKN55} & \multicolumn{3}{c}{xDH@B3LYP} & \multicolumn{3}{c}{XYG6+1} \\
   \cmidrule(lr){1-2} \cmidrule(lr){3-5} \cmidrule(lr){6-8}
   子集 & 小子集 & \multicolumn{1}{c}{XYG3}  & \multicolumn{1}{c}{XYG6}  & \multicolumn{1}{c}{XYG7}  & \multicolumn{1}{c}{MP2/cr} & \multicolumn{1}{c}{sIEPA} & \multicolumn{1}{c}{IEPA}  \\ \midrule
   \endfirsthead
-  \caption{(续表)}
+  \caption[]{(续表)}
   \\ \toprule
   \multicolumn{2}{c}{GMTKN55} & \multicolumn{3}{c}{xDH@B3LYP} & \multicolumn{3}{c}{XYG6+1} \\
   \cmidrule(lr){1-2} \cmidrule(lr){3-5} \cmidrule(lr){6-8}
@@ -874,35 +874,35 @@ XYG6+1 模型尽管对以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为代表的 HOMO/LUMO
 \begin{figure}[!h]
   \centering
   \includegraphics[width=0.7\textwidth]{assets/curve-N2-stab.pdf}
-  \caption{各方法在 \ce{N2} 解离曲线的表现。参考态方法均在开壳层下优化到稳定。}
+  \caption[\ce{N2} 解离曲线表现 (开壳层)]{各方法在 \ce{N2} 解离曲线的表现。参考态方法均在开壳层下优化到稳定。}
   \label{fig.2.curve-N2-stab}
 \end{figure}
 
 \begin{figure}[!h]
   \centering
   \includegraphics[width=0.7\textwidth]{assets/curve-F2-stab.pdf}
-  \caption{各方法在 \ce{F2} 解离曲线的表现。参考态方法均在开壳层下优化到稳定。}
+  \caption[\ce{F2} 解离曲线表现 (开壳层)]{各方法在 \ce{F2} 解离曲线的表现。参考态方法均在开壳层下优化到稳定。}
   \label{fig.2.curve-F2-stab}
 \end{figure}
 
 \begin{figure}[!h]
   \centering
   \includegraphics[width=0.7\textwidth]{assets/curve-H2O-stab.pdf}
-  \caption{各方法在 \ce{H2O} 解离曲线的表现。参考态方法均在开壳层下优化到稳定。}
+  \caption[\ce{H2O} 解离曲线表现 (开壳层)]{各方法在 \ce{H2O} 解离曲线的表现。参考态方法均在开壳层下优化到稳定。}
   \label{fig.2.curve-H2O-stab}
 \end{figure}
 
 \begin{figure}[!h]
   \centering
   \includegraphics[width=0.7\textwidth]{assets/curve-H2O-part-stab.pdf}
-  \caption{各方法在 \ce{H2O} 解离曲线 1.4--2.25 \AA 段的表现。参考态方法均在开壳层下优化到稳定。}
+  \caption[\ce{H2O} 解离曲线 1.4--2.25 \AA 段表现 (开壳层)]{各方法在 \ce{H2O} 解离曲线 1.4--2.25 \AA 段的表现。参考态方法均在开壳层下优化到稳定。}
   \label{fig.2.curve-H2O-part-stab}
 \end{figure}
 
 \begin{figure}[!h]
   \centering
   \includegraphics[width=0.7\textwidth]{assets/curve-H6-stab.pdf}
-  \caption{各方法在 \ce{H6} 解离曲线的表现。参考态方法均在开壳层下优化到稳定。}
+  \caption[\ce{H6} 解离曲线表现 (开壳层)]{各方法在 \ce{H6} 解离曲线的表现。参考态方法均在开壳层下优化到稳定。}
   \label{fig.2.curve-H6-stab}
 \end{figure}
 
@@ -925,7 +925,7 @@ XYG6+1 模型尽管对以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为代表的 HOMO/LUMO
 
 \begin{table}[!ht]
 \centering
-\caption{MP2/cr 与 IEPA 在不同情形下能级简并轨道间的正交变换不变性}
+\caption[MP2/cr 与 IEPA 在不同情形下的正交变换不变性]{MP2/cr 与 IEPA 在不同情形下能级简并轨道间的正交变换不变性。}
 \label{tab.2.invariance-mp2cr-iepa}
 \widetabular{
   \begin{tabular}{cccl}
@@ -1070,7 +1070,7 @@ MP2/cr 缩放比例 $N_{ij}$ 定义式在 (\ref{eq.2.Nij-MP2cr}) 已有表述。
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=0.6\textwidth]{assets/invar-sep-Ne.pdf}
-  \caption{距离 100 \AA 的 \ce{Ne2} 的相关能随正交变换相位 $\theta$ 变化产生的误差。右下角图例表示被正交变换对应的单体分子轨道。该情形下 MP2、MP2/cr、sIEPA 的误差均为零或极其接近零，图上的曲线重合。}
+  \caption[\ce{Ne2} 对称性简并轨道正交变换误差]{距离 100 \AA 的 \ce{Ne2} 的相关能随正交变换相位 $\theta$ 变化产生的误差。右下角图例表示被正交变换对应的单体分子轨道。该情形下 MP2、MP2/cr、sIEPA 的误差均为零或极其接近零，图上的曲线重合。}
   \label{fig.2.invar-sep-Ne}
 \end{figure}
 
@@ -1081,14 +1081,14 @@ MP2/cr 缩放比例 $N_{ij}$ 定义式在 (\ref{eq.2.Nij-MP2cr}) 已有表述。
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=0.6\textwidth]{assets/invar-sep-N2-1.pdf}
-  \caption{距离 100 \AA 的 \ce{N2} 的相关能随正交变换相位 $\theta$ 变化产生的误差。\ce{N2} 键长为 HF/cc-pVDZ 下平衡键长 1.077 \AA。右下角图例表示被正交变换对应的单体分子轨道。该情形下 MP2、MP2/cr、sIEPA 的误差均为零或极其接近零，图上的曲线重合。}
+  \caption[\ce{N2} 对称性简并轨道正交变换误差 (键长 1.077 \AA)]{距离 100 \AA 的 \ce{N2} 的相关能随正交变换相位 $\theta$ 变化产生的误差。\ce{N2} 键长为 HF/cc-pVDZ 下平衡键长 1.077 \AA。右下角图例表示被正交变换对应的单体分子轨道。该情形下 MP2、MP2/cr、sIEPA 的误差均为零或极其接近零，图上的曲线重合。}
   \label{fig.2.invar-sep-N2-1}
 \end{figure}
 
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=0.6\textwidth]{assets/invar-sep-N2-2.pdf}
-  \caption{距离 100 \AA 的 \ce{N2} 的相关能随正交变换相位 $\theta$ 变化产生的误差。\ce{N2} 键长为 2.0 \AA。右下角图例表示被正交变换对应的单体分子轨道。该情形下 MP2、MP2/cr 的误差均为零，图上的曲线重合。}
+  \caption[\ce{N2} 对称性简并轨道正交变换误差 (键长 2.0 \AA)]{距离 100 \AA 的 \ce{N2} 的相关能随正交变换相位 $\theta$ 变化产生的误差。\ce{N2} 键长为 2.0 \AA。右下角图例表示被正交变换对应的单体分子轨道。该情形下 MP2、MP2/cr 的误差均为零，图上的曲线重合。}
   \label{fig.2.invar-sep-N2-2}
 \end{figure}
 
@@ -1146,7 +1146,7 @@ $$
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=0.6\textwidth]{assets/invar-sep-C4H4-1.pdf}
-  \caption{$T_d$ 点群下 \ce{C4H4} 的相关能随相同不可约表示简并轨道下正交变换相位 $\theta$ 变化产生的误差。右下角图例表示被正交变换对应的分子轨道。该情形下 MP2、MP2/cr 的误差，以及 $1E$ 轨道下所有方法的误差均为零，图上的曲线重合。}
+  \caption[$T_d$ 点群下 \ce{C4H4} 对称性简并轨道正交变换误差]{$T_d$ 点群下 \ce{C4H4} 的相关能随相同不可约表示简并轨道下正交变换相位 $\theta$ 变化产生的误差。右下角图例表示被正交变换对应的分子轨道。该情形下 MP2、MP2/cr 的误差，以及 $1E$ 轨道下所有方法的误差均为零，图上的曲线重合。}
   \label{fig.2.invar-sep-C4H4-1}
 \end{figure}
 
@@ -1163,6 +1163,6 @@ RHF/cc-pVDZ 基组下以能量 \num{1e-13} Hartree、轨道梯度 \num{1e-11} Ha
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=0.6\textwidth]{assets/invar-sep-CO.pdf}
-  \caption{\ce{CO} 分子的相关能在能级偶然简并的 $1 \symup{\Pi}$ 轨道与 $5 \symup{\Sigma}^+$ 轨道间依正交变换相位 $\theta$ 变化产生的误差。该情形下 MP2 的误差为零。}
+  \caption[\ce{CO} 偶然简并轨道正交变换误差]{\ce{CO} 分子的相关能在能级偶然简并的 $1 \symup{\Pi}$ 轨道与 $5 \symup{\Sigma}^+$ 轨道间依正交变换相位 $\theta$ 变化产生的误差。该情形下 MP2 的误差为零。}
   \label{fig.2.invar-sep-CO}
 \end{figure}
