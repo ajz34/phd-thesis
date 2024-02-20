@@ -15,14 +15,14 @@
 
 双杂化泛函的梯度性质已经有先驱性的程序实现与测评\cite{Neese-Grimme.JCP.2007, Biczysko-Barone.JCTC.2010, Su-Xu.JCC.2013, Stoychev-Neese.JCTC.2018, Gu-Xu.JCTC.2021, Yan-Xu.JCTC.2022}。这些工作表明，双杂化泛函，特别是 xDH 型泛函，在分子振动、NMR 光谱预测等问题上有优异的表现。但目前的程序在计算双杂化解析梯度问题上，效率还一定提升空间。同时，考虑到双杂化泛函除了 MP2 型相关能外还有其它的杂化可能性；在理论推导与程序化过程中，也应尽量留出空间以容纳其它杂化形式。
 
-基于前人的工作\cite{Gerratt-Mills.JCP.1968, Gerratt-Mills.JCP.1968a, Pople-Binkley.IJQC.1979, Dykstra-Jasien.CPL.1984, Handy-Schaefer.JCP.1984, Handy-Simandiras.CPL.1985, Pulay-Saeboe.TCA.1986, Trucks-Bartlett.CPL.1988, Frisch-Pople.CP.1990, Frisch-Pople.CPL.1990, Frisch-Pople.CPL.1990a, Gauss-Bartlett.JCP.1992, Stanton-Bartlett.CPL.1992, Johnson-Frisch.CPL.1993, Head-Gordon-Head-Gordon.CPL.1994, Yamaguchi-Schaefer.Oxford.1994, Weigend-Haeser.TCA.1997, Aikens-Gordon.TCA.2003, Cammi-Frisch.TCA.2004, Distasio-Head-Gordon.JCC.2007, Neese-Grimme.JCP.2007, Biczysko-Barone.JCTC.2010, Su-Xu.JCC.2013, Ji-Jung.JCTC.2013, Bykov-Neese.MP.2015, Stoychev-Neese.JCTC.2018, Gu-Xu.JCTC.2021, Yan-Xu.JCTC.2022}，将以电性质外场微扰为前提下，进行双杂化二阶梯度梯度的理论推演、与基于原子轨道基的程序化。本章节的内容自成完整的篇章。本章的理论推演部分是其他科研工作者已有成果的总结与重新复述；程序编写在 \textsc{PySCF} 程序的基础上独立完成。为清晰地表述程序实现思路与原则，在复述电性质二阶梯度理论时，本文着重于
+基于前人的工作\cite{Gerratt-Mills.JCP.1968, Gerratt-Mills.JCP.1968a, Pople-Binkley.IJQC.1979, Dykstra-Jasien.CPL.1984, Handy-Schaefer.JCP.1984, Handy-Simandiras.CPL.1985, Pulay-Saeboe.TCA.1986, Trucks-Bartlett.CPL.1988, Frisch-Pople.CP.1990, Frisch-Pople.CPL.1990, Frisch-Pople.CPL.1990a, Gauss-Bartlett.JCP.1992, Stanton-Bartlett.CPL.1992, Johnson-Frisch.CPL.1993, Head-Gordon-Head-Gordon.CPL.1994, Yamaguchi-Schaefer.Oxford.1994, Weigend-Haeser.TCA.1997, Aikens-Gordon.TCA.2003, Cammi-Frisch.TCA.2004, Distasio-Head-Gordon.JCC.2007, Neese-Grimme.JCP.2007, Biczysko-Barone.JCTC.2010, Su-Xu.JCC.2013, Ji-Jung.JCTC.2013, Bykov-Neese.MP.2015, Stoychev-Neese.JCTC.2018, Gu-Xu.JCTC.2021, Yan-Xu.JCTC.2022}，将以电性质外场微扰为前提下，进行双杂化二阶梯度梯度的理论推演、与基于原子轨道基的程序化。本章节的内容自成完整的篇章。本章的理论推演部分是其他科研工作者已有成果的总结与重新复述，\textbf{并非独创性工作}；程序编写在 \textsc{PySCF} 程序的基础上独立完成。为清晰地表述程序实现思路与原则，在复述电性质二阶梯度理论时，本文着重于
 \begin{itemize}[nosep]
     \item 一般不使用波函数，避免大量使用矩阵或张量记号、尽量使用展开了指标的矩阵或张量元素记号 (同时参见文献 \citenum{Aikens-Gordon.TCA.2003})，并一定程度地规范指标记号 (参见 \ref{sec.3.notations} 节)；
     \item 对于 DFT 格点计算，也尽量使用张量记号展开密度在空间坐标上的数值；
     \item 文段自成篇章，尽可能展示诸多张量的定义，减少未定义记号的出现；
     \item 强调现有流行的密度泛函、其能量泛函 $E^\textmt{DH}$ 及其导出量的可加和性，即它是诸多能量贡献项的线性加和；在初步的理论推演中，弱化每个能量项的表达细节以求适用性更宽泛的表达式；在程序实现中，这些能量贡献具体展开为可扩展的实例列表。
 \end{itemize}
-\ref{sec.3.basic-equation-def} 与 \ref{sec.3.dipole-polar} 节对计算化学与电性质的基本概念的记号作定义。\ref{sec.3.theory} 节对双杂化泛函电性质梯度涉及到的记号作定义；这节内容不引入具体的 MP2 相关能，因此预期可以推广到其他形式的双杂化泛函。\ref{sec.3.program} 节解释了本工作中，闭壳层 MP2 相关能构成的双杂化泛函的程序实现细节与思路。\ref{sec.3.efficiency} 节通过简单的例子，展示本工作程序的实现效率。本工作的梯度实现是基于弱的正则 SCF 条件 (\ref{eq.3.weak-canonical-SCF})；作为附录的 \ref{sec.3.non-canonical-mp2-gradient} 节展示当前记号体系下，非正则 MP2 相关能及其梯度的推演过程。
+\ref{sec.3.basic-equation-def} 与 \ref{sec.3.dipole-polar} 节对计算化学与电性质的基本概念的记号作定义。\ref{sec.3.theory} 节对双杂化泛函电性质梯度涉及到的记号作定义；这节内容不引入具体的 MP2 相关能，因此预期可以推广到包含长短程的 MP2 型相关能、或者其他相关能形式的双杂化泛函，使得程序可以有灵活的框架。\ref{sec.3.program} 节解释了本工作中，闭壳层 MP2 相关能构成的双杂化泛函的程序实现细节与思路。\ref{sec.3.efficiency} 节通过简单的例子，展示本工作程序的实现效率。本工作的梯度实现是基于弱的正则 SCF 条件 (\ref{eq.3.weak-canonical-SCF})；作为附录的 \ref{sec.3.non-canonical-mp2-gradient} 节展示当前记号体系下，非正则 MP2 相关能及其梯度的推演过程。
 
 % \ref{sec.3.background} 节将介绍物理问题背景与程序化背景，以确定大体的技术线路。\ref{sec.3.theory} 节将介绍一般双杂化泛函电性质解析梯度理论。MP2 型泛函作为双杂化泛函的其中一个重要的分支，其在 RI 近似下解析静态极化率的 Python 代码在 CPU 上的实现细节将在 \ref{sec.3.program} 阐述，并作简单的效率测评。
 
@@ -235,7 +235,7 @@ ERI 的 Cholesky 分解，可以用于对 4c-2e ERI 作 RI-V 近似：
     \hat g^\textmt{terf} &= \mathrm{terf} (r_{12}, r_0)
 \end{alignat}
 \end{subequations}
-Yukawa 衰减形式由文献 \citenum{Savin-Flad.IJQC.1995} 给出；terf 衰减形式由文献 \citenum{Goldey-Head-Gordon.PCCP.2013} 给出。\textsc{Libcint} 已经实现了 $\hat g, \hat g^\textmt{LR}, \hat g^\textmt{SR}$ 的 ERI 计算，因此我们的程序也可以对应地给出包括 ωB97X-2、RS-PBE-PBE 等目前常见的长短程分离泛函的能量结果。
+Yukawa 衰减形式由文献 \citenum{Savin-Flad.IJQC.1995} 给出；terf 衰减形式由文献 \citenum{Goldey-Head-Gordon.PCCP.2013} 给出。\textsc{Libcint} 已经实现了 $\hat g, \hat g^\textmt{LR}, \hat g^\textmt{SR}$ 的 ERI 计算，因此我们的程序也可以对应地给出包括 ωB97X-2、RS-PBE-PBE、lrc-XYG3 等目前常见的长短程分离泛函的能量结果。
 
 \subsection{轨道系数及其导出量}
 
@@ -501,7 +501,7 @@ $c_\mathrm{x}$ 特指严格交换系数 (区别于其它 DFA 交换能分量的�
         zx & zy & z^2
     \end{pmatrix}
 \end{equation*}
-那么在该类型的外加电场下，一阶梯度将给出四极矩 (quadrupole)。电场的其它多级展开还将给出八极矩 (octupole)、十六极矩 (hexadecapole) 等等。所有类型的外加电场，在计算化学程序中都表现为对单电子积分与原子核能量的微扰，而对双电子积分、DFA 格点积分能量、原子轨道等部分不产生微扰。本工作着重于极化率，即 $- \symbfscr{E}^\dagger \bm{r}$ 形式的偶极电场下的一阶与二阶梯度，即偶极矩与静态极化率的推导与程序实现；但本文也将用 $\mathbb{A}$ 等记号表示更为一般的外电场；这样能比较容易地拓展到其它形式的外加电场一阶与二阶梯度。
+那么在该类型的外加电场下，一阶梯度将给出四极矩。电场的其它多级展开还将给出八极矩、十六极矩等等。所有类型的外加电场，在计算化学程序中都表现为对单电子积分与原子核能量的微扰，而对双电子积分、DFA 格点积分能量、原子轨道等部分不产生微扰。本工作着重于极化率，即 $- \symbfscr{E}^\dagger \bm{r}$ 形式的偶极电场下的一阶与二阶梯度，即偶极矩与静态极化率的推导与程序实现；但本文也将用 $\mathbb{A}$ 等记号表示更为一般的外电场；这样能比较容易地拓展到其它形式的外加电场一阶与二阶梯度。
 
 \section{双杂化泛函电性质解析梯度}
 \label{sec.3.theory}
@@ -1423,7 +1423,7 @@ $\symscr{T}_{pq}$ 与 $\symscr{T}_{pq}^\mathbb{A}$ 是容易求得的。$A_{ai, 
 \verb|    auxbasis_jk="def2-universal-jkfit",|\\
 \verb|    auxbasis_ri="def2-QZVPPD-ri").run()|
 
-\textsc{ORCA} 软件的关键参数设置是\\
+\textsc{ORCA} 软件输入卡的关键参数设置是\\
 \verb|! RI-MP2 RI-JK def2-QZVPPD def2/JK|\\
 \verb|! def2-QZVPPD/C NoFrozenCore RITrafo|\\
 \verb|%maxcore 8000|

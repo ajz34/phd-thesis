@@ -9,13 +9,13 @@
 
 尽管上一章中发展的 FPA 策略、以及其给出的 CCSD(T)/CBS 级别精确的极化率相当重要，但 CCSD(T) 计算消耗仍然十分巨大；若要将极化率计算应用到更大的体系，或者提升精确极化率计算的效率，则需要计算量更小的基组或电子结构方法。密度泛函近似在计算量与精度上，是普遍为计算化学与固体物理应用工作者所接受的方法；它有希望成为解决大量精确计算静态极化率问题的方法。
 
-如第一章所述，双杂化泛函已经在许多化学反应能量与分子性质的测评上，展现出良好的结果。如第三章所述，双杂化泛函的极化率计算尽管相比于杂化泛函更为耗时，但对于 2000 基组大小以内的中等体系是可以接受的，这也契合目前流行的诸多大数据集 20 重原子以内的分子大小\cite{Ruddigkeit-Reymond.JCIM.2012, Ramakrishnan-Lilienfeld.SD.2014, Bowman-Yu.JCP.2022, Zou-Hu.NCS.2023}。因此，双杂化泛函从计算效率上，应可以胜任静态极化率的大规模计算。对于偏重无机小分子与自旋极化分子的 HH132 数据集，Hait 与 Head-Gordon 的测评结果展示了双杂化泛函、特别是 xDH 型泛函在静态极化率计算结果相当精确\cite{Hait-Head-Gordon.PCCP.2018}。
+如第 \alertref{sec.1.title} 章所述，双杂化泛函已经在许多化学反应能量与分子性质的测评上，展现出良好的结果。如附录 \alertref{sec.3.title} 的所述，双杂化泛函的极化率计算尽管相比于杂化泛函更为耗时，但对于 2000 基组大小以内的中等体系是可以接受的，这也契合目前流行的诸多大数据集 20 重原子以内的分子大小\cite{Ruddigkeit-Reymond.JCIM.2012, Ramakrishnan-Lilienfeld.SD.2014, Bowman-Yu.JCP.2022, Zou-Hu.NCS.2023}。因此，双杂化泛函从计算效率上，应可以胜任静态极化率的大规模计算。对于偏重无机小分子与自旋极化分子的 HH132 数据集，Hait 与 Head-Gordon 的测评结果展示了双杂化泛函、特别是 xDH 型泛函在静态极化率计算结果相当精确\cite{Hait-Head-Gordon.PCCP.2018}。
 
-本章将拓展静态极化率测评结果，以更全面地展示密度泛函的精确性、以及如何高效但不失精度地计算静态极化率。在一定的、可容忍的误差范围内，使用合理大小的基组，可以有效地以较小的代价实现极化率的计算；\ref{sec.6.basis-converg} 节将对典型的双杂化泛函，B2PLYP 泛函与 xDH@B3LYP 类型泛函，对于静态极化率问题作基组误差分析，以探讨基组对计算精度的影响。目前基于高精度 CCSD(T)/CBS 精度的测评，仅涉及到少量双杂化泛函以及 HH132\cite{Hait-Head-Gordon.PCCP.2018} 为代表的小型无机分子；\ref{sec.6.benchmark} 节将基于第五章的 CCSD(T)/CBS 精度的参考值，拓展数据集到 HR46\cite{Hickey-Rowley.JPCA.2014} 与 T144\cite{Wu-Thakkar.CPL.2015}，测评包括更多双杂化泛函在内的诸密度泛函近似在静态极化率上的表现。对于分子性质的测评，最终应服务于密度泛函的发展；作为最初步的探索，\ref{sec.6.pol-xdh-optimize} 节将基于 xDH@B3LYP 参数化模型\cite{Zhang-Xu.JPCL.2021}，仅针对极化率测评表现进行参数优化，探究 xDH@B3LYP 模式在极化率问题上的极限。
+本章将拓展静态极化率测评结果，以更全面地展示密度泛函的精确性、以及如何高效但不失精度地计算静态极化率。在一定的、可容忍的误差范围内，使用合理大小的基组，可以有效地以较小的代价实现极化率的计算；\ref{sec.6.basis-converg} 节将对典型的双杂化泛函，B2PLYP 泛函与 xDH@B3LYP 类型泛函，对于静态极化率问题作基组误差分析，以探讨基组对计算精度的影响。目前基于高精度 CCSD(T)/CBS 精度的测评，仅涉及到少量双杂化泛函以及 HH132\cite{Hait-Head-Gordon.PCCP.2018} 为代表的小型无机分子；\ref{sec.6.benchmark} 节将基于第 \alertref{sec.5.title} 章的 CCSD(T)/CBS 精度的参考值，拓展数据集到 HR46\cite{Hickey-Rowley.JPCA.2014} 与 T144\cite{Wu-Thakkar.CPL.2015}，测评包括更多双杂化泛函在内的诸密度泛函近似在静态极化率上的表现。对于分子性质的测评，最终应服务于密度泛函的发展；作为最初步的探索，\ref{sec.6.pol-xdh-optimize} 节将基于 xDH@B3LYP 参数化模型\cite{Zhang-Xu.JPCL.2021}，仅针对极化率测评表现进行参数优化，探究 xDH@B3LYP 模式在极化率问题上的极限。
 
 \section{实现细节}
 
-本章工作继承第五章工作；大多数实现细节上也参考 \alertref{sec.5.detail} 节。需要额外说明或有所不同的实现细节列出如下。
+本章工作继承第 \alertref{sec.5.title} 章工作；大多数实现细节上也参考 \alertref{sec.5.detail} 节。需要额外说明或有所不同的实现细节列出如下。
 
 \subsection{数据集}
 
@@ -35,7 +35,7 @@
 \end{itemize}
 对于 ωB97M-V 泛函，本工作的计算不考虑其 VV10 贡献项。
 
-我们同时对 HF、MP2、CCSD 的极化率表现作测评。对于 HH101 数据集，计算结果取自 Hait 与 Head-Gordon 的工作的 aCV[TQ]Z 或 aCV[Q5]Z 计算结果。对于 HR46 与 T144 数据集，计算结果取自第五章工作；即 HF 与 MP2 使用 aCV[Q5]Z 计算结果，CCSD 使用 FPA-aV[DT]Z、FPA-aV[TQ]Z 或 FPA-aV[Q5]Z 计算结果。
+我们同时对 HF、MP2、CCSD 的极化率表现作测评。对于 HH101 数据集，计算结果取自 Hait 与 Head-Gordon 的工作的 aCV[TQ]Z 或 aCV[Q5]Z 计算结果。对于 HR46 与 T144 数据集，计算结果取自第 \alertref{sec.5.title} 章工作；即 HF 与 MP2 使用 aCV[Q5]Z 计算结果，CCSD 使用 FPA-aV[DT]Z、FPA-aV[TQ]Z 或 FPA-aV[Q5]Z 计算结果。
 
 \subsection{误差测评标准}
 
@@ -108,7 +108,7 @@ $$
 \begin{equation*}
     \alpha_\textsf{DH} = \alpha_\textsf{SCF} + \symup{\Delta} \alpha_\textsf{PT2} \quad \text{(B2PLYP-like doubly hybrid)}
 \end{equation*}
-我们将对这两部分分量，分别作基组收敛分析。作为基准，我们选取 aCV[Q5]Z 的 CBS 外推模型作为参考值；这也与第五章的最佳 CBS 外推标准相同：
+我们将对这两部分分量，分别作基组收敛分析。作为基准，我们选取 aCV[Q5]Z 的 CBS 外推模型作为参考值；这也与第 \alertref{sec.5.title} 章的最佳 CBS 外推标准相同：
 \begin{equation*}
     \alpha_\textsf{DH} (\text{aCV[Q5]Z}) = \alpha_\textsf{SCF} (\text{aCV5Z}) + \symup{\Delta} \alpha_\textsf{PT2} (\text{aCV[Q5]Z})
 \end{equation*}
@@ -280,7 +280,7 @@ B2PLYP 是典型的双杂化泛函；其他各式各色双杂化泛函的严格�
 
 在极化率计算问题上，双杂化泛函的计算误差显著小于低阶泛函；而相比于高精度波函数方法，双杂化泛函可能同时大幅降低计算量、但同时有更精准的计算结果。对于双杂化泛函优异的极化率表现，我们对此作如下理解。
 
-回顾第 \alertref{sec.3.title} 章，xDH 泛函的静态电性质的计算可以归结为分子总能量 $E^\textsf{xDH}$ 对外场 $\symbfcal{E}$ 的梯度计算；偶极矩 $t \in \{ x, y, z \}$ 分量的计算可以化归为问题
+回顾附录 \alertref{sec.3.title}，xDH 泛函的静态电性质的计算可以归结为分子总能量 $E^\textsf{xDH}$ 对外场 $\symbfcal{E}$ 的梯度计算；偶极矩 $t \in \{ x, y, z \}$ 分量的计算可以化归为问题
 \begin{equation*}
     \mu_t^\textsf{xDH} = \partial_{\mathcal{E}_t} E^\textsf{xDH} = D_{pq}^\textsf{xDH} F_{pq}^{\mathcal{E}_t} + \partial_{\mathcal{E}_t} E^\textsf{non-elec}
 \end{equation*}
@@ -292,7 +292,7 @@ B2PLYP 是典型的双杂化泛函；其他各式各色双杂化泛函的严格�
 \begin{equation}
     \mu_t^\textsf{xDH} = D_{\mu \nu}^\textsf{xDH} F_{\mu \nu}^{\mathcal{E}_t} + \partial_{\mathcal{E}_t} E^\textsf{non-elec}
 \end{equation}
-其中 $F_{\mu \nu}^{\mathcal{E}_t}$ 作为电性质 Skeleton 导数，也仅与分子结构有关，而与电子结构无关。因而，可以左右计算电子结构在偶极矩计算问题上计算表现的唯一变量，是该方法的弛豫密度矩阵 $D_{\mu \nu}^\textsf{xDH}$。对于 bDH 型泛函、以及低阶泛函，它们可以看做是 xDH 泛函的退化形式，即上式对 bDH 与低阶泛函也同样成立。作为密度矩阵的导出量，第四章的测评已经表明双杂化泛函的密度 $\rho^\textsf{xDH} (\bm{r}) = D_{\mu \nu}^\textsf{xDH} \phi_\mu (\bm{r}) \phi_\nu (\bm{r})$ 及其关于空间坐标的梯度，有良好的表现；而在 Hait 与 Head-Gordon 的工作\cite{Hait-Head-Gordon.JCTC.2018}中，双杂化泛函也有良好的偶极矩测评结果。
+其中 $F_{\mu \nu}^{\mathcal{E}_t}$ 作为电性质 Skeleton 导数，也仅与分子结构有关，而与电子结构无关。因而，可以左右计算电子结构在偶极矩计算问题上计算表现的唯一变量，是该方法的弛豫密度矩阵 $D_{\mu \nu}^\textsf{xDH}$。对于 bDH 型泛函、以及低阶泛函，它们可以看做是 xDH 泛函的退化形式，即上式对 bDH 与低阶泛函也同样成立。作为密度矩阵的导出量，第 \alertref{sec.4.title} 章的测评已经表明双杂化泛函的密度 $\rho^\textsf{xDH} (\bm{r}) = D_{\mu \nu}^\textsf{xDH} \phi_\mu (\bm{r}) \phi_\nu (\bm{r})$ 及其关于空间坐标的梯度，有良好的表现；而在 Hait 与 Head-Gordon 的工作\cite{Hait-Head-Gordon.JCTC.2018}中，双杂化泛函也有良好的偶极矩测评结果。
 
 极化率分量 $t, s \in \{ x, y, z \}$ 则是偶极矩在偶极外场下的梯度：
 \begin{equation*}
@@ -390,8 +390,6 @@ B2PLYP 是典型的双杂化泛函；其他各式各色双杂化泛函的严格�
 我们对诸多双杂化与低阶泛函，对 HR46、T144、HH101 三个数据集的同性极化率 $\alpha$，HR46 与 T144 两个数据集的异性极化率 $\gamma$，以及 HH101 数据集极化率分量 $\alpha_{xx}, \alpha_{yy}, \alpha_{zz}$ 作系统的测评。这部分测评表明，双杂化泛函的极化率误差显著地小于低阶泛函的误差；且表现最优异的双杂化泛函，在以 CCSD(T) 为基准的前提下，其误差可以媲美波函数方法 MP2、或计算开销上更为昂贵 CCSD 或甚至更小。双杂化泛函适合用于以 HR46、T144、HH101 为代表的一系列中小分子的静态极化率计算；而在其中，以 XYGJ-OS、XYG6、xDH-PBE0 为代表的 xDH 型泛函，与 DSD-PBEPBE-D3BJ 为代表的 bDH 型泛函，在各极化率数据集上有相当低的误差表现，是适合用于静态极化率计算的双杂化泛函。
 
 本工作还对各种 xDH@B3LYP 模型下的泛函作参数优化的尝试。我们发现，异自旋二阶微扰贡献项 $E_\mathrm{c}^\text{OS-PT}$ 对于静态极化率的描述有重要的作用；即在合理的泛函构造下，双杂化泛函确实比专门针对极化率作参数优化的低阶泛函，有更低的误差。同时，当同自旋二阶微扰贡献项 $E_\mathrm{c}^\text{SS-PT}$ 贡献相比于 $E_\mathrm{c}^\text{OS-PT}$ 较少甚至于零贡献时，双杂化泛函的极化率误差通常较小。专门针对静态极化率而优化的 xDH@B3LYP 模型泛函确实有更好的极化率表现，但也容易产生非物理或不符合直觉的泛函参数，测评误差的提升也比较有限；考虑到密度泛函的泛用性，我们认为使用以 XYGJ-OS、XYG6、xDH-PBE0、DSD-PBEPBE-D3BJ 为代表的基于能量误差量标优化的泛函，也可以很好地描述静态极化率。
-
-\newpage
 
 \section{附录}
 
@@ -888,7 +886,7 @@ BLYP             & 1988 & GGA  &     &     &     & 7.446 & 8.153 & 10.425 & 12.6
 \end{longtable}
 \vspace{-1em}
 \footnotesize
-\par\noindent\emph{a} 该表格以 WTRE 数值排序。作为参考值的方法是 CCSD(T)；如前文所述，HH101 参考值由 Hait 与 Head-Gordon 在 aCV[TQ]Z 或 aCV[Q5]Z 级别下给出\cite{Hait-Head-Gordon.PCCP.2018}；HR46 与 T144 参考值由本论文第五章给出，为 FPA-aV[DT]Z、FPA-aV[TQ]Z 或 FPA-aV[Q5]Z 级别下给出。
+\par\noindent\emph{a} 该表格以 WTRE 数值排序。作为参考值的方法是 CCSD(T)；如前文所述，HH101 参考值由 Hait 与 Head-Gordon 在 aCV[TQ]Z 或 aCV[Q5]Z 级别下给出\cite{Hait-Head-Gordon.PCCP.2018}；HR46 与 T144 参考值由本论文第 \alertref{sec.5.title} 章给出，为 FPA-aV[DT]Z、FPA-aV[TQ]Z 或 FPA-aV[Q5]Z 级别下给出。
 \par\noindent\emph{b} “hyb”指交换能中掺杂部分非局域的严格交换能；“exact”指交换能全部为严格交换能；“rsh”指交换能包含长短程分离的非局域交换能，不论其是否包含非局域短程交换。该项若非空缺，则视为杂化泛函。
 \par\noindent\emph{c} “hyb”指相关能中掺杂 MP2 型非局域相关能；“rsh”指相关能中掺杂长短程分离的 MP2 型非局域相关能。该项若非空缺，则视为双杂化泛函。
 \end{landscape}

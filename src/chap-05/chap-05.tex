@@ -81,7 +81,7 @@ RelRMSD 误差多大，才认为是可以被接受或容许的范围？首先，
     \item 分子或自由基的选取契合化学反应、污染控制、生物化学与能源化学的需求；
     \item 除了 3 个体系是自由基体系 (\ce{^2NO}, \ce{^3O2}, \ce{^3SO}，上标的数字表示自旋多重度) 为自旋极化体系 (SP)，其余体系均为非自旋极化的体系 (NSP)。
 \end{itemize}
-在本工作中，HR46 中的所有分子的几何结构经过 RI-MP2/aVTZ 级别作优化，且没有启用冻核近似\alert{盲审通过后将结构的链接链上}。所有极化率的计算也在此几何结构下实现。
+在本工作中，HR46 中的所有分子的几何结构经过 RI-MP2/aVTZ 级别作优化，且没有启用冻核近似。所有极化率的计算也在此几何结构下实现。
 
 原始的 T145 数据集\cite{Wu-Thakkar.CPL.2015}包含 145 个有机体系。该数据集使用 B3LYP/aVTZ 下的优化结构，最精确的极化率计算模型是 CCSD(T)/aVTZ。T145 数据集是 TABS 数据集\cite{Blair-Thakkar.CTC.2014}的子集。TABS 数据集本身是一大类着眼于药物化学、有机化学与生物化学应用的、自旋非极化的数据集。TABS 数据集的分子数量为 1641；一方面该数据集本身数量较大、另一方面为使该数据集用于机器学习，Blair 等人对 TABS 挑选 298 分子作为极化率与分子容量的训练集为 T298 数据集\cite{Blair-Thakkar.CPL.2014}。但由于并非所有 T298 数据集中的分子都可以承受 CCSD(T)/aVTZ 的计算代价，因此 Wu 等人从 T298 选出 145 个较小的分子，以给出极化率参考值更精确的数据集，即 T145 数据集\cite{Wu-Thakkar.CPL.2015}。本工作中，我们选取其中的 144 个分子，并称其为 T144 数据集。相比于 T145 数据集，我们排除了第 1363 号分子 (TABS 分子编号，分子名称为 2,3-dihydro-1,3-oxazole)；这是因为 TABS 数据集提供的分子构型中，1363 号分子与分子式对应的结构相差两个氢原子，即可能存在数据的损坏。T144 数据集的分子构型使用 TABS 原始数据库提供的 B3LYP/aVTZ 几何结构\cite{Blair-Thakkar.CTC.2014} (化合物结构参考附录图 \ref{fig.fig-s2-1})。
 
@@ -95,7 +95,7 @@ RelRMSD 误差多大，才认为是可以被接受或容许的范围？首先，
 
 \subsection{数值极化率}
 
-在第 \alertref{sec.3.title} 章中，我们已经了解极化率是对外电场强度的二阶梯度；依外电场 $\pmb{\mathcal{E}}$ 在三个空间方向取向的大小 $(\mathcal{E}_x, \mathcal{E}_y, \mathcal{E}_z)$，极化率张量 $\bm{\alpha}$ 是 $3 \times 3$ 的对称矩阵：
+在附录 \alertref{sec.3.title} 中，我们已经了解极化率是对外电场强度的二阶梯度；依外电场 $\pmb{\mathcal{E}}$ 在三个空间方向取向的大小 $(\mathcal{E}_x, \mathcal{E}_y, \mathcal{E}_z)$，极化率张量 $\bm{\alpha}$ 是 $3 \times 3$ 的对称矩阵：
 \begin{equation}
     \alpha_{ts} = - \frac{\partial^2 E}{\partial \mathcal{E}_t \partial \mathcal{E}_s} \quad t, s \in \{ x, y, z \}
 \end{equation}
