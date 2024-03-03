@@ -60,8 +60,8 @@
     $\mathrm{n}$ & 非变分 (相对于自洽场泛函) & 上标 & 特定 & 正体 \\
     $\mathrm{S}$ & skeleton 导数 & 上标 & 特定 & 正体 \\
     $\mathrm{U}$ & 轨道旋转导数 & 上标 & 特定 & 正体 \\
-    $\mathrm{x}$ & 交换效应 & 下标 & 特定 & 正体 \\
-    $\mathrm{c}$ & 相关效应 & 下标 & 特定 & 正体 \\
+    $\textmt{x}$ & 交换效应 & 下标 & 特定 & 非衬线 \\
+    $\textmt{c}$ & 相关效应 & 下标 & 特定 & 非衬线 \\
     $g$ & 空间离散格点 & 下标 & 小写 & 斜体 \\
     $\symbb{A}, \symbb{B}$ & 外场微扰量、被求导量 & 下标、向量 & 大写 & 双线体 \\
     $\symbfscr{E}$ & 偶极电场 & 上下标、三维向量 & 特定 & 粗花体 \\
@@ -289,22 +289,22 @@ Yukawa 衰减形式由文献 \citenum{Savin-Flad.IJQC.1995} 给出；terf 衰减
 \item 对于非长短程泛函，ERI 积分能量 $E^\textmt{ERI} [\mathbf{D}]$：
 \begin{equation}
     \label{eq.3.def.eri}
-    E^\textmt{ERI} [\mathbf{D}] \coloneq E^\textmt{J} [\mathbf{D}] + c_\mathrm{x} E_\mathrm{x}^\textmt{exact} [\mathbf{D}]
+    E^\textmt{ERI} [\mathbf{D}] \coloneq E^\textmt{J} [\mathbf{D}] + c_\textmt{x} E_\textmt{x}^\textmt{exact} [\mathbf{D}]
 \end{equation}
-其中，$E^\textmt{J} [\mathbf{D}]$ 是库伦能\footnote{事实上，尽管本工作对双电子积分 $(\mu \nu | \kappa \lambda)$ 作近似；但该近似是 RI 近似，它使用了计算复杂度为 $O(n_\mathrm{basis}^2 n_\mathrm{aux}) \sim O(N^3)$ 的三中心双电子积分 $(\mu \nu | P)$，因而在实际程序中仍然使用密度矩阵 $\mathbf{D}$ 描述库伦能。库伦能在程序实现上，确实可以通过密度格点 $\rho$ 而非具有更多细节的密度矩阵 $\mathbf{D}$ 计算实现、且计算复杂度为更小的 $O(N^2)$\cite{Toivanen-Sundholm.PCCP.2015}；但我们的主要研究对象是双杂化泛函，在交换能 $E_\mathrm{x}^\textmt{exact}$ 与微扰能 $E_\mathrm{c}^\textmt{PT}$ 难以使用密度格点 $\rho$ 进行计算、或交换能在较小体系下使用密度格点的计算代价较大\cite{IZSAK-NEESE.JCP.2011}的情况下，在程序实现中使用密度矩阵 $\mathbf{D}$ 以描述库伦能相信是可以接受的。}
+其中，$E^\textmt{J} [\mathbf{D}]$ 是库伦能\footnote{事实上，尽管本工作对双电子积分 $(\mu \nu | \kappa \lambda)$ 作近似；但该近似是 RI 近似，它使用了计算复杂度为 $O(n_\mathrm{basis}^2 n_\mathrm{aux}) \sim O(N^3)$ 的三中心双电子积分 $(\mu \nu | P)$，因而在实际程序中仍然使用密度矩阵 $\mathbf{D}$ 描述库伦能。库伦能在程序实现上，确实可以通过密度格点 $\rho$ 而非具有更多细节的密度矩阵 $\mathbf{D}$ 计算实现、且计算复杂度为更小的 $O(N^2)$\cite{Toivanen-Sundholm.PCCP.2015}；但我们的主要研究对象是双杂化泛函，在交换能 $E_\textmt{x}^\textmt{exact}$ 与微扰能 $E_\textmt{c}^\textmt{PT}$ 难以使用密度格点 $\rho$ 进行计算、或交换能在较小体系下使用密度格点的计算代价较大\cite{IZSAK-NEESE.JCP.2011}的情况下，在程序实现中使用密度矩阵 $\mathbf{D}$ 以描述库伦能相信是可以接受的。}
 \begin{equation}
     E^\textmt{J} [\mathbf{D}] = J[\rho] \coloneq \frac{1}{2} D_{\mu \nu} (\mu \nu | \kappa \lambda) D_{\kappa \lambda}
 \end{equation}
-$c_\mathrm{x}$ 特指严格交换系数 (区别于其它 DFA 交换能分量的系数)，$E_\mathrm{x}^\textmt{exact} [\mathbf{D}]$ 是严格交换能
+$c_\textmt{x}$ 特指严格交换系数 (区别于其它 DFA 交换能分量的系数)，$E_\textmt{x}^\textmt{exact} [\mathbf{D}]$ 是严格交换能
 \begin{equation}
-    E_\mathrm{x}^\textmt{exact} [\mathbf{D}] \coloneq - \frac{1}{2} D_{\mu \nu}^\sigma (\mu \lambda | \kappa \nu) D_{\kappa \lambda}^\sigma
+    E_\textmt{x}^\textmt{exact} [\mathbf{D}] \coloneq - \frac{1}{2} D_{\mu \nu}^\sigma (\mu \lambda | \kappa \nu) D_{\kappa \lambda}^\sigma
 \end{equation}
 对于闭壳层问题，严格交换能可以写为
 \begin{equation}
-    E_\mathrm{x}^\textmt{exact} [\mathbf{D}] \coloneq - \frac{1}{4} D_{\mu \nu} (\mu \lambda | \kappa \nu) D_{\kappa \lambda} \quad \text{(closed-shell)}
+    E_\textmt{x}^\textmt{exact} [\mathbf{D}] \coloneq - \frac{1}{4} D_{\mu \nu} (\mu \lambda | \kappa \nu) D_{\kappa \lambda} \quad \text{(closed-shell)}
 \end{equation}
-部分泛函在交换能部分考虑了长短程分离效应；对应地，其交换能除了由 $\hat g$ 算符给出的 $E_\mathrm{x}^\textmt{exact}$ 外，也将包括由 $\hat g^\textmt{LR}$ 等算符给出的 $E_\mathrm{x}^\textmt{LR}$ 等能量项。由于其计算、程序调用过程与严格交换能相同，因此正文中不对更一般的长短程分离型交换能作展开。
-\item DFA 格点积分能量 $E^\textmt{DFA} [\mathbf{D}]$\footnote{区别于 DFA 近似总能量 $E^\textmt{tot}$。} 用以处理“Jacob 阶梯”上 1--3 阶 (LDA, GGA, meta-GGA) 交换相关能。密度泛函近似通常表示为参量为 $\bm{\xi}$ 的被积函数 $f(\bm{\xi})$ 在电子坐标空间上的积分
+部分泛函在交换能部分考虑了长短程分离效应；对应地，其交换能除了由 $\hat g$ 算符给出的 $E_\textmt{x}^\textmt{exact}$ 外，也将包括由 $\hat g^\textmt{LR}$ 等算符给出的 $E_\textmt{x}^\textmt{LR}$ 等能量项。由于其计算、程序调用过程与严格交换能相同，因此正文中不对更一般的长短程分离型交换能作展开。
+\item DFA 格点积分能量 $E^\textmt{DFA} [\mathbf{D}]$\footnote{区别于 DFA 近似总能量 $E^\textmt{tot}$。} 用以处理“Jacob 阶梯”上 1--3 阶 (LDA, GGA, meta-GGA) 交换相关能。密度泛函近似通常表示为参量为 $\bm{\xi}$ 的泛函核 $f(\bm{\xi})$ 在电子坐标空间上的积分
 \begin{equation}
     \label{eq.3.def.dfa-energy}
     E^\textmt{DFA} [\mathbf{D}] \coloneq \int f(\bm{\xi}(\bm{r})) \rho (\bm{r}) \, \mathrm{d} \bm{r}
@@ -326,11 +326,11 @@ $c_\mathrm{x}$ 特指严格交换系数 (区别于其它 DFA 交换能分量的�
 
 对于“Jacob 阶梯”上高阶的泛函，其能量项可以写为轨道系数矩阵的函数：
 \begin{equation}
-    E^\textmt{tot}[\mathbf{C}] \coloneq E^\textmt{core} [\mathbf{D}] + E^\textmt{ERI} [\mathbf{D}] + E^\textmt{DFA} [\mathbf{D}] + E_\mathrm{c}^\textmt{PT} [\mathbf{C}] + E^\textmt{non-elec} \; \text{(high-rung)}
+    E^\textmt{tot}[\mathbf{C}] \coloneq E^\textmt{core} [\mathbf{D}] + E^\textmt{ERI} [\mathbf{D}] + E^\textmt{DFA} [\mathbf{D}] + E_\textmt{c}^\textmt{PT} [\mathbf{C}] + E^\textmt{non-elec} \; \text{(high-rung)}
 \end{equation}
-其中，$E_\mathrm{c}^\textmt{PT} [\mathbf{C}]$ 是 DH 中的高阶近似部分。目前流行的高阶杂化形式是 MP2 型相关能；它也可以代表成对电子即 EP 型相关能 (G{\"o}rling-Levy 微扰)、或无规相近似即 RPA 型相关能 (ACFD 理论) 等等，这些类型的能量大多来源于绝热路径上的微扰所导出的相关能，因此统称为微扰相关能。
+其中，$E_\textmt{c}^\textmt{PT} [\mathbf{C}]$ 是 DH 中的高阶近似部分。目前流行的高阶杂化形式是 MP2 型相关能；它也可以代表成对电子即 EP 型相关能 (G{\"o}rling-Levy 微扰)、或无规相近似即 RPA 型相关能 (ACFD 理论) 等等，这些类型的能量大多来源于绝热路径上的微扰所导出的相关能，因此统称为微扰相关能。
 
-\subsection{密度泛函近似的被积函数与其导数}
+\subsection{密度泛函近似的泛函核与其导数}
 \label{sec.3.dft-grid}
 
 式 (\ref{eq.3.def.dfa-energy}) 的程序实现是对电子空间坐标的格点积分。令格点 $\bm{r}_g$ 上的变量 $\bm{\xi}_g = \bm{\xi} (\bm{r}_g)$、$f_g = f(\bm{\xi}_g)$，且该格点的积分权重为 $w_g$，则 DFA 格点积分能量为
@@ -360,9 +360,9 @@ $c_\mathrm{x}$ 特指严格交换系数 (区别于其它 DFA 交换能分量的�
 \end{subequations}
 由此可见，若基组与格点确定，即 $\phi_{g\mu}$ 与 $\phi_{tg\mu}$ 是确定的，那么 $\bm{\xi} (\bm{r})$ 完全由密度矩阵 $D_{\mu \nu}$ 确定\footnote{若外加微扰涉及到分子振动效应，尽管强度通常不大且不影响测评结果，但格点并非完全确定的常量，而应视为变量。但本工作仅涉及外加电场微扰，因此基组与格点确定。同时需要指出，尽管对于 LDA 或 GGA 型的近似，$\bm{\xi} (\bm{r})$ 也可以认为是由 $\rho(\bm{r})$ 完全确定；但本工作的程序框架接受动能密度 $\tau (\bm{r})$ 作为 meta-GGA 的参量；而 $\tau (\bm{r})$ 并非仅由密度 $\rho(\bm{r})$ 决定。将密度矩阵 $O(n_\mathrm{basis}^2)$ 大小的 $D_{\mu \nu}$ 作为参量，尽管存在一定代价，但可以解决 meta-GGA 的定义问题，也与目前程序实现策略一致。}。有时我们需要用到自洽场密度矩阵以外的矩阵 $X_{\mu \nu}$；这种情况下，我们会记该参量为 $\bm{\xi}[\mathbf{X}]$。
 
-对于开壳层情形，则令密度泛函近似的被积函数为 $f(\bm{\xi}^\alpha (\bm{r}), \bm{\xi}^\beta (\bm{r}))$；其中，$\bm{\xi}^\alpha, \bm{\xi}^\beta$ 的定义与式 (\ref{eq.3.def.xi}--\ref{eq.3.def.tau-grid}) 类似，但其密度矩阵分别使用 $D_{\mu \nu}^\alpha$ 与 $D_{\mu \nu}^\beta$。为方便起见，定义开壳层下的 $\bm{\xi}(\bm{r}) \coloneq (\bm{\xi}^\alpha (\bm{r}), \bm{\xi}^\beta (\bm{r}))$。
+对于开壳层情形，则令密度泛函近似的泛函核为 $f(\bm{\xi}^\alpha (\bm{r}), \bm{\xi}^\beta (\bm{r}))$；其中，$\bm{\xi}^\alpha, \bm{\xi}^\beta$ 的定义与式 (\ref{eq.3.def.xi}--\ref{eq.3.def.tau-grid}) 类似，但其密度矩阵分别使用 $D_{\mu \nu}^\alpha$ 与 $D_{\mu \nu}^\beta$。为方便起见，定义开壳层下的 $\bm{\xi}(\bm{r}) \coloneq (\bm{\xi}^\alpha (\bm{r}), \bm{\xi}^\beta (\bm{r}))$。
 
-指标 $\chi$ 或带有数字的 $\chi_n$ ($n = 1, 2, 3, \cdots$) 表示向量 $\bm{\xi}$ 的分量，即它们可以指代 $\rho, \rho_t (t = x, y, z), \tau$。这里定义被积函数梯度为
+指标 $\chi$ 或带有数字的 $\chi_n$ ($n = 1, 2, 3, \cdots$) 表示向量 $\bm{\xi}$ 的分量，即它们可以指代 $\rho, \rho_t (t = x, y, z), \tau$。这里定义泛函核梯度为
 \begin{subequations}
 \begin{align}
     \label{eq.3.def.f-chi-1}
@@ -385,15 +385,15 @@ $c_\mathrm{x}$ 特指严格交换系数 (区别于其它 DFA 交换能分量的�
 能量泛函部分项使用上标 $\mathrm{n}$ 进行区分；将由式 (\ref{eq.3.def.C-SCF}) 给出的分子轨道系数 $C_{\mu p}$ 代入下式得到 DH 能量：
 \begin{equation}
     \label{eq.3.def.eng-DH}
-    E^\textmt{DH} = E^\textmt{core} [\mathbf{D}] + E^{\mathrm{n}, \textmt{ERI}} [\mathbf{D}] + E^{\mathrm{n}, \textmt{DFA}} [\mathbf{D}] + E_\mathrm{c}^\textmt{PT} [\mathbf{C}] + E^\textmt{non-elec}
+    E^\textmt{DH} = E^\textmt{core} [\mathbf{D}] + E^{\mathrm{n}, \textmt{ERI}} [\mathbf{D}] + E^{\mathrm{n}, \textmt{DFA}} [\mathbf{D}] + E_\textmt{c}^\textmt{PT} [\mathbf{C}] + E^\textmt{non-elec}
 \end{equation}
-其中，$E^\textmt{core} [\mathbf{D}]$ 与 $E^\textmt{non-elec}$ 对于能量泛函和自洽场泛函没有区别。微扰能 $E_\mathrm{c}^\textmt{PT} [\mathbf{C}]$ 仅在能量泛函出现；出于行文便利，将不对其作 $\mathrm{n}$ 的上标区分。为了后文讨论上的方便，我们额外定义 $E^{\mathrm{n}, \textmt{hyb}}$ 作为 $E^\textmt{DH}$ 中仅依赖于密度矩阵 $\mathbf{D}$ 的所有项之和：
+其中，$E^\textmt{core} [\mathbf{D}]$ 与 $E^\textmt{non-elec}$ 对于能量泛函和自洽场泛函没有区别。微扰能 $E_\textmt{c}^\textmt{PT} [\mathbf{C}]$ 仅在能量泛函出现；出于行文便利，将不对其作 $\mathrm{n}$ 的上标区分。为了后文讨论上的方便，我们额外定义 $E^{\mathrm{n}, \textmt{hyb}}$ 作为 $E^\textmt{DH}$ 中仅依赖于密度矩阵 $\mathbf{D}$ 的所有项之和：
 \begin{equation}
     \label{eq.3.def.eng-n-hyb}
     E^{\mathrm{n}, \textmt{hyb}} \coloneq E^\textmt{core} [\mathbf{D}] + E^{\mathrm{n}, \textmt{ERI}} [\mathbf{D}] + E^{\mathrm{n}, \textmt{DFA}} [\mathbf{D}] + E^\textmt{non-elec}
 \end{equation}
 
-需要补充的是，xDH 型泛函的结果即是上述计算过程给出。bDH 型泛函是当 xDH 型泛函的 $E^{\mathrm{n}, \textmt{ERI}} = E^\textmt{ERI}$、$E^{\mathrm{n}, \textmt{DFA}} = E^\textmt{DFA}$ 时的退化版本。bDH 型泛函由于仍然存有 $E_\mathrm{c}^\textmt{PT} [\mathbf{C}]$ 一项，因此总能量泛函与 xDH 同样都是通过非变分途径计算得来；bDH 与 xDH 计算代价相近且渐进复杂度相同。在目前的程序实现与公式推演上，可以不区分 bDH 与 xDH 两者。
+需要补充的是，xDH 型泛函的结果即是上述计算过程给出。bDH 型泛函是当 xDH 型泛函的 $E^{\mathrm{n}, \textmt{ERI}} = E^\textmt{ERI}$、$E^{\mathrm{n}, \textmt{DFA}} = E^\textmt{DFA}$ 时的退化版本。bDH 型泛函由于仍然存有 $E_\textmt{c}^\textmt{PT} [\mathbf{C}]$ 一项，因此总能量泛函与 xDH 同样都是通过非变分途径计算得来；bDH 与 xDH 计算代价相近且渐进复杂度相同。在目前的程序实现与公式推演上，可以不区分 bDH 与 xDH 两者。
 
 \subsection{导数记号与耦合微扰}
 
@@ -562,7 +562,7 @@ $F_{\mu \nu}$ 作为原子轨道基下的矩阵，秩 $n_\mathrm{orb}$ 明显大
 \begin{equation*}
     \tilde A_{\mu \nu, \kappa \lambda} = \tilde A_{\kappa \lambda, \mu \nu} = \tilde A_{\nu \mu, \lambda \kappa} = \tilde A_{\lambda \kappa, \nu \mu}
 \end{equation*}
-但需要指出，若交换能 $E_\mathrm{x}^\textmt{exact}$ (或不同于 $\hat g$ 的算符所贡献的 ERI 交换能) 对能量项有贡献，那么该张量不是 8 重对称性的 (即不满足 $\tilde A_{\mu \nu, \kappa \lambda} = \tilde A_{\mu \nu, \lambda \kappa}$)。出于便利，我们将定义下述 8 重对称性的张量 $A_{\mu \nu, \kappa \lambda}$，该张量称为 A 张量：
+但需要指出，若交换能 $E_\textmt{x}^\textmt{exact}$ (或不同于 $\hat g$ 的算符所贡献的 ERI 交换能) 对能量项有贡献，那么该张量不是 8 重对称性的 (即不满足 $\tilde A_{\mu \nu, \kappa \lambda} = \tilde A_{\mu \nu, \lambda \kappa}$)。出于便利，我们将定义下述 8 重对称性的张量 $A_{\mu \nu, \kappa \lambda}$，该张量称为 A 张量：
 \begin{equation}
     \label{eq.3.def.Auvkl}
     A_{\mu \nu, \kappa \lambda} \coloneq 2 \left( \tilde A_{\mu \nu, \kappa \lambda} + \tilde A_{\mu \nu, \lambda \kappa} \right)
@@ -767,7 +767,7 @@ DH 总能量的全导数可以分为 skeleton 部分与对轨道系数的导数�
     \partial_\mathbb{A} E^\textmt{DH} = \partial_\mathbb{A}^\mathrm{S} E^\textmt{DH} + L_{ai}^\textmt{DH} U_{ai}^\mathbb{A}
 \end{empheq}
 
-正因为 DH 包含了公式形式复杂的 $E_\mathrm{c}^\textmt{PT} [\mathbf{C}]$、其 Lagrangian 一般地非零即 $L_{ai}^\textmt{DH} \not \equiv 0$，从而 DH 的梯度理论相比之自洽场而言要复杂不少。
+正因为 DH 包含了公式形式复杂的 $E_\textmt{c}^\textmt{PT} [\mathbf{C}]$、其 Lagrangian 一般地非零即 $L_{ai}^\textmt{DH} \not \equiv 0$，从而 DH 的梯度理论相比之自洽场而言要复杂不少。
 
 \subsection{一阶梯度：约化密度矩阵}
 \label{sec.3.resp-den}
@@ -800,7 +800,7 @@ CI 的 (一阶) 约化密度在分子轨道基下，通过二次量子化算符�
 但作为常见的 DH 能量贡献项，MP2 相关能或其它形式的相关能，在定义约化密度的问题上存在困难。MP2 方法的波函数并非是对 $\hat H$ 变分极小的，因此 Hellmann-Feynman 定理失效，从而 MP2 方法的约化密度矩阵不能通过与 CI 相同的方式 (\ref{eq.3.def.rdm-ci}) 所定义\footnote{
     作为波函数方法，MP2 相关能可以通过 Hylleraas 泛函给出\cite{Hylleraas-Hylleraas.ZP.1930, Pulay-Saeboe.TCA.1986}：
     \begin{equation*}
-    E_\mathrm{c}^\textmt{(2)} = \min_{\Psi^{(1)}} \left( 2 \langle \Psi^\textmt{(1)} | \hat H - E^\textmt{0} | \Phi^\textmt{0} \rangle - \langle \Psi^\textmt{(1)} | \hat F - E^\textmt{0} | \Psi^\textmt{(1)} \rangle \right)
+    E_\textmt{c}^\textmt{(2)} = \min_{\Psi^{(1)}} \left( 2 \langle \Psi^\textmt{(1)} | \hat H - E^\textmt{0} | \Phi^\textmt{0} \rangle - \langle \Psi^\textmt{(1)} | \hat F - E^\textmt{0} | \Psi^\textmt{(1)} \rangle \right)
     \end{equation*}
     这里的 $\Phi^\textmt{0}$ 是 Hartree-Fock 行列式，$E^\textmt{0} = \langle \Phi^\textmt{0} | \hat F | \Phi^\textmt{0} \rangle$ 为零阶能量 (占据轨道能之和)，$\Psi^\textmt{(1)}$ 是 MP2 相关波函数。上式对 $\Psi^\textmt{(1)}$ 取变分极小，因此尽管 MP2 并非变分方法，但 Hellmann-Feynman 定理适用于上式。又由于 Brillouin 定理，$\Psi^\textmt{(1)}$ 只有二次激发项贡献、没有单次激发项，故对于任何单电子算符 $\hat o$ 总有 $\langle \Psi^\textmt{(1)} | \hat o | \Phi^\textmt{0} \rangle = 0$。故 MP2 相关部分对约化密度矩阵贡献是
     \begin{equation}
@@ -951,36 +951,36 @@ Z 矩阵导数对总能量二阶梯度的贡献，其求取难度在于如何给
     \item 可以实现以 XYG7 (作为区分同自旋与异自旋 MP2 相关能的泛函)、ωB97X-2 (作为含有长程交换能的泛函)、TPSS0-DH (作为含有 meta-GGA 的双杂化泛函)、lrc-XYG3 (作为含有普通、长程、短程 MP2 相关能的泛函) 等为代表的双杂化泛函的极化率计算。
     \item 对于含有多种 MP2 相关能形式的泛函 (以 lrc-XYG3、RS-PBE-P86 为代表)，其微扰能形式是
         \begin{equation*}
-          E_\mathrm{c}^\textmt{PT} = E_\mathrm{c}^\textmt{(2)} + E_\mathrm{c}^{\textmt{(2)}, \textmt{LR}} + E_\mathrm{c}^{\textmt{(2)}, \textmt{SR}}
+          E_\textmt{c}^\textmt{PT} = E_\textmt{c}^\textmt{(2)} + E_\textmt{c}^{\textmt{(2)}, \textmt{LR}} + E_\textmt{c}^{\textmt{(2)}, \textmt{SR}}
         \end{equation*}
         这类泛函的微扰能对 Lagrangian 的贡献写为
         \begin{equation*}
           L_{ai}^\textmt{PT} = L_{ai}^\textmt{(2)} + L_{ai}^{\textmt{(2)}, \textmt{LR}} + L_{ai}^{\textmt{(2)}, \textmt{SR}}
         \end{equation*}
-        即微扰总 Lagrangian 的贡献等于各子项的 Lagrangian 的线性加和。这种可加性也同样可以应用到交换相关泛函的子项拆分；弛豫密度、Z 矩阵、A 张量等也适用这种可加性。同时，除了使用了不同类型但维度相同的 ERI，短程、长程 MP2 相关能计算方式与普通的 MP2 完全一致；因此，不失一般性，我们仅讨论 $E_\mathrm{c}^\textmt{PT} = E_\mathrm{c}^\textmt{(2)}$ 的情形，而在程序中实现所有类型的 MP2 相关能。
-    \item 对于含有多种严格交换能的泛函 (以 ωB97X-2、RS-PBE-P86 为代表)，首先短程交换能 $E_\mathrm{x}^\textmt{SR}$ 可以拆分为普通的严格交换能 $E_\mathrm{x}^\textmt{exact}$ 与长程交换能 $E_\mathrm{x}^\textmt{LR}$ 的差减；其次，长程交换能的计算与普通严格交换能计算流程一致。与 MP2 相关能同样，我们也仅在正文中引入严格交换能 $E_\mathrm{x}^\textmt{exact}$，而在程序中引入长程交换能。
+        即微扰总 Lagrangian 的贡献等于各子项的 Lagrangian 的线性加和。这种可加性也同样可以应用到交换相关泛函的子项拆分；弛豫密度、Z 矩阵、A 张量等也适用这种可加性。同时，除了使用了不同类型但维度相同的 ERI，短程、长程 MP2 相关能计算方式与普通的 MP2 完全一致；因此，不失一般性，我们仅讨论 $E_\textmt{c}^\textmt{PT} = E_\textmt{c}^\textmt{(2)}$ 的情形，而在程序中实现所有类型的 MP2 相关能。
+    \item 对于含有多种严格交换能的泛函 (以 ωB97X-2、RS-PBE-P86 为代表)，首先短程交换能 $E_\textmt{x}^\textmt{SR}$ 可以拆分为普通的严格交换能 $E_\textmt{x}^\textmt{exact}$ 与长程交换能 $E_\textmt{x}^\textmt{LR}$ 的差减；其次，长程交换能的计算与普通严格交换能计算流程一致。与 MP2 相关能同样，我们也仅在正文中引入严格交换能 $E_\textmt{x}^\textmt{exact}$，而在程序中引入长程交换能。
     \item MP2 相关能依自旋平行或反平行，拆分为同自旋与异自旋两部分：
         \begin{align}
-          E_\mathrm{c}^{\textmt{(2)}, \textmt{SS}} &= c_\mathrm{c}^\textmt{SS} (t_{ij}^{ab} - t_{ij}^{ba}) (ia|jb) \\
-          E_\mathrm{c}^{\textmt{(2)}, \textmt{OS}} &= c_\mathrm{c}^\textmt{OS} t_{ij}^{ab} (ia|jb) 
+          E_\textmt{c}^{\textmt{(2)}, \textmt{SS}} &= c_\textmt{c}^\textmt{SS} (t_{ij}^{ab} - t_{ij}^{ba}) (ia|jb) \\
+          E_\textmt{c}^{\textmt{(2)}, \textmt{OS}} &= c_\textmt{c}^\textmt{OS} t_{ij}^{ab} (ia|jb) 
         \end{align}
-        若同自旋能量系数为 $c_\mathrm{c}^\textmt{SS}$、异自旋能量系数为 $c_\mathrm{c}^\textmt{OS}$，则总 MP2 相关能是
+        若同自旋能量系数为 $c_\textmt{c}^\textmt{SS}$、异自旋能量系数为 $c_\textmt{c}^\textmt{OS}$，则总 MP2 相关能是
         \begin{equation}
-          E_\mathrm{c}^{\textmt{(2)}} = E_\mathrm{c}^{\textmt{(2)}, \textmt{SS}} + E_\mathrm{c}^{\textmt{(2)}, \textmt{OS}} = \big( (c_\mathrm{c}^\textmt{SS} + c_\mathrm{c}^\textmt{OS}) t_{ij}^{ab} - c_\mathrm{c}^\textmt{SS} t_{ij}^{ba} \big) (ia|jb)
+          E_\textmt{c}^{\textmt{(2)}} = E_\textmt{c}^{\textmt{(2)}, \textmt{SS}} + E_\textmt{c}^{\textmt{(2)}, \textmt{OS}} = \big( (c_\textmt{c}^\textmt{SS} + c_\textmt{c}^\textmt{OS}) t_{ij}^{ab} - c_\textmt{c}^\textmt{SS} t_{ij}^{ba} \big) (ia|jb)
         \end{equation}
         出于公式推演的方便，我们会记
         \begin{align}
             \label{eq.3.def.g-ijab}
             g_{ij}^{ab} &\coloneq (ia|jb) \\
             \label{eq.3.def.T-ijab}
-            T_{ij}^{ab} &\coloneq (c_\mathrm{c}^\textmt{SS} + c_\mathrm{c}^\textmt{OS}) t_{ij}^{ab} - c_\mathrm{c}^\textmt{SS} t_{ij}^{ba} \\
+            T_{ij}^{ab} &\coloneq (c_\textmt{c}^\textmt{SS} + c_\textmt{c}^\textmt{OS}) t_{ij}^{ab} - c_\textmt{c}^\textmt{SS} t_{ij}^{ba} \\
             \label{eq.3.def.G-ijab}
-            G_{ij}^{ab} &\coloneq (c_\mathrm{c}^\textmt{SS} + c_\mathrm{c}^\textmt{OS}) g_{ij}^{ab} - c_\mathrm{c}^\textmt{SS} g_{ij}^{ba}
+            G_{ij}^{ab} &\coloneq (c_\textmt{c}^\textmt{SS} + c_\textmt{c}^\textmt{OS}) g_{ij}^{ab} - c_\textmt{c}^\textmt{SS} g_{ij}^{ba}
         \end{align}
         由此，MP2 相关能还可以写为
         \begin{align}
             \label{eq.3.emp2-by-T}
-            E_\mathrm{c}^\textmt{(2)} = T_{ij}^{ab} g_{ij}^{ab} = t_{ij}^{ab} G_{ij}^{ab}
+            E_\textmt{c}^\textmt{(2)} = T_{ij}^{ab} g_{ij}^{ab} = t_{ij}^{ab} G_{ij}^{ab}
         \end{align}
     \item 在极化率问题中，$F_{\mu \nu}^\mathbb{AB} = 0$ 且 $\partial_\mathbb{A} \partial_\mathbb{B} E^\textmt{non-elec} = 0$。
     \item 在当前的所有程序实现中，要求可以在内存储存 $n_\mathrm{prop} n_\mathrm{occ} n_\mathrm{vir} n_\mathrm{aux}$ 与 $n_\mathrm{vir}^2 n_\mathrm{aux}$ 大小的张量、以及在硬盘储存 $n_\mathrm{basis}^2 n_\mathrm{aux}$ 与 $n_\mathrm{occ}^2 n_\mathrm{vir}^2$ 大小的张量。%在本文涉及的效率测评中，所有张量都置于内存中，不涉及硬盘 I/O；但实际程序实现中，会考虑到低内存设备的情形而设计通过 h5py 库实现的硬盘 I/O 算法。
@@ -1011,14 +1011,14 @@ A 张量 $A_{\mu \nu, \kappa \lambda}$ 或其分子轨道基表示，不仅出�
     \verb|pyscf.df.df_jk.get_jk|
 \end{tcolorbox}
 
-依式 (\ref{eq.3.def.eri}) 的定义，若不考虑长程交换能 $E_\mathrm{x}^\textmt{LR}$ 等其他形式的交换能，闭壳层下双电子积分能量可以写为
+依式 (\ref{eq.3.def.eri}) 的定义，若不考虑长程交换能 $E_\textmt{x}^\textmt{LR}$ 等其他形式的交换能，闭壳层下双电子积分能量可以写为
 \begin{equation*}
-    E^\textmt{ERI} = \frac{1}{2} D_{\mu \nu} (\mu \nu | \kappa \lambda) D_{\kappa \lambda} - \frac{c_\mathrm{x}}{4} D_{\mu \nu} (\mu \lambda | \kappa \nu) D_{\kappa \lambda}
+    E^\textmt{ERI} = \frac{1}{2} D_{\mu \nu} (\mu \nu | \kappa \lambda) D_{\kappa \lambda} - \frac{c_\textmt{x}}{4} D_{\mu \nu} (\mu \lambda | \kappa \nu) D_{\kappa \lambda}
 \end{equation*}
 依据导数规则，ERI 对 A 张量的贡献是
 \begin{equation}
     \label{eq.3.deduct.A-eri-expand}
-    A_{\mu \nu, \kappa \lambda}^\textmt{ERI} = 4 (\mu \nu | \kappa \lambda) - c_\mathrm{x} (\mu \lambda | \kappa \nu) - c_\mathrm{x} (\mu \kappa | \lambda \nu)
+    A_{\mu \nu, \kappa \lambda}^\textmt{ERI} = 4 (\mu \nu | \kappa \lambda) - c_\textmt{x} (\mu \lambda | \kappa \nu) - c_\textmt{x} (\mu \kappa | \lambda \nu)
 \end{equation}
 在程序计算中，一般 A 张量不会单独出现，而是会与特定的 X 矩阵 $X_{\kappa \lambda}$ 进行乘积得到 $B_{\mu \nu}$：
 \begin{equation}
@@ -1037,7 +1037,7 @@ A 张量 $A_{\mu \nu, \kappa \lambda}$ 或其分子轨道基表示，不仅出�
 对 X 矩阵的对称化的意义在于，式 (\ref{eq.3.deduct.A-eri-expand}) 对 $A_{\mu \nu, \kappa \lambda}^\textmt{ERI}$ 原先给出了三项双电子积分；若要与 $X_{\kappa \lambda}$ 作乘积求和，则需要调用三次 ERI 与 X 矩阵乘法的过程；但当 X 矩阵化为对称的 $\tilde X_{\kappa \lambda}$ 后，则可以验证只需要两次乘法调用：
 \begin{equation}
     \label{eq.3.A-contract-AO-JK}
-    B_{\mu \nu} = 4 (\mu \nu | \kappa \lambda) \tilde X_{\kappa \lambda} - 2 c_\mathrm{x} (\mu \lambda | \kappa \nu) \tilde X_{\kappa \lambda}
+    B_{\mu \nu} = 4 (\mu \nu | \kappa \lambda) \tilde X_{\kappa \lambda} - 2 c_\textmt{x} (\mu \lambda | \kappa \nu) \tilde X_{\kappa \lambda}
 \end{equation}
 上式的计算过程与 Fock 矩阵中涉及双电子积分的计算过程完全一致。在我们的程序中，一般将直接使用 PySCF 的接口给出结果，不对此作程序实现。除开系数，我们称上式前者为 J 积分、后者为 K 积分：
 \begin{align}
@@ -1071,7 +1071,7 @@ A 张量 $A_{\mu \nu, \kappa \lambda}$ 或其分子轨道基表示，不仅出�
 在本工作中，处理 xDH 型双杂化泛函二阶梯度问题时，A 张量通常是通过分子轨道基所表示：
 \begin{equation}
     \label{eq.3.A-tensor-RI-expansion}
-    A_{pq, rs}^\textmt{ERI} = 4 (pq | rs) - c_\mathrm{x} (ps | rq) - c_\mathrm{x} (pr | sq)
+    A_{pq, rs}^\textmt{ERI} = 4 (pq | rs) - c_\textmt{x} (ps | rq) - c_\textmt{x} (pr | sq)
 \end{equation}
 但并非所有情况都会使用全部的 $A_{pq, rs}$ 元素：以 CP-SCF 方程 (\ref{eq.3.CP-SCF}) 的求解过程为例，其使用到的仅仅是 A 张量的非占-占据-非占-占据部分 $A_{ai, bj}$。由于 CP-SCF 方程求解的程序调用次数较多，有比较重要的优化价值，因此我们先对 $A_{ai, bj}^\textmt{ERI}$ 与分子轨道基下的 X 矩阵 $X_{bj}$ 作讨论：
 \begin{equation}
@@ -1083,13 +1083,13 @@ A 张量 $A_{\mu \nu, \kappa \lambda}$ 或其分子轨道基表示，不仅出�
 在分子轨道基下，$A_{ai, bj}^\textmt{ERI}$ 的 RI 近似可以展开为
 \begin{equation}
     \label{eq.3.A-tensor-ERI-RI}
-    A_{ai, bj}^\textmt{ERI} = 4 Y_{ai, P} Y_{bj, P} - c_\mathrm{x} Y_{aj, P} Y_{bi, P} - c_\mathrm{x} Y_{ab, P} Y_{ji, P}
+    A_{ai, bj}^\textmt{ERI} = 4 Y_{ai, P} Y_{bj, P} - c_\textmt{x} Y_{aj, P} Y_{bi, P} - c_\textmt{x} Y_{ab, P} Y_{ji, P}
 \end{equation}
 与原子轨道基的情况不同，分子轨道基下 K 积分部分无法利用对称性进行计算简化：
 \begin{align}
     \label{eq.3.A-contract-MO-RI-decompose}
-    B_{ai} &= 4 (ai | bj) X_{bj} - c_\mathrm{x} (aj | bi) X_{bj} - c_\mathrm{x} (ab | ji) X_{bj} \notag\\
-    &\simeq 4 Y_{ai, P} Y_{bj, P} X_{bj} - c_\mathrm{x} Y_{aj, P} Y_{bi, P} X_{bj} - c_\mathrm{x} Y_{ab, P} Y_{ji, P} X_{bj}
+    B_{ai} &= 4 (ai | bj) X_{bj} - c_\textmt{x} (aj | bi) X_{bj} - c_\textmt{x} (ab | ji) X_{bj} \notag\\
+    &\simeq 4 Y_{ai, P} Y_{bj, P} X_{bj} - c_\textmt{x} Y_{aj, P} Y_{bi, P} X_{bj} - c_\textmt{x} Y_{ab, P} Y_{ji, P} X_{bj}
 \end{align}
 因此，对于 $B_{ai} = A_{ai, bj}^\textmt{ERI} X_{bj}$ 张量缩并过程，其有三种具体的实现方式：
 \begin{enumerate}[nosep]
@@ -1167,15 +1167,15 @@ $A_{\mu \nu, \kappa \lambda}^\textmt{DFA}$ 与密度矩阵 $X_{\kappa \lambda}$ 
     \label{eq.3.def.d-ijab}
     D_{ij}^{ab} &\coloneq \varepsilon_i + \varepsilon_j - \varepsilon_a - \varepsilon_b &\quad& O(n_\mathrm{occ}^2 n_\mathrm{vir}^2) \\
     t_{ij}^{ab} &= g_{ij}^{ab} / D_{ij}^{ab} &\quad& O(n_\mathrm{occ}^2 n_\mathrm{vir}^2) &\quad& \text{cf. (\ref{eq.3.non-canonical-mp2-working})} \\
-    T_{ij}^{ab} &= (c_\mathrm{c}^\textmt{OS} + c_\mathrm{c}^\textmt{SS}) t_{ij}^{ab} - c_\mathrm{c}^\textmt{SS} t_{ij}^{ba} &\quad& O(n_\mathrm{occ}^2 n_\mathrm{vir}^2) &\quad& \text{cf. (\ref{eq.3.def.T-ijab})}\\
-    E_\mathrm{c}^\textmt{(2)} &= T_{ij}^{ab} g_{ij}^{ab} &\quad& O(n_\mathrm{occ}^2 n_\mathrm{vir}^2) &\quad& \text{cf. (\ref{eq.3.emp2-by-T})} \\
+    T_{ij}^{ab} &= (c_\textmt{c}^\textmt{OS} + c_\textmt{c}^\textmt{SS}) t_{ij}^{ab} - c_\textmt{c}^\textmt{SS} t_{ij}^{ba} &\quad& O(n_\mathrm{occ}^2 n_\mathrm{vir}^2) &\quad& \text{cf. (\ref{eq.3.def.T-ijab})}\\
+    E_\textmt{c}^\textmt{(2)} &= T_{ij}^{ab} g_{ij}^{ab} &\quad& O(n_\mathrm{occ}^2 n_\mathrm{vir}^2) &\quad& \text{cf. (\ref{eq.3.emp2-by-T})} \\
     D_{jk}^{\textmt{(2)}, \textmt{RDM}} &\leftarrow - 2 T_{ij}^{ab} t_{ik}^{ab} &\quad& O(n_\mathrm{occ}^3 n_\mathrm{vir}^2) &\quad& \text{cf. (\ref{eq.3.rdm-mp2-ij})} \\
     D_{ab}^{\textmt{(2)}, \textmt{RDM}} &= 2 T_{ij}^{ac} t_{ij}^{bc} &\quad& O(n_\mathrm{occ}^2 n_\mathrm{vir}^3) &\quad& \text{cf. (\ref{eq.3.rdm-mp2-ab})} \\
     \label{eq.3.def.g-iaP}
     G_{ia, P} &\coloneq T_{ij}^{ab} Y_{jb, P} &\quad& O(n_\mathrm{occ}^2 n_\mathrm{vir}^2 n_\mathrm{aux})
 \end{alignat}
 \end{subequations}
-上述计算过程的最终导出量是 $t_{ij}^{ab}$, $E_\mathrm{c}^\textmt{(2)}$, $D_{pq}^{\textmt{(2)}, \textmt{RDM}}$, $G_{ia, P}$。上述计算过程的共同特征是，指标 $i$ 是可以拆分的；即上述计算可以对指标 $i$ 作简单循环，从而将内存消耗控制在 $(n_\mathrm{occ} n_\mathrm{vir}^2)$ 量级。同时，如果只考虑一阶梯度问题，$t_{kj}^{ab}$ ($k \neq i$) 不影响涉及 $t_{ij}^{ab}$ 的计算，因此张量 $t_{ij}^{ab}$ 不需要保存 (但二阶梯度问题，目前的程序实现任然需要该张量)。
+上述计算过程的最终导出量是 $t_{ij}^{ab}$, $E_\textmt{c}^\textmt{(2)}$, $D_{pq}^{\textmt{(2)}, \textmt{RDM}}$, $G_{ia, P}$。上述计算过程的共同特征是，指标 $i$ 是可以拆分的；即上述计算可以对指标 $i$ 作简单循环，从而将内存消耗控制在 $(n_\mathrm{occ} n_\mathrm{vir}^2)$ 量级。同时，如果只考虑一阶梯度问题，$t_{kj}^{ab}$ ($k \neq i$) 不影响涉及 $t_{ij}^{ab}$ 的计算，因此张量 $t_{ij}^{ab}$ 不需要保存 (但二阶梯度问题，目前的程序实现任然需要该张量)。
 
 \subsection{MP2 与 DH 的 Laplacian 与 Z 矩阵}
 
@@ -1194,9 +1194,9 @@ MP2 的 Lagrangian 已经通过式 (\ref{eq.3.mp2-lagrangian}) 导出；在 RI �
 \end{equation}
 上式的 $Y_{ab, P}$ 对内存的占用压力较大，程序将对辅助基指标 $P$ 作分批求和。计算复杂度是 $O(n_\mathrm{occ} n_\mathrm{vir}^2 n_\mathrm{aux}) \sim O(N^4)$。
 
-注意到 Lagrangian 是广义 Fock 矩阵的反对称化结果、而广义 Fock 矩阵是能量对轨道系数的导数；能量 $E^\textmt{DH}$ 依 (\ref{eq.3.def.eng-DH}, \ref{eq.3.def.eng-n-hyb}) 可以写为 $E^{\mathrm{n}, \textmt{hyb}} + E_\mathrm{c}^\textmt{PT}$，从而 Lagrangian 也可以写为
+注意到 Lagrangian 是广义 Fock 矩阵的反对称化结果、而广义 Fock 矩阵是能量对轨道系数的导数；能量 $E^\textmt{DH}$ 依 (\ref{eq.3.def.eng-DH}, \ref{eq.3.def.eng-n-hyb}) 可以写为 $E^{\mathrm{n}, \textmt{hyb}} + E_\textmt{c}^\textmt{PT}$，从而 Lagrangian 也可以写为
 \begin{equation}
-    L_{ai}^\textmt{DH} = L_{ai}^{\mathrm{n}, \textmt{hyb}} + L_{ai}^\textmt{(2)} \quad (\text{when $E_\mathrm{c}^\textmt{PT} = E_\mathrm{c}^\textmt{(2)}$})
+    L_{ai}^\textmt{DH} = L_{ai}^{\mathrm{n}, \textmt{hyb}} + L_{ai}^\textmt{(2)} \quad (\text{when $E_\textmt{c}^\textmt{PT} = E_\textmt{c}^\textmt{(2)}$})
 \end{equation}
 $E^{\mathrm{n}, \textmt{hyb}}$ 给出的推论有
 \begin{align}
@@ -1206,7 +1206,7 @@ $E^{\mathrm{n}, \textmt{hyb}}$ 给出的推论有
 \end{align}
 综上，DH 的 Lagrangian $L_{ai}^\textmt{DH}$ 便是可以求得的了。代入 Z-Vector 方程 (\ref{eq.3.Z-vector})，便求得 $Z_{ai}^\textmt{DH}$。该步骤的计算量依 \ref{sec.3.A-by-MO} 小节中的不同算法而不同，但均为 $O(N^4)$。
 
-这里补充讨论 $L_{ai}^\textmt{DH}$ 的实现细节。当 $E_\mathrm{c}^\textmt{PT}$ 不仅有 $E_\mathrm{c}^\textmt{(2)}$、还需要允许有长程 $E_\mathrm{c}^{\textmt{(2)}, \textmt{LR}}$ 或短程贡献 $E_\mathrm{c}^{\textmt{(2)}, \textmt{SR}}$ 时，程序的框架需要灵活地设计，以允许众多不同相关能的 Lagrangian 贡献加和；但对于仅有 $E_\mathrm{c}^\textmt{(2)}$ 的情形，也不应增加计算量。当前程序中，attribute \verb|pyscf.dh.DH.inherited| 用于保存构成 $E^\textmt{DH}$ 各个能量分量的实例。这些实例分别单独实现了能量 $E$、Lagrangian 矩阵 $L_{ai}$、以及如式 (\ref{eq.3.def.SCR3}) 所表示的 $\symscr{S}_{ai}^\mathbb{A}$ 等可以线性加和的量；最终在计算 DH 的能量与梯度性质时，对这些量作线性加和。尽管目前仅实现了 MP2 型相关能以及其梯度，但该程序框架也应当容易地作扩展，以应对 $E^\textmt{DH}$ 包含不同于 MP2 形式的相关能时的情形。
+这里补充讨论 $L_{ai}^\textmt{DH}$ 的实现细节。当 $E_\textmt{c}^\textmt{PT}$ 不仅有 $E_\textmt{c}^\textmt{(2)}$、还需要允许有长程 $E_\textmt{c}^{\textmt{(2)}, \textmt{LR}}$ 或短程贡献 $E_\textmt{c}^{\textmt{(2)}, \textmt{SR}}$ 时，程序的框架需要灵活地设计，以允许众多不同相关能的 Lagrangian 贡献加和；但对于仅有 $E_\textmt{c}^\textmt{(2)}$ 的情形，也不应增加计算量。当前程序中，attribute \verb|pyscf.dh.DH.inherited| 用于保存构成 $E^\textmt{DH}$ 各个能量分量的实例。这些实例分别单独实现了能量 $E$、Lagrangian 矩阵 $L_{ai}$、以及如式 (\ref{eq.3.def.SCR3}) 所表示的 $\symscr{S}_{ai}^\mathbb{A}$ 等可以线性加和的量；最终在计算 DH 的能量与梯度性质时，对这些量作线性加和。尽管目前仅实现了 MP2 型相关能以及其梯度，但该程序框架也应当容易地作扩展，以应对 $E^\textmt{DH}$ 包含不同于 MP2 形式的相关能时的情形。
 
 \subsection{MP2 激发张量的偶极电场梯度及其相关量}
 
@@ -1287,7 +1287,7 @@ $E^{\mathrm{n}, \textmt{hyb}}$ 给出的推论有
 \end{align}
 上式中，依据式 (\ref{eq.3.def.sleketon-huv}) 附近的讨论，作为电性质导数量的 $F_{ai}^{\mathbb{A}, \mathrm{n}, \textmt{hyb}} = h_{ai}^\mathbb{A}$。在程序实现中，比较需要注意的是 $A_{ai, mj}^{\mathrm{n}, \textmt{hyb}} U_{mj}^\mathbb{A}$，因为其所使用的 A 张量并非源自于自洽场 $E^\textmt{SCF}$，而是源自于能量泛函的低阶部分 $E^{\mathrm{n}, \textmt{hyb}}$。
 
-对于 $\partial_\mathbb{B} L_{ai}^\textmt{PT}$，这里仅讨论 $E_\mathrm{c}^\textmt{PT} = E_\mathrm{c}^\textmt{(2)}$ 的情形。回顾 $L_{ai}^\textmt{(2)}$ 在 RI 近似下的表达式 (\ref{eq.3.Lai-mp2-ri})，对其作导数可得
+对于 $\partial_\mathbb{B} L_{ai}^\textmt{PT}$，这里仅讨论 $E_\textmt{c}^\textmt{PT} = E_\textmt{c}^\textmt{(2)}$ 的情形。回顾 $L_{ai}^\textmt{(2)}$ 在 RI 近似下的表达式 (\ref{eq.3.Lai-mp2-ri})，对其作导数可得
 \begin{align}
     \partial_\mathbb{B} L_{ai}^\textmt{(2)} &\simeq 4 \partial_\mathbb{B} G_{ib, P} Y_{ab, P} + 4 G_{ib, P} \partial_\mathbb{B} Y_{ab, P} - 4 \partial_\mathbb{B} G_{ja, P} Y_{ij, P} - 4 G_{ja, P} \partial_\mathbb{B} Y_{ij, P} \notag\\
     &\quad + \partial_\mathbb{B} A_{ai, pq} D_{pq}^{\textmt{(2)}, \textmt{RDM}} + A_{ai, pq} \partial_\mathbb{B} D_{pq}^{\textmt{(2)}, \textmt{RDM}}
@@ -1444,7 +1444,7 @@ $\symscr{T}_{pq}$ 与 $\symscr{T}_{pq}^\mathbb{A}$ 是容易求得的。$A_{ai, 
 
 对于闭壳层 MP2，非正则情形的能量与正则情形相同，都可以用激发系数与电子积分的乘积得到：
 \begin{align}
-    E_\mathrm{c}^\textmt{(2)} &= T_{ij}^{ab} (ia|jb) \\
+    E_\textmt{c}^\textmt{(2)} &= T_{ij}^{ab} (ia|jb) \\
     T_{ij}^{ab} &= 2 t_{ij}^{ab} - t_{ij}^{ba}
 \end{align}
 但激发系数并非是正则情形下的 $t_{ij}^{ab} = (ia|jb) / D_{ij}^{ab}$，而是需要通过类似于 CISD 的迭代过程求解\cite{Pulay-Saeboe.TCA.1986}：
@@ -1466,19 +1466,19 @@ $\symscr{T}_{pq}$ 与 $\symscr{T}_{pq}^\mathbb{A}$ 是容易求得的。$A_{ai, 
 \end{align}
 在指标 $a, b$ 求和的前提下，容易证明对偶正交可以从激发张量迁移到 ERI 张量：
 \begin{equation}
-    E_\mathrm{c}^\textmt{(2)} = T_{ij}^{ab} g_{ij}^{ab} = t_{ij}^{ab} G_{ij}^{ab}
+    E_\textmt{c}^\textmt{(2)} = T_{ij}^{ab} g_{ij}^{ab} = t_{ij}^{ab} G_{ij}^{ab}
 \end{equation}
 后续推导中经常使用类似的技巧。
 
 \subsection{电性质一阶梯度：MP2 相关能对性质的 skeleton 导数}
 \label{sec.3.skeleton}
 
-本小节将给出 MP2 相关能的 skeleton 导数 $\partial_\mathbb{A}^\mathrm{S} E_\mathrm{c}^\textmt{(2)}$。
+本小节将给出 MP2 相关能的 skeleton 导数 $\partial_\mathbb{A}^\mathrm{S} E_\textmt{c}^\textmt{(2)}$。
 
 对于电性质，skeleton 导数仅在涉及 Fock 矩阵或单电子积分矩阵、或者原子核互斥能时出现。对于分子轨道 ERI 积分 $g_{ij}^{ab}$，其 skeleton 导数为零。因此，MP2 相关能的 skeleton 导数为
 \begin{equation}
     \label{eq.3.pdSA-Ec-MP2-0}
-    \partial_\mathbb{A}^\mathrm{S} E_\mathrm{c}^\textmt{(2)} = \frac{\partial E_\mathrm{c}^\textmt{(2)} (\mathbb{A}, \mathbf{C})}{\partial \mathbb{A}} = \frac{\partial t_{ij}^{ab}}{\partial \mathbb{A}} G_{ij}^{ab}
+    \partial_\mathbb{A}^\mathrm{S} E_\textmt{c}^\textmt{(2)} = \frac{\partial E_\textmt{c}^\textmt{(2)} (\mathbb{A}, \mathbf{C})}{\partial \mathbb{A}} = \frac{\partial t_{ij}^{ab}}{\partial \mathbb{A}} G_{ij}^{ab}
 \end{equation}
 因此，对于 skeleton 导数，唯一需要关注的是激发张量 $t_{ij}^{ab}$ 在外场微扰 $\mathbb{A}$ 下的导数。
 
@@ -1508,7 +1508,7 @@ $D_{ij}^{ab}$ 定义见式 (\ref{eq.3.def.d-ijab})。从而，对 $F_{ij}^{ab}$ 
 \end{equation}
 代入式 (\ref{eq.3.pdSA-Ec-MP2-0})，并作指标对换与应用张量对称性，可以得到
 \begin{empheq}[box=\fbox]{align}
-    \partial_\mathbb{A}^\mathrm{S} E_\mathrm{c}^\textmt{(2)} &= \left( - F_{ki}^\mathbb{A} t_{kj}^{ab} - F_{kj}^\mathbb{A} t_{ik}^{ab} + F_{ca}^\mathbb{A} t_{ij}^{cb} + F_{cb}^\mathbb{A} t_{ij}^{ac} \right) T_{ij}^{ab} \notag\\
+    \partial_\mathbb{A}^\mathrm{S} E_\textmt{c}^\textmt{(2)} &= \left( - F_{ki}^\mathbb{A} t_{kj}^{ab} - F_{kj}^\mathbb{A} t_{ik}^{ab} + F_{ca}^\mathbb{A} t_{ij}^{cb} + F_{cb}^\mathbb{A} t_{ij}^{ac} \right) T_{ij}^{ab} \notag\\
     &= - 2 F_{ij}^\mathbb{A} T_{ik}^{ab} t_{jk}^{ab} + 2 F_{ab}^\mathbb{A} T_{ij}^{ac} t_{ij}^{bc}
 \end{empheq}
 
@@ -1531,7 +1531,7 @@ $D_{ij}^{ab}$ 定义见式 (\ref{eq.3.def.d-ijab})。从而，对 $F_{ij}^{ab}$ 
 MP2 相关能对轨道系数的梯度相关量写为 (乘以 $C_{\mu p}$ 是因为方便在分子轨道基下进行讨论)
 \begin{equation}
     \label{eq.3.def-fock-cmp2}
-    F_{mp}^\textmt{(2)} \coloneq C_{\mu m} \frac{\mathrm{d} E_\mathrm{c}^\textmt{(2)}}{\mathrm{d} C_{\mu p}} = T_{ij}^{ab} C_{\mu m} \frac{\mathrm{d} g_{ij}^{ab}}{\mathrm{d} C_{\mu p}} + C_{\mu m} \frac{\mathrm{d} t_{ij}^{ab}}{\mathrm{d} C_{\mu p}} G_{ij}^{ab}
+    F_{mp}^\textmt{(2)} \coloneq C_{\mu m} \frac{\mathrm{d} E_\textmt{c}^\textmt{(2)}}{\mathrm{d} C_{\mu p}} = T_{ij}^{ab} C_{\mu m} \frac{\mathrm{d} g_{ij}^{ab}}{\mathrm{d} C_{\mu p}} + C_{\mu m} \frac{\mathrm{d} t_{ij}^{ab}}{\mathrm{d} C_{\mu p}} G_{ij}^{ab}
 \end{equation}
 上式定义了 $F_{mp}^\textmt{(2)}$ 即 MP2 相关能对广义 Fock 矩阵的贡献。
 

@@ -3,13 +3,13 @@
 \chapter{绪论}
 \label{sec.1.title}
 
-本工作所涉及的记号、重要公式与约定俗成，在 \alertref{sec.3.notations} 节中定义。本论文正文将基于这些定义展开。
+本工作所涉及的记号、重要公式与约定俗成，在术语缩写对照表与附录 \alertref{sec.3.notations} 节中定义。本论文正文将基于这些定义展开。本工作涉及到的基组与程序、波函数方法、密度泛函近似，分别列于附录 \alertref{sec.app.dft}、\alertref{sec.app.wft}、\alertref{sec.app.basis}。
 
 \section{密度泛函理论}
 
 \subsection{\Schrodinger 方程}
 
-从第一性的角度出发，对于分子体系的微观状态描述，在 Born-Oppenheimer 近似下\cite{Born-Oppenheimer.AP.1927}，原子核运动对电子运动的影响可以忽略。非相对论的分子中电子运动问题在数学形式上，可以化归为对含时 \Schrodinger 方程\cite{Schroedinger-Schroedinger.PR.1926}求解关于电子自旋坐标 $\{\bm{x}_i\}$ ($i = 1, 2, \cdots, n_\mathrm{elec}$，其中 $n_\mathrm{elec}$ 表示电子数、$\bm{x}_i = (\bm{r}_i, \sigma_i)$ 代表电子的三维空间坐标与自旋) 与时间 $t$ 的波函数 $\Psi(\{\bm{x}_i\}, t)$：
+从第一性的角度出发，对于分子体系的微观状态描述，在 Born-Oppenheimer 近似下\cite{Born-Oppenheimer.AP.1927}，电子与原子核耦合运动问题可以解耦地考虑。非相对论下，分子中电子运动问题在数学形式上，可以化归为对含时 \Schrodinger 方程\cite{Schroedinger-Schroedinger.PR.1926}求解关于电子自旋坐标 $\{\bm{x}_i\}$ ($i = 1, 2, \cdots, n_\mathrm{elec}$，其中 $\bm{x}_i = (\bm{r}_i, \sigma_i)$ 代表电子的三维空间坐标与自旋) 与时间 $t$ 的波函数 $\Psi(\{\bm{x}_i\}, t)$：
 \begin{equation}
   i \frac{\partial \Psi(\{\bm{x}_i\}, t)}{\partial t} = \hat H \Psi(\{\bm{x}_i\}, t)
 \end{equation}
@@ -26,17 +26,17 @@
 \end{equation}
 该方程称为定态 \Schrodinger 方程。对该 \Schrodinger 方程的精确求解，是第一性计算化学的核心问题之一。
 
-本工作中，$\hat H$ 包含四部分算符贡献，即动能算符 $\hat T$、库伦排斥算符 $\hat V_\mathrm{ee}$、外势算符 $\hat V_\mathrm{ext}$ 与非电子参与的算符 $\hat V_\text{non-elec}$：
+本工作中，$\hat H$ 包含四部分算符贡献，即动能算符 $\hat T$、库伦排斥算符 $\hat V_\textmt{ee}$、外势算符 $\hat V_\textmt{ext}$ 与非电子参与的算符 $\hat V_\textmt{non-elec}$：
 \begin{equation}
   \label{eq.1.def.hamiltonian}
-  \hat H = \hat T + \hat V_\mathrm{ee} + \hat V_\mathrm{ext} + \hat V_\text{non-elec}
+  \hat H = \hat T + \hat V_\textmt{ee} + \hat V_\textmt{ext} + \hat V_\textmt{non-elec}
 \end{equation}
-若没有其它外加势场作用在分子体系上 (如电场或磁场等)，$\hat V_\mathrm{ext}$ 表征原子核对电子的库伦吸引作用、$\hat V_\text{non-elec}$ 表征原子核间的库伦互斥作用。在此情形下，四部分算符贡献的具体表达式是
+若没有其它外加势场作用在分子体系上 (如电场或磁场等)，$\hat V_\textmt{ext}$ 表征原子核对电子的库伦吸引作用、$\hat V_\textmt{non-elec}$ 表征原子核间的库伦互斥作用。在此情形下，四部分算符贡献的具体表达式是
 \begin{align}
   \hat T &= - \frac{1}{2} \sum_i^{n_\mathrm{elec}} \nabla_i^2 \\
-  \hat V_\mathrm{ee} &= \frac{1}{2} \sum_{i \neq j}^{n_\mathrm{elec}} \frac{1}{| \bm{r}_i - \bm{r}_j |} \\
-  \hat V_\mathrm{ext} &= \sum_{i}^{n_\mathrm{elec}} v (\bm{r}_i) \\
-  \hat V_\text{non-elec} &= \frac{1}{2} \sum_{A \neq B}^{n_\mathrm{atom}} \frac{Z_A Z_B}{| \bm{R}_A  - \bm{R}_B |} \quad \text{(无其它外势)}
+  \hat V_\textmt{ee} &= \frac{1}{2} \sum_{i \neq j}^{n_\mathrm{elec}} \frac{1}{| \bm{r}_i - \bm{r}_j |} \\
+  \hat V_\textmt{ext} &= \sum_{i}^{n_\mathrm{elec}} v (\bm{r}_i) \\
+  \hat V_\textmt{non-elec} &= \frac{1}{2} \sum_{A \neq B}^{n_\mathrm{atom}} \frac{Z_A Z_B}{| \bm{R}_A  - \bm{R}_B |} \quad \text{(无其它外势)}
 \end{align}
 上式中，外势函数为
 \begin{equation}
@@ -44,83 +44,81 @@
 \end{equation}
 其中，$Z_A$ 是原子 $A$ 的核电荷数、$\bm{R}_A$ 是原子 $A$ 的核坐标、$n_\mathrm{atom}$ 是分子的原子数。
 
-本论文的工作涉及到偶极电场对分子体系的作用。对于电中性体系，该电场对分子的影响是规范不变的；我们始终规定规范原点为原点。在此情形下，$\hat T$ 与 $\hat V_\mathrm{ee}$ 没有发生变化。在强度为 $\symbfcal{E}^\dagger = (\varepsilon_x, \varepsilon_y, \varepsilon_z)$ 的偶极电场下 \cite{Atkins-Friedman.Oxford.2011}\footnote{事实上，电场是依频率而随时间变化的场；本工作中，不考虑含频率情形，或认为频率为 0，从而外势电场随时间是恒定的。本工作仅考虑电场多级展开的最低阶展开；因此我们仅考察偶极电场，而不考察更高阶的四极、八极等电场。}，
+本论文的工作涉及到偶极电场对分子体系的作用。对于电中性体系，该电场对分子的影响是规范不变的；我们始终规定规范原点为原点。在此情形下，$\hat T$ 与 $\hat V_\textmt{ee}$ 没有发生变化。在强度为 $\symbfcal{E}^\dagger = (\varepsilon_x, \varepsilon_y, \varepsilon_z)$ 的偶极电场下 \cite{Atkins-Friedman.Oxford.2011}\footnote{事实上，电场是依频率而随时间变化的场；本工作中，不考虑含频率情形，或认为频率为 0，从而外势电场随时间是恒定的。本工作仅考虑电场多级展开的最低阶展开；因此我们仅考察偶极电场，而不考察更高阶的四极、八极等电场。}，
 \begin{align}
   \label{eq.1.dipole-v-r}
   v (\bm{r}) &= - \sum_{A}^{n_\mathrm{atom}} \frac{Z_A}{| \bm{r} - \bm{R}_A |} - \mathbfcal{E}^\dagger \bm{r} \quad \text{(dipole field)} \\
   \label{eq.1.dipole-nonelec-r}
-  \hat V_\text{non-elec} &= \frac{1}{2} \sum_{A \neq B}^{n_\mathrm{atom}} \frac{Z_A Z_B}{| \bm{R}_A  - \bm{R}_B |} + \sum_{A}^{n_\mathrm{atom}} Z_A \mathbfcal{E}^\dagger \bm{R}_A \quad \text{(dipole field)}
+  \hat V_\textmt{non-elec} &= \frac{1}{2} \sum_{A \neq B}^{n_\mathrm{atom}} \frac{Z_A Z_B}{| \bm{R}_A  - \bm{R}_B |} + \sum_{A}^{n_\mathrm{atom}} Z_A \mathbfcal{E}^\dagger \bm{R}_A \quad \text{(dipole field)}
 \end{align}
 
-定态 \Schrodinger 方程求解的困难至少来自于两方面。一者，从应用的角度，对计算化学的精度要求非常高。以化学反应为例，若速率方程满足 Arrhenius 公式 $k = A \exp \big( - \frac{E_\mathrm{a}}{R T} \big)$，又自由能 $E_a$ 计算若存在 1 kcal/mol 的误差，那么反应速率 $k$ 在 298 K 下就会有约 5 倍的误差。而目前密度泛函近似声称的最佳精度在 1.2 -- 2.0 kcal/mol \cite{Zhang-Xu.JPCL.2021, Santra-Martin.JPCL.2021}，还有可以提升的空间。二者，从表达式来看，由于库伦排斥算符 $\hat V_\mathrm{ee}$ 的存在，无法通过变量分离等技巧快速求解 \Schrodinger 方程。
+定态 \Schrodinger 方程求解的困难至少来自于两方面。一者，从应用的角度，计算化学对精度的要求非常高。以化学反应为例，若速率方程满足 Arrhenius 公式 $k = A \exp \big( - \frac{E_\textmt{a}}{R T} \big)$，又自由能 $E_\textmt{a}$ 计算若存在 1 kcal/mol 的误差，那么反应速率 $k$ 在 298 K 下就会有约 5 倍的误差。而目前即使是表现最优异的密度泛函，其声称的最佳精度也有 1.2 -- 2.0 kcal/mol 的误差\cite{Zhang-Xu.JPCL.2021, Santra-Martin.JPCL.2021}，还有可以提升的空间。二者，从表达式来看，由于库伦排斥算符 $\hat V_\textmt{ee}$ 的存在，无法通过变量分离等技巧快速求解 \Schrodinger 方程。
 %---disable-start---
 %最近的研究表明，如果将定态 \Schrodinger 方程看作 $k$-local Hamiltonian 问题 ($k \geq 2$)，那么该方程的求解是困难的 QMA (Quantum Merlin Arthur) 问题：即不论是经典计算还是量子计算，对基组大小为 $n > n_\mathrm{elec}$ 的算符 $\hat H$，无法在多项式时间 $\mathrm{poly}(n)$ 内、以较大的正确概率判断基态能量 $\min \langle \hat H \rangle$ 是否小于给定数值 \cite{Kempe-Regev.SJC.2006}。
 %---disable-end---
 
-为了在保证一定精度的同时，更快地求解化学所关心的体系，对定态 \Schrodinger 方程的近似方法、以及为近似方法所设计的框架就有重要的价值。
+为了在保证一定精度的同时，更快地求解化学所关心的体系，对定态 \Schrodinger 方程的近似方法、以及为近似方法所设计的理论框架有着重要的价值。
 
 \subsection{Hohenberg-Kohn 定理}
 
-若不将自旋看作变量，那么定态 \Schrodinger 方程 (\ref{eq.1.tise}) 是关于电子坐标 $\{\bm{r}_i\}$ 的方程；其中 $i = 1, 2, \cdots, n_\mathrm{elec}$，待处理的自变量数量非常大。为避免分析复杂的波函数，Hohenberg 与 Kohn 考虑使用变量数非常少的电子密度 $\rho(\bm{r})$ 对体系进行研究，并提出了两条基本定理 \cite{Hohenberg-Kohn.PR.1964}。
+若不将自旋看作变量，那么定态 \Schrodinger 方程 (\ref{eq.1.tise}) 是关于电子坐标 $\{\bm{r}_i\}$ 的方程；其中 $i = 1, 2, \cdots, n_\mathrm{elec}$，待处理的自变量数量非常大。为避免分析复杂的波函数，Hohenberg 与 Kohn 考虑使用变量数非常少的电子云密度 $\rho(\bm{r})$ 对体系进行研究，并提出了两条基本定理 \cite{Hohenberg-Kohn.PR.1964}。
 
-\textbf{唯一性定理}：体系的基态电子密度 $\rho(\bm{r})$ 与体系所处的外势 $v(\bm{r})$ 存在一一对应关系 (不计入外势函数上的任意常数)。该定理的意义有两者：
+\textbf{唯一性定理。}体系的基态电子云密度 $\rho(\bm{r})$ 与体系所处的外势 $v(\bm{r})$ 存在一一对应关系 (不计入外势函数上的任意常数)。该定理的意义有两者：
 \begin{itemize}[nosep]
-  \item 由于算符 $\hat H$ 可以看作关于外势 $\hat V_\mathrm{ext}$ 的算符，因此在 \Schrodinger 方程下，基态能量 $E$ 可以写成关于外势函数 $v(\bm{r})$ 的泛函：
+  \item 由于算符 $\hat H$ 可以看作是关于外势 $\hat V_\textmt{ext}$ 的算符，因此在 \Schrodinger 方程下，基态能量 $E$ 可以表达为关于外势函数 $v(\bm{r})$ 的泛函：
   \begin{equation}
     \label{eq.1.true-system-variation}
     E[v] = \min_\Psi \langle \Psi | \hat H | \Psi \rangle
   \end{equation}
-  而又由于外势 $v(\bm{r})$ 与基态电子密度 $\rho(\bm{r})$ 有一一对应关系，因此可以基态能量是关于基态电子密度 $\rho(\bm{r})$ 的泛函 $E[\rho]$。该理论也得名为密度泛函理论。
+  而又由于外势 $v(\bm{r})$ 与基态电子云密度 $\rho(\bm{r})$ 有一一对应关系，因此基态能量 $E[v]$ 是关于基态电子云密度 $\rho(\bm{r})$ 的泛函，即几台能量也可以以记号 $E[\rho]$ 表示。该理论因此得名为密度泛函理论。
   
-  \item 对于特定外势 $v(\bm{r})$ 下的体系，若令其波函数为 $\Psi_0$，那么能量泛函可以写为四部分：
+  \item 对于特定外势 $v(\bm{r})$ 下的体系，若令其基态波函数为 $\Psi_0$，那么能量泛函可以展开为四部分：
   \begin{align*}
-    E[\rho] &= \langle \Psi_0 | \hat T + \hat V_\mathrm{ee} + \hat V_\mathrm{ext} + \hat V_\text{non-elec} | \Psi_0 \rangle \\
-    &= \langle \Psi_0 | \hat T + \hat V_\mathrm{ee} | \Psi_0 \rangle + \int v (\bm{r}) \rho (\bm{r}) \, \mathrm{d} \bm{r} + \langle \hat V_\text{non-elec} \rangle
+    E[\rho] &= \langle \Psi_0 | \hat T + \hat V_\textmt{ee} + \hat V_\textmt{ext} + \hat V_\textmt{non-elec} | \Psi_0 \rangle \\
+    &= \langle \Psi_0 | \hat T + \hat V_\textmt{ee} | \Psi_0 \rangle + \int v (\bm{r}) \rho (\bm{r}) \, \mathrm{d} \bm{r} + \langle \hat V_\textmt{non-elec} \rangle
   \end{align*}
-  其中，$\langle \hat V_\text{non-elec} \rangle$ 是常数项，在泛函的映射关系中可以忽略；后文也对该项不作讨论。定义泛函 $F[\rho]$ 为
+  其中，$\langle \hat V_\textmt{non-elec} \rangle$ 是常数项，在泛函的映射关系中可以忽略；后文也不对该项作讨论。定义泛函 $F[\rho]$ 为
   \begin{equation}
     \label{eq.1.f-functional-interacting-system}
-    F[\rho] = \langle \Psi_0 | \hat T | \Psi_0 \rangle + \langle \Psi_0 | \hat V_\mathrm{ee} | \Psi_0 \rangle = T[\rho] + V_\mathrm{ee}[\rho]
+    F[\rho] = \langle \Psi_0 | \hat T | \Psi_0 \rangle + \langle \Psi_0 | \hat V_\textmt{ee} | \Psi_0 \rangle = T[\rho] + V_\textmt{ee}[\rho]
   \end{equation}
-  该项表达式没有 $v$ 显式的参与，因此这部分贡献可以看作是对任意外势普适的泛函。具体来说，该泛函 $F[\rho]$ 可以应用于任何不同构型的分子体系、以及任何不影响动能与电子库伦互斥效应的外势。
+  该项表达式没有 $v$ 显式的参与，因此这部分贡献可以看作是对任意外势普适的泛函。具体来说，泛函 $F[\rho]$ 可以应用于任意不同构型的分子体系、以及任意不影响动能与电子库伦互斥效应的外势。
 \end{itemize}
 
-\textbf{变分定理}：在给定外势 $v(\bm{r})$ 的体系下，基态能量可以通过对下述泛函求取电子密度 $\rho(\bm{r})$ 的变分极小得到：
+\textbf{变分定理。}在给定外势 $v(\bm{r})$ 的体系下，基态能量可以通过对下述泛函求取电子云密度 $\rho(\bm{r})$ 的变分极小得到：
 \begin{equation}
   E[\rho] = \min_{\rho \rightarrow n_\mathrm{elec}} \left( F[\rho] + \int v (\bm{r}) \rho (\bm{r}) \, \mathrm{d} \bm{r} \right)
 \end{equation}
-其中电子密度 $\rho(\bm{r})$ 不是任意的，它需要满足的边界条件是 $\rho \rightarrow n_\mathrm{elec}$ 即 $\rho(\bm{r})$ 为 $N$ 可表示密度、且全空间积分得到 $n_\mathrm{elec}$ 个电子。
+其中电子云密度 $\rho(\bm{r})$ 不是任意的，它需要满足的边界条件是 $\rho \rightarrow n_\mathrm{elec}$ 即 $\rho(\bm{r})$ 为 $N$ 可表示密度、且全空间积分得到 $n_\mathrm{elec}$ 个电子。变分定理的意义是，假使泛函 $F[\rho]$ 是已知的，那么基态能量可以通过变分计算得到。
 
-变分定理的意义是，假使泛函 $F[\rho]$ 是已知的，那么基态能量可以通过变分计算得到。
-
-Hohenberg-Kohn 定理的提出，标志着密度泛函理论成为了一个原则上严格的理论。然而，如何构建普适泛函 $F[\rho]$，定理本身没有给出具体的路径。如何分析与构建 $F[\rho]$、并且基于这个泛函求解能量基态 $E[\rho]$，是密度泛函理论与近似研究的核心与难点问题。
+Hohenberg-Kohn 定理的提出，标志着密度泛函理论成为了一个原则上严格的理论。然而，如何构建普适泛函 $F[\rho]$，定理本身没有给出具体的思路。如何分析与构建 $F[\rho]$、并且基于这个泛函求解能量基态 $E[\rho]$，是密度泛函理论与近似研究的核心与难点问题。
 
 \subsection{Kohn-Sham 方程}
 
-作为 Hohenberg-Kohn 变分定理的拓展，Kohn 与 Sham 提出一种在假定泛函 $F[\rho]$ 已知的前提下，解决对电子密度 $\rho(\bm{r})$ 变分计算的具体过程 \cite{Kohn-Sham.PR.1965}。
+作为 Hohenberg-Kohn 变分定理的拓展，Kohn 与 Sham 提出一种在假定泛函 $F[\rho]$ 已知的前提下，解决对电子云密度 $\rho(\bm{r})$ 变分计算的具体过程 \cite{Kohn-Sham.PR.1965}。
 
 定义给定外势 $v (\bm{r})$ 下的泛函 $E_{v}[\rho]$：
 \begin{equation}
   E_{v}[\rho] = F[\rho] + \int v (\bm{r}) \rho (\bm{r}) \, \mathrm{d} \bm{r}
 \end{equation}
-依据 Hohenberg-Kohn 变分定理，对 $E_{v}[\rho]$ 作关于 $\rho(\bm{r})$ 的变分极小即可给出基态能量 $E[\rho]$。考虑到电子密度 $\rho(\bm{r})$ 满足 $N$ 可表示性，它可以展开为正交归一的单电子轨道函数基 $\{\phi_i(\bm{r})\}$ 与对应占据数 $\{n_i\}$ 的表达式
+依据 Hohenberg-Kohn 变分定理，对 $E_{v}[\rho]$ 作关于 $\rho(\bm{r})$ 的变分极小即可给出基态能量 $E[\rho]$。考虑到电子云密度 $\rho(\bm{r})$ 满足 $N$ 可表示性，它可以展开为正交归一的单电子轨道函数基 $\{\phi_i(\bm{r})\}$ 与对应占据数 $\{n_i\}$ 的表达式
 \begin{equation}
   \rho(\bm{r}) = \sum_i n_i |\phi_i(\bm{r})|^2
 \end{equation}
-其中，对于任意占据轨道 $i$，电子占据数需要满足下述 $N$ 可表示性条件
+其中，对于任意占据轨道 $i$，电子占据数需要满足下述 $N$ 可表示性条件\footnote{简单起见，这里的讨论没有引入自旋，且不同电子必须占据不同状态；这不满足电子的真实物理图像。但如果这里的基选为自旋轨道 $\{\phi_i (\bm{x})\}$、能量是 $\alpha, \beta$ 电子云密度的泛函 $E[\rho^\alpha(\bm{r}), \rho^\beta(\bm{r})]$，那么这部分讨论既考虑了电子的物理图像、同时也是有效的。}
 \begin{equation}
   0 \leqslant n_i \leqslant 1, \quad \sum_i n_i = n_\mathrm{elec}
 \end{equation}
 引入 Lagrange 乘子 $\mu, \{ \varepsilon_{ij} \}$ 分别对总电子数条件与单电子轨道正交归一条件作限制，则变分极小问题是
 \begin{equation}
-  \delta \left( E_{v}[\rho] - \mu \int \rho(\bm{r}) \, \mathrm{d} \bm{r} - \sum_{ij} \varepsilon_{ij} \phi_i^*(\bm{r}) \phi_j(\bm{r})  \, \mathrm{d} \bm{r} \right) = 0
+  \delta \left( E_{v}[\rho] - \mu \int \rho(\bm{r}) \, \mathrm{d} \bm{r} - \sum_{ij} \varepsilon_{ij} \int \phi_i^*(\bm{r}) \phi_j(\bm{r})  \, \mathrm{d} \bm{r} \right) = 0
 \end{equation}
 将上式应用于对单电子轨道函数基复共轭 $\{\phi_i^*(\bm{r})\}$ 的变分，并利用基变换使正交归一条件的 Lagrange 乘子 $\varepsilon_{ij}$ 的矩阵对角化，可以得到关于轨道指标 $i$ 的 Euler 方程组
 \begin{equation}
   \label{eq.1.frac-ks}
   \left( \frac{\delta F[\rho]}{\delta \rho} + v(\bm{r}) - \mu \right) n_i \phi_i (\bm{r}) = \varepsilon_i \phi_i (\bm{r})
 \end{equation}
-对上述等式左右乘以 $\phi_i^* (\bm{r})$ 积分并对角标 $i$ 求和，可以整理得泛函 $E_{v}[\rho]$ 的表达式
+对上述等式乘以 $\phi_i^* (\bm{r})$ 积分并对角标 $i$ 求和，可以整理得泛函 $E_{v}[\rho]$ 的表达式
 \begin{equation}
   \label{eq.1.frac-ks-eng}
   E_v[\rho] = \sum_i \varepsilon_i + F[\rho] - \int \frac{\delta F[\rho]}{\delta \rho} \rho \, \mathrm{d} \bm{r} + \mu n_\mathrm{elec}
@@ -130,11 +128,11 @@ Hohenberg-Kohn 定理的提出，标志着密度泛函理论成为了一个原�
   \label{eq.1.ks}
   \left( \frac{\delta F[\rho]}{\delta \rho} + v(\bm{r}) \right) \phi_i (\bm{r}) = \varepsilon_i \phi_i (\bm{r}), \quad i = 1, 2, \cdots, n_\mathrm{elec}
 \end{equation}
-该方程即 Kohn-Sham 方程。电子密度可以通过下式给出：
+该方程即 Kohn-Sham 方程。电子云密度可以通过下式给出：
 \begin{equation}
   \rho(\bm{r}) = \sum_i^{n_\mathrm{elec}} |\phi_i(\bm{r})|^2
 \end{equation}
-将上述电子密度代入 $E_v[\rho]$，就求得了体系的能量 $E[\rho]$。
+将上述电子云密度代入 $E_v[\rho]$，就求得了体系的能量 $E[\rho]$。
 
 上述过程表明，对于任意的外势 $v(\bm{r})$，在没有能级简并的前提下，其密度可以表述为对一系列分子轨道 $\{ \phi_i ({\bm{r}}) \}$ 非零即一的占据状态。该状态的波函数 $\Psi_{\lambda = 0}$ 也可以表示为下述定义的算符 $\hat H_{\lambda=0}$ 的能级最低本征态：
 \begin{align}
@@ -142,74 +140,72 @@ Hohenberg-Kohn 定理的提出，标志着密度泛函理论成为了一个原�
   \label{eq.1.psi-lambda-0}
   \Psi_{\lambda = 0} &= \arg \min_{\Psi} \langle \Psi | \hat H_{\lambda = 0} | \Psi \rangle
 \end{align}
-由于算符 $\hat H_{\lambda = 0}$ 没有显式的双电子相互作用项，因此 $\Psi_{\lambda = 0}$ 也称为无电子相互作用波函数。其波函数由占据轨道 $\{ \phi_i ({\bm{r}}) \}$ 的 Hartree 连乘积构成 (或连乘积波函数的线性组合)；其密度 $\rho(\bm{r})$ 是泛函 $E_v[\rho]$ 变分取最小值时的密度，即真实基态密度。这个无相互作用体系的电子轨道 $\{\phi_i\}$ 可以通过 Kohn-Sham 方程 (\ref{eq.1.ks}) 导出。它与 Hartree-Fock 方程尽管具有完全不同的意义；但表达式非常相似、都可以用自洽场过程求解。这也就意味着，如果泛函 $F[\rho]$ 的形式是已知的，那么基态能量可以通过已知的数值方法快速求解。
+由于算符 $\hat H_{\lambda = 0}$ 没有显式的双电子相互作用项，因此 $\Psi_{\lambda = 0}$ 也称为无电子相互作用波函数。其波函数由占据轨道 $\{ \phi_i ({\bm{r}}) \}$ 的 Hartree 连乘积构成 (或连乘积波函数的线性组合，Slater 行列式是其中一种有效地线性组合)；其密度 $\rho(\bm{r})$ 是泛函 $E_v[\rho]$ 变分取最小值时的密度，即真实基态密度。这个无相互作用体系的电子轨道 $\{\phi_i\}$ 可以通过 Kohn-Sham 方程 (\ref{eq.1.ks}) 导出。它与 Hartree-Fock 方程尽管具有完全不同的意义；但表达式非常相似、都可以用自洽场过程求解。这也就意味着，如果泛函 $F[\rho]$ 的形式是已知的，那么基态能量可以通过已知的数值方法快速求解。
 
 \subsection{Kohn-Sham 框架与“Jacob 阶梯”}
 
-尽管 Kohn-Sham 方程解决了在给定 $F[\rho]$ 的情况下，如何求解基态密度与能量的具体自洽场方法；但它尚没有解决如何构建 $F[\rho]$ 的问题。Kohn 与 Sham 提出 \cite{Kohn-Sham.PR.1965}，$F[\rho]$ 中，很大一部分贡献项可以准确地给出。定义无相互作用体系动能为
+尽管 Kohn-Sham 方程解决了在给定 $F[\rho]$ 的情况下，求解基态密度与能量的具体自洽场方法；但它尚没有解决如何构建 $F[\rho]$ 的问题。Kohn 与 Sham 提出 \cite{Kohn-Sham.PR.1965}，$F[\rho]$ 中，很大一部分贡献项可以准确地给出。定义无相互作用体系动能为
 \begin{equation}
-  T_\mathrm{s} [\rho] = \langle \Psi_{\lambda = 0} | \hat T | \Psi_{\lambda = 0} \rangle
+  T_\textmt{s} [\rho] = \langle \Psi_{\lambda = 0} | \hat T | \Psi_{\lambda = 0} \rangle
 \end{equation}
 其中，$\Psi_{\lambda = 0}$ 是 Kohn-Sham 方程 (\ref{eq.1.psi-lambda-0}) 最低能级的占据轨道构成的波函数，而非由 (\ref{eq.1.true-system-variation}) 给出的真实体系波函数 $\Psi_0$。定义库伦作用能为
 \begin{equation}
   J[\rho] = \frac{1}{2} \iint \frac{\rho(\bm{r}) \rho(\bm{r}')}{|\bm{r} - \bm{r}'|} \, \mathrm{d} \bm{r} \, \mathrm{d} \bm{r}'
 \end{equation}
-联系到式 (\ref{eq.1.f-functional-interacting-system}) 所给出的真实体系波函数 $\Psi_0$ 定义下的动能 $T[\rho]$ 与电子互斥能 $V_\mathrm{ee} [\rho]$，Kohn 与 Sham 定义由于电子相互作用而产生的能量为交换相关能：
+联系到式 (\ref{eq.1.f-functional-interacting-system}) 所给出的真实体系波函数 $\Psi_0$ 定义下的动能 $T[\rho]$ 与电子互斥能 $V_\textmt{ee} [\rho]$，Kohn 与 Sham 定义交换相关能 $E_\textmt{xc} [\rho]$ 为电子相互作用而产生的能量：
 \begin{equation}
-  E_\mathrm{xc} = F[\rho] - T_\mathrm{s} [\rho] - J[\rho] = (T[\rho] - T_\mathrm{s} [\rho]) + (V_\mathrm{ee} [\rho] - J[\rho])
+  E_\textmt{xc} [\rho] = F[\rho] - T_\textmt{s} [\rho] - J[\rho] = (T[\rho] - T_\textmt{s} [\rho]) + (V_\textmt{ee} [\rho] - J[\rho])
 \end{equation}
-相对于完整的普适泛函 $F[\rho]$ 而言，交换相关能 $E_\mathrm{xc}[\rho]$ 数值要小得多。
+相对于完整的普适泛函 $F[\rho]$ 而言，交换相关能 $E_\textmt{xc}[\rho]$ 数值要小得多。
 
-在 Kohn-Sham 框架下，如何对 $E_\mathrm{xc}[\rho]$ 作精确的近似，是将密度泛函理论应用于数值计算的核心问题。Perdew 与 Schmidt 在 2001 年阶段性地对近似方法提出总结与展望 \cite{Perdew-Schmidt.ACP.2001}。他们指出，密度泛函近似的精度与表达式的复杂程度是正相关的。依照表达式的复杂程度，密度泛函近似可以分为若干等级；这个等级表被称为“Jacob 阶梯”，象征着密度泛函近似从基本的理论一步一步走向化学精度的“天堂”。发展一个良好的近似方法不仅要引入高等级的表达式，也要注意到低等级表达式作为基石的重要性。这个展望至今仍然深刻地影响着密度泛函理论与近似的发展。
+在 Kohn-Sham 框架下，如何对 $E_\textmt{xc}[\rho]$ 作精确的近似，是将密度泛函理论应用于数值计算的核心问题。Perdew 与 Schmidt 在 2001 年阶段性地对近似方法提出总结与展望 \cite{Perdew-Schmidt.ACP.2001}。他们指出，密度泛函近似的精度与表达式的复杂程度是正相关的。依照表达式的复杂程度，密度泛函近似可以分为若干等级；这个等级表被称为“Jacob 阶梯”，象征着密度泛函近似从基本的理论一步一步走向化学精度的“天堂”。发展一个良好的近似方法不仅要引入高等级的表达式，也要注意到低等级表达式作为基石的重要性。这个展望至今仍然深刻地影响着密度泛函理论与近似的发展。
 
-“Jacob 阶梯”提出的理论背景与 Kohn-Sham 方程有关。由于无相互作用波函数 $\Psi_{\lambda = 0}$ 可以是 Hartree 乘积型波函数 (区别于 Hartree-Fock 型行列式波函数)，因此 Perdew 与 Schmidt 称“Jacob 阶梯”建立在 Hartree 的地面上。其通往“天堂”的阶梯一般认为有五级：
+“Jacob 阶梯”提出的理论背景与 Kohn-Sham 方程有关。由于无相互作用波函数 $\Psi_{\lambda = 0}$ 可以是 Hartree 乘积型波函数 (区别于 Slater 行列式波函数)，因此 Perdew 与 Schmidt 称“Jacob 阶梯”建立在 Hartree 的地面上。其通往“天堂”的阶梯一般认为有五级：
 \begin{enumerate}[nosep]
-  \item \textbf{LDA 或 LSDA。}LDA 下，交换相关能是关于电子密度本身的函数 $f(\rho)$ 的积分：
+  \item \textbf{LDA 或 LSDA。}LDA 下，交换相关能是关于电子云密度本身的函数 $f(\rho)$ 的积分：
   \begin{equation}
-    E_\mathrm{xc}^\mathrm{LDA} = \int f(\rho) \rho \, \mathrm{d} \bm{r}
+    E_\textmt{xc}^\textmt{LDA} = \int f(\rho) \rho \, \mathrm{d} \bm{r}
   \end{equation}
-  为表述方便，在后文中我们称形如上述公式中的函数 $f$ 为泛函核。当考虑到体系存在电子的自旋效应时，密度泛函近似会给出 $\alpha$ 自旋密度 $\rho^\alpha$ 与 $\beta$ 自旋密度 $\rho^\beta$；LSDA 则是将这两个自旋密度作为泛函核变量，即
+  为表述方便，后文我们称形如上述公式中的函数 $f$ 为泛函核。当考虑到体系存在电子的自旋效应时，密度泛函近似会给出 $\alpha$ 自旋密度 $\rho^\alpha$ 与 $\beta$ 自旋密度 $\rho^\beta$；LSDA 则是将这两个自旋密度作为泛函核变量，即
   \begin{equation}
-    E_\mathrm{xc}^\mathrm{LSDA} = \int f(\rho^\alpha, \rho^\beta) \rho \, \mathrm{d} \bm{r}
+    E_\textmt{xc}^\textmt{LSDA} = \int f(\rho^\alpha, \rho^\beta) \rho \, \mathrm{d} \bm{r}
   \end{equation}
-  L(S)DA 通常是基于物理中均匀电子气模型而构造，对电子密度变化较小的体系有较好的描述；但化学分子的电子云密度经常变化较大，因此 L(S)DA 在描述化学现象时误差较大。但 L(S)DA 仍然是密度泛函近似的重要基石，后来发展的许多泛函是在 L(S)DA 的泛函核上乘以一个矫正函数。这类泛函的典型是 SVWN3\cite{Dirac-Dirac.MPCPS.1930, Bloch-Bloch.ZP.1929, Vosko-Nusair.CJP.1980}、SVWN5\cite{Dirac-Dirac.MPCPS.1930, Bloch-Bloch.ZP.1929, Vosko-Nusair.CJP.1980}。
+  L(S)DA 通常是基于物理中均匀电子气模型而构造，对电子云密度变化较小的体系有较好的描述；但化学分子的电子云密度经常变化较大，因此 L(S)DA 在描述化学现象时误差较大。但 L(S)DA 仍然是密度泛函近似的重要基石，后来发展的许多泛函是在 L(S)DA 的泛函核上乘以一个矫正函数。这类泛函的典型是 SVWN3、SVWN5。
   
-  \item \textbf{GGA。}GGA 下，交换相关能是电子密度与其梯度的函数 $f(\rho, \nabla \rho)$ 的积分：
+  \item \textbf{GGA。}GGA 下，交换相关能是电子云密度与其梯度的函数 $f(\rho, \nabla \rho)$ 的积分：
   \begin{equation}
-    E_\mathrm{xc}^\mathrm{GGA} = \int f(\rho, \nabla \rho) \rho \, \mathrm{d} \bm{r}
+    E_\textmt{xc}^\textmt{GGA} = \int f(\rho, \nabla \rho) \rho \, \mathrm{d} \bm{r}
   \end{equation}
-  GGA 以及更高阶梯泛函也有其对应的自旋密度变种形式。GGA 的意义在于引入了半局域 (semi-local) 的电子密度信息，以能处理好电子密度变化较大的体系。这类泛函的典型是 BLYP\cite{Becke-Becke.PRA.1988, Lee-Parr.PRB.1988}、PBE\cite{Perdew-Ernzerhof.PRL.1996}、PW91\cite{Perdew-Fiolhais.PRB.1992} 等。
+  GGA 以及在“Jacob”阶梯上更高阶的泛函，也有其对应的自旋密度变种形式。GGA 的意义在于引入了半局域 (semi-local) 的电子云密度信息，以能更好地处理电子云密度变化较大的体系，改善 L(S)DA 倾向于弱化化学成键的特性。这类泛函的典型是 BLYP、PBE、PW91 等。
 
   \item \textbf{meta-GGA。}meta-GGA 相对于 GGA，额外引入了基于 Kohn-Sham 轨道的动能密度
   \begin{equation*}
-    \tau (\bm{r}) = \sum_i^{n_\mathrm{elec}} \nabla \phi_i (\bm{r}) \cdot \nabla \phi_i (\bm{r})
+    \tau (\bm{r}) = \frac{1}{2} \sum_i^{n_\mathrm{elec}} \nabla \phi_i (\bm{r}) \cdot \nabla \phi_i (\bm{r})
   \end{equation*}
-  事实上，无相互作用体系的动能 $T_\mathrm{s} [\rho]$ 就是动能密度在空间下的积分乘以 $-1/2$。电子密度二阶梯度 $\nabla^2 \rho$ 也可以是 meta-GGA 泛函核的参数。meta-GGA 的交换泛函形式如下：
+  事实上，无相互作用体系的动能 $T_\textmt{s} [\rho]$ 就是动能密度在空间下的积分的负值。电子云密度二阶梯度 $\nabla^2 \rho$ 也可以是 meta-GGA 泛函核的参数。meta-GGA 的交换泛函形式如下：
   \begin{equation}
-    E_\mathrm{xc}^\mathrm{mGGA} = \int f(\rho, \nabla \rho, \tau, \nabla^2 \rho) \rho \, \mathrm{d} \bm{r}
+    E_\textmt{xc}^\textmt{mGGA} = \int f(\rho, \nabla \rho, \tau, \nabla^2 \rho) \rho \, \mathrm{d} \bm{r}
   \end{equation}
-  meta-GGA 引入动能密度的意义在于考虑对于电子密度而言离域、对于 Kohn-Sham 轨道而言半定域的效应；引入二阶梯度的意义在于更精细地考虑电子密度半定域效应。这类泛函的典型是 TPSS\cite{Tao-Scuseria.PRL.2003, Perdew-Scuseria.JCP.2004}、M06-L\cite{Zhao-Truhlar.TCA.2008}、SCAN\cite{Sun-Perdew.PRL.2015} 等。
+  meta-GGA 引入动能密度的意义在于考虑对于电子云密度而言离域、对于 Kohn-Sham 轨道而言半定域的效应；引入二阶梯度的意义在于更精细地考虑电子云密度半定域效应。这类泛函的典型是 TPSS、M06-L、SCAN 等。
 
-  \item \textbf{显式地引入 Kohn-Sham 占据轨道的泛函。}相比于 meta-GGA，其意义是额外地将 Kohn-Sham 占据轨道的离域效应引入到交换相关泛函中。这类泛函在交换能 $E_\mathrm{x} [\rho]$ 中杂糅一部分的无相互作用体系严格的交换能
+  \item \textbf{显式地引入 Kohn-Sham 占据轨道的泛函。}相比于 meta-GGA，其意义是额外地将 Kohn-Sham 占据轨道的离域效应引入到交换相关泛函中。这类泛函由于通常在交换能 $E_\textmt{x} [\rho]$ 中杂糅一部分无相互作用体系下的严格交换能
   \begin{equation}
-    E_\mathrm{x}^\mathrm{exact} = - \frac{1}{2} \sum_\sigma \sum_{i\sigma, j\sigma} \iint \frac{\phi_{i\sigma}^* (\bm{r}) \phi_{j\sigma}^* (\bm{r}') \phi_{j\sigma} (\bm{r}) \phi_{i\sigma} (\bm{r}')}{|\bm{r} - \bm{r}'|} \, \mathrm{d} \bm{r} \, \mathrm{d} \bm{r}'
+    E_\textmt{x}^\textmt{exact} = - \frac{1}{2} \sum_\sigma \sum_{i\sigma, j\sigma} \iint \frac{\phi_{i\sigma}^* (\bm{r}) \phi_{j\sigma}^* (\bm{r}') \phi_{j\sigma} (\bm{r}) \phi_{i\sigma} (\bm{r}')}{|\bm{r} - \bm{r}'|} \, \mathrm{d} \bm{r} \, \mathrm{d} \bm{r}'
   \end{equation}
-  故称杂化泛函；上式的 $\sigma$ 表示电子自旋。在各种反应、分子性质的测评结果上，杂化泛函经常比 GGA 或 meta-GGA 有更好的表现；在分子体系下，其计算效率又与 meta-GGA 或 Hartree-Fock 相当。因此，这类既能兼顾精度又有较高计算效率的泛函受到广泛的应用。杂化泛函对自相关问题、交换相关势 $v_\mathrm{xc} = \frac{\delta E_\mathrm{xc}}{\delta \rho}$ 的渐进性质等问题上也有一定的改善。这类泛函的典型是 B3LYP\cite{Becke-Becke.JCP.1993, Stephens-Frisch.JPC.1994}、PBE0\cite{Adamo-Barone.JCP.1999, Ernzerhof-Scuseria.JCP.1999}、X3LYP\cite{Xu-Goddard.PNAS.2004}、M06-2X\cite{Zhao-Truhlar.TCA.2008} 等。
-  
-  由于杂化泛函的计算量相对可接受、计算表现优异，第四阶 Jacob 阶梯到现在还有大量的发展。为了解决一般密度泛函长短程相互作用上不正确的性质、进一减少自相互作用误差、更精确地计算电荷转移与激发态等等问题，长短程分离杂化泛函\cite{Iikura-Hirao.JCP.2001}以及局域混合泛函\cite{Jaramillo-Ernzerhof.JCP.2003}的概念应运而生，并衍生出类如 $\omega$B97X-V\cite{Mardirossian-Head-Gordon.PCCP.2014}、MN15\cite{Yu-Truhlar.CS.2016}、DM21\cite{Kirkpatrick-Cohen.S.2021} 等被广泛使用或有良好测评结果的泛函。
+  故这类泛函称为杂化泛函。上式的 $\sigma$ 表示电子自旋。在各种反应、分子性质的测评结果上，杂化泛函经常比 GGA 或 meta-GGA 有更好的表现；在分子体系下，其计算效率又与 meta-GGA 或 Hartree-Fock 相当。因此，这类既能兼顾精度又有较高计算效率的泛函受到广泛的应用。杂化泛函对自相关问题、交换相关势 $v_\textmt{xc} = \frac{\delta E_\textmt{xc}}{\delta \rho}$ 的渐进性质等问题上，相比于更低阶的泛函也有一定的改善。这类泛函的典型是 B3LYP、PBE0、X3LYP、M06-2X 等。由于杂化泛函的计算量相对可接受、计算表现优异，第四阶 Jacob 阶梯到现在还有长足的发展。为了解决一般密度泛函长短程相互作用上不正确的性质、进一减少自相互作用误差、更精确地计算电荷转移与激发态等等问题，长短程分离杂化泛函\cite{Iikura-Hirao.JCP.2001}以及局域混合泛函\cite{Jaramillo-Ernzerhof.JCP.2003}的概念应运而生，并衍生出类如 ωB97X-V、MN15、DM21 等被广泛使用或有良好测评结果的泛函。
 
-  \item \textbf{显式地引入 Kohn-Sham 非占轨道的泛函。}这是“Jacob 阶梯”最接近化学精度“天堂”的一阶。这类泛函相比于杂化泛函，在反应势垒、弱相互作用等问题上有明显的提升；在各种测评计算上，这类泛函表现通常最为优异。由于它杂糅了严格交换能之外的部分严格相关效应，这类泛函也称为双杂化泛函。这类泛函的典型是 B2PLYP\cite{Grimme-Grimme.JCP.2006}、XYG3\cite{Zhang-Goddard.PNAS.2009}、$\omega$B97M(2)\cite{Mardirossian-Head-Gordon.JCP.2018} 等。
+  \item \textbf{显式地引入 Kohn-Sham 非占轨道的泛函。}这是“Jacob 阶梯”最接近化学精度“天堂”的一阶。这类泛函相比于杂化泛函，在反应势垒、弱相互作用等问题上有明显的提升；在各种测评计算上，这类泛函表现通常最为优异。由于它杂糅了严格交换能之外的部分严格相关效应，这类泛函也称为双杂化泛函。这类泛函的典型是 B2PLYP、XYG3、ωB97M(2) 等。
 \end{enumerate}
 
-双杂化泛函作为目前最高阶的泛函类别，其精度的上限更高、更大程度上能接近真实的交换相关泛函 $E_\mathrm{xc}[\rho]$。对双杂化泛函的更多物理认知、计算方法与高效实现、拓展双杂化泛函的应用领域，对密度泛函理论和近似的发展都有重要的价值和意义。
+双杂化泛函作为目前最高阶的泛函类别，其精度的上限更高、更大程度上接近真实的交换相关泛函 $E_\textmt{xc}[\rho]$。对双杂化泛函的更多物理认知、计算方法与高效实现、拓展双杂化泛函的应用领域，对密度泛函理论和近似的发展都有重要的价值和意义。
 
 \section{双杂化泛函方法}
 
-自第一个双杂化泛函泛函在 2004 年提出起\cite{Zhao-Truhlar.JPCA.2004}，双杂化泛函经历大约 20 年的发展，已然成为庞大的密度泛函近似谱系的一个重要且粗壮的分支。这里对双杂化泛函的发展历程与大致分类作说明。
+自第一个提出双杂化概念的方法在 2004 年提出起\cite{Zhao-Truhlar.JPCA.2004}，双杂化泛函经历大约 20 年的发展，已然成为庞大的密度泛函近似谱系的一个重要且粗壮的分支。这里对双杂化泛函的发展历程与大致分类作说明。
 
-作为“Jacob 阶梯”的第五阶泛函，双杂化密度泛函在相关能引入部分严格相关能。非占轨道的引入方式可以有多种策略，且经常是 post-SCF 近似应用于 Kohn-Sham 轨道的结果。依照引入能量的计算方式的不同，双杂化泛函大体分为两类。第一类是在 G\"{o}rling-Levy 微扰框架\cite{Goerling-Levy.PRB.1993, Goerling-Levy.PRA.1994}下引入 MP2 型相关能；这类泛函目前已经广泛应用于具体的计算化学应用、以及机器学习。这类泛函的典型是 B2PLYP\cite{Grimme-Grimme.JCP.2006}、XYG3\cite{Zhang-Goddard.PNAS.2009}、$\omega$B97M(2)\cite{Mardirossian-Head-Gordon.JCP.2018} 等。另一类泛函在绝热路径上的涨落耗散框架\cite{Langreth-Perdew.SSC.1975, Langreth-Perdew.PRB.1977, Goerling-Goerling.PRB.2019}下引入 RPA 型相关能；这类泛函的典型是 dRPA75\cite{Mezei-Kallay.JCTC.2015}、scsRPA\cite{Zhang-Xu.JPCL.2019}、$\sigma$-functional\cite{Trushin-Goerling.JCP.2021}等。在本工作中，我们仅考察与测评以 G\"{o}rling-Levy 微扰为框架的泛函；我们也称其为 MP2 型泛函。MP2 型相关能表达式如下：
+作为“Jacob 阶梯”的第五阶泛函，双杂化密度泛函引入了部分严格相关能；而这类型相关能通常显式地依赖于非占轨道。非占轨道的引入方式可以有多种策略，且经常是 post-SCF 近似应用于 Kohn-Sham 轨道的结果。依照理论框架的不同，双杂化泛函大体分为两类。第一类是在 G\"{o}rling-Levy 微扰框架\cite{Goerling-Levy.PRB.1993, Goerling-Levy.PRA.1994}下引入 MP2 型相关能；这类泛函目前已经广泛应用于具体的计算化学应用、以及机器学习。这类泛函的典型是 B2PLYP\cite{Grimme-Grimme.JCP.2006}、XYG3\cite{Zhang-Goddard.PNAS.2009}、ωB97M(2)\cite{Mardirossian-Head-Gordon.JCP.2018} 等。第二类泛函在绝热路径上的涨落耗散框架\cite{Langreth-Perdew.SSC.1975, Langreth-Perdew.PRB.1977, Goerling-Goerling.PRB.2019}下引入 RPA 型相关能；这类泛函的典型是 dRPA75\cite{Mezei-Kallay.JCTC.2015}、scsRPA\cite{Zhang-Xu.JPCL.2019}、$\sigma$-functional\cite{Trushin-Goerling.JCP.2021}等。在本工作中，我们仅考察与测评以 G\"{o}rling-Levy 微扰为框架的泛函；我们也称其为 MP2 型泛函。MP2 型相关能表达式如下：
 \begin{equation}
-  E_\mathrm{c}^\mathrm{MP2} = \frac{1}{4} \sum_{ijab} \frac{\big| \langle ij \Vert ab \rangle \big|^2}{\varepsilon_i + \varepsilon_j - \varepsilon_a - \varepsilon_b}
+  E_\textmt{c}^\textmt{MP2} = \frac{1}{4} \sum_{ijab} \frac{\big| \langle ij \Vert ab \rangle \big|^2}{\varepsilon_i + \varepsilon_j - \varepsilon_a - \varepsilon_b}
 \end{equation}
 其中 $\langle ij || ab \rangle = \langle ij | ab \rangle - \langle ij | ba \rangle$ 表示双电子积分：
 \begin{equation}
@@ -217,50 +213,48 @@ Hohenberg-Kohn 定理的提出，标志着密度泛函理论成为了一个原�
 \end{equation}
 $i, j$ 是 Kohn-Sham 单电子占据轨道角标、$a, b$ 是非占轨道角标。
 
-最早期的双杂化泛函 MC3BB 由赵焱、Lynch 与 Truhlar 提出\cite{Zhao-Truhlar.JPCA.2004}。其灵感来自于 Gaussian-3\cite{Curtiss-Pople.JCP.1998, Curtiss-Pople.JCP.2000} 的组合系数方法、理论基础是相关能系数缩放\cite{Gordon-Truhlar.JACS.1986}。它以 Hartree-Fock 为参考态计算 MP2 能量，并部分地杂糅在密度泛函的计算结果中：
+最早期具有双杂化概念的方法 MC3BB 由赵焱、Lynch 与 Truhlar 提出\cite{Zhao-Truhlar.JPCA.2004}。其灵感来自于 Gaussian-3\cite{Curtiss-Pople.JCP.1998, Curtiss-Pople.JCP.2000} 的组合系数方法、理论基础是相关能系数缩放\cite{Gordon-Truhlar.JACS.1986}。它以 Hartree-Fock 为参考态计算 MP2 能量，并部分地杂糅在密度泛函的计算结果中：
 \begin{equation}
-  E_\mathrm{xc}^\mathrm{MC3BB} = a_2 (E_\mathrm{x}^\mathrm{exact} + a_1 E_\mathrm{c}^\mathrm{MP2}) + (1 - a_2) E^\text{low-rung}
+  E_\textmt{xc}^\textmt{MC3BB} = a_2 (E_\textmt{x}^\textmt{exact} + a_1 E_\textmt{c}^\textmt{MP2}) + (1 - a_2) E^\textmt{low-rung}
 \end{equation}
-该方法提及其与绝热路径理论有所关联，因此它也可以看作是 G\"{o}rling-Levy 微扰框架衍生的泛函。但该方法需要计算两种不同的自洽场，计算量较大是其缺点之一。另外，该方法使用了 Hartree-Fock 轨道而非 Kohn-Sham 轨道用于计算严格交换能与部分严格相关能；这与 G\"{o}rling-Levy 微扰理论并不一致。
+该方法提及其与绝热路径理论有所关联，因此它也可以看作是 G\"{o}rling-Levy 微扰框架衍生的方法。但该方法需要计算两种不同的自洽场，计算量较大是其缺点之一。另外，该方法使用了 Hartree-Fock 轨道而非 Kohn-Sham 轨道用于计算严格交换能与部分严格相关能；这与 G\"{o}rling-Levy 微扰理论并不一致。因此，相比于密度泛函近似，MC3BB 具有更强的组合方法的特征。
 
 首个明确以 G\"{o}rling-Levy 微扰为理论依据的双杂化泛函 B2PLYP 由 Grimme 提出\cite{Grimme-Grimme.JCP.2006}。以该泛函为代表的 bDH 型泛函，是现今双杂化泛函的一种基本范式：自洽场部分泛函为
 \begin{equation}
-  E_\mathrm{xc}^\mathrm{bDH, s} = c_\mathrm{x} E_\mathrm{x}^\mathrm{exact} + (1 - c_\mathrm{x}) E_\mathrm{x}^\text{low-rung} + (1 - c_\mathrm{c}) E_\mathrm{c}^\text{low-rung}
+  E_\textmt{xc}^{\textmt{bDH}, \mathrm{s}} = c_\textmt{x} E_\textmt{x}^\textmt{exact} + (1 - c_\textmt{x}) E_\textmt{x}^\textmt{low-rung} + (1 - c_\textmt{c}) E_\textmt{c}^\textmt{low-rung}
 \end{equation}
 而总能量泛函是在自洽场泛函的基础上引入 MP2 型相关能：
 \begin{equation}
-  E_\mathrm{xc}^\mathrm{bDH} = E_\mathrm{xc}^\mathrm{bDH, s} + c_\mathrm{c} E_\mathrm{c}^\mathrm{MP2}
+  E_\textmt{xc}^\textmt{bDH} = E_\textmt{xc}^{\textmt{bDH}, \mathrm{s}} + c_\textmt{c} E_\textmt{c}^\textmt{MP2}
 \end{equation}
 但需要注意到，bDH 型泛函的自洽场部分并不是完整的相关能。从这个角度来说，bDH 型泛函自洽场所得的轨道是真实的 Kohn-Sham 轨道缺失了部分相关效应的近似替代；而 G\"{o}rling-Levy 微扰框架则是基于完整的 Kohn-Sham 轨道发展而来的。
 
 徐昕课题组发展的 xDH 型泛函，是现今双杂化泛函的另一种基本范式。其自洽场部分的泛函使用有完整交换与相关的、表现良好的泛函 (如 B3LYP、PBE0 等)，导出优质的 (Generalized) Kohn-Sham 轨道。而能量的计算则引入 MP2 型相关能：
 \begin{equation}
-  E_\mathrm{xc}^\mathrm{xDH} = c_\mathrm{x} E_\mathrm{x}^\mathrm{exact} + (1 - c_\mathrm{x}) E_\mathrm{x}^\text{low-rung} + (1 - c_\mathrm{c}) E_\mathrm{c}^\text{low-rung} + c_\mathrm{c} E_\mathrm{c}^\mathrm{MP2}
+  E_\textmt{xc}^\textmt{xDH} = c_\textmt{x} E_\textmt{x}^\textmt{exact} + (1 - c_\textmt{x}) E_\textmt{x}^\textmt{low-rung} + (1 - c_\textmt{c}) E_\textmt{c}^\textmt{low-rung} + c_\textmt{c} E_\textmt{c}^\textmt{MP2}
 \end{equation}
-xDH 型泛函的能量泛函是第五阶泛函，相比于杂化泛函包含更多物理信息。而在单电子轨道的获取上，相比于 bDH 型泛函，xDH 型泛函使用了从 G\"{o}rling-Levy 微扰框架的角度看更合理的、经过广泛测评而效果优异的杂化泛函所给出的单电子轨道；这既保证了单电子轨道的精度，同时也没有因为引入高阶泛函而引起计算量的暴增，从而在精度与效率上达到良好的平衡。同时拥有良好的单电子轨道与能量泛函，为 xDH 方法在各种反应能计算与性质计算上的良好表现提供了原理上的保证。
+xDH 型泛函的能量泛函是第五阶泛函，相比于杂化泛函包含更多物理信息。而在单电子轨道的获取上，相比于 bDH 型泛函，xDH 型泛函使用了从 G\"{o}rling-Levy 微扰框架的角度看更合理的、经过广泛测评而效果优异的杂化泛函；这既保证了单电子轨道的精度，同时也没有因为引入高阶泛函而引起计算量的暴增，从而在精度与效率上达到良好的平衡。同时拥有良好的单电子轨道与能量泛函，为 xDH 方法在各种化学反应与性质上良好的表现提供了原理上的保证。
 
-理论上而言，单电子轨道的导出、与能量计算的两种泛函应当同是真实泛函；但不论是 MC3BB、bDH 型或 xDH 型泛函，都在处理单电子轨道与能量计算时使用了不同的泛函。为了避免单电子轨道与能量计算泛函的不自洽，轨道优化双杂化泛函得以提出\cite{Hait-Head-Gordon.JCP.2018}。这类泛函有希望对近解离态性质等困难的问题给出比一般双杂化泛函更好的计算结果；但由于轨道优化需要调用多次自洽场与非正则 MP2 型弛豫密度计算，计算量消耗非常大，因此其使用尚未普及。
+理论上而言，单电子轨道的导出、与能量计算的两种泛函应同为真实泛函；但不论是 MC3BB，还是 bDH 型或 xDH 型泛函，都在处理单电子轨道与能量计算时使用了不同的泛函。为了避免单电子轨道与能量计算泛函的不自洽，轨道优化双杂化泛函得以提出\cite{Hait-Head-Gordon.JCP.2018}。这类泛函有希望对静态相关性质等困难的问题给出比一般双杂化泛函更好的计算结果；但由于轨道优化需要调用多次自洽场与非正则 MP2 型弛豫密度计算，计算量消耗非常大，因此其使用尚未普及。
 
 除了这些主流的框架外，目前也有许多泛函在理论或经验形式上有改进。这些改进包括但不限于
 \begin{itemize}[nosep]
-  \item \textbf{引入弥散矫正。}MP2 型相关能处理非共价、氢键等弱相互作用体系有一定优势，但一般的双杂化泛函包含的 MP2 型相关能并不是一整份；因此在描述弱相互作用时仍然改善的空间。类如 DFT-D3\cite{Grimme-Goerigk.JCC.2011, Smith-Sherrill.JPCL.2016}、DFT-D4\cite{Caldeweyher-Grimme.JCP.2019}、VV10\cite{Vydrov-VanVoorhis.JCP.2010} 等分子力场型或密度泛函型弥散矫正在处理弱相互作用体系时有较好的表现；引入这类弥散矫正对杂化泛函或更低阶的泛函测评表现有显著的提升\cite{Goerigk-Grimme.PCCP.2017}。对于一部分双杂化泛函，引入这类弥散矫正确实可以对非共价测评集有良好的表现\cite{Grimme-Goerigk.JCC.2011, Santra-Martin.JPCA.2019}。除此之外，尽管一般不称长程分离矫正的 MP2 型相关能为弥散矫正，但类如 lrc-XYG3 等泛函引入长程矫正相关能的目的与其它弥散矫正相近，在非共价体系上有很好的测评结果\cite{Zhang-Xu.JPCL.2013}。但对于以 B88 与 LYP 为基础单的 xDH 型泛函，如果放开参数拟合限制，不引入弥散矫正所造成的测评误差并不很大\cite{Zhang-Xu.JPCL.2021, Santra-Martin.JPCL.2021}。在特定的反应种类与双杂化泛函下，引入弥散矫正可能反而导致测评结果变差\cite{Bremond-Adamo.JCP.2022}。因此对于双杂化泛函而言，弥散矫正是否真正地改善了泛函测评表现，仍然是值得待进一步讨论的。
+  \item \textbf{引入弥散矫正。}MP2 型相关能处理非共价、氢键等弱相互作用体系有一定优势，但一般的双杂化泛函包含的 MP2 型相关能并不是一整份；因此在描述弱相互作用时仍然改善的空间。类如 DFT-D3\cite{Grimme-Goerigk.JCC.2011, Smith-Sherrill.JPCL.2016}、DFT-D4\cite{Caldeweyher-Grimme.JCP.2019}、VV10\cite{Vydrov-VanVoorhis.JCP.2010} 等分子力场型或密度泛函型弥散矫正在处理弱相互作用体系时有较好的表现；引入这类弥散矫正对杂化泛函或更低阶的泛函测评表现有显著的提升\cite{Goerigk-Grimme.PCCP.2017}。对于一部分双杂化泛函，引入这类弥散矫正确实可以对非共价测评集有良好的表现\cite{Grimme-Goerigk.JCC.2011, Santra-Martin.JPCA.2019}。除此之外，尽管一般不称长程分离矫正的 MP2 型相关能为弥散矫正，但类如 lrc-XYG3 等泛函引入长程矫正相关能的目的与其它弥散矫正相近，在非共价体系上有很好的测评结果\cite{Zhang-Xu.JPCL.2013}。但对于以 B88 与 LYP 为基础的 xDH 型泛函，如果放开参数拟合限制，不引入弥散矫正所造成的测评误差并不很大\cite{Zhang-Xu.JPCL.2021, Santra-Martin.JPCL.2021}。在特定的反应种类与双杂化泛函下，引入弥散矫正反而可能导致测评结果变差\cite{Bremond-Adamo.JCP.2022}。因此对于双杂化泛函而言，弥散矫正是否真正地改善了泛函测评表现，仍然是值得待进一步讨论的。
   
-  \item \textbf{对自旋相同与自旋相反 MP2 型相关能的分离与参数化。}基于 SCS 在 MP2 方法应用上的成功 \cite{Grimme-Grimme.JCP.2003}，大量实用的经验参数化双杂化泛函使用该方法计算 G\"{o}rling-Levy 微扰相关能。Head-Gordon 课题组以 B97 泛函作为基础进行多参数优化，得到 $\omega$B97X-2\cite{Chai-Head-Gordon.JCP.2009} 与 $\omega$B97M(2)\cite{Mardirossian-Head-Gordon.JCP.2018}。Martin 课题组进一步引入弥散矫正，发展了一系列参数化的 DSD 泛函，并对基底泛函的组成作了大量系统性地测评；提出了 DSD-PBEP86-D3BJ\cite{Kozuch-Martin.JCC.2013} 等双杂化泛函。徐昕课题组对以 B3LYP 为基底的 XYG3 泛函作更为仔细的参数优化，提出了 XYG7\cite{Zhang-Xu.JPCL.2021} 等双杂化泛函。由于对大多数计算化学软件来说容易实现、同时在主族化学与主流测评集上有良好的表现，这类泛函是目前应用最广泛的双杂化泛函。
+  \item \textbf{对自旋相同与自旋相反 MP2 型相关能的分离与参数化。}基于 SCS 在 MP2 方法应用上的成功 \cite{Grimme-Grimme.JCP.2003}，大量实用的经验参数化双杂化泛函使用该方法计算 G\"{o}rling-Levy 微扰相关能。Head-Gordon 课题组以 B97 泛函作为基础进行多参数优化，得到 ωB97X-2 与 ωB97M(2)。Martin 课题组进一步引入弥散矫正，发展了一系列参数化的 DSD 泛函，并对基底泛函的组成作了大量系统性地测评；提出了 DSD-PBEP86-D3BJ 等双杂化泛函。徐昕课题组对以 B3LYP 为基底的 XYG3 泛函作更为仔细的参数优化，提出了 XYG7 等双杂化泛函。由于对大多数计算化学软件来说容易实现、同时在主族化学与主流测评集上有良好的表现，这类泛函是目前应用最广泛的双杂化泛函。除此之外，OS-MP2 的计算量在 Laplace-Transform 近似下比 MP2 本身要小一个数量级\cite{Almloef-Almloef.CPL.1991}，这也意味着例如 XYGJ-OS、xDH-PBE0 为代表的 OS-MP2 型泛函在计算量上小于一般的双杂化泛函。这些泛函的测评结果并不明显劣于其它 MP2 型泛函；在本工作中，我们还会表明 OS-MP2 型泛函在极化率性质上的计算表现经常优于其它双杂化泛函。因此，这类泛函兼备良好精度与高效率。
   
-  除此之外，OS-MP2 的计算量在 Laplace-Transform 近似下比 MP2 本身要小一个数量级\cite{Almloef-Almloef.CPL.1991}，这也意味着例如 XYGJ-OS\cite{Zhang-Goddard.PNAS.2011}、xDH-PBE0\cite{Zhang-Xu.JCP.2012} 为代表的 OS-MP2 型泛函在计算量上小于一般的双杂化泛函。这些泛函的测评结果并不明显劣于其它 MP2 型泛函；在本工作中，我们还会表明 OS-MP2 型泛函在极化率性质上的计算表现经常优于其它双杂化泛函。因此，这类泛函兼备良好精度与高效率。
+  \item \textbf{少参数化的泛函。}多参数的泛函通常是针对特定的反应与性质数据集进行优化的。一般来说，参数越多，过拟合的情况会越严重、在拟合集之外的反应与性质表现上越有可能产生不可预料的误差\cite{Medvedev-Lyssenko.S.2017}。以 Adamo 课题组代表的研究者，基于绝热路径提出了 PBE0-DH 等无参数优化的泛函。这些泛函通过理论推导或验证泛函参数、特别是交换系数 $c_\textmt{x}$ 与相关系数 $c_\textmt{c}$ 的数值范围，避免了重度经验参数拟合泛函所可能产生的问题。
   
-  \item \textbf{少参数化的泛函。}多参数的泛函通常是针对特定的反应与性质数据集进行优化的。一般来说，参数越多，过拟合的情况会越严重、在拟合集之外的反应与性质表现上越有可能产生不可预料的误差\cite{Medvedev-Lyssenko.S.2017}。以 Adamo 课题组代表的研究者，基于绝热路径提出了 PBE0-DH 等无参数优化的泛函\cite{Toulouse-Adamo.JCP.2011}。这些泛函通过理论依据推导或验证泛函参数、特别是交换系数 $c_\mathrm{x}$ 与相关系数 $c_\mathrm{c}$ 的数值范围，避免了重度经验参数拟合泛函所可能产生的问题。
+  \item \textbf{引入重整化的 MP2 型相关能。}MP2 型的双杂化泛函是可以看作 G\"{o}rling-Levy 微扰在二阶近似下的特例。考虑到 G\"{o}rling-Levy 微扰构建起了波函数理论与密度泛函的联系，一些工作将波函数理论的其它近似形式引入到双杂化泛函的框架中。Martin 课题组通过引入 MP3 型相关能，表明高阶相关能可以进一步提升双杂化泛函在测评集上的表现\cite{Santra-Martin.JPCL.2021}。由于 MP2 型双杂化泛函在解离态存在严重的误差，一些密度泛函\cite{Zhang-Scheffler.PRL.2016, Santra-Martin.JPCL.2022}近似引入 sBGE2\cite{Zhang-Scheffler.NJP.2016}、$\kappa$-MP2\cite{Lee-Head-Gordon.JCTC.2018}、OBMP2\cite{Lan-Yanai.JCP.2013}等重整化策略以改善这类误差的程度；这类重整化型泛函经常也在弱相互作用体系上表现更好。尽管一般来说，这类泛函在计算量上与 MP2 没有差别；但它们所用的相关能形式并不是常规的计算化学软件所实现的，因此这类泛函的推广受制于方法开发者所使用的软件偏好。
   
-  \item \textbf{引入重整化的 MP2 型相关能。}MP2 型的双杂化泛函是可以看作 G\"{o}rling-Levy 微扰在二阶近似下的特例。考虑到 G\"{o}rling-Levy 微扰构建起了波函数理论与密度泛函的联系，一些工作将波函数理论的其它近似形式引入到双杂化泛函的框架中。Martin 课题组通过引入 MP3 型相关能，表明高阶相关能可以进一步提升双杂化泛函在测评集上的表现\cite{Santra-Martin.JPCL.2021}。由于 MP2 型双杂化泛函在解离态存在严重的误差，一些密度泛函\cite{Zhang-Scheffler.PRL.2016, Santra-Martin.JPCL.2022}近似引入 sBGE2\cite{Zhang-Scheffler.NJP.2016}、$\kappa$-MP2\cite{Lee-Head-Gordon.JCTC.2018} 等重整化策略以改善这类误差的程度；这类重整化型泛函经常也在弱相互作用体系上表现更好。尽管一般来说，这类泛函在计算量上与 MP2 没有差别；但它们所用的相关能形式并不是常规的计算化学软件所实现的，因此这类泛函的推广受制于方法开发者所使用的软件偏好。
-  
-  \item \textbf{绝热路径积分泛函。}一般的双杂化泛函对于所有化学体系都假定有相似的绝热路径曲线形状；对这类路径积分近似积分，对于不同的分子体系，可以得到相同的交换系数 $c_\mathrm{x}$ 与相关系数 $c_\mathrm{c}$。但实际的情况是，不同分子的绝热路径差异可能很大\cite{Teale-Helgaker.JCP.2010}。因此，对于大多数双杂化泛函而言，绝热路径理论的意义在于提供了理论依据；但实际计算中不会真正地构造绝热路径本身。SPL2 型泛函\cite{Seidl-Levy.PRA.1999, Daas-Vuckovic.JPCL.2021, Daas-Vuckovic.arXiv.2023} 则是依据不同的分子体系近似了不同的绝热路径，并加以积分得到相关能。
+  \item \textbf{绝热路径积分泛函。}一般的双杂化泛函近似对于所有化学体系都假定有相似的绝热路径曲线 $\symscr{W}_\lambda [\rho]$ 形状 (定义于式 (\alertref{eq.2.adiabatic-curve-w}))；对这类近似的 $\symscr{W}_\lambda [\rho]$ 作关于 $\lambda$ 积分，对于不同的分子体系，可以得到相同的交换系数 $c_\textmt{x}$ 与相关系数 $c_\textmt{c}$。但实际的情况是，不同分子的绝热路径差异可能很大\cite{Teale-Helgaker.JCP.2010}。因此，对于大多数双杂化泛函而言，绝热路径理论的意义在于提供了理论依据；但实际计算中不会真正地构造绝热路径本身。SPL2 型泛函\cite{Seidl-Levy.PRA.1999, Daas-Vuckovic.JPCL.2021, Daas-Vuckovic.arXiv.2023} 则是依据不同的分子体系近似了不同的绝热路径，并加以积分得到相关能。
 \end{itemize}
 
 \section{MP2 型双杂化泛函的测评表现}
 
 关于 MP2 型双杂化泛函的测评，目前已有大量的文献作了详细的阐述，并为研究工作者提供了有价值的参考意见。近年 xDH 型双杂化泛函发展了一阶梯度、二阶梯度、周期性计算的理论，几何结构、电子云密度、周期性体系、振动频率与偶极矩等性质的计算得以实现并测评。本工作的主要研究对象是 xDH 型泛函，为此我们先对这类型泛函已有的测评情况作说明，以对该类型泛函有直观的认识。这一段的讨论同时参见论文\cite{Gu.Thesis.2020, Yan.Thesis.2022}。
 
-\textbf{分子能量测评表现}。目前反应能测评集中，最普遍与流行的测评集之一是 GMTKN55 数据集\cite{Goerigk-Grimme.PCCP.2017}。该数据集囊括了 1505 个反应的相对能量数据；这些反应包含主族化学的热力学、动力学与非共价相互作用。具体来说，该数据集分为五个子数据集，分别是基本性质与小体系反应能 (Sub1)、大体系反应能与异构能 (Sub2)、反应势垒 (Sub3)、分子间非共价相互作用 (Sub4)、分子内非共价相互作用 (Sub5)。由于 GMTKN55 的反应种类较为全面、数据量相对于双杂化参数量非常大，该数据集也经常用于新泛函开发、或系统性地测评与比较各种密度泛函近似或波函数方法。GMTKN55 所使用的测评标准是一种加权平均绝对值的误差 WTMAD-2 (单位 kcal/mol)，以公允地对不同类型、大小的体系进行误差表现评价。张颖等对以 B3LYP 为参考态的 xDH 型密度泛函进行了系统性的测评\cite{Zhang-Xu.JPCL.2021}。从图 \ref{fig.1.xdh-b3lyp-wtmad} 可以看到，在爬升“Jacob 阶梯”时，作为第 5 阶的各 bDH 型与 xDH 型泛函在各个数据集上的表现都显著地优于作为第 4 阶的 B3LYP。早期的双杂化泛函，如 B2PLYP、XYG3、DSD-BLYP-D3 等并非在 GMTKN55 数据集上进行优化；因此，进一步地在 GMTKN55 上优化的 XYG7 与 xrevDSD-PBEB86-D4 泛函，在 GMTKN55 测评表现上普遍优于早期的双杂化泛函。即使对泛函可优化参数施加较强的限制，在 GMTKN55 重新优化下的 revXYG3 仍然能达到 2.5 kcal/mol 的精度。总地来说，XYG7、$\omega$B97M(2)、xrevDSD-PBEB86-D4 等泛函在 GMTKN55 下测评精度达到 2.2 kcal/mol 左右，是现在主族反应表现最佳的一类泛函。
+\textbf{分子能量测评表现}。目前反应能测评集中，最普遍与流行的测评集之一是 GMTKN55 数据集\cite{Goerigk-Grimme.PCCP.2017}。该数据集囊括了 1505 个反应的相对能量数据；这些反应包含主族化学的热力学、动力学与非共价相互作用。具体来说，该数据集分为五个子数据集，分别是基本性质与小体系反应能 (Sub1)、大体系反应能与异构能 (Sub2)、反应势垒 (Sub3)、分子间非共价相互作用 (Sub4)、分子内非共价相互作用 (Sub5)。由于 GMTKN55 的反应种类较为全面、数据量相对于双杂化参数量非常大，该数据集也经常用于新泛函开发、或系统性地测评与比较各种密度泛函近似或波函数方法。GMTKN55 所使用的测评标准是一种加权平均绝对值的误差 WTMAD-2 (单位 kcal/mol)，以公允地对不同类型、大小的体系进行误差表现评价。张颖等对以 B3LYP 为参考态的 xDH 型密度泛函进行了系统性的测评\cite{Zhang-Xu.JPCL.2021}。从图 \ref{fig.1.xdh-b3lyp-wtmad} 可以看到，在爬升“Jacob 阶梯”时，作为第 5 阶的各 bDH 型与 xDH 型泛函在各个数据集上的表现都显著地优于作为第 4 阶的 B3LYP。早期的双杂化泛函，如 B2PLYP、XYG3、DSD-BLYP-D3 等并非在 GMTKN55 数据集上进行优化；因此，进一步地在 GMTKN55 上优化的 XYG7 与 xrevDSD-PBEB86-D4 泛函，在 GMTKN55 测评表现上普遍优于早期的双杂化泛函。即使对泛函可优化参数施加较强的限制，在 GMTKN55 重新优化下的 revXYG3 仍然能达到 2.5 kcal/mol 的精度。总地来说，XYG7、ωB97M(2)、xrevDSD-PBEB86-D4 等泛函在 GMTKN55 下测评精度达到 2.2 kcal/mol 左右，是现在主族反应表现最佳的一类泛函。
 
 \begin{figure}[h]
   \centering
@@ -326,17 +320,17 @@ xDH 型泛函的能量泛函是第五阶泛函，相比于杂化泛函包含更�
 
 xDH 型泛函构造的理论框架搭建在绝热路径与 G\"{o}rling-Levy 微扰之上，使用较好的单电子轨道作为基础，并在能量计算中追求“Jacob 阶梯”上更高、更精确的阶梯，有着良好的理论基础。xDH 型双杂化泛函在分子能量与性质计算上，其精度水平代表了目前密度泛函方法的最高水准。对于类如 MP2 与 RPA 等相近计算量或计算标度的 post-SCF 方法而言，双杂化泛函的精度通常也更为优异。近年来发展的 xDH 泛函在主族化学反应的能量的表现，已经在切实地逼近 1 kcal/mol 的化学精度；而其它性质的测评工作也表明，xDH 型泛函不仅在能量，还在分子几何结构、振动频率、核磁屏蔽常数等问题上有令人鼓舞的表现。而这些良好的数值结果，也印证了 xDH 型泛函良好的理论框架的重要性。但也需要指出，目前发展的大多数 xDH 型泛函近似的具体实现，依赖于 (Generalized) Kohn-Sham 框架导出的轨道、以及 MP2 型相关能；这两者存在的问题，也可能会反映到 xDH 型双杂化泛函、以及作为退化形式的 bDH 型双杂化泛函的测评表现中。
 
-除了精度上双杂化泛函仍然有发展空间外，其在应用的推广也是重要的课题。在双杂化泛函刚提出的 2004--2010 年代，由于大多数计算化学软件在处理 MP2 型相关能时的计算量很大；即使测评结果较好，也难以推广到实际的应用中。随着一系列针对相关能以及双电子积分计算近似方法、算法与程序的发展，在处理 20 原子以下的分子体系时，MP2 相关能的计算耗时经常少于自洽场的计算耗时，使得双杂化泛函在能量计算问题上不再有严重的效率瓶颈。而对于更大的计算体系，ONIOM 或 XO 等组合化学方法通常可以有效地拆分问题而不严重影响计算精度\cite{Guo-Xu.JCC.2012, Chen-Xu.JCTC.2020, Chen-Xu.NC.2023}。因此，在可见的未来内，在分子体系的计算问题上，双杂化密度泛函的主要应用会集中在数个到数十个原子左右尺度的问题上。
+除了精度上双杂化泛函仍然有发展空间外，其在应用的推广也是重要的课题。在双杂化泛函刚提出的 2004--2010 年代，由于大多数计算化学软件在处理 MP2 型相关能时的计算量很大；即使测评结果较好，也难以推广到实际的应用中。随着一系列针对相关能以及双电子积分计算近似方法、算法与程序的发展，在处理 20 原子以下的分子体系时，MP2 相关能的计算耗时经常少于自洽场的计算耗时，使得双杂化泛函在能量计算问题上不再有严重的效率瓶颈。而对于更大的计算体系，ONIOM 或 XO 等组合化学方法通常可以有效地拆分问题而不严重影响计算精度\cite{Guo-Xu.JCC.2012, Chen-Xu.JCTC.2020, Chen-Xu.NC.2023}。因此，在可见的未来内，在分子体系的计算问题上，双杂化密度泛函的主要应用会集中在数十个原子左右尺度的问题上。
 
 基于以上的研究思路和认识，本文的主要工作从以下五个方面展开。
 \begin{enumerate}[nosep]
-  \item \textbf{基于对电子方法的双杂化能量泛函实现与测评。}(第 \alertref{sec.2.title} 章) MP2 型相关能在处理分子解离曲线、过渡金属体系等涉及 Kohn-Sham 轨道能级近简并问题时，容易导致及其严重的误差。为减小近简并问题误差的严重性，双杂化泛函中需要考虑引入其它形式的相关能。基于 G\"orling-Levy 微扰所构建的密度泛函与波函数理论的桥梁，本工作尝试引入以波函数理论中对 MP2 相关能矫正方法 MP2/cr\cite{Dykstra-Davidson.IJQC.2000} 为代表的对电子方法相关能形式。我们将对该方法在模型体系下的表现作研究与评价；并通过参数化的泛函优化，考察该类型泛函在一般双杂化泛函表现优异的主族化学反应、与表现欠佳的多参考体系和解离分子体系下的表现。我们期望这份工作，在双杂化近似的框架下，向真实泛函迈进一小步。
+  \item \textbf{基于对电子方法的双杂化能量泛函实现与测评。}(第 \alertref{sec.2.title} 章) MP2 型相关能在处理分子解离曲线、过渡金属体系等涉及 Kohn-Sham 轨道能级近简并问题时，容易导致及其严重的误差。为减小近简并体系误差的严重性，双杂化泛函中需要考虑引入其它形式的相关能。基于 G\"orling-Levy 微扰所构建的密度泛函与波函数理论的桥梁，本工作尝试在双杂化泛函中，引入以波函数理论中对 MP2 相关能矫正方法 MP2/cr\cite{Dykstra-Davidson.IJQC.2000} 为代表的成对电子型相关能。我们将构建新的泛函参数化模型，并对参数作系统的优化，考察该类型泛函在一般双杂化泛函表现优异的主族化学反应、与表现欠佳的多参考体系和解离分子体系下的表现。我们期望这份工作，在双杂化近似的框架下，向真实泛函迈进一小步。
 
-  \item \textbf{双杂化泛函的电性质梯度理论与程序实现。}(附录 \alertref{sec.3.title}) 许多分子的性质，譬如分子频率、偶极矩与极化率、化学屏蔽常数、弛豫密度等都需要基于梯度理论得以计算实现。xDH 型泛函的一阶梯度与二阶梯度已经分别由苏乃强等\cite{Su-Xu.SCC.2013}与谷永浩等\cite{Gu-Xu.JCTC.2021}提出。作为本工作中后三章内容的程序实现基础，在电性质外场为微扰的前提下，对 xDH 型泛函的梯度理论作回顾。除此之外，本工作将尝试扩充该梯度理论到更为一般的非变分双杂化泛函框架，为将来在同一程序框架下实现多种形式的双杂化泛函能量与梯度性质作准备。最后，作为该框架的具体应用，我们将基于开源框架 \textsc{PySCF} 发展扩展程序 \textsc{dh}，实现 RI 近似下包含 MP2 型相关能的 DH 极化率，以扩展目前 DH 在分子性质上的算力到 2000 以上基函数的级别。这部分工作仅程序实现是独立完成的工作；理论部分是前人工作的重新推演与整理，\textbf{并非独创性工作}，且由于较为冗长，因此置于附录。
+  \item \textbf{双杂化泛函的电性质梯度理论与程序实现。}(附录 \alertref{sec.3.title}) 许多分子的性质，譬如分子频率、偶极矩与极化率、化学屏蔽常数、弛豫密度等都需要基于梯度理论得以计算实现。xDH 型泛函的一阶梯度与二阶梯度已经分别由苏乃强等\cite{Su-Xu.SCC.2013}与谷永浩等\cite{Gu-Xu.JCTC.2021}提出。作为本工作中后三章内容的程序实现基础，在电性质外场为微扰的前提下，对 DH 的梯度理论作回顾。除此之外，本工作将尝试扩充该梯度理论到更为一般的非变分双杂化泛函框架，为将来在同一程序框架下实现多种形式的双杂化泛函能量与梯度性质作准备。最后，作为该框架的具体应用，我们将基于开源框架 \textsc{PySCF} 发展扩展程序 \textsc{dh}，实现 RI 近似下包含 MP2 型相关能的 DH 极化率，以扩展目前 DH 在分子性质上的算力到 2000 以上基函数的级别。这部分工作仅程序实现是独立完成的工作；理论部分是前人工作的重新推演与整理，\textbf{并非独创性工作}，且由于较为冗长，因此置于附录。
   
   \item \textbf{双杂化泛函原子体系电子云密度与能量测评。}(第 \alertref{sec.4.title} 章) Medvedev 等指出，在非常基本的原子体系能量与密度计算问题上，密度泛函近似并没有随着提出的年代愈近有更好的表现\cite{Medvedev-Lyssenko.S.2017}；这让该文章作者产生了“密度泛函是否偏离了逼近真实泛函的道路上”的疑问。他们同时指出，表现欠佳的泛函的共性是含有重度的参数拟合、以及没有建立在合理的理论模型之上或泛函近似在“Jacob 阶梯”的阶数较低。本工作在 Medvedev 等人的测评基础上，对诸多双杂化泛函进行原子能量与密度的计算测评。我们将探究以 xDH 型泛函为代表的双杂化泛函，作为少或无拟合参数、且不专门针对原子体系进行优化的泛函，是否有着相当良好的测评表现；以及随着密度泛函近似的“Jacob 阶梯”的提升，密度泛函是否在原子体系问题下精度有精度的改善。
   
-  \item \textbf{高精度基组外推方法在 CCSD(T) 静态极化率计算上的应用。}(第 \alertref{sec.5.title} 章) 该部分工作是第 \alertref{sec.6.title} 章测评双杂化泛函静态极化率的前置工作。静态极化率是光学性质与分子间相互作用等问题的重要组成部分。一般来说，静态极化率的实验精度为 0.5\% 左右；但目前大多数测评数据集的参考值在计算方法或基组上，都与该精度级别有一定差距。有赖于当前高效率的双杂化型泛函的极化率程序，大基组的 MP2 极化率对计算资源的消耗已比较小；但可以作为极化率参考值计算方法的 CCSD(T) 计算消耗仍然巨大。FPA 方法是一种波函数理论的组合方法；在我们的工作中，它将大基组的 MP2 计算结果与中等基组大小的 CCSD(T) 相关能结果结合起来，从而以较低的计算代价实现高精度的极化率计算。本工作将系统地测评了各级别 FPA 方法的误差，并将 FPA 方法应用到现有的极化率数据集，以提升数据集精度。
+  \item \textbf{高精度基组外推方法在 CCSD(T) 静态极化率计算上的应用。}(第 \alertref{sec.5.title} 章) 该部分工作是第 \alertref{sec.6.title} 章测评双杂化泛函静态极化率的前置工作。静态极化率是描述光学性质与分子间相互作用等问题的重要物理量。一般来说，静态极化率的实验精度误差为 0.5\% 左右；但目前大多数测评数据集的参考值在计算方法或基组上，都与该精度级别有一定差距。有赖于当前高效率的双杂化泛函的极化率程序，大基组的 MP2 极化率对计算资源的消耗已比较小；但可以作为极化率参考值计算方法的 CCSD(T) 计算消耗仍然巨大。FPA 方法是一种波函数理论的组合方法；在我们的工作中，它将大基组的 MP2 计算结果与中等基组大小的 CCSD(T) 相关能结果结合起来，从而以较低的计算代价实现高精度的极化率计算。本工作将系统地测评各级别 FPA 方法的误差，并将 FPA 方法应用到现有的极化率数据集，以提升数据集精度。
   
   \item \textbf{双杂化泛函的静态极化率测评。}(第 \alertref{sec.6.title} 章) 本工作对目前流行的 MP2 型双杂化泛函作系统性的静态极化率测评。该测评的结果将表明，xDH 型泛函在无机与有机、自旋极化与非极化、小分子与中等分子等各类体系下，都有非常良好的极化率表现。该工作也尝试从长短程分离、自旋相同与相反、泛函拟合参数等方面切入，考察这些效应对双杂化泛函在极化率测评表现上的影响。
   

@@ -155,11 +155,11 @@ Medvedev 等人的工作也已经表明，除了少数特定的泛函，泛函�
 
 而其优势之二在于，它提供了一种切实可行、易于实现的同时矫正能量与密度误差的方案。现在一种普遍接受与流行的观点是，密度泛函近似存在两个误差来源：一是能量驱动误差、二是密度驱动误差。一般来说，能量驱动误差更为关键\cite{Cohen-Yang.CR.2012}；但在一些的情况下，密度驱动的误差也会产生重要的影响\cite{Kim-Burke.JCP.2014}。事实上，这两种误差在标准的 Kohn-Sham 框架下是相互耦合的：欠佳的交换相关泛函将会给出欠佳的能量；而对这个欠佳的能量作变分，将会给出偏离真实的 Kohn-Sham 势函数，进而无法给出真实精确地密度。因此，能量与密度通过 Kohn-Sham 势函数得以联系起来：
 \begin{equation}
-    v_\mathrm{xc} (\bm{r}) = \frac{\delta E_\mathrm{xc} [\rho]}{\delta \rho(\bm{r})}
+    v_\textmt{xc} (\bm{r}) = \frac{\delta E_\textmt{xc} [\rho]}{\delta \rho(\bm{r})}
 \end{equation}
-或者在 Generalized Kohn-Sham 理论下，将 $E_\mathrm{xc}$ 看作双粒子密度的泛函 (而并非是局域的关于 $\bm{r}$ 函数的泛函) 时，能量与密度通过下述势函数得以联系：
+或者在 Generalized Kohn-Sham 理论下，将 $E_\textmt{xc}$ 看作双粒子密度的泛函 (而并非是局域的关于 $\bm{r}$ 函数的泛函) 时，能量与密度通过下述势函数得以联系：
 \begin{equation}
-    v_\mathrm{xc}^\mathrm{GKS} (\bm{r}, \bm{r}') = \frac{\delta E_\mathrm{xc}}{\delta \rho(\bm{r}, \bm{r}')}
+    v_\textmt{xc}^\mathrm{GKS} (\bm{r}, \bm{r}') = \frac{\delta E_\textmt{xc}}{\delta \rho(\bm{r}, \bm{r}')}
 \end{equation}
 后者实际上已经突破了 Kohn-Sham 理论框架本身了\cite{Su-Xu.WCMS.2016, Su-Xu.IJQC.2015, Su-Xu.MP.2016}。对于“Jacob 阶梯”上第五阶泛函，它并非表示为密度 $\rho(\bm{r})$ 或密度矩阵 $D_{\mu \nu}$ 的显式泛函；而这应当是真实泛函的特征\cite{Kohn-Kohn.PRB.1986, Yang-Mori-Sanchez.JCP.2012}。对于 xDH 型泛函，其使用较低阶的泛函近似，大体上可信与精确、但同时又以良好效率性价比地给出密度与轨道信息；而同时，在最终能量计算时，则引入更高阶的双杂化泛函近似形式，以通过引入非局域相关能效应 (也是 GKS 框架下泛函应当具有的特性) 的方式，进一步提升能量计算的精度。低阶泛函自洽场的电子云密度，则可以通过高阶能量泛函相对于自洽场泛函之差所给出的微扰，以 Z-Vector 方法矫正\cite{Handy-Schaefer.JCP.1984, Su-Xu.JCC.2013}。相比之下，低阶泛函所包含的非局域信息不足；而 bDH 型泛函则在自洽场泛函中没有引入完整的相关效应，因此自洽场所给出的密度也缺失一些相关效应。正因为 xDH 型泛函近似在框架设计上克服了上述两类泛函的困难，可以对能量与密度两者分别作精度的调整与提升；从而，xDH 型泛函近似相比于其他低阶泛函近似、以及 bDH 型双杂化泛函近似，更有可能同时在能量与密度上有良好的表现。
 
