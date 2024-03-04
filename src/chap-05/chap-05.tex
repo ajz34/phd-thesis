@@ -121,7 +121,7 @@ RelRMSD 误差多大，才认为是可以被接受或容许的范围？首先，
 \end{equation*}
 标量 $h$ 是微扰电场的强度；在本工作的数值差分计算中，我们对所有体系均使用 $h = 0.004$ au。关于使用该外加微扰强度的合理性，我们在附录的 \ref{sec.5.s9} 小节中作讨论。
 
-数值梯度计算大多使用 \textsc{Q-Chem}\cite{Shao-Head-Gordon.MP.2015}。自洽场收敛判据 (\texttt{SCF\_CONVERGENCE} 关键词) 设为 $10^{-11}$ au，CCSD 能量与振幅收敛判据 (\texttt{CC\_E\_CONV} 与 \texttt{CC\_T\_CONV}) 分别设为 $10^{-10}$ au 与 $10^{-7}$ au。作为特例，对于 \ce{^2NO} 分子，其数值梯度是通过 \textsc{PySCF} 在限制分子对称性的不可约表示而实现；其自洽场与 CCSD 收敛判据与 \textsc{Q-Chem} 设置相同。由于我们在以 aCV5Z 基组计算 \ce{SO2} 分子时遇到收敛困难，因此该情形下我们分别降低 \textsc{Q-Chem} 的收敛判据 \texttt{SCF\_CONVERGENCE}, \texttt{CC\_E\_CONV}, \texttt{CC\_T\_CONV} 为 $10^{-10}$ au, $10^{-9}$ au, $10^{-6}$ au。
+数值梯度计算大多使用 \textsc{Q-Chem}。自洽场收敛判据 (\texttt{SCF\_CONVERGENCE} 关键词) 设为 $10^{-11}$ au，CCSD 能量与振幅收敛判据 (\texttt{CC\_E\_CONV} 与 \texttt{CC\_T\_CONV}) 分别设为 $10^{-10}$ au 与 $10^{-7}$ au。作为特例，对于 \ce{^2NO} 分子，其数值梯度是通过 \textsc{PySCF} 在限制分子对称性的不可约表示而实现；其自洽场与 CCSD 收敛判据与 \textsc{Q-Chem} 设置相同。由于我们在以 aCV5Z 基组计算 \ce{SO2} 分子时遇到收敛困难，因此该情形下我们分别降低 \textsc{Q-Chem} 的收敛判据 \texttt{SCF\_CONVERGENCE}, \texttt{CC\_E\_CONV}, \texttt{CC\_T\_CONV} 为 $10^{-10}$ au, $10^{-9}$ au, $10^{-6}$ au。
 
 \subsection{CBS 外推}
 \label{sec.5.cbs}

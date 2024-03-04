@@ -7,9 +7,9 @@
 
 分子体系的基态能量始终是计算化学所关心的根本问题。只有准确地描述分子基态能量，才有可能准确描述分子自由能等热力学性质，并进而将计算结果应用于反应动力学、分子动力学、精细光谱等各种具体的化学或物理问题。目前主流的对分子体系基态性质描述的理论体系，有 post-HF、DFT、QMC 等。由于 DFT 的近似方法相比于其它理论框架下的方法而言，在相同的计算资源消耗下，可以对更大的分子体系作计算、并有更高的精度，即计算消耗与精度的性价比高；因此，密度泛函近似在计算化学应用受到广泛的欢迎与使用。在第 \alertref{sec.1.title} 章中，也回顾到密度泛函近似的其中一个分支，双杂化泛函，在涉及主族化学的各类反应能量、弱相互作用、几何结构、分子振动与谱学问题有良好的表现。
 
-但密度泛函近似仍然存在一些困难。目前主流的密度泛函可以依据开发模式分为两类：经验参数拟合的、与纯理论模型的。一般来说，纯理论模型的泛函在测评数据集上的表现通常稍逊色\cite{Goerigk-Grimme.PCCP.2017}；但对于经验参数拟合的泛函，可能在拟合范围外产生比较严重误差，即可泛化性通常较差\cite{Medvedev-Lyssenko.S.2017}。目前流行的大多数双杂化泛函，为保证一定的泛化能力，可以采用的策略是使用较少的参数数量，如 XYG$n$\cite{Zhang-Xu.JPCL.2021} 或 DSD 系列\cite{Kozuch-Martin.JCC.2013}等泛函；或者采用复杂的参数拟合策略，如 ωB97X-2\cite{Chai-Head-Gordon.JCP.2009} 或 ωB97M(2)\cite{Mardirossian-Head-Gordon.JCP.2018}等泛函。这些泛函的参数通常是针对主族化学体系的反应能与弱相互作用能数据集上拟合得到；但目前的测评中，这些泛函确实在原子密度\cite{Su-Xu.PNAS.2018}、偶极矩与极化率\cite{Hait-Head-Gordon.JCTC.2018, Hait-Head-Gordon.PCCP.2018}、化学位移\cite{Stoychev-Neese.JCTC.2018}等问题上有良好的结果，即表现出不错的泛化能力。但同时需要注意到，这些泛函仍然在以过渡金属体系，以及具有静态相关或分数电荷与自旋特性的体系为代表的一些计算问题上，数值表现通常还有提升的空间\cite{Cohen-Yang.S.2008, Mori-Sanchez-Yang.PRL.2009, Hesselmann-Goerling.PRL.2011, Cohen-Yang.CR.2012, Zhang-Scheffler.PRL.2016,Zhang-Xu.JPCL.2021}。
+但密度泛函近似仍然存在一些困难。目前主流的密度泛函可以依据开发模式分为两类：经验参数拟合的、与纯理论模型的。一般来说，纯理论模型的泛函在测评数据集上的表现通常稍逊色\cite{Goerigk-Grimme.PCCP.2017}；但对于经验参数拟合的泛函，可能在拟合范围外产生比较严重误差，即可泛化性通常较差\cite{Medvedev-Lyssenko.S.2017}。目前流行的大多数双杂化泛函，为保证一定的泛化能力，可以采用的策略是使用较少的参数数量，如 XYG$n$\cite{Zhang-Xu.JPCL.2021} 或 DSD 系列\cite{Kozuch-Martin.JCC.2013}等泛函；或者采用复杂的参数拟合策略，如 ωB97X-2 或 ωB97M(2) 等泛函。这些泛函的参数通常是针对主族化学体系的反应能与弱相互作用能数据集上拟合得到；但目前的测评中，这些泛函确实在原子密度\cite{Su-Xu.PNAS.2018}、偶极矩与极化率\cite{Hait-Head-Gordon.JCTC.2018, Hait-Head-Gordon.PCCP.2018}、化学位移\cite{Stoychev-Neese.JCTC.2018}等问题上有良好的结果，即表现出不错的泛化能力。但同时需要注意到，这些泛函仍然在以过渡金属体系，以及具有静态相关或分数电荷与自旋特性的体系为代表的一些计算问题上，数值表现通常还有提升的空间\cite{Cohen-Yang.S.2008, Mori-Sanchez-Yang.PRL.2009, Hesselmann-Goerling.PRL.2011, Cohen-Yang.CR.2012, Zhang-Scheffler.PRL.2016,Zhang-Xu.JPCL.2021}。
 
-目前流行的双杂化泛函，通常是对基于 Kohn-Sham 参考态的电子云分布，引入 MP2 型相关能 $E_\textmt{c}^\textmt{MP2}$。若分子体系的 HOMO/LUMO gap 较小，则 $E_\textmt{c}^\textmt{MP2}$ 会产生严重的负误差。由于一部分过渡金属与多参考问题具有 HOMO/LUMO gap 较小的特性，因此双杂化泛函在这类问题上表现较差。波函数理论中，与 MP2 计算量相仿的电子对方法 IEPA\cite{Sinanoǧlu-Sinanoǧlu.ACP.1964, Nesbet-Nesbet.ACP.1965}、sIEPA\cite{Zhang-Scheffler.PRL.2016}、MP2/cr\cite{Dykstra-Davidson.IJQC.2000}\footnote{在 Dykstra and Davidson 原文\cite{Dykstra-Davidson.IJQC.2000}中提出了两种 MP2/cr 形式。原文的 MP2/cr-II 的计算需要自旋相同且同占据轨道角标的激发系数 $t_{i \bar i}^{a \bar b}$；这在 $\alpha, \beta$ 占据数不同的情形下难以合理地定义。在正文中，我们仅介绍与使用原文的 MP2/cr-I，并将其指代为 MP2/cr。} 等可以一定程度地避免 $E_\textmt{c}^\textmt{MP2}$ 型相关能的负误差。在双杂化泛函中引入这类相关能，有望在不加大计算量的同时，提高 HOMO/LUMO gap 较小体系问题的计算精度。这三类近似方法在本工作中统称为 EP 型相关能。
+目前流行的双杂化泛函，通常是对基于 Kohn-Sham 参考态的电子云分布，引入 MP2 型相关能 $E_\textmt{c}^\textmt{MP2}$。若分子体系的 HOMO/LUMO gap 较小，则 $E_\textmt{c}^\textmt{MP2}$ 会产生严重的负误差。由于一部分过渡金属与多参考问题具有 HOMO/LUMO gap 较小的特性，因此双杂化泛函在这类问题上表现较差。波函数理论中，与 MP2 计算量相仿的电子对方法 IEPA\cite{Sinanoǧlu-Sinanoǧlu.ACP.1964, Nesbet-Nesbet.ACP.1965}、sIEPA\cite{Zhang-Scheffler.PRL.2016}、MP2/cr\cite{Dykstra-Davidson.IJQC.2000}\footnote{在 Dykstra and Davidson 原文\cite{Dykstra-Davidson.IJQC.2000}中提出了两种 MP2/cr 形式。原文的 MP2/cr-II 的计算需要同占据轨道角标的激发系数 $t_{i \bar i}^{a \bar b}$；这在 $\alpha, \beta$ 占据数不同的情形下难以合理地定义。在正文中，我们仅介绍与使用原文的 MP2/cr-I，并将其指代为 MP2/cr。} 等可以一定程度地避免 $E_\textmt{c}^\textmt{MP2}$ 型相关能的负误差。在双杂化泛函中引入这类相关能，有望在不加大计算量的同时，提高 HOMO/LUMO gap 较小体系问题的计算精度。这三类近似方法在本工作中统称为 EP 型相关能。
 
 在理论层面，掺杂 MP2 型相关能的双杂化泛函基础，一般认为是 G\"orling-Levy 微扰理论的二阶近似。事实上，G\"orling-Levy 微扰理论建立起了密度泛函方法与波函数理论之间的联系，而这层联系不仅仅局限于二阶微扰、还可以与更高级的方法产生联系。从这个角度来看，在密度泛函中引入不同于 MP2 的其它波函数理论下的相关能，在 G\"orling-Levy 微扰理论的角度下是可以立足的。
 
@@ -24,21 +24,22 @@
 
 密度泛函理论，相比于波函数理论，通常被认为可以以更低的计算代价实现较为准确的计算；但普适泛函 $F[\rho]$ 的获得途径并不清晰，因此如何系统性地逼近真实泛函，成为密度泛函发展的瓶颈之一。
 
-对于易于求得、但需要借助于确切值的普适泛函 $F[\rho]$ 的 Kohn-Sham 波函数，与计算量巨大、但可以严格逼近确切值求得的真实波函数，绝热路径理论可以通过耦合常数 $\lambda$ 将两种波函数联系起来。该耦合常数 $\lambda$，以及其对应的 Hamiltonian 量定义如下：
+对于求取过程方便、但需要借助于形式未知普适泛函 $F[\rho]$ 的 Kohn-Sham 波函数，与计算量巨大、但可以严格逼近确切值求得的真实波函数，绝热路径理论可以通过耦合常数 $\lambda$ 将两种波函数联系起来。该耦合常数 $\lambda$，以及其对应的 Hamiltonian 量定义如下：
 \begin{equation}
   \label{eq.2.H-lambda-ac}
   \hat H_\lambda = \hat T + \lambda \hat V_\mathrm{ee} + \sum_i^{n_\mathrm{elec}} v_{\lambda}(\bm{r}_i)
 \end{equation}
-其中，$v_{\lambda}(\bm{r})$ 是随耦合常数 $\lambda$ 改变而不同的势函数；其作用是用于保持在不同的 $\lambda$ 下，$\hat H_\lambda$ 所给出的波函数的密度都等同于真实体系密度 $\rho(\bm{r})$。
+其中，$v_{\lambda}(\bm{r})$ 是随耦合常数 $\lambda$ 改变而不同的势函数；其作用是用于保持在不同的 $\lambda$ 下，$\hat H_\lambda$ 所给出波函数的密度都等同于真实体系密度 $\rho(\bm{r})$。
 
-如同波函数理论从 Hartree-Fock 波函数出发，经过微扰处理可以得到精确波函数；依耦合常数 $\lambda$ 展开的绝热路径上的微扰，也可以得到精确波函数；后者也称为 G\"orling-Levy 微扰框架\cite{Goerling-Levy.PRB.1993, Goerling-Levy.PRA.1994}。在该微扰框架下，定义 $\hat H_\lambda$ 对应的本征态为 $| \Psi_\lambda \rangle$；作为特例，真实波函数为 $| \Psi_{\lambda = 1} \rangle$，Kohn-Sham 波函数为 $| \Psi_{\lambda = 0} \rangle$；这两个波函数成功地通过耦合常数 $\lambda$ 得以联系。定义绝热路径上的被积函数
+如同波函数理论从 Hartree-Fock 波函数出发，经过微扰处理可以得到精确波函数；依耦合常数 $\lambda$ 展开的绝热路径上的微扰，也可以得到精确波函数。后者也称为 G\"orling-Levy 微扰框架\cite{Goerling-Levy.PRB.1993, Goerling-Levy.PRA.1994}。在该微扰框架下，定义 $\hat H_\lambda$ 对应的本征态为 $| \Psi_\lambda \rangle$；作为特例，真实波函数为 $| \Psi_{\lambda = 1} \rangle$，Kohn-Sham 波函数为 $| \Psi_{\lambda = 0} \rangle$；这两个波函数成功地通过耦合常数 $\lambda$ 得以联系。定义绝热路径上的被积函数
 \begin{align}
   \label{eq.2.adiabatic-curve-w}
   \mathcal{W}_{\lambda} [\rho] &= \langle \Psi_\lambda | \hat V_\mathrm{ee} | \Psi_\lambda \rangle \\
   \mathcal{W}_{\textmt{c}, \lambda} [\rho] &= \mathcal{W}_{\lambda} [\rho] - E_\textmt{x}^\textmt{exact} [\rho] = \mathcal{W}_{\lambda} [\rho] - \langle \Psi_{\lambda = 0} | \hat V_\mathrm{ee} | \Psi_{\lambda = 0} \rangle
 \end{align}
-则普适泛函 $F[\rho]$ 中，唯一无法由 Kohn-Sham 波函数简单给出的相关能 $E_\textmt{c} [\rho] = E_{\textmt{c}, \lambda=1} [\rho]$，则由 Hellmann-Feynman 定理，可以展开为对耦合常数 $\lambda$ 的积分
+依上述定义，普适泛函 $F[\rho]$ 中唯一无法由 Kohn-Sham 波函数简单给出的相关能 $E_\textmt{c} [\rho] = E_{\textmt{c}, \lambda=1} [\rho]$，则由 Hellmann-Feynman 定理可以展开为对耦合常数 $\lambda$ 的积分
 \begin{equation}
+  \label{eq.2.Ec-lambda-integral}
   E_{\textmt{c}, \lambda} [\rho] = \int_0^\lambda \mathcal{W}_{\textmt{c}, \lambda} [\rho] \, \mathrm{d} \bm{r}
 \end{equation}
 
@@ -61,11 +62,11 @@
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.5\textwidth]{assets/adiabatic-curve.jpg}
-  \caption[绝热路径曲线示意图]{绝热路径曲线示意图。下图取自文献\cite{Su-Xu.JCP.2014}。图中的 $W_{xc}^{\lambda}$ 即本文中的 $\mathcal{W}_{\lambda}$。图中的 $W'_{xc}{}^{0}$ 数值上等于本文中的 $2 E_\textmt{GL}^{(2)}$。}
+  \caption[绝热路径曲线示意图]{绝热路径曲线示意图。该图取自文献 \citenum{Su-Xu.JCP.2014}。图中的 $W_{xc}^{\lambda}$ 即本文中的 $\mathcal{W}_{\lambda}$。图中的 $W'_{xc}{}^{0}$ 数值上等于本文中的 $2 E_\textmt{GL}^{(2)}$。}
   \label{fig.2.adiabatic-curve}
 \end{figure}
 
-而对于式 (\ref{eq.2.GL2-def})，尽管 $E_\textmt{GL}^{(2)}$ 的表达式相比于 MP2 相关能 $E_\textmt{c}^\textmt{MP2}$ 多出了关于 $v_\textmt{x}^\textmt{NL}$ 的单电子贡献项；但一般来说单电子贡献非常小\cite{DellaSala-Goerling.JCP.2001}，同时 $v_\textmt{x}$ 在实际计算中需要代价昂贵的响应函数方法\cite{Goerling-Goerling.PRL.1999}、或存在数值不稳定可能性的 KLI 方法\cite{Krieger-Iafrate.PRA.1992, DellaSala-Goerling.JCP.2001}或 OEP 方法\cite{Mori-Sanchez-Yang.JCP.2005}；因此忽略上式的第一项，即单电子项，通常是可接受的。从而，$E_\textmt{GL}^{(2)}$ 可以仅由第二项近似得到：
+而对于式 (\ref{eq.2.GL2-def})，尽管 $E_\textmt{GL}^{(2)}$ 的表达式相比于 MP2 相关能 $E_\textmt{c}^\textmt{MP2}$ 多出了关于 $v_\textmt{x}^\textmt{NL}$ 的单电子贡献项，但一般来说单电子贡献非常小\cite{DellaSala-Goerling.JCP.2001}。同时 $v_\textmt{x}$ 在实际计算中需要代价昂贵的响应函数方法\cite{Goerling-Goerling.PRL.1999}，或存在数值不稳定可能性的 KLI 方法\cite{Krieger-Iafrate.PRA.1992, DellaSala-Goerling.JCP.2001}或 OEP 方法\cite{Mori-Sanchez-Yang.JCP.2005}；因此忽略上式的第一项，即单电子项，通常是可接受的。从而，$E_\textmt{GL}^{(2)}$ 可以仅由第二项近似得到：
 \begin{equation}
   E_\textmt{GL}^{(2)} \simeq E_\textmt{c}^\textmt{MP2}
 \end{equation}
@@ -74,16 +75,16 @@
 \subsection{GLPT2 与双杂化泛函}
 \label{sec.2.glpt2-dh}
 
-现在回到近似泛函的问题上。上一小节通过分析给出了 Kohn-Sham 相关能泛函与 MP2 相关能，在 $\mathcal{W}_{\textmt{c}, \lambda} [\rho]$ 关于 $\lambda$ 接近线性、以及 $\hat v_\textmt{x}^\textmt{NL} - v_\textmt{x}$ 算符效果接近于零的假设下，是非常相似的结论；即 $E_\textmt{c} [\rho] \simeq E_\textmt{GL}^{(2)} \simeq E_\textmt{c}^\textmt{MP2}$。当然现实情况下，$\mathcal{W}_{\textmt{c}, \lambda} [\rho]$ 关于 $\lambda$ 并非严格线性，因此上述近似一般不能直接使用；但将 $E_\textmt{c}^\textmt{MP2}$ 作为杂化项掺入泛函，仍然是有所帮助的。这就构成了一般的 MP2 型双杂化泛函。但 MP2 相关能仅仅是最初步的其中一种引入 G\"orling-Levy 微扰方式；从具体实现上，如何引入 G\"orling-Levy 微扰、引入多大程度的近似能得到较精确地结果，都是值得讨论的话题。
+现在回到近似泛函的问题上。上一小节回顾了 G{\"o}rling-Levy 微扰理论；表明了 Kohn-Sham 相关能泛函与 MP2 相关能，在 $\mathcal{W}_{\textmt{c}, \lambda} [\rho]$ 关于 $\lambda$ 接近线性、以及 $\hat v_\textmt{x}^\textmt{NL} - v_\textmt{x}$ 算符效果接近于零的假设下，是非常相似的结论；即 $E_\textmt{c} [\rho] \simeq E_\textmt{GL}^{(2)} \simeq E_\textmt{c}^\textmt{MP2}$。当然现实情况下，$\mathcal{W}_{\textmt{c}, \lambda} [\rho]$ 关于 $\lambda$ 并非严格线性，因此上述近似一般不能直接使用；但将 $E_\textmt{c}^\textmt{MP2}$ 作为杂化项掺入泛函，仍然是有所帮助的。这就构成了一般的 MP2 型双杂化泛函。但 MP2 相关能仅仅是最初步的其中一种引入 G\"orling-Levy 微扰方式；从具体实现上，如何引入 G\"orling-Levy 微扰、引入多大程度的近似能得到较精确地结果，都是值得讨论的话题。
 
 理论上，我们可以获得依式 (\ref{eq.2.e-c-lambda}) 定义的 $\lambda=0$ 处各阶微扰能量；从而在 $\lambda$ 的级数收敛区间内给出最终的 $E_{\textmt{c}, \lambda} [\rho]$。显然，若可以求得更高阶数的 G\"orling-Levy 微扰能 $E_\textmt{GL}^{(n)}$ ($n > 2$)，那么相关能的结果就更为精确。但如果对 G\"orling-Levy 微扰作更多分析，那么算符 $\hat H_\lambda$ 对耦合常数 $\lambda$ 的展开表达式为
 \begin{equation}
-  \hat H_\lambda = \left( \hat T - \sum_i^{n_\mathrm{elec}} v_\mathrm{s} (\bm{r}_i) \right) + \lambda \left( \hat V_\mathrm{ee} - \sum_i^{n_\mathrm{elec}} \big( v_\mathrm{J} (\bm{r}_i) + v_\textmt{x} (\bm{r}_i) \big) \right) - \sum_{n=2}^\infty \lambda^n \sum_{i}^{n_\mathrm{elec}} v_\textmt{c}^{(n)} (\bm{r}_i)
+  \hat H_\lambda = \left( \hat T - \sum_i^{n_\mathrm{elec}} v_\textmt{s} (\bm{r}_i) \right) + \lambda \left( \hat V_\mathrm{ee} - \sum_i^{n_\mathrm{elec}} \big( v_\textmt{J} (\bm{r}_i) + v_\textmt{x} (\bm{r}_i) \big) \right) - \sum_{n=2}^\infty \lambda^n \sum_{i}^{n_\mathrm{elec}} v_\textmt{c}^{(n)} (\bm{r}_i)
 \end{equation}
 其中，上式中出现的势函数是一些能量项对密度的函数变分：
 \begin{equation*}
-  v_\mathrm{s} (\bm{r}) = \frac{\delta T_\mathrm{s} [\rho]}{\delta \rho(\bm{r})} , \;
-  v_\mathrm{J} (\bm{r}) = \frac{\delta J [\rho]}{\delta \rho(\bm{r})}, \;
+  v_\textmt{s} (\bm{r}) = \frac{\delta T_\textmt{s} [\rho]}{\delta \rho(\bm{r})} , \;
+  v_\textmt{J} (\bm{r}) = \frac{\delta J [\rho]}{\delta \rho(\bm{r})}, \;
   v_\textmt{x} (\bm{r}) = \frac{\delta E_\textmt{x}^\textmt{exact} [\rho]}{\delta \rho(\bm{r})}, \;
   v_\textmt{c}^{(n)} (\bm{r}) = \frac{\delta E_\textmt{GL}^{(n)} [\rho]}{\delta \rho (\bm{r})}
 \end{equation*}
@@ -91,13 +92,13 @@
 
 可以预见，G\"orling-Levy 微扰的计算代价是相当高的。但也需要指出，由于近年来近似算法 (特别是 RI 近似算法)、以及计算硬件 (特别是 DRAM 内存容量) 发展，MP2 相关能的计算在数十原子体系以内耗时不多于引入交换效应的 Kohn-Sham 自洽场计算；因此，对于 $n = 2$ 阶 G\"orling-Levy 微扰即 GLPT2，若近似为 MP2 相关则不会增加太多计算资源负担。而对于 $n = 3$ 阶的情形，现在确实有针对 MP3 相关能的计算所提出或适用的近似算法；这类算法通常基于 THC 或其它张量分解与缩并方法\cite{Hohenstein-Martinez.JCP.2012, Parrish-Sherrill.JCP.2012, Lee-Head-Gordon.JCTC.2020, Matthews-Matthews.JCTC.2020}，但目前的效率仍然无法达到与自洽场计算齐平的程度\cite{Matthews-Matthews.JCP.2021}。考虑到杂化密度泛函近似近年来的巨大成功，得益于可以在较低自洽场级别的计算代价下获得相对精确的结果；其中计算代价小是非常重要的因素。因此，若 MP3 相关能的计算效率难以进一步提升，那么在可见的未来，基于 G\"orling-Levy 微扰理论所开发的实用的密度泛函，很可能不会引入\textbf{完整的} $n = 3$ 阶或更高阶微扰能量。
 
-因此，若以 G\"orling-Levy 为基础发展泛函方法，仅引入 GLPT2 从计算资源消耗与精度平衡的角度上，是非常自然的想法。作为最基本的泛函模型，$\mathcal{W}_{\lambda}$ 若依 $\lambda$ 接近线性，则
+因此，若以 G\"orling-Levy 为基础发展泛函方法，仅引入 GLPT2 从计算资源消耗与精度平衡的角度上，是非常自然的想法。作为最基本的泛函模型，$\mathcal{W}_{\lambda}$ 若依 $\lambda$ 接近线性，则高阶 $E_\textmt{GL}^{(n)} \, (n > 3)$ 微扰近似为零；依式 (\ref{eq.2.Ec-lambda-integral}) 对 $\lambda$ 积分，
 \begin{equation}
-  E_{\textmt{xc}, \lambda} [\rho] = \lambda E_\textmt{x}^\textmt{exact}[\rho] + \lambda^2 E_\textmt{GL}^{(2)} [\rho] + o(\lambda^3) \simeq E_\textmt{x}^\textmt{exact}[\rho] + E_\textmt{GL}^{(2)} [\rho]
+  E_{\textmt{xc}, \lambda} [\rho] \simeq \lambda E_\textmt{x}^\textmt{exact}[\rho] + \lambda^2 E_\textmt{GL}^{(2)} [\rho]
 \end{equation}
 当 $\lambda = 1$ 时，上述的 $E_{\textmt{xc}, \lambda} [\rho]$ 就是真实体系的交换相关能 $E_{\textmt{xc}} [\rho]$。但事实上，当相关能若仅引入 GLPT2 时，测评表现并不好\cite{Su-Xu.JCP.2014}。事实上，重新回顾式 (\ref{eq.2.GL2-W}) 的结论，微扰理论只能描述取到极限 $\lambda \rightarrow 0$ 时绝热路径曲线行为。若 $E_{\textmt{c}, \lambda} [\lambda]$ 作为关于 $\lambda$ 的函数在 $(0, 1]$ 邻域上 Taylor 级数收敛，那么精确地描述 $\lambda \rightarrow 0$ 处越热路径曲线的行为 (可以精确计算 $\lambda \rightarrow 0$ 的各阶导数)，也能给出正确的 $\lambda \in (0, 1]$ 下 $\mathcal{W}_{\lambda}$ 的结果；从而对 $\mathcal{W}_{\lambda}$ 作关于 $\lambda$ 的积分得到准确的 $E_\textmt{xc}$。但在计算资源的限制下，如图 \ref{fig.2.adiabatic-curve} 所示，如果无法引入三阶或更高阶微扰能量，即只能相对精确地计算 $\mathcal{W}_{\lambda}$ 在 $\lambda = 0$ 处的函数值与斜率，我们只能得到非常粗糙的对 $\lambda = 0$ 附近 $\mathcal{W}_{\lambda}$ 的局部认识、而无法对整体形状有所把握；大多数分子的 $\mathcal{W}_{\lambda}$ 并不非常接近线性，那么若仅近似 $E_\textmt{c} [\rho] \simeq E_\textmt{GL}^{(2)} [\rho]$，自然无法给出好的测评表现。
 
-为提升测评精度，也为了更好地对大多数类型分子的 $\mathcal{W}_{\lambda}$ 作合理建模以更好地逼近真实的 $E_\textmt{xc} [\rho]$，其中一种有效且理论上相对严格的策略，是结合 G\"orling-Levy 微扰与传统的低阶密度泛函近似，对 $\mathcal{W}_{\lambda}$ 作合理的参数化。尽管传统的低阶泛函\footnote{低阶泛函 (low-rung functional) 指在“Jacob 阶梯”的第四阶或以下，即杂化泛函或以下的泛函。后文也经常使用该称法。}未必能正确地描述 $\mathcal{W}_{\lambda}$ 在 $\lambda \rightarrow 0$ 时的行为，但却因为对 $\mathcal{W}_{\lambda}$ 在 $\lambda \in [0, 1]$ 整体有良好的描述，传统泛函的 $E_\textmt{xc} [\rho]$ 的结果通常相比于仅近似 $E_\textmt{c} [\rho] \simeq E_\textmt{GL}^{(2)} [\rho]$ 的 GLPT2 要更精确。如果在构造绝热路径曲线 $\mathcal{W}_{\lambda}$ 的过程中，在 $\lambda \rightarrow 0$ 时偏重 G\"orling-Levy 微扰理论、而在 $\lambda \rightarrow 1$ 时偏重传统泛函，那么可以取两者所长，获得比传统泛函近似或 GLPT2 更为精确的泛函。在这种新的泛函形式中，交换相关能同时有严格交换能 $E_\textmt{x}^\textmt{exact}$ 与二阶微扰相关能 $E_\textmt{GL}^{(2)}$ 的掺杂：
+为提升测评精度，也为了更好地对大多数类型分子的 $\mathcal{W}_{\lambda}$ 作合理建模以更好地逼近真实的 $E_\textmt{xc} [\rho]$，其中一种有效且理论上相对严格的策略，是结合 G\"orling-Levy 微扰与传统的低阶密度泛函近似，对 $\mathcal{W}_{\lambda}$ 作合理的参数化。尽管传统的低阶泛函\footnote{低阶泛函 (low-rung functional) 指在“Jacob 阶梯”的第四阶或以下，即杂化泛函或以下的泛函。后文也经常使用该称法。}未必能正确地描述 $\mathcal{W}_{\lambda}$ 在 $\lambda \rightarrow 0$ 时的行为，但却因为对 $\mathcal{W}_{\lambda}$ 在 $\lambda \in [0, 1]$ 整体有良好的描述，低阶泛函近似的 $E_\textmt{xc} [\rho]$ 结果通常相比于仅近似 $E_\textmt{c} [\rho] \simeq E_\textmt{GL}^{(2)} [\rho]$ 的 GLPT2 要更精确。如果在构造绝热路径曲线 $\mathcal{W}_{\lambda}$ 的过程中，在 $\lambda \rightarrow 0$ 时偏重 G\"orling-Levy 微扰理论、而在 $\lambda \rightarrow 1$ 时偏重传统泛函，那么可以取两者所长，获得比传统泛函近似或 GLPT2 更为精确的泛函。在这种新的泛函形式中，交换相关能同时有严格交换能 $E_\textmt{x}^\textmt{exact}$ 与二阶微扰相关能 $E_\textmt{GL}^{(2)}$ 的掺杂：
 \begin{equation}
   E_\textmt{xc} = \int_0^\lambda \mathcal{W}_{\lambda} \, \mathrm{d} \lambda = E_\textmt{xc}^\textmt{low-rung} + c_\textmt{x} E_\textmt{x}^\textmt{exact} + c_\textmt{c} E_\textmt{GL}^{(2)}
 \end{equation}
@@ -107,7 +108,7 @@
 
 需要指出，对绝热路径曲线 $\mathcal{W}_{\lambda}$ 作参数化或模型化后积分，从而在 $E_\textmt{xc}$ 中引入 GLPT2 相关能，是双杂化泛函的其中一种理论基础。以 PBE0-DH\cite{Toulouse-Adamo.JCP.2011} 为代表的双杂化泛函，其理论基础并非构建于 $\lambda = 0$ 的 Kohn-Sham 轨道行列式下 G\"orling-Levy 微扰，而是构建于 $0 < \lambda < 1$ 下杂化泛函轨道行列式下的二阶微扰基础上\cite{Sharkas-Savin.JCP.2011}；该理论引入绝热路径给出相关能的方式，与 G\"orling-Levy 微扰有些许不同。
 
-不论是使用绝热路径、还是使用杂化泛函波函数下的微扰理论，都可以构造出双杂化泛函。但与低阶泛函中纯粹以理论模型驱动所构造 PBE、TPSS、SCAN 或他们对应的杂化泛函，在诸多数据集下测评表现相对于同等级参数拟合方法仍然有不少优势\cite{Goerigk-Grimme.PCCP.2017, Medvedev-Lyssenko.S.2017}的情况不同，存在经验参数的双杂化泛函近似通常要比纯理论模型驱动构造的泛函有更优异的测评表现\cite{Mehta-Goerigk.PCCP.2018}。因此，理论模型通常在双杂化泛函中扮演的角色，很可能是对双杂化泛函的合理化。若要提升双杂化泛函的测评数值表现，参数优化非常重要。
+不论是使用绝热路径、还是使用杂化泛函波函数下的微扰理论，都可以构造出双杂化泛函。但与低阶泛函中纯粹以理论模型驱动所构造 PBE、TPSS、SCAN 或他们对应的杂化泛函，在诸多数据集下测评表现相对于同等级参数拟合方法仍然有不少优势\cite{Goerigk-Grimme.PCCP.2017, Medvedev-Lyssenko.S.2017}的情况不同，存在经验参数的双杂化泛函近似通常要比纯理论模型驱动构造的泛函有更优异的测评表现\cite{Mehta-Goerigk.PCCP.2018}。因此，理论模型通常在双杂化泛函中扮演的角色，很可能是对双杂化泛函的合理化。若要提升双杂化泛函的测评数值表现，参数优化同样非常重要。
 
 但理论模型仍然可以指导双杂化密度泛函的发展。目前在数值计算上的迹象表明，对于绝大多数体系，绝热路径曲线是凸曲线\cite{Frydel-Burke.JCP.2000, Fuchs-Burke.JCP.2005, Teale-Helgaker.JCP.2009,Teale-Helgaker.JCP.2010, Carrascal-Burke.JPCM.2015} (但该结论目前没有对任意体系成立的确切证明\cite{Crisostomo-Burke.LMP.2023})：
 \begin{equation}
@@ -129,14 +130,14 @@
 \begin{equation*}
   c_\textmt{c} + c_\textmt{c}^\textmt{low-rung} \leqslant 1 \quad \text{(conjecture)}
 \end{equation*}
-事实上，在 xDH@B3LYP 模型下的诸多泛函的优化结果印证了这个结论\cite{Zhang-Xu.JPCL.2021}。因此，要求 $c_\textmt{c}, c_\textmt{c}^\textmt{low-rung}$ 等相关能参数之和小于 1，是其中一种引入 GLPT2 相关能以构造双杂化泛函的限制条件。
+事实上，在 xDH@B3LYP 模型下的诸多泛函的参数优化结果印证了这个结论\cite{Zhang-Xu.JPCL.2021}。因此，要求 $c_\textmt{c}, c_\textmt{c}^\textmt{low-rung}$ 等相关能参数之和小于 1，是其中一种引入 GLPT2 相关能以构造双杂化泛函的限制条件。
 
-同时，G\"orling-Levy 微扰理论本身是类似于波函数方法、通过微扰阶数增加而逐步逼近真实泛函的理论框架；因为微扰阶数的增加会导致计算资源的巨量消耗，现在的密度泛函近似避免使用更高阶的 G\"orling-Levy 微扰相关能而仅考虑 GLPT2。但注意到波函数理论中存在一些近似方法：它们在 M\o{}ller-Plesset 微扰或耦合簇理论的框架下，基于较低阶的近似，引入一部分计算量较小的高阶贡献。对应于 MP2 的计算消耗，介于 MP2 到 CCSD 的经典波函数方法有 IEPA\cite{Sinanoǧlu-Sinanoǧlu.ACP.1964, Nesbet-Nesbet.ACP.1965}、MP2/cr\cite{Dykstra-Davidson.IJQC.2000}、CC2\cite{Christiansen-Joergensen.CPL.1995} 等。在下一节中，我们将会回顾 IEPA 与 MP2/cr 方法，并表明这类方法的相关能将大于 MP2 的相关能。由于 GLPT2 相关能通常近似为基于 Kohn-Sham 轨道行列式的 MP2 相关能，而 GLPT2 相关能相对于真实体系的相关能 $E_\mathrm{c, \lambda=1}$ 总是负误差；同时，由于 G\"orling-Levy 微扰中包含 $\hat V_\mathrm{ee}$ 算符，因而一部分表达式预期与 M\o{}ller-Plesset 微扰有着同样的结构，在能量计算中引入高阶的基于 Kohn-Sham 轨道行列式的 M\o{}ller-Plesset 微扰能量是合理的；因此，在双杂化泛函近似中引入 IEPA 或 MP2/cr 等相关能，预期一定程度上可以化解 GLPT2 的负误差，并且是理论上合理的。
+同时，G\"orling-Levy 微扰理论本身是类似于波函数方法、通过微扰阶数增加而逐步逼近真实泛函的理论框架；因为微扰阶数的增加会导致计算资源的巨量消耗，现在的密度泛函近似避免使用更高阶的 G\"orling-Levy 微扰相关能而仅考虑 GLPT2。但注意到波函数理论中存在一些近似方法：它们在 M\o{}ller-Plesset 微扰或耦合簇理论的框架下，基于较低阶的近似，引入一部分计算量较小的高阶贡献。对应于 MP2 的计算消耗，介于 MP2 到 CCSD 的经典波函数方法有 IEPA\cite{Sinanoǧlu-Sinanoǧlu.ACP.1964, Nesbet-Nesbet.ACP.1965}、MP2/cr\cite{Dykstra-Davidson.IJQC.2000}、CC2\cite{Christiansen-Joergensen.CPL.1995} 等。在下一节中，我们将会回顾 IEPA 与 MP2/cr 方法，并表明这类方法的相关能将大于 MP2 的相关能。由于 GLPT2 相关能通常近似为基于 Kohn-Sham 轨道行列式的 MP2 相关能，而 GLPT2 相关能相对于真实体系的相关能 $E_{\textmt{c}, \lambda=1}$ 总是负误差；同时，由于 G\"orling-Levy 微扰中包含 $\hat V_\mathrm{ee}$ 算符，因而一部分表达式预期与 M\o{}ller-Plesset 微扰有着同样的结构，在能量计算中引入高阶的基于 Kohn-Sham 轨道行列式的 M\o{}ller-Plesset 微扰能量是合理的。因此，在双杂化泛函近似中引入 IEPA 或 MP2/cr 等相关能，预期一定程度上可以化解 GLPT2 的负误差，并且是理论上合理的。
 
 \subsection{电子对方法}
 \label{sec.3.ep}
 
-本工作考虑的 IEPA 方法与 MP2/cr 方法，从计算过程而言，都是基于占据电子成对效应而实现；因此我们统称这两类方法为电子对或 EP 方法。在将这类电子对方法引入密度泛函前，这里将在波函数理论下，介绍电子对方法的部分理论基础与性质。
+本工作考虑的 IEPA 方法与 MP2/cr 方法，从计算过程而言，都是基于占据电子成对效应而实现；因此我们统称这两类方法为电子对或 EP 方法。在将这类电子对方法引入密度泛函前，这里将在波函数理论下，简要介绍电子对方法的部分理论基础。
 
 若参考态为 Hartree-Fock 基态 $| 0 \rangle$，且依据 Brillouin 定理的推论认为在 Fock 算符下的一次激发态可以近似忽略，那么真实的、含有相关效应的波函数可以写为
 \begin{equation}
@@ -152,7 +153,7 @@
 \begin{itemize}[nosep]
   \item \textbf{Full-CI。}该方法将所有基于 Fock 算符下基态下的激发态作为变分空间，对分子体系的 Hamilton 算符 $\hat H$ 求取变分极小。在有限基组下，若不考虑溶剂化、分子振动、精细光谱以及其它实验化学影响下，该方法是最精确的计算化学方法；
   \item \textbf{CCD。}将高次 Hartree-Fock 激发态 (在 Fock 算符下的激发) 近似为二次簇算符的耦合。该方法满足正交不变性与大小延展性等重要的物理条件，且计算精度相对较高；但需要多次 $O(n_\mathrm{occ}^2 n_\mathrm{vir}^4)$ 复杂度的计算、且内存资源消耗巨大。
-  \item \textbf{CEPA。}将 CCD 簇算符系数方程中的部分项近似为零，以对计算过程中复杂度为 $O(n_\mathrm{occ}^2 n_\mathrm{vir}^4)$ 的巨量计算与内存消耗的项作非占轨道的解耦，从而仅耦合占据电子对。该方法以牺牲一定的精度与正交不变性为代价，换取计算效率的改善、并仍然保证大小延展性的性质。由于解耦非占轨道的方式不唯一，CEPA 存在四种不同的近似形式。
+  \item \textbf{CEPA。}将 CCD 簇算符系数方程中的部分项近似为零，以对计算过程中复杂度为 $O(n_\mathrm{occ}^2 n_\mathrm{vir}^4)$ 的巨量计算与内存消耗的项作非占轨道的解耦，从而仅耦合占据电子对。该方法以牺牲一定的精度与正交不变性为代价，换取计算效率的改善、并仍然保证大小延展性的性质。由于解耦非占轨道的方式不唯一，CEPA 存在多种不同的近似形式。
   \item \textbf{CPF。}该方法是基于 CID 的改善。CPF 方法中，变分所涉及到的分母不同于波函数归一化量 $\langle \Psi | \Psi \rangle$，而是电子对的相关波函数的归一化量。该方法也具有大小延展性，且与 CEPA(1) 方法有所联系。
   \item \textbf{IEPA。}以 CEPA(2) 为基础，进一步地解耦成对占据轨道。
   \item \textbf{MP2/cr。}以 CPF 为基础，忽略部分残差项近似而来。亦可以 CEPA(1) 为基础，通过激进的近似给出。
@@ -171,9 +172,9 @@
 \begin{equation}
   e_{ij}^\textmt{MP2} = \frac{1}{2} \sum_{ab} \frac{|\langle ij || ab \rangle|^2}{D_{ij}^{ab}}
 \end{equation}
-从程序实现的角度，IEPA 方法需要迭代、而 MP2 方法则可以一次性地给出电子对能量。对于 HOMO/LUMO gap 较小的体系，若此时的 $i, j$ 代表 HOMO 轨道、$a, b$ 代表 LUMO 轨道，则 $D_{ij}^{ab}$ 的数值较小、但 $e_{ij}$ 会因为作为分母的 $D_{ij}^{ab}$ 较小而有较大的数值。对于 MP2 方法，当 $D_{ij}^{ab}$ 接近零时，$e_{ij}^\textmt{MP2}$ 将会接近负无穷大；但对于 IEPA 方法，由于较大数值的 $e_{ij}^\textmt{IEPA}$ 也在分母中，因而避免了 $e_{ij}^\textmt{IEPA}$ 趋于负无穷大的趋势。因此，IEPA 方法在 HOMO/LUMO gap 较小的体系，特别是分子解离曲线问题上，相对于 MP2 有更好的表现\cite{Zhang-Scheffler.NJP.2016, Zhang-Scheffler.PRL.2016}。
+从程序实现的角度，IEPA 方法需要迭代、而 MP2 方法则可以一次性地给出电子对能量；但迭代计算的计算量并非耗时瓶颈。对于 HOMO/LUMO gap 较小的体系，若此时的 $i, j$ 代表 HOMO 轨道、$a, b$ 代表 LUMO 轨道，则 $D_{ij}^{ab}$ 的数值较小、但 $e_{ij}$ 会因为作为分母的 $D_{ij}^{ab}$ 较小而有较大的数值。对于 MP2 方法，当 $D_{ij}^{ab}$ 接近零时，$e_{ij}^\textmt{MP2}$ 将会接近负无穷大；但对于 IEPA 方法，由于较大数值的 $e_{ij}^\textmt{IEPA}$ 也在分母中，因而避免了 $e_{ij}^\textmt{IEPA}$ 趋于负无穷大的趋势。因此，IEPA 方法在 HOMO/LUMO gap 较小的体系，特别是分子解离曲线问题上，相对于 MP2 有更好的表现\cite{Zhang-Scheffler.NJP.2016, Zhang-Scheffler.PRL.2016}。
 
-对于 MP2/cr 方法，它相对于 MP2 方法而言，电子对相关能缩放了一个比例 $N_{ij}$：
+对于 MP2/cr 方法，它相对于 MP2 方法而言，电子对相关能缩放了比例 $N_{ij}$：
 \begin{equation}
   \label{eq.2.eij-MP2cr}
   e_{ij}^\textmt{MP2/cr} = \frac{1}{2} \sum_{ab} \frac{1}{N_{ij}} \frac{|\langle ij || ab \rangle|^2}{D_{ij}^{ab}}
@@ -183,7 +184,7 @@
   \label{eq.2.Nij-MP2cr}
   N_{ij} = 1 + \frac{1}{2} \sum_{kab} \big( (t_{ik}^{ab})^2 + (t_{jk}^{ab})^2 \big) \quad \text{(MP2/cr)}
 \end{equation}
-从程序实现的角度，MP2/cr 与 MP2 方法一样，可以一次性地给出电子对能量。对于 HOMO/LUMO gap 较小的体系，由于置于分母中的比例系数 $N_{ij}$ 中包含较大的激发张量平方 $(t_{ij}^{ab})^2$，因此也可以避免 $e_{ij}^\textmt{MP2/cr}$ 过快地区域负无穷大的趋势。该方法同样在分子解离曲线上，相比于 MP2 有更好的表现\cite{Dykstra-Davidson.IJQC.2000}。
+从程序实现的角度，MP2/cr 与 MP2 方法一样，可以一次性地给出电子对能量。对于 HOMO/LUMO gap 较小的体系，由于置于分母中的比例系数 $N_{ij}$ 中包含较大的激发张量平方 $(t_{ij}^{ab})^2$，因此也可以避免 $e_{ij}^\textmt{MP2/cr}$ 趋于负无穷大的趋势。该方法同样在分子解离曲线上，相比于 MP2 有更好的表现\cite{Dykstra-Davidson.IJQC.2000}。
 
 由于 IEPA 与 MP2/cr 方法均是增加分母的绝对值；而相关能本身是负值，因此这两个方法一定会给出比 MP2 相关能更大的 (绝对值上更小的) 相关能。回顾到先前关于绝热路径的讨论，可以认为这类方法相对于 MP2 考虑了更多的高阶微扰贡献、且有希望更好地满足绝热路径曲线的凸性。我们预期在密度泛函中引入这类电子对方法的相关能形式，特别在 HOMO/LUMO gap 较小的体系，有望提升泛函的测评精度。
 
@@ -193,7 +194,7 @@
 
 在本工作中，我们将使用 GMTKN55 全数据集\cite{Goerigk-Grimme.PCCP.2017}与 Minnesota 2015 其中五个数据子集\cite{Yu-Truhlar.PCCP.2015} (MR-MGM-BE4、MR-MGN-BE17、MR-TM-BE13、SR-MGM-BE9、SR-TM-BE17)，作为泛函表现的量标。这两个数据集的子集说明列于表 \ref{tab.2.subset-detail}。其中，Minnesota 2015 数据子集中的“单参考”与“多参考”，是指在波函数或密度泛函方法计算下，依据一定的指标特征\cite{Lee-Taylor.IJQC.1989, Schultz-Truhlar.JPCA.2005, Zhao-Truhlar.JCTC.2006, Tishchenko-Truhlar.JCTC.2008}，若体系的 Hartree-Fock 参考态在考虑相关效应的波函数中占据较大的比例，则称该体系为单参考 (single-reference) 的；否则是多参考 (multi-reference) 的。
 
-\begin{table}[h]
+\begin{table}[t]
 \centering
 \caption[测评数据集概况与参数拟合权重]{测评数据集概况与参数拟合权重。}
 \label{tab.2.subset-detail}
@@ -219,16 +220,6 @@
   \item[b] GMTKN55 数据集所有子集的 WTMAD-2 权重。
 }
 \end{table}
-
-测评 GMTKN55 所使用的误差量标是 WTMAD-2：
-\begin{equation}
-  \text{WTMAD-2} = \frac{1}{\sum_{i}^{n_\mathrm{sub}} N_i} \cdot \sum_{i}^{n_\mathrm{sub}} N_i \cdot \frac{\SI{56.84}{kcal.mol^{-1}}}{\overline{|\Delta E|}_i} \text{MAD}_i
-\end{equation}
-其中，上式的 $n_\mathrm{sub}$ 是测评数据集的小子集数量、$N_i$ 是小子集 $i$ 的反应数据数量、$\overline{|\Delta E|}_i$ 是小子集 $i$ 反应能参考值的平均绝对值、$\text{MAD}_i$ 是泛函近似在小子集 $i$ 上误差的平均绝对值。该测评量标使得反应前后能量差较大的情形 (譬如燃烧焓、键能、电离能等问题) 允许较大的能量误差、而能量差较小的情形 (譬如弱相互作用、配位效应、分子异构等问题) 则有更苛刻的精度要求，从而较好地平衡了不同反应类型的误差标准。
-
-测评 Minnesota 2015 数据子集的误差量标是 MUEPB，即计算误差时先除以断键数量再取平均绝对值。因此，MUEPB 并非反应能量的误差量标、而是均摊到每个分子键后的键能误差量标。该量标不区分化学键种类，即对单键、双键、三键、配位键一视同仁。
-
-需要指出的是，GMTKN55 数据集与 Minnesota 2015 数据集存在一定的重合。举例来说，Minnesota 2015 数据集中的 MR-MGN-BE17 (多参考主族非金属键能，测评 \ce{CO}、\ce{O2}、\ce{N2} 等主族小分子键解离能) 子集中部分分子收录到 GMTKN55 子集 Sub1 中的 W4-11 (Weizmann-4 原子化能) 小子集；MR-MGM-BE4 (多参考主族金属键能，测评 \ce{CaO}、\ce{MgS} 等体系的键解离能) 与 SR-MGM-BE9 (单参考主族金属键能，测评 \ce{AlCl3}、\ce{AlF3}、\ce{NaO} 等分子的键解离能) 子集的部分分子同时收录到 GMTKN55 子集 Sub1 中的 W4-11 与 ALKBDE10 (碱金属键解离能) 小子集。由于大多数经过经验参数拟合的泛函，其拟合数据集通常与 GMTKN55 较为接近，因此这类泛函在部分数据集 (特别是 MR-MGN-BE17 与 SR-MGM-BE9) 上的表现通常较好。而相应地，尽管 SR-TM-BE13 的计算体系被认为是单参考的，但绝大多数经验参数拟合的密度泛函近似没有将过渡金属纳入拟合数据中、或没有针对过渡金属问题对泛函表达式进行优化，因此多数泛函的测评结果较差。因此，从这部分的测评结果来看，计算体系是否纳入了近似泛函所使用的拟合数据集、以及这类计算问题是否以更大权重地被近似泛函所拟合，相比于计算问题与近似泛函是否同样有单参考的结构，对近似泛函的计算表现影响更重要。部分当前主流的双杂化泛函在 GMTKN55 数据集与 Minnesota 2015 数据集的测评结果列于表 \ref{tab.2.bench-current-gmtkn55-minnesota}。
 
 \begin{sidewaystable}
 \centering
@@ -275,7 +266,7 @@
   \bottomrule
   \end{tabular}
 }{
-  \item[a] Minnesota 2015 部分子集、以及 GMTKN55 下 xDH@B3LYP 模型下泛函 (包括 XYG3、XYG6、XYG7) 的测评数据取自本工作。除 DSD-BLYP-D3(BJ) 与 DSD-PBEP86-D3(BJ) 外，其余泛函在 Minnesota 2015 集合下的测评没有使用色散矫正。XYG3、XYG6、XYG7 的测评结果与文献\cite{Zhang-Xu.JPCL.2021}有一定差距，这是因为本工作与该文献使用了不同的基组与冻核近似规则。
+  \item[a] Minnesota 2015 部分子集、以及 GMTKN55 下 xDH@B3LYP 模型下泛函 (包括 XYG3、XYG6、XYG7) 的测评数据取自本工作。除 DSD-BLYP-D3(BJ) 与 DSD-PBEP86-D3(BJ) 外，其余泛函在 Minnesota 2015 集下的测评没有使用色散矫正。XYG3、XYG6、XYG7 的测评结果与文献\cite{Zhang-Xu.JPCL.2021}有一定差距，这是因为本工作与该文献使用了不同的基组与冻核近似规则。
   \item[b] 色散矫正模型均选用 DFT-D3(BJ)。
   \item[c] 在计算加权误差时，选取 GMTKN55 误差较低的数值 (一般来说，若有色散矫正，则使用矫正后的 WTMAD-2 误差)，测评结果。
   \item[d] 数据取自文献\cite{Goerigk-Grimme.PCCP.2017}。
@@ -283,6 +274,16 @@
   \item[f] 数据取自文献\cite{Santra-Martin.JPCA.2019}。
 }
 \end{sidewaystable}
+
+测评 GMTKN55 所使用的误差量标是 WTMAD-2：
+\begin{equation}
+  \text{WTMAD-2} = \frac{1}{\sum_{i}^{n_\mathrm{sub}} N_i} \cdot \sum_{i}^{n_\mathrm{sub}} N_i \cdot \frac{\SI{56.84}{kcal.mol^{-1}}}{\overline{|\Delta E|}_i} \text{MAD}_i
+\end{equation}
+其中，上式的 $n_\mathrm{sub}$ 是测评数据集的小子集数量、$N_i$ 是小子集 $i$ 的反应数据数量、$\overline{|\Delta E|}_i$ 是小子集 $i$ 反应能参考值的平均绝对值、$\text{MAD}_i$ 是泛函近似在小子集 $i$ 上误差的平均绝对值。该测评量标使得反应前后能量差较大的情形 (譬如燃烧焓、键能、电离能等问题) 允许较大的能量误差、而能量差较小的情形 (譬如弱相互作用、配位效应、分子异构等问题) 则有更苛刻的精度要求，从而较好地平衡了不同反应类型的误差标准。
+
+测评 Minnesota 2015 数据子集的误差量标是 MUEPB，即计算误差时先除以断键数量再取平均绝对值。因此，MUEPB 并非反应能量的误差量标、而是均摊到每个分子键后的键能误差量标。该量标不区分化学键种类，即对单键、双键、三键、配位键一视同仁。
+
+需要指出，GMTKN55 数据集与 Minnesota 2015 数据集存在一定重合。举例来说，Minnesota 2015 数据集中的 MR-MGN-BE17 (多参考主族非金属键能，测评 \ce{CO}、\ce{O2}、\ce{N2} 等主族小分子键解离能) 子集中部分反应收录到 GMTKN55 子集 Sub1 中的 W4-11 (Weizmann-4 原子化能) 小子集；MR-MGM-BE4 (多参考主族金属键能，测评 \ce{CaO}、\ce{MgS} 等体系的键解离能) 与 SR-MGM-BE9 (单参考主族金属键能，测评 \ce{AlCl3}、\ce{AlF3}、\ce{NaO} 等分子的键解离能) 子集的部分反应同时收录到 GMTKN55 子集 Sub1 中的 W4-11 与 ALKBDE10 (碱金属键解离能) 小子集。由于大多数经过经验参数拟合的泛函，其拟合数据集通常与 GMTKN55 较为接近，因此这类泛函在部分数据集 (特别是 MR-MGN-BE17 与 SR-MGM-BE9) 上的表现通常较好。而相应地，尽管 SR-TM-BE13 的计算体系被认为是单参考的，但绝大多数经验参数拟合的双杂化泛函没有将过渡金属纳入拟合数据中、或没有针对过渡金属问题对泛函表达式进行优化，因此多数双泛函测评结果较差。因此，从这部分的测评结果来看，计算体系是否纳入了泛函所使用的拟合数据集、以及这类计算问题是否以更大权重地被泛函所拟合，相比于计算问题与近似泛函是否同样有单参考的结构，对泛函的计算表现影响有时更重要。部分当前主流的双杂化泛函在 GMTKN55 数据集与 Minnesota 2015 数据集的测评结果列于表 \ref{tab.2.bench-current-gmtkn55-minnesota}。
 
 在后续的工作中，我们将对上述数据集进行参数拟合，构造新的密度泛函。该拟合过程选用的误差量标是 GMTKN55 数据集的 WTMAD-2 误差、与 Minnesota 2015 五个子数据集的 MUEPB 误差的加权 (weighted error)。权重列于表 \ref{tab.2.basis-gmtkn55}。该权重是人为设置的；其设置方式反映的是我们对新泛函所能应用的化学问题范围与能力的期许。
 \begin{itemize}[nosep]
@@ -297,9 +298,9 @@
 
 GMTKN55 数据集计算选用的基组列于表 \ref{tab.2.basis-gmtkn55}。GMTKN55 计算所选用的冻核近似规则列于表 \ref{tab.2.fc-gmtkn55}。Minnesota 2015 数据集所选用的基组是 def2-QZVPP，冻核近似规则为表 \ref{tab.2.fc-gmtkn55} 中的 FC-2 规则。
 
-本工作选用 \textsc{SciPy}\cite{Virtanen-Vazquez-Baeza.NM.2020} 进行泛函参数的优化。优化算法选用 L-BFGS-B 算法\cite{Byrd-Zhu.SJSC.1995}，收敛判标是参数梯度模长 (\verb|gtol|) 小于 $10^{-5}$。本工作没有进行严格的全局优化；对于后文表 \ref{tab.2.coeff-xyg6-1-weighted-error} 的参数，优化过程是非对电子能矫正项以 XYG6 的参数、对电子能占比微扰能比例以 0.7 作为初始参数；对于 \ref{sec.2.proportion-iepa-like}、\ref{sec.2.proportion-exchange}、\ref{sec.2.propotion-dataset} 等小节中的参数优化问题与图像绘制过程，则以其对应的原始泛函参数、或图中相邻的数据点作为初始参数优化。
+本工作选用 \textsc{SciPy} 进行泛函参数的优化。优化算法选用 L-BFGS-B 算法\cite{Byrd-Zhu.SJSC.1995}，收敛判标是参数梯度模长 (\verb|gtol|) 小于 $10^{-5}$。本工作没有进行严格的全局优化；对于后文表 \ref{tab.2.coeff-xyg6-1-weighted-error} 的参数，优化过程是非对电子能矫正项以 XYG6 的参数、对电子能占比微扰能比例以 0.7 作为初始参数；对于 \ref{sec.2.proportion-iepa-like}、\ref{sec.2.proportion-exchange}、\ref{sec.2.propotion-dataset} 等小节中的参数优化问题与图像绘制过程，则以其对应的原始泛函参数、或图中相邻的数据点作为初始参数优化。
 
-\begin{table}[h]
+\begin{table}[t]
 \centering
 \caption[GMTKN55 数据集计算所使用的基组]{GMTKN55 数据集计算所使用的基组}
 \label{tab.2.basis-gmtkn55}
@@ -358,7 +359,7 @@ GMTKN55 数据集计算选用的基组列于表 \ref{tab.2.basis-gmtkn55}。GMTK
 
 \subsection{解离曲线计算细节}
 
-分子解离曲线问题的计算中，除作为参考值的 DMC 方法外，其它方法选择 cc-pV5Z 基组。MP2、CCSD、CCSD(T) 方法使用传统四中心二电子积分计算，其它方法使用 RI-JK 与 RI-MP2 算法并使用辅助基组 cc-pV5Z-jkfit 与 cc-pV5Z-rifit。计算程序是 \textsc{PySCF} 与 \textsc{dh} commit 80ca9e8。
+分子解离曲线问题的计算中，除作为参考值的 DMC 方法外，其它方法选择 cc-pV5Z 基组。MP2、CCSD、CCSD(T) 方法使用 4c-2e ERI 计算，其它方法使用 RI-JK 与 RI-MP2 算法并使用辅助基组 cc-pV5Z-jkfit 与 cc-pV5Z-rifit。计算程序是 \textsc{PySCF} 与 \textsc{dh} (commit 80ca9e8)。
 
 对于 DMC 方法，首先选用 ccecp-cc-pVQZ 基组在 \textsc{PySCF} 下给出 CASSCF 的波函数初猜；随后在 \textsc{PyQMC} 程序下先进行 1000 组态数量的 15 次 VMC 过程；其次进行 10000 组态数量的 4000 次 DMC，并舍弃前 200 次运行结果作能量计算；最后将时间步长为 0.02、0.01、0.005、0.0025、0.001 Hartree 的 DMC 结果线性外推到 0 时间步长的情形。
 
@@ -382,19 +383,7 @@ xDH@B3LYP 模型总共有 7 个可变参数。XYG7 近似泛函的参数是通�
   a_1 + a_2 + a_3 = 1 \quad \text{(constrain on XYG6)}
 \end{equation}
 
-为引入 EP 型相关能，我们引入额外的参数 $a_8$，用以控制 EP 型相关能占总高阶微扰相关能的比例；该模型记为 xDH@B3LYP+1，其形式为
-\begin{align}
-  E_\textmt{xc}^\textmt{xDH@B3LYP+1} &= a_1 E_\textmt{x}^\textmt{exact} + a_2 E_\textmt{x}^\textmt{S} + a_3 E_\textmt{x}^\textmt{B88} + a_4 E_\textmt{c}^\textmt{VWN3} + a_5 E_\textmt{c}^\textmt{LYP} \notag \\
-  &\quad + (1 - a_8) (a_6 E_\textmt{c}^\textmt{OS-MP2} + a_7 E_\textmt{c}^\textmt{SS-MP2}) \notag\\
-  &\quad + a_8 (a_6 E_\textmt{c}^\textmt{OS-EP} + a_7 E_\textmt{c}^\textmt{SS-EP})
-\end{align}
-上式的 $E_\textmt{c}^\textmt{SS-EP}$ 与 $E_\textmt{c}^\textmt{OS-EP}$ 分别代表基于参考态的自旋相反与自旋相同的 EP 型的相关能。根据引入到泛函近似的 EP 种类的不同，它可以代表 MP2/cr ($E_\textmt{c}^\textmt{MP2/cr}$)、sIEPA ($E_\textmt{c}^\textmt{sIEPA}$) 与 IEPA ($E_\textmt{c}^\textmt{IEPA}$) 相关能。MP2 与 EP 均是微扰形式的相关能；我们也会用记号 PT 表示总微扰相关效应。
-
-在本工作中，我们将始终对 xDH@B3LYP+1 模型引入 XYG6 的限制 (\ref{eq.2.constrain-xyg6})，并称其为 XYG6+1 模型。对 GMTKN55 全集与 Minnesota 2015 的五个子集进行加权拟合后，XYG6+1/cr、XYG6+1/sIEPA 与 XYG6+1/IEPA 模型的泛函参数如表 (\ref{tab.2.coeff-xyg6-1-weighted-error}) 所示。
-
-对于泛函系数，我们注意到 $E_\textmt{x}^\textmt{B88}$ 的比例通常小于零；这一现象也出现在 XYG7 对 GMTKN55 数据集的 WTMAD-2 误差量标参数拟合中。除此之外，代表 $E_\textmt{c}^\textmt{EP}$ 占比的参数 $a_8$ 在 XYG6+1/sIEPA 与 XYG6+1/IEPA 中大于一，意味着在这些泛函中 $E_\textmt{c}^\textmt{MP2}$ 的占比小于零；而在 XYG6+1/cr 中参数 $a_8$ 则介于零与一之间。从分子解离问题的表现来看，MP2/cr 对 MP2 的矫正相比于 sIEPA 或 IEPA 通常更为激进；因此 $E_\textmt{c}^\textmt{MP2/cr}$ 相关能在 XYG6+1/cr 的占比系数更有可能小于 $E_\textmt{c}^\textmt{sIEPA}$ 相关能在 XYG6+1/sIEPA 的占比系数。
-
-\begin{table}[h]
+\begin{table}[t]
 \centering
 \caption[XYG6+1 模型泛函的参数优化结果]{XYG6+1 模型泛函在 GMTKN55 全集与 Minnesota 2015 五个子集下参数优化结果。}
 \label{tab.2.coeff-xyg6-1-weighted-error}
@@ -419,12 +408,24 @@ xDH@B3LYP 模型总共有 7 个可变参数。XYG7 近似泛函的参数是通�
 }
 \end{table}
 
+为引入 EP 型相关能，我们引入额外的参数 $a_8$，用以控制 EP 型相关能占总高阶微扰相关能的比例；该模型记为 xDH@B3LYP+1，其形式为
+\begin{align}
+  E_\textmt{xc}^\textmt{xDH@B3LYP+1} &= a_1 E_\textmt{x}^\textmt{exact} + a_2 E_\textmt{x}^\textmt{S} + a_3 E_\textmt{x}^\textmt{B88} + a_4 E_\textmt{c}^\textmt{VWN3} + a_5 E_\textmt{c}^\textmt{LYP} \notag \\
+  &\quad + (1 - a_8) (a_6 E_\textmt{c}^\textmt{OS-MP2} + a_7 E_\textmt{c}^\textmt{SS-MP2}) \notag\\
+  &\quad + a_8 (a_6 E_\textmt{c}^\textmt{OS-EP} + a_7 E_\textmt{c}^\textmt{SS-EP})
+\end{align}
+上式的 $E_\textmt{c}^\textmt{OS-EP}$ 与 $E_\textmt{c}^\textmt{SS-EP}$ 分别代表基于参考态的自旋相反与自旋相同的 EP 型的相关能。根据引入到泛函近似的 EP 种类的不同，它可以代表 MP2/cr ($E_\textmt{c}^\textmt{MP2/cr}$)、sIEPA ($E_\textmt{c}^\textmt{sIEPA}$) 与 IEPA ($E_\textmt{c}^\textmt{IEPA}$) 相关能。MP2 与 EP 均是微扰形式的相关能；我们也会用记号 PT 表示总微扰相关效应。
+
+在本工作中，我们将始终对 xDH@B3LYP+1 模型引入 XYG6 的限制 (\ref{eq.2.constrain-xyg6})，并称其为 XYG6+1 模型。对 GMTKN55 全集与 Minnesota 2015 的五个子集进行加权拟合后，XYG6+1/cr、XYG6+1/sIEPA 与 XYG6+1/IEPA 模型的泛函参数如表 (\ref{tab.2.coeff-xyg6-1-weighted-error}) 所示。
+
+对于泛函系数，我们注意到 $E_\textmt{x}^\textmt{B88}$ 的比例通常小于零；这一现象也出现在 XYG7 对 GMTKN55 数据集的 WTMAD-2 误差量标参数拟合中。除此之外，代表 $E_\textmt{c}^\textmt{EP}$ 占比的参数 $a_8$ 在 XYG6+1/sIEPA 与 XYG6+1/IEPA 中大于一，意味着在这些泛函中 $E_\textmt{c}^\textmt{MP2}$ 的占比小于零；而在 XYG6+1/cr 中参数 $a_8$ 则介于零与一之间。从分子解离问题的表现来看，MP2/cr 对 MP2 的矫正相比于 sIEPA 或 IEPA 通常更为激进；因此 $E_\textmt{c}^\textmt{MP2/cr}$ 相关能在 XYG6+1/cr 的占比系数更有可能小于 $E_\textmt{c}^\textmt{sIEPA}$ 相关能在 XYG6+1/sIEPA 的占比系数。
+
 \subsection{XYG6+1 模型泛函测评表现}
 \label{sec.2.xyg6-1-model-benchmark}
 
-\begin{table}[h]
+\begin{table}[t]
 \centering
-\caption[部分 xDH@B3LYP 模型与 XYG6+1 模型的测评表现]{部分 xDH@B3LYP 模型与 XYG6+1 模型近似泛函在数据集下的测评表现。误差单位 \si{kcal.mol^{-1}}。}
+\caption[部分 xDH@B3LYP 模型与 XYG6+1 模型泛函测评表现]{部分 xDH@B3LYP 模型与 XYG6+1 模型近似泛函在数据集下的测评表现。误差单位 \si{kcal.mol^{-1}}。}
 \label{tab.2.bench-xyg6-1}
 \widetabular{
   \begin{tabular}{ld{2.2}d{2.2}d{2.2}d{2.2}d{2.2}d{2.2}d{2.2}}
@@ -456,55 +457,55 @@ xDH@B3LYP 模型总共有 7 个可变参数。XYG7 近似泛函的参数是通�
 }
 \end{table}
 
-首先考察经过参数优化后的诸 XYG6+1 模型在各测评集下的表现。从表 \ref{tab.2.bench-xyg6-1} 中可以看出，在引入 EP 型相关能、并对加权误差进行参数化拟合后，XYG6+1 的误差表现总体表现有一定提升。
+首先考察 XYG6+1 模型下诸泛函经过参数优化后在各测评集下的表现。从表 \ref{tab.2.bench-xyg6-1} 中可以看出，在引入 EP 型相关能、并对加权误差进行参数化拟合后，XYG6+1 模型下泛函的总体误差表现，相对于 xDH@B3LYP 模型下泛函有一定提升。
 
-从 GMTKN55 的测评结果来看，XYG6、XYG7 泛函是直接针对 GMTKN55 的 WTMAD-2 量标进行优化，因此这两个泛函在 GMTKN55 的总体测评结果非常优异、误差小于 2.2 \si{kcal.mol^{-1}}。由于 XYG6+1 模型的优化在 GMTKN55 上的权重为 48\% 而非完全针对 GMTKN55 优化、参数量上 XYG6+1 模型与 XYG7 同样为 7 个参数，因此 XYG6+1 在 GMTKN55 上的误差表现逊于 XYG7 是符合预期的。但即使如此，XYG6+1/cr 与 XYG6+1/sIEPA 的 GMTKN55 测评表现仍然表现良好。其中，XYG6+1/sIEPA 的 WTMAD-2 误差 2.94 \si{kcal.mol^{-1}} 小于 XYG3 的误差 3.39 \si{kcal.mol^{-1}}；XYG6+1/cr 的误差 2.36 \si{kcal.mol^{-1}} 小于专门针对 GMTKN55 进行优化的 revXYG3 的误差 2.38 \si{kcal.mol^{-1}}。造成 XYG6+1 模型在 GMTKN55 数据集上 WTMAD-2 误差量标增加的主要化学体系是 Sub4 (分子间非共价相互作用) 与 Sub5 (分子内非共价相互作用)。
+从 GMTKN55 的测评结果来看，XYG6、XYG7 泛函是直接针对 GMTKN55 的 WTMAD-2 量标进行优化，因此这两个泛函在 GMTKN55 的总体测评结果非常优异、误差小于 2.2 \si{kcal.mol^{-1}}。由于 XYG6+1 模型的优化在 GMTKN55 上的权重为 48\% 而非完全针对 GMTKN55 优化、参数量上 XYG6+1 模型与 XYG7 同样为 7 个参数，因此 XYG6+1 模型泛函在 GMTKN55 上的误差表现逊于 XYG7 是符合预期的。但即使如此，XYG6+1/cr 与 XYG6+1/sIEPA 的 GMTKN55 测评表现仍然表现良好。其中，XYG6+1/sIEPA 的 WTMAD-2 误差 2.94 \si{kcal.mol^{-1}} 小于 XYG3 的误差 3.39 \si{kcal.mol^{-1}}；XYG6+1/cr 的误差 2.36 \si{kcal.mol^{-1}} 小于专门针对 GMTKN55 进行优化的 revXYG3 的误差 2.38 \si{kcal.mol^{-1}}。造成 XYG6+1 模型泛函在 GMTKN55 数据集上 WTMAD-2 误差量标增加的主要化学体系是 Sub4 (分子间非共价相互作用) 与 Sub5 (分子内非共价相互作用)。
 
 对于 Minnesota 2015 部分数据子集的测评结果，所有未引入 EP 型相关能的方法在 MR-MGM-BE4、MR-TM-BE13 子集上有大于 10 \si{kcal.mol^{-1}} 的 MUEPB 误差；而这一巨大的误差随着 EP 型相关能的引入、以及对这部分数据集进行参数优化，得以降低到 MR-MGM-BE4 子集 4 \si{kcal.mol^{-1}}、MR-TM-BE13 子集 8 \si{kcal.mol^{-1}} 以下。但需要指出的是，在这些 Minnesota 2015 子集的测评结果中，XYG6+1 模型泛函并非在主流杂化或双杂化泛函中表现最佳。举例而言，B2PLYP 与 PBE0-DH 泛函在 MR-TM-BE13 子集的 MUEPB 为 4.69 \si{kcal.mol^{-1}} 与 5.59 \si{kcal.mol^{-1}}，相比于 XYG6+1/cr 与 XYG6+1/sIEPA 大约 7.5 \si{kcal.mol^{-1}} 的误差要小许多；但 XYG6+1/cr 与 XYG6+1/sIEPA 泛函在 GMTKN55、MR-MGM-BE4、SR-TM-BE17 等数据集或子集上的有相对更好的表现。因此，XYG6+1 模型泛函尽管并非专精于其中一种化学问题，但在各种问题的表现上达到较好的平衡。
 
-从总体的数值表现来看，XYG6+1/cr 泛函的加权误差 3.28 \si{kcal.mol^{-1}} 是诸多双杂化泛函中最小；且除了 MR-TM-BE13 子集的 MUEPB 误差稍大外，在 GMTKN55 数据集与其它经测评的 Minnesota 2015 数据集上的误差都有非常良好的表现。对于 MR-TM-BE13 子集，相对于 XYG$n$ ($n=3,6,7$)，XYG6+1/cr 成功地矫正到一般双杂化泛函的误差水平。因此，我们认为 XYG6+1/cr 在处理主族化学与含金属的分子体系解离能等各类问题上有优异的表现。其它 XYG6+1 模型下的泛函，XYG6+1/sIEPA 与 XYG6+1/IEPA，也有相对良好的结果。
+从总体的数值表现来看，XYG6+1/cr 的加权误差 3.28 \si{kcal.mol^{-1}} 是诸多双杂化泛函中最小；且除了 MR-TM-BE13 子集的 MUEPB 误差稍大外，在 GMTKN55 数据集与其它经测评的 Minnesota 2015 数据集上的误差都有非常良好的表现。对于 MR-TM-BE13 子集，相对于 XYG$n$ ($n=3,6,7$)，XYG6+1/cr 成功地矫正到一般双杂化泛函的误差水平。因此，我们认为 XYG6+1/cr 在处理主族化学与含金属分子体系的解离能等各类问题上有优异的表现。其它 XYG6+1 模型下的泛函，XYG6+1/sIEPA 与 XYG6+1/IEPA，也有相对良好的结果。
 
 \subsection{参数优化讨论：EP 型相关能占比}
 \label{sec.2.proportion-iepa-like}
 
 构造 XYG6+1 型泛函时，相对于未引入 EP 型相关能的 xDH@B3LYP 模型，有三个重要的变化：
 \begin{enumerate}[nosep]
-  \item 引入 EP 型相关能；
-  \item 引入 Minnesota 2015 数据子集；
-  \item 重新参数优化。
+  \item 泛函形式上引入 EP 型相关能；
+  \item 参数重新拟合；
+  \item 参数拟合中引入 Minnesota 2015 数据子集。
 \end{enumerate}
-针对这三个问题对泛函优化结果的影响，我们将这三小节分别进行讨论。下文将考察特定模型下泛函参数变化情况；类如 XYG6+1/cr、XYG7 等上面作为具体泛函名称的术语，在下文中一般将作为参数模型出现。
+针对这三个问题对泛函优化结果的影响，我们将这三小节分别进行讨论。下文将考察特定模型下泛函参数变化情况；类如 XYG6+1/cr、XYG7 等上文中作为具体泛函名称的术语，在下文中一般将作为参数化模型出现。
 
-\begin{figure}[h]
+\begin{figure}[t]
   \centering
   \includegraphics[width=0.6\textwidth]{assets/plot-seq-cr-proportion.pdf}
-  \caption[XYG6+1/cr 在限制参数 $E_\textmt{c}^\textmt{EP}$ 占比系数下的参数优化误差表现]{XYG6+1/cr 在限制参数 $a_8$ 下对加权误差的拟合后数据集误差表现。}
+  \caption[XYG6+1/cr 在限制参数 $E_\textmt{c}^\textmt{EP}$ 占比系数下的参数优化误差表现]{XYG6+1/cr 在限制参数 $a_8$ 下对 GMTKN55 与 Minnesota 2015 部分数据集加权误差拟合后的误差表现。}
   \label{fig.2.plot-seq-cr-proportion}
 \end{figure}
 
-首先考虑 EP 型相关能的引入。这里以 XYG6+1/cr 模型为例。图 \ref{fig.2.plot-seq-cr-proportion} 展示的是限制 $E_\textmt{c}^\textmt{MP2/cr}$ 在 $E_\textmt{c}^\textmt{PT}$ 效应中的占比数 $a_8$ 时，各数据子集误差随 $a_8$ 取值的变化情况。特别地，当取 $a_8 = 0$ (图像最右侧) 时，该模型化归为 XYG6 模型；当取 $a_8 = 1$ (图像最左侧) 时，该模型的微扰相关能完全是 MP2/cr；点划线表示加权误差取到最小时参数 $a_8$ 的数值，即 \ref{sec.2.xyg6-1-model-benchmark} 小节中所定义的 XYG6+1/cr 近似泛函。
+首先考虑 EP 型相关能的引入。这里以 XYG6+1/cr 模型为例。图 \ref{fig.2.plot-seq-cr-proportion} 展示的是限制 $E_\textmt{c}^\textmt{MP2/cr}$ 的占比数 $a_8$ 时，各数据子集误差随 $a_8$ 取值的变化情况。特别地，当取 $a_8 = 0$ (图像最左侧) 时，该模型化归为 XYG6 模型；当取 $a_8 = 1$ (图像最右侧) 时，该模型的微扰相关能完全是 MP2/cr；点划线表示加权误差取到最小时参数 $a_8$ 的数值，即 \ref{sec.2.xyg6-1-model-benchmark} 小节中所定义的 XYG6+1/cr 近似泛函。
 
-受参数 $a_8$ 影响最大的数据集是 MR-MGM-BE4 (多参考主族金属键解离能)；若不引入 ($a_8 = 0$) 或完全引入 ($a_8 = 1$) $E_\textmt{c}^\textmt{MP2/cr}$ 相关能，其 MUEPB 误差都将超过 8 \si{kcal.mol^{-1}}。事实上，从附录的表 \ref{tab.2.supp.MR-MGM-BE4} 中可以看到，XYG$n$ ($n=3,6,7$) 在 MR-MGM-BE4 测评中，阴离子 \ce{KO-} 与 \ce{LiO-} 的误差很大；其误差分别在 40 \si{kcal.mol^{-1}} 与 20 \si{kcal.mol^{-1}} 左右。这两个体系具有 1 eV 的小 HOMO/LUMO gap，因此可以预期到仅使用 MP2 相关能的 XYG$n$ ($n=3,6,7$) 在这类体系上表现较差。当 $a_8 \simeq 0.6$ 时，MP2/cr 的引入有效地缓解了这两个离子的误差到小于 10 \si{kcal.mol^{-1}}，从而 MR-MGM-BE4 子集的 MUEPB 整体误差降至 3 \si{kcal.mol^{-1}} 左右。
+受参数 $a_8$ 影响最大的数据集是 MR-MGM-BE4 (多参考主族金属键解离能)；若不引入 ($a_8 = 0$) 或完全引入 ($a_8 = 1$) $E_\textmt{c}^\textmt{MP2/cr}$ 相关能，其 MUEPB 误差都将超过 8 \si{kcal.mol^{-1}}。事实上，从附录的表 \ref{tab.2.supp.MR-MGM-BE4} 中可以看到，XYG$n$ ($n=3,6,7$) 在 MR-MGM-BE4 测评中，阴离子 \ce{KO-} 与 \ce{LiO-} 的误差很大；其误差分别在 40 \si{kcal.mol^{-1}} 与 20 \si{kcal.mol^{-1}} 左右。这两个体系具有 1 eV 左右的小 HOMO/LUMO gap，因此可以预期到仅引入 MP2 相关能的 XYG$n$ ($n=3,6,7$) 给出过强的相关效应，在这类体系上表现较差；而仅引入 MP2/cr 则会过份低估相关效应的影响，也会导致较差的表现。当 $a_8 \simeq 0.6$ 时，MP2/cr 的引入有效地缓解了这两个离子的误差到小于 10 \si{kcal.mol^{-1}}，从而 MR-MGM-BE4 子集的 MUEPB 整体误差降至 3 \si{kcal.mol^{-1}} 左右。
 
 对于其它数据集，一般来说，参数 $a_8$ 越大，越有利于 GMTKN55 数据集与 SR-MGM-BE9 子集的误差下降，尽管下降幅度较小；$a_8$ 对于 SR-TM-BE17 数据集的影响不大。需要指出的是，对于 $a_8 \simeq 0.6$ 的情形 (如表 \ref{tab.2.supp.SR-TM-BE17} 所示)，SR-TM-BE17 数据集的 \ce{Zr2} 体系 HOMO/LUMO gap 是较小的 1.34 eV，处于 EP 型相关能可以对 MP2 相关能产生有效矫正的范围；在引入 EP 型相关能后计算误差相对于 XYG$n$ ($n=3,6,7$) 下降约 20 \si{kcal.mol^{-1}}。但同时因为其它计算体系的误差有小幅上升，因此 SR-MGM-BE9 子集的整体误差没有下降太多。
 
 值得注意的是 MR-TM-BE13 与 MR-MGN-BE17 的表现在 XYG6+1/cr 模型下 $a_8 = 0.6$ 附近有较大的跳变；这个跳变的影响因素比较可能是间接地因参数优化过程中 $c_\textmt{x} = a_1$ 即严格交换能的占比跳变较大有关，如图 \ref{fig.2.plot-seq-cr-against-cx} 所示。可以发现，MR-TM-BE13 数据集的 MUEPB 误差通常随严格交换系数 $c_\textmt{x}$ 的增大而增大；相反地，MR-MGN-BE17 的 MUEPB 误差则随 $c_\textmt{x}$ 的增大而减小。因此，该误差跳变不能简单地归因于 MP2/cr 的引入本身。关于严格交换能占比参数 $c_\textmt{x}$ 对各数据集的影响，将在后一小节 \ref{sec.2.proportion-exchange} 中阐述。
 
-\begin{figure}[h]
+\begin{figure}[t]
   \centering
   \includegraphics[width=0.6\textwidth]{assets/plot-seq-cr-against-cx.pdf}
   \caption[XYG6+1/cr 在限制参数 $E_\textmt{c}^\textmt{EP}$ 占比系数下误差与 $E_\textmt{x}^\textmt{exact}$ 系数表现]{XYG6+1/cr 在限制参数 $a_8$ 下对加权误差的拟合后 MR-TM-BE13、MR-MGN-BE17 数据集的 MUEPB 误差表现、以及参数 $c_\textmt{x} = a_1$ 在给定参数 $a_8$ 下的变化情况。}
   \label{fig.2.plot-seq-cr-against-cx}
 \end{figure}
 
-最后，我们考察引入 EP 型相关能后表现较差的体系。以 XYG6+1/cr 近似泛函为例，MR-TM-BE13 子集 (表 \ref{tab.2.supp.MR-TM-BE13}) 中的 \ce{TiCl}、\ce{NiCH2+}、\ce{VO} 以及 SR-TM-BE17 子集 (表 \ref{tab.2.supp.SR-TM-BE17}) 中的 \ce{CoH}、\ce{FeH}、\ce{FeCl}，这些体系平均每个键的解离误差大于 10 \si{kcal.mol^{-1}}。由于这些体系的 HOMO/LUMO gap 均大于 1.5 eV，因此 MP2/cr 相关能与 MP2 相关能表现上会比较接近，从而难以通过仅引入 MP2/cr 相关能解决这类体系的计算误差。
+最后，我们考察引入 EP 型相关能后表现较差的体系。以 XYG6+1/cr 近似泛函为例，MR-TM-BE13 子集 (表 \ref{tab.2.supp.MR-TM-BE13}) 中的 \ce{TiCl}、\ce{NiCH2+}、\ce{VO} 以及 SR-TM-BE17 子集 (表 \ref{tab.2.supp.SR-TM-BE17}) 中的 \ce{CoH}、\ce{FeH}、\ce{FeCl}，这些体系平均每个键的解离误差大于 10 \si{kcal.mol^{-1}}。由于这些体系的 HOMO/LUMO gap 均大于 1.5 eV，因此 MP2/cr 相关能与 MP2 相关能表现上会比较接近，从而难以通过仅引入 MP2/cr 相关能解决这类体系的计算误差。对于其他 EP 型相关能泛函，即 XYG6+1/IEPA 与 XYG6+1/sIEPA，这些现象同样存在。
 
 \subsection{参数优化讨论：严格交换能占比}
 \label{sec.2.proportion-exchange}
 
-其次考察严格交换能的占比对数据集测评的影响。图 \ref{fig.2.plot-seq} 展示的是限制严格相关能 $E_\textmt{x}^\textmt{exact}$ 在总交换能中的占比数 $c_\textmt{x} = a_1$ 时，各数据子集误差随 $c_\textmt{x}$ 取值的变化情况。
+其次考察严格交换能的占比 $c_\textmt{x} = a_1$ 对数据集测评的影响。图 \ref{fig.2.plot-seq} 展示的是限制严格相关能 $E_\textmt{x}^\textmt{exact}$ 在总交换能中的占比数 $c_\textmt{x} = a_1$ 时，各数据子集误差随 $c_\textmt{x}$ 取值的变化情况。
 
-首先，从上一小节 \ref{sec.2.proportion-iepa-like} 的讨论中，我们已经注意到 EP 型相关能的引入对 MR-MGM-BE4 子集的 MUEPB 测评表现、特别是 \ce{KO-} 与 \ce{LiO-} 离子的解离能有很大的提升；在图 \ref{fig.2.plot-seq} 中，可以清晰地看到在 $c_\textmt{x} > 0.5$ 时，XYG6+1 参数模型在 MR-MGM-BE4 的测评结果上明显优于没有引入 EP 型相关能的 XYG$n$ ($n=6,7$)。同时，对于 XYG6+1/cr 模型，其 GMTKN55、MR-MGN-BE17 与 MR-TM-BE13 在 $c_\textmt{x} > 0.5$ 时的误差相较于 XYG$n$ ($n=6,7$) 有一定提升，SR-MGM-BE9 与 SR-TM-BE17 的误差与 XYG$n$ ($n=6,7$) 接近；考虑到一般的双杂化泛函近似都选用 $c_\textmt{x} > 0.5$，因此图 \ref{fig.2.plot-seq} 的结果进一步验证了引入 EP、特别是 MP2/cr 相关能，对整体误差表现确实有所提升。
+首先，从上一小节 \ref{sec.2.proportion-iepa-like} 的讨论中，我们已经注意到 EP 型相关能的引入对 MR-MGM-BE4 子集的 MUEPB 测评表现、特别是 \ce{KO-} 与 \ce{LiO-} 离子的解离能有很大的提升；在图 \ref{fig.2.plot-seq} 中，可以清晰地看到在 $c_\textmt{x} > 0.5$ 时，XYG6+1 参数模型在 MR-MGM-BE4 的测评结果上明显优于没有引入 EP 型相关能的 XYG$n$ ($n=6,7$) 参数模型。同时，对于 XYG6+1/cr 模型，其 GMTKN55、MR-MGN-BE17 与 MR-TM-BE13 在 $c_\textmt{x} > 0.5$ 时的误差相较于 XYG$n$ ($n=6,7$) 有一定提升，SR-MGM-BE9 与 SR-TM-BE17 的误差与 XYG$n$ ($n=6,7$) 接近；考虑到一般的双杂化泛函近似都选用 $c_\textmt{x} > 0.5$，因此图 \ref{fig.2.plot-seq} 的结果进一步验证了引入 EP、特别是 MP2/cr 相关能，对整体误差表现确实有所提升。
 
 但对于其它数据集而言，不论选取哪一种模型，总体上
 \begin{itemize}[nosep]
@@ -514,38 +515,38 @@ xDH@B3LYP 模型总共有 7 个可变参数。XYG7 近似泛函的参数是通�
 \end{itemize}
 考虑到 GMTKN55 数据集在拟合过程中的权重较大、MR-TM-BE13 与 MR-MGM-BE4 子集的误差本身较大，且这三个数据集误差对 $c_\textmt{x}$ 的变化比较敏感，因此对泛函模型进行参数优化时，$c_\textmt{x}$ 取值事实上平衡这三个数据集的误差。由于 EP 型相关能的引入大幅降低了 MR-MGM-BE4 的误差、并一定程度地降低了 MR-TM-BE13 的误差以及其对 $c_\textmt{x}$ 取值的敏感程度，因此 XYG6+1 模型所优化得到的参数中 $c_\textmt{x}$ 取值比较接近 GMTKN55 数据集下表现良好的范围即 $c_\textmt{x} \simeq 0.9$。而对于 XYG$n$ ($n=6,7$) 模型而言，降低参数 $c_\textmt{x}$ 可以在牺牲一定的 GMTKN55 误差时显著降低 MR-TM-BE13 与 MR-MGM-BE4 的误差，因此参数这类模型倾向于优化 $c_\textmt{x}$ 到大约 0.7 左右。
 
-\begin{figure}[h]
+\begin{figure}[t]
   \centering
   \includegraphics[width=0.9\textwidth]{assets/plot-seq.pdf}
   \caption[诸参数模型在限制 $E_\textmt{x}^\textmt{exact}$ 系数下参数优化后误差]{诸参数模型在限制参数 $c_\textmt{x} = a_1$ 下对加权误差的拟合后数据集的误差表现。}
   \label{fig.2.plot-seq}
 \end{figure}
 
-Yu 等\cite{Yu-Truhlar.CS.2016} 认为，Hartree-Fock 交换能通常可以提升碳水化合物、弱相互作用、反应能垒等问题上有较好的表现 (这些也是 GMTKN55 数据集着重关心的问题)，但会破坏多参考体系问题的表现。尽管 Yu 等的主张针对杂化泛函，但图 \ref{fig.2.plot-seq} 表明在 $c_\textmt{x} > 0.5$ 的情形下表明基于 B3LYP 轨道的双杂化泛函也有相同的结论。
+Yu 等\cite{Yu-Truhlar.CS.2016} 认为，较大占比的严格交换能 $E_\textmt{x}^\textmt{exact}$ 通常可以提升碳水化合物、弱相互作用、反应能垒等问题上的表现 (这些也是 GMTKN55 数据集着重关心的问题)，但会破坏多参考体系问题的表现。尽管 Yu 等的主张是针对杂化泛函，但图 \ref{fig.2.plot-seq} 表明，在 $c_\textmt{x} > 0.5$ 的情形下基于 B3LYP 轨道的双杂化泛函也有相同的结论。
 
-XYG6+1 模型尽管对以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为代表的 HOMO/LUMO gap 较小的计算问题有更好的处理，但需要指出的是，尽管引入了 EP 型相关能的 XYG6+1 模型一定程度上减少了 MR-TM-BE13 的误差，但减小幅度远小于降低 $c_\textmt{x}$ 所带来的收益；类如 \ce{TiCl}、\ce{NiCH2+}、\ce{VO}、\ce{CoH}、\ce{FeH}、\ce{FeCl} 等困难的计算问题，一定程度地降低 $c_\textmt{x}$ 尽管能有更好的计算表现，但同时会推高 GMTKN55 为代表的主族化学问题的误差。因此需要承认，为要更好地解决这两类问题，仅使用引入 EP 型相关能的 XYG6+1 框架仍然是不够的。
+XYG6+1 模型尽管对以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为代表的 HOMO/LUMO gap 较小的计算问题有更好的处理，但需要指出的是，尽管引入了 EP 型相关能的 XYG6+1 模型一定程度上减少了 MR-TM-BE13 的误差，但减小幅度远小于降低 $c_\textmt{x}$ 所带来的收益；类如 \ce{TiCl}、\ce{NiCH2+}、\ce{VO}、\ce{CoH}、\ce{FeH}、\ce{FeCl} 等困难的计算问题，一定程度地降低 $c_\textmt{x}$ 尽管能有更好的计算表现，但同时会推高 GMTKN55 为代表的主族化学问题的误差。因此需要承认，为要更好地同时解决这两类问题，仅使用引入 EP 型相关能的 XYG6+1 框架仍然是不够的。
 
 \subsection{参数优化讨论：数据集的影响}
 \label{sec.2.propotion-dataset}
 
-简单讨论引入 Minnesota 2015 数据集与否，对参数优化结果的影响。图 \ref{fig.2.plot-seq-xyg7} 展示了 XYG6+1/cr 模型下，仅对 GMTKN55 数据集参数优化、与额外引入 Minnesota 2015 五个数据子集参数优化的误差比较。可以看到，引入额外的数据集、并重新定义误差量标，确实会使得部分数据子集的误差表现有明显的变化。引入 Minnesota 2015 数据集进行优化后，在所有图中展示的 $c_\textmt{x}$ 区域内对 GMTKN55 的 WTMAD-2 误差量标有大约 0.5 \si{kcal.mol^{-1}} 的增加。因此，GMTKN55 的误差总体变化不大；由于我们在构造加权误差时对 GMTKN55 的 WTMAD-2 施加权重为很大的 48\%，因此 GMTKN55 的误差变化较小是可以预期的。
-
-当 Minnesota 2015 五个数据子集纳入拟合集时，尽管每个子集分到的权重不超过 12\%，但除 SR-MGM-BE9 外的数据子集误差显著下降；SR-MGM-BE9 的误差在 $c_\textmt{x} > 0.5$ 的范围内也可以控制在 3 \si{kcal.mol^{-1}} 以内。这意味着，从积极的角度来看，即使参数拟合没有严重地偏向于每一个参与加权误差计算的 Minnesota 2015 数据子集，XYG6+1/cr 模型也能在不严重影响 GMTKN55 误差的前提下，较好地改善这些子集的表现，从而在更广泛的化学问题上有优异的表现。但从消极的角度看，也意味着在当前的加权误差标准下，这些 Minnesota 2015 子集的误差对 XYG6+1/cr 模型的参数并不是非常稳健；若对加权误差的表达式作较大程度的改变、或引入其它数据集参与参数拟合，这些子集的误差有很大可能会被较大程度地改变。
-
-同时需要注意到，若没有引入 Minnesota 2015 数据子集、而仅以 GMTKN55 数据集进行拟合时，XYG6+1/cr 模型对这五个数据子集 (如图 \ref{fig.2.plot-seq-xyg7} 左侧所示) 的预测表现不能称为良好。若以此现象外推，则不能期望 \ref{sec.2.xyg6-1-model-benchmark} 小节所提出的 XYG6+1/cr 近似泛函可以以与 GMTKN55 和 Minnesota 2015 五个数据子集相同的精度解决被拟合的数据集以外的化学问题。这部分的讨论对除 MP2/cr 以外的其它掺杂 EP 型相关能的 XYG6+1 参数模型泛函同样适用。
-
-\begin{figure}[h]
+\begin{figure}[t]
   \centering
   \includegraphics[width=0.9\textwidth]{assets/plot-seq-cr.pdf}
   \caption[XYG6+1/cr 模型在限制 $E_\textmt{x}^\textmt{exact}$ 系数下不同参数优化策略测评误差]{XYG6+1/cr 模型在限制参数 $c_\textmt{x} = a_1$ 下对数据集拟合后数据集的误差表现。左图针对 GMTKN55 的 WTMAD-2 误差量标优化，右图针对 GMTKN55 与 Minnesota 2015 五个子集的加权误差量标优化。点划线表示在对应误差量标下 $c_\textmt{x}$ 的最佳取值。}
   \label{fig.2.plot-seq-xyg7}
 \end{figure}
 
+简单讨论引入 Minnesota 2015 数据集与否，对参数优化结果的影响。图 \ref{fig.2.plot-seq-xyg7} 展示了 XYG6+1/cr 模型下，仅对 GMTKN55 数据集作参数优化、与额外引入 Minnesota 2015 五个数据子集作参数优化的误差比较。可以看到，引入额外的数据集、并重新定义误差量标，确实会使得部分数据子集的误差表现有明显的变化。引入 Minnesota 2015 数据集进行优化后，在所有图中展示的 $c_\textmt{x}$ 区域内对 GMTKN55 的 WTMAD-2 误差量标有大约 0.5 \si{kcal.mol^{-1}} 的增加。因此，GMTKN55 的误差总体变化不大；由于我们在构造加权误差时对 GMTKN55 的 WTMAD-2 施加权重为很大的 48\%，因此 GMTKN55 的误差变化较小是可以预期的。
+
+当 Minnesota 2015 五个数据子集纳入拟合集时，尽管每个子集分到的权重不超过 12\%，但除 SR-MGM-BE9 外的数据子集误差显著下降；SR-MGM-BE9 的误差在 $c_\textmt{x} > 0.5$ 的范围内也可以控制在 3 \si{kcal.mol^{-1}} 以内。这意味着，从积极的角度来看，即使参数拟合没有严重地偏向于每一个参与加权误差计算的 Minnesota 2015 数据子集，XYG6+1/cr 模型也能在不严重影响 GMTKN55 误差的前提下，较好地改善这些子集的表现，从而在更广泛的化学问题上有优异的表现。但从消极的角度看，也意味着在当前的加权误差标准下，这些 Minnesota 2015 子集的误差对 XYG6+1/cr 模型的参数并不是非常稳健；若对加权误差的表达式作较大程度的改变、或引入其它数据集参与参数拟合，这些子集的误差有很大可能会被较大程度地改变。
+
+同时需要注意到，若没有引入 Minnesota 2015 数据子集、而仅以 GMTKN55 数据集进行拟合时，XYG6+1/cr 模型对这五个数据子集 (如图 \ref{fig.2.plot-seq-xyg7} 左侧所示) 的预测表现不能称为良好。若以此现象外推，则不能期望 \ref{sec.2.xyg6-1-model-benchmark} 小节所提出的 XYG6+1/cr 近似泛函可以以与 GMTKN55 和 Minnesota 2015 五个数据子集相同的精度解决被拟合的数据集以外的化学问题。这部分的讨论对除 MP2/cr 以外的其它掺杂 EP 型相关能的 XYG6+1 参数模型泛函同样适用。
+
 \subsection{XYG6+1 模型泛函在分子解离曲线问题的表现}
 
 在本节最后，将简短地考察 XYG6+1 模型泛函的在部分分子解离曲线问题的表现。
 
-作为三键体系，\ce{N2} 氮气解离问题是最有挑战性的分子解离势能面问题之一。在图 \ref{fig.2.curve-N2} 中可以看到，在解离曲线 1.0--2.0 \AA 的范围内，XYG6+1/cr 方法与 DMC 方法之间的误差普遍在 30 \si{kcal.mol^{-1}} 以内；而 XYG6+1/IEPA 方法与 CCSD(T)、DMC 方法的结果在 1.0--2.0 \AA 非常接近。XYG6+1/sIEPA 尽管存在较大误差，但相较于 MP2、MP2/cr-III、XYG$n$ ($n=3,7$) 等方法，在键长超过 1.4 \AA 时严重下行的趋势上有所改善。
+作为叁键体系，\ce{N2} 氮气解离问题是最有挑战性的分子解离势能面问题之一。在图 \ref{fig.2.curve-N2} 中可以看到，在解离曲线 1.0--2.0 \AA 的范围内，XYG6+1/cr 方法与 DMC 方法之间的误差普遍在 30 \si{kcal.mol^{-1}} 以内；而 XYG6+1/IEPA 方法与 CCSD(T)、DMC 方法的结果在 1.0--2.0 \AA 非常接近。XYG6+1/sIEPA 尽管存在较大误差，但相较于 MP2、MP2/cr-III、XYG$n$ ($n=3,7$) 等方法，在键长超过 1.4 \AA 时严重下行的趋势上有所改善。
 
 但需要指出，在图中所测评的基于单参考态的近似方法中，几乎没有可以正确预言超过 2.0 \AA 后解离的趋势。CCSD 方法尽管在解离后段趋于准确值 (两个氮原子的能量和)，但由于在 1.0--2.0 \AA 区间高估了解离趋势，因此产生了非物理的凸包。CCSD(T) 与 XYG6+1/cr 方法尽管在 1.0--2.0 \AA 的范围内表现良好，但在 2.0 \AA 以后的区域有明显下行趋势。XYG6+1/sIEPA 与 XYG6+1/IEPA 方法则在 2.0 \AA 以后的区域有明显的上行趋势；这是因为尽管 sIEPA 与 IEPA 相关能的趋势是下行，但 MP2 相关能相比于 sIEPA 与 IEPA 相关能下行趋势要明显地多；而 XYG6+1/sIEPA 与 XYG6+1/IEPA 的 MP2 在总微扰型相关能中的占比分别约为 -0.42\% 和 -0.11\%，由于 MP2 相关能负系数的原因，XYG6+1/sIEPA 与 XYG6+1/IEPA 显现出了与 MP2 相反的上升趋势。由于 XYG6+1/sIEPA 中 MP2 相关能的负系数占比更大，因此 XYG6+1/sIEPA 比 XYG6+1/IEPA 更早、更明显地在势能面上显现出错误的上升趋势。
 
@@ -558,7 +559,7 @@ XYG6+1 模型尽管对以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为代表的 HOMO/LUMO
 
 随后考虑 \ce{F2} 解离曲线。在图 \ref{fig.2.curve-F2} 中，仍然没有方法能完全正确地预言合理的解离趋势。尽管 CCSD(T) 的 \ce{F2} 解离曲线在 1.2 \AA 后始终是倾向于成键的 (势能面的能量在 0 \si{kcal.mol^{-1}} 以下)，但在 2.2 \AA 以后显现出不正确的下行趋势。XYG6+1/cr、XYG6+1/sIEPA 与 XYG$n$ (n=3,7) 在 1.2--1.6 \AA 的成键区域中，能量与 CCSD(T) 非常接近。但在 2.0 \AA 后的区域中，XYG$n$ ($n=3,7$) 有着比 CCSD(T) 更加严重的下行。相反地，诸 XYG6+1 近似泛函与 CCSD、B3LYP、MP2/cr-III 等方法则在成键区域以后严重高估势能面；这些方法在 1.6--2.0 \AA 的区域中有比较接近的数值。
 
-\begin{figure}[h]
+\begin{figure}[t]
   \centering
   \includegraphics[width=0.7\textwidth]{assets/curve-F2.pdf}
   \caption[\ce{F2} 解离曲线表现]{各方法在 \ce{F2} 解离曲线的表现。}
@@ -567,51 +568,51 @@ XYG6+1 模型尽管对以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为代表的 HOMO/LUMO
 
 \ce{H2O} 与 \ce{F2} 体系同样是单键解离问题。从图 \ref{fig.2.curve-H2O} 与图 \ref{fig.2.curve-H2O-part} 中可以看出，相比于 \ce{F2}，各方法在 \ce{H2O} 体系上的表现明显普遍较好，但仍然存在一些问题。CCSD(T)、XYG3 方法在 2.0 \AA 以前与 DMC 的结果非常接近，但 2.0 \AA 以后显现出下降的趋势。XYG7 在解离曲线后期普遍低估能量。除 CCSD(T)、XYG$n$ ($n=3, 7$) 外的方法则对解离曲线有一定程度的高估；其中 MP2 与 XYG6+1/sIEPA 方法在 1.4--1.8 \AA 与作为参考值的 DMC 结果非常接近、其它方法则在这一段解离曲线上也稍有误差。
 
-\begin{figure}[h]
+\begin{figure}[t]
   \centering
   \includegraphics[width=0.7\textwidth]{assets/curve-H2O.pdf}
   \caption[\ce{H2O} 解离曲线表现]{各方法在 \ce{H2O} 解离曲线的表现。}
   \label{fig.2.curve-H2O}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[t]
   \centering
   \includegraphics[width=0.7\textwidth]{assets/curve-H2O-part.pdf}
   \caption[\ce{H2O} 解离曲线 1.4--2.25 \AA 段表现]{各方法在 \ce{H2O} 解离曲线 1.4--2.25 \AA 段的表现。}
   \label{fig.2.curve-H2O-part}
 \end{figure}
 
-作为一种不太常规的单键解离问题，图 \ref{fig.2.curve-H6} 所示的环状 \ce{H6} 解离曲线也有一定挑战性。对于 CCSD 与 CCSD(T) 方法，它们在 1.8 \AA 以前的表现骄傲好，但在 2.0 \AA 以后能量明显地出现了不符合物理直觉的下降。MP2 与 MP2/cr-III 方法则不管是在 0.75--1.25 \AA 的成键区域、还是以后的解离区域，相比于参考值 DMC 都有一定程度的高估。B3LYP 在成键区域低估、但在解离区域则明显高估势能面上的能量。对于经测评的 xDH 型泛函，他们都在成键区域有良好的表现，但在解离区域产生明显的高估。
+作为一种不太常规的单键解离问题，图 \ref{fig.2.curve-H6} 所示的环状 \ce{H6} 解离曲线也有一定挑战性。对于 CCSD 与 CCSD(T) 方法，它们在 1.8 \AA 以前的表现较好，但在 2.0 \AA 以后能量明显地出现了不符合物理直觉的下降。MP2 与 MP2/cr-III 方法则不管是在 0.75--1.25 \AA 的成键区域、还是以后的解离区域，相比于参考值 DMC 都有一定程度的高估。B3LYP 在成键区域低估、但在解离区域则明显高估势能面上的能量。对于经测评的 xDH 型泛函，他们都在成键区域有良好的表现，但在解离区域产生明显的高估。
 
-\begin{figure}[h]
+\begin{figure}[t]
   \centering
   \includegraphics[width=0.7\textwidth]{assets/curve-H6.pdf}
   \caption[\ce{H6} 解离曲线表现]{各方法在 \ce{H6} 解离曲线的表现。}
   \label{fig.2.curve-H6}
 \end{figure}
 
-从上述的讨论中，我们看到大多数情形下，xDH 型泛函和 CCSD、CCSD(T) 方法在成键区域的势能面与参考值非常接近。但即使是计算化学中普遍受到认可的高精度 CCSD 与 CCSD(T) 方法，在闭壳层的限制下，也难以给出定性上正确的解离曲线；而对于其它 post-HF 与密度泛函近似方法更是如此。引入 EP 类型相关能的诸 XYG6+1 模型可以在 \ce{N2} 问题上，相较于 XYG$n$ ($n=3,7$) 有很大程度的改善，成功地避免了解离过程中段过于严重的负误差；但正因为一般来说 EP 型相关能绝对值小于 MP2 相关能、并且 HOMO/LUMO gap 愈小 EP 型相关能与 MP2 相关能之间的差距愈大，因此绝大多数情况下诸多 XYG6+1 模型近似泛函的势能面比 XYG$n$ 模型要高。对于所有经测评的单键解离体系，相比于 DMC 参考值、或者解离极限的原子能量之和而言，XYG$n$ ($n=3,7$) 的势能面在解离区域已经有较大程度的高估；在这种情况下，正因为引入了 EP 型相关能，XYG6+1 模型实际上会更严重地高估势能面。因此，我们无法给出简单的结论，表明 XYG6+1 模型是否在解离曲线问题上，相比于 XYG$n$ ($n=3,7$) 是否有改善。
+从上述的讨论中，我们看到大多数情形下，xDH 型泛函和 CCSD、CCSD(T) 方法在成键区域的势能面与参考值非常接近。但即使是计算化学中普遍受到认可的高精度 CCSD 与 CCSD(T) 方法，在闭壳层的限制下，也难以给出定性上正确的解离曲线；而对于其它基于单参考态的 post-HF 与密度泛函近似方法更是如此。引入 EP 类型相关能的诸 XYG6+1 模型可以在 \ce{N2} 问题上，相较于 XYG$n$ ($n=3,7$) 有很大程度的改善，成功地避免了解离过程中段过于严重的负误差；但正因为一般来说 EP 型相关能绝对值小于 MP2 相关能、并且 HOMO/LUMO gap 愈小 EP 型相关能与 MP2 相关能之间的差距愈大，因此绝大多数情况下诸多 XYG6+1 模型近似泛函的势能面比 XYG$n$ 模型要高。对于所有经测评的单键解离体系，相比于 DMC 参考值、或者解离极限的原子能量之和而言，XYG$n$ ($n=3,7$) 的势能面在解离区域已经有较大程度的高估；在这种情况下，正因为引入了 EP 型相关能，XYG6+1 模型实际上会更严重地高估势能面。因此，我们无法给出简单的结论，表明 XYG6+1 模型是否在解离曲线问题上，相比于 XYG$n$ ($n=3,7$) 是否有改善。
 
 \section{本章小结}
 
 在本章工作中，我们简单回顾了作为双杂化泛函理论基础的 G\"orling-Levy 微扰理论。该理论联系起 post-HF 方法与密度泛函近似。作为该微扰理论的近似，GLPT2 是诸多双杂化泛函的理论基础。GLPT2 一般由 MP2 相关能实现，而 MP2 相关能在 HOMO/LUMO gap 较小时存在明显的负误差。籍此，我们简单梳理了 IEPA 与 MP2/cr 的理论，并表明这些 EP 型相关能可以缓解 MP2 相关能在 HOMO/LUMO gap 较小情况下的误差。类似于 post-HF 框架之于 IEPA 的关系，我们对 G\"orling-Levy 微扰框架下引入 EP 型相关能的理论合理性作了说明。
 
-为缓解基于 MP2 型相关能的双杂化泛函在以 \ce{N2} 解离、含过渡金属体系为代表的 HOMO/LUMO gap 较小体系上存在一定负误差的情况，同时保证在以主族反应势垒、键解离能、弱相互作用能为代表的、主流双杂化泛函表现较好的问题上保持较小的误差，我们尝试在 GMTKN55 数据集上有优异表现的 xDH@B3LYP 框架下引入 EP 型相关能以构造新的 XYG6+1 参数模型。在参数优化上，除了着重主族化学的 GMTKN55 外，我们引入部分含有多参考信息与过渡金属信息的 Minnesota 2015 子数据集，作参数优化得到新的泛函近似；它们依引入的相关能形式不同，称为 XYG6+1/cr、XYG6+1/IEPA 与 XYG6+1/sIEPA。
+为缓解基于 MP2 型相关能的双杂化泛函在以 \ce{N2} 解离、含过渡金属体系为代表的 HOMO/LUMO gap 较小体系上存在一定负误差的情况，同时保证在以主族反应势垒、键解离能、弱相互作用能为代表的主流双杂化泛函表现较好的问题上保持较小的误差，我们尝试在 GMTKN55 数据集上有优异表现的 xDH@B3LYP 框架下引入 EP 型相关能以构造新的 XYG6+1 参数模型。在参数优化上，除了着重主族化学的 GMTKN55 外，我们引入部分含有多参考信息与过渡金属信息的 Minnesota 2015 子数据集，作参数优化得到新的泛函近似；它们依引入的相关能形式不同，称为 XYG6+1/cr、XYG6+1/IEPA 与 XYG6+1/sIEPA。
 
 参数优化与测评结果表明，XYG6+1/cr 近似泛函在各个数据集上的表现有良好的平衡。对于 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 等 HOMO/LUMO gap 小于 1.5 eV 的体系，键解离能的计算误差从 20--40 \si{kcal.mol^{-1}} 降到 10 \si{kcal.mol^{-1}} 以下，有效地降低了这类体系误差。同时，XYG6+1/cr 在 GMTKN55 数据集上的总体 WTMAD-2 误差为 2.36 \si{kcal.mol^{-1}}，其表现相比于目前流行的 MP2 型相关能的双杂化泛函仍然良好；在我们所定义的 GMTKN55 和 Minnesota 2015 部分子数据集上的加权误差为 3.28 \si{kcal.mol^{-1}}，是表现最优异的泛函。XYG6+1/cr 很好地平衡了主族化学问题与多参考特性或过渡金属问题的误差，基本达到了设计该泛函近似的初衷。XYG6+1/sIEPA 泛函也有类似的良好表现。
 
 但需要承认，仅引入 EP 型相关能、并作关于 GMTKN55 和 Minnesota 2015 部分子数据集的优化得到的泛函，仍然存在着困难。
 \begin{itemize}[nosep]
-  \item 首先，HOMO/LUMO gap 小的体系一般具有多参考特性，但多参考特性的体系 HOMO/LUMO gap 不一定小；在诸如 \ce{TiCl}、\ce{NiCH2+}、\ce{VO} 为代表的多参考特性的体系上，XYG6+1 模型泛函表现较差。此外，诸如 \ce{CoH}、\ce{FeH}、\ce{FeCl} 等单参考特性含过渡金属体系的键解离也存在较大误差，而多参考特性的 MR-MGN-BE17 数据集的总的误差相当低，表明 XYG6+1 模型的误差来源与单参考或多参考的关联性不一定很强，而可能与过渡金属本身关联性稍大。
+  \item 首先，HOMO/LUMO gap 小的体系一般具有多参考特性，但反之不成立；在诸如 \ce{TiCl}、\ce{NiCH2+}、\ce{VO} 为代表的 HOMO/LUMO gap 较大的多参考特性的体系上，XYG6+1 模型泛函表现较差。此外，诸如 \ce{CoH}、\ce{FeH}、\ce{FeCl} 等单参考特性含过渡金属体系的键解离也存在较大误差，而多参考特性的 MR-MGN-BE17 数据集的总的误差相当低，表明 XYG6+1 模型的误差来源与单参考或多参考的关联性不一定很强，而可能与过渡金属本身关联性稍大。
   \item 在分子解离曲线问题上，在闭壳层限制下，尽管 XYG6+1 参数模型在 \ce{N2} 体系上 2.0 \AA 以前的表现较好，但仍然无法避免解离到更远时定性不正确的趋势；而在以 \ce{F2}、\ce{H2O}、环状 \ce{H6} 为代表的单键解离问题上，不论是否引入 EP 型或 MP2 型相关能，都在解离区域存在较大的正误差。这意味着在密度泛函近似中，仅仅矫正 MP2 相关能在 HOMO/LUMO gap 较小时的误差表现，不足以漂亮地解决解离曲线的问题。
-  \item 对参数优化过程的讨论，表明严格交换能 $E_\textmt{x}^\textmt{exact}$ 占比愈大对 GMTKN55 主族化学问题的误差愈小、但相应地 MR-TM-BE13 等含过渡金属或多参考特性体系的数据集误差愈大；这个现象并不因为在泛函中引入 EP 型相关能而有所改善。同时，对于 XYG6+1 参数模型优化得到的泛函，误差容易随参与拟合数据集的变化而波动，表明该参数模型下的泛函不是非常稳健。我们无法建议将 XYG6+1 参数模型下优化的泛函，应用在 GMTKN55 与 Minnesota 2015 五个子数据集的目标化学问题以外的体系计算上。
+  \item 对参数优化过程的讨论，表明严格交换能 $E_\textmt{x}^\textmt{exact}$ 占比愈大、对 GMTKN55 主族化学问题的误差愈小，但相应地 MR-TM-BE13 等含过渡金属或多参考特性体系的数据集误差愈大；这个现象并不因为在泛函中引入 EP 型相关能而有所改善。同时，对于 XYG6+1 参数模型优化得到的泛函，误差容易随参与拟合数据集的变化而波动，表明该参数模型下的泛函不是非常稳健。我们无法建议将 XYG6+1 参数模型下优化的泛函，应用在 GMTKN55 与 Minnesota 2015 五个子数据集的目标化学问题以外的体系计算上。
 \end{itemize}
 
 \clearpage
 
 \section{附录：补充数据}
 
-\begin{table}[ht]
+\begin{table}[!h]
 \centering
 \caption[MR-MGM-BE4 子集测评误差]{部分 xDH@B3LYP 模型与 XYG6+1 模型近似泛函在 MR-MGM-BE4 子集上误差。\\反应能与 MUEPB 单位 \si{kcal.mol^{-1}}；HOMO/LUMO gap 单位 eV。}
 \label{tab.2.supp.MR-MGM-BE4}
@@ -634,6 +635,37 @@ XYG6+1 模型尽管对以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为代表的 HOMO/LUMO
   \end{tabular}
 }{
   \item[a] 为方便排版，表头第二行指代的是 XYG6+1 模型泛函所使用的 EP 型相关能 $E_\textmt{c}^\textmt{EP}$ 的具体类型；即 MP2/cr 指代 XYG6+1/cr、sIEPA 指代 XYG6+1/sIEPA、IEPA 指代 XYG6+1/IEPA。后续表格类同。
+}
+\end{table}
+
+\begin{table}[!h]
+\centering
+\caption[SR-MGM-BE9 子集测评误差]{部分 xDH@B3LYP 模型与 XYG6+1 模型近似泛函在 SR-MGM-BE9 子集上误差。\\反应能与 MUEPB 单位 \si{kcal.mol^{-1}}；HOMO/LUMO gap 单位 eV。}
+\label{tab.2.supp.SR-MGM-BE9}
+\widetabular{
+  \begin{tabular}{ld{1.2}d{3.2}d{3.2}d{3.2}d{3.2}d{3.2}d{3.2}}
+  \toprule
+  \multicolumn{2}{c}{SR-MGM-BE9} & \multicolumn{3}{c}{xDH@B3LYP} & \multicolumn{3}{c}{XYG6+1} \\
+  \cmidrule(lr){1-2} \cmidrule(lr){3-5} \cmidrule(lr){6-8}
+  体系 & \multicolumn{1}{c}{gap} & 
+                 \multicolumn{1}{c}{XYG3} & \multicolumn{1}{c}{XYG6} & \multicolumn{1}{c}{XYG7} &
+                 \multicolumn{1}{c}{MP2/cr} & \multicolumn{1}{c}{sIEPA} & \multicolumn{1}{c}{IEPA} \\
+  \midrule
+  \ce{AlCl3}          & 7.35 & 0.02  & 0.72  & -0.07 & -0.11     & 0.29         & 0.55        \\
+  \ce{AlF3 }          & 9.43 & -1.23 & -0.30 & -3.03 & -0.74     & -1.39        & -1.18       \\
+  \ce{KOH  }\tnote{a} & 3.72 & -1.73 & -0.79 & -3.14 & -2.71     & -2.55        & -3.59       \\
+  \ce{NaO  }          & 3.09 & -2.18 & -2.62 & -4.22 & -4.25     & -3.79        & -4.47       \\
+  \ce{LiO  }          & 3.41 & 1.83  & 0.52  & -0.92 & -0.72     & -0.12        & -0.03       \\
+  \ce{LiCl }          & 5.31 & -0.87 & -1.58 & -2.43 & -2.99     & -2.17        & -2.00       \\
+  \ce{AlCl3}          & 5.01 & -0.05 & 0.39  & -0.26 & -0.81     & -0.39        & -0.32       \\
+  \ce{ZnSe }          & 1.64 & 6.16  & 7.86  & 7.89  & 4.51      & 5.43         & 4.55        \\
+  \ce{ZnCl }          & 2.34 & 0.25  & 1.22  & 0.97  & 0.93      & 0.75         & 1.54        \\
+  \midrule
+  MUEPB              &      & 1.59  & 1.78  & 2.55  & 1.97      & 1.87         & 2.03        \\
+  \bottomrule
+  \end{tabular}
+}{
+  \item[a] \ce{KOH -> K + OH}
 }
 \end{table}
 
@@ -713,37 +745,6 @@ XYG6+1 模型尽管对以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为代表的 HOMO/LUMO
 }{
   \item[a] \ce{NiCH2+ -> Ni+ + CH2}
   \item[b] \ce{FeCO5 -> Fe + 5CO}
-}
-\end{table}
-
-\begin{table}[ht]
-\centering
-\caption[SR-MGM-BE9 子集测评误差]{部分 xDH@B3LYP 模型与 XYG6+1 模型近似泛函在 SR-MGM-BE9 子集上误差。\\反应能与 MUEPB 单位 \si{kcal.mol^{-1}}；HOMO/LUMO gap 单位 eV。}
-\label{tab.2.supp.SR-MGM-BE9}
-\widetabular{
-  \begin{tabular}{ld{1.2}d{3.2}d{3.2}d{3.2}d{3.2}d{3.2}d{3.2}}
-  \toprule
-  \multicolumn{2}{c}{SR-MGM-BE9} & \multicolumn{3}{c}{xDH@B3LYP} & \multicolumn{3}{c}{XYG6+1} \\
-  \cmidrule(lr){1-2} \cmidrule(lr){3-5} \cmidrule(lr){6-8}
-  体系 & \multicolumn{1}{c}{gap} & 
-                 \multicolumn{1}{c}{XYG3} & \multicolumn{1}{c}{XYG6} & \multicolumn{1}{c}{XYG7} &
-                 \multicolumn{1}{c}{MP2/cr} & \multicolumn{1}{c}{sIEPA} & \multicolumn{1}{c}{IEPA} \\
-  \midrule
-  \ce{AlCl3}          & 7.35 & 0.02  & 0.72  & -0.07 & -0.11     & 0.29         & 0.55        \\
-  \ce{AlF3 }          & 9.43 & -1.23 & -0.30 & -3.03 & -0.74     & -1.39        & -1.18       \\
-  \ce{KOH  }\tnote{a} & 3.72 & -1.73 & -0.79 & -3.14 & -2.71     & -2.55        & -3.59       \\
-  \ce{NaO  }          & 3.09 & -2.18 & -2.62 & -4.22 & -4.25     & -3.79        & -4.47       \\
-  \ce{LiO  }          & 3.41 & 1.83  & 0.52  & -0.92 & -0.72     & -0.12        & -0.03       \\
-  \ce{LiCl }          & 5.31 & -0.87 & -1.58 & -2.43 & -2.99     & -2.17        & -2.00       \\
-  \ce{AlCl3}          & 5.01 & -0.05 & 0.39  & -0.26 & -0.81     & -0.39        & -0.32       \\
-  \ce{ZnSe }          & 1.64 & 6.16  & 7.86  & 7.89  & 4.51      & 5.43         & 4.55        \\
-  \ce{ZnCl }          & 2.34 & 0.25  & 1.22  & 0.97  & 0.93      & 0.75         & 1.54        \\
-  \midrule
-  MUEPB              &      & 1.59  & 1.78  & 2.55  & 1.97      & 1.87         & 2.03        \\
-  \bottomrule
-  \end{tabular}
-}{
-  \item[a] \ce{KOH -> K + OH}
 }
 \end{table}
 
@@ -911,20 +912,24 @@ XYG6+1 模型尽管对以 \ce{KO-}、\ce{LiO-}、\ce{Zr2} 为代表的 HOMO/LUMO
 
 \section{附录：电子对方法不具有正交不变性的说明}
 
-对分子轨道的正交变换，会使得 Hartree-Fock 参考态对应分子轨道基的 Fock 矩阵并非对角矩阵。与 MP2 方法不同，本工作所考虑的电子对方法 MP2/cr 与 IEPA，其定义须基于正则 Hartree-Fock 轨道。因此，从定义上，MP2/cr 与 IEPA 方法等电子对方法，无法对非正则 Hartree-Fock 作计算，故而不存在正交不变性。
+正交变换不变性与大小可延展性，是电子结构方法非常关心的基本性质。目前流行的众多波函数方法，诸如 CCSD、MP2，以及密度泛函近似，都具有正交不变性与大小可延展性。一般来说，大小可延展性是电子结构方法推向实用过程中，必须要满足的性质。以 CID 方法为例，若不满足大小可延展性，能量便不随着体系的增大而线性地增加；这将产生相当严重的数值误差。大多数情况下，满足大小一致性的方法，其大小可延展性也可以得到满足。
 
-但是，对于正则 Hartree-Fock 能级简并的分子轨道，正交变换后的分子轨道仍然是正则的。此时，IEPA 或 MP2/cr 等电子对方法仍然是可以被定义的；从而，对简并分子轨道的正交变换不变性是可以讨论的。简并轨道可能源于下述四种情况：
+从实用性角度来看，正交变换不变性相对来说重要性较低；但作为电子结构方法，它也是应当得以满足的性质。对分子轨道的正交变换，会使得 Hartree-Fock 参考态对应分子轨道基的 Fock 矩阵并非对角矩阵。与 MP2 方法不同，本工作所考虑的电子对方法 MP2/cr 与 IEPA，其定义须基于正则 Hartree-Fock 轨道。因此，从定义上，MP2/cr 与 IEPA 方法等电子对方法，无法对非正则 Hartree-Fock 作计算，故而不存在正交不变性。因而，XYG6+1 模型下的泛函近似也不具有正交不变性。
+
+但是，对于正则 Hartree-Fock 能级简并的分子轨道，正交变换后的分子轨道仍然是正则的。此时，IEPA 或 MP2/cr 等电子对方法仍然是可以被定义的；从而，对能级简并分子轨道的正交变换不变性是可以讨论的。简并轨道可能源于下述四种情况：
 \begin{enumerate}[nosep]
   \item 距离无穷远的两个完全等价体系产生的成对简并轨道；
   \item 因分子点群对称性而在二维不可约表示下产生的二重简并轨道；
   \item 因分子点群对称性而在三维不可约表示下产生的三重简并轨道；
   \item 偶然的能级简并。
 \end{enumerate}
-对于这些情形，我们将作简单的讨论与分析，并将表明本工作所考虑的电子对方法 (MP2/cr、IEPA) 依情况并非正交不变；同时，因简并分子轨道正交变换而导致的能量变化通常不严重，但也存在正交变换误差大于 0.5 eV 的情形。由于从表达式上，sIEPA 与 IEPA 具有相似的形式；因此，若 IEPA 并非正交不变，那么容易知道 sIEPA 也同样并非正交不变。但由于 sIEPA 引入了 erfc 形式的放缩函数，因此正交变换误差通常小于 IEPA。
+针对这些情形，我们将作简单的讨论与分析，并将表明本工作所考虑的电子对方法 (MP2/cr、IEPA) 依情况并非正交不变；同时，因简并分子轨道正交变换而导致的能量变化通常不严重，但也存在正交变换误差大于 0.5 eV 的情形。由于从表达式上，sIEPA 与 IEPA 具有相似的形式；因此，若 IEPA 并非正交不变，那么容易知道 sIEPA 也同样并非正交不变。但由于 sIEPA 引入了 erfc 形式的放缩函数，因此正交变换误差通常小于 IEPA。
 
-这一小节的公式推演将基于自旋轨道；数值结果展现将基于闭壳层轨道。一些结论展示于表 \ref{tab.2.invariance-mp2cr-iepa}。该节的数值计算使用 cc-pVDZ 基组，程序使用 \textsc{PySCF} 与 \textsc{dh}。
+IEPA 方法具有大小可延展性是广为接受的结论\cite{Szabo-Ostlund.Dover.1996}。对于上述第 1 种情形的讨论，将顺带证明 MP2/cr 方法的大小一致性，从而自然具有大小可延展性。因此，本章讨论的 XYG6+1 模型下的泛函近似具有大小可延展性。
 
-\begin{table}[!ht]
+这一小节的推演将基于自旋轨道，数值结果展现将基于闭壳层轨道。一些结论展示于表 \ref{tab.2.invariance-mp2cr-iepa}。该节的数值计算使用 cc-pVDZ 基组，程序使用 \textsc{PySCF} 与 \textsc{dh}。
+
+\begin{table}[ht]
 \centering
 \caption[MP2/cr 与 IEPA 在不同情形下的正交变换不变性]{MP2/cr 与 IEPA 在不同情形下能级简并轨道间的正交变换不变性。}
 \label{tab.2.invariance-mp2cr-iepa}
@@ -989,11 +994,11 @@ MP2/cr 缩放比例 $N_{ij}$ 定义式在 (\ref{eq.2.Nij-MP2cr}) 已有表述。
 \end{gather*}
 因此容易表明，MP2/cr 在局域基下是大小一致的。
 
-随后需要说明 MP2/cr 在离域基下的相关能与局域基是相同的。首先，$l_A$ 与 $l_B$ 的轨道能均为 $\varepsilon_l$；因此，对这两根轨道的正交变换后，得到的 $\mathscr{l}_1$ 与 $\mathscr{l}_2$ 轨道能仍然有
+随后需要说明 MP2/cr 在离域基下的相关能与局域基是相同的。首先，$l_A$ 与 $l_B$ 的轨道能均为 $\varepsilon_l$；因此，对这两根轨道正交变换后，得到的 $\mathscr{l}_1$ 与 $\mathscr{l}_2$ 轨道能仍然有
 \begin{equation*}
   \varepsilon_{\mathscr{l}_1} = \varepsilon_{\mathscr{l}_2} = \varepsilon_l
 \end{equation*}
-对于离域基，占据轨道中并非 $\mathscr{l}_1$ 与 $\mathscr{l}_2$ 的部分，其结果与局域基完全一致；这部分的结果显然是相等的。因此，我们仅讨论涉及 $\mathscr{l}_1$ 与 $\mathscr{l}_2$ 的部分。对于 ${i_A \mathscr{l}_1}$ 电子对的情形 ($\forall i \neq l$)，注意到对于 $\forall a, b$，
+对于离域基，显然地，占据轨道中并非 $\mathscr{l}_1$ 与 $\mathscr{l}_2$ 的部分，其结果与局域基完全一致。因此，我们仅讨论涉及 $\mathscr{l}_1$ 与 $\mathscr{l}_2$ 的部分。对于 ${i_A \mathscr{l}_1}$ 电子对的情形 ($\forall i \neq l$)，注意到对于 $\forall a, b$，
 \begin{align*}
   g_{i_A \mathscr{l}_1}^{a_A b_A} &= \frac{1}{\sqrt{2}} g_{i_A l_A}^{a_A b_A} + \frac{1}{\sqrt{2}} g_{i_A l_B}^{a_A b_A} = \frac{1}{\sqrt{2}} g_{il}^{ab} \\
   t_{i_A \mathscr{l}_1}^{a_A b_A} &= \frac{1}{\sqrt{2}} \frac{g_{i_A l_A}^{a_A b_A} - g_{i_A l_A}^{b_A a_A}}{D_{il}^{ab}} = \frac{1}{\sqrt{2}} t_{il}^{ab}
@@ -1055,7 +1060,7 @@ MP2/cr 缩放比例 $N_{ij}$ 定义式在 (\ref{eq.2.Nij-MP2cr}) 已有表述。
 \end{align*}
 该离域基下的复合物 $AB$ 相关能与 $A$、$B$ 单体的相关能之和完全相等。
 
-上述讨论表明，尽管离域基与局域基并不等价；但复合物 $AB$ 的能量，在相同能级轨道的式 (\ref{eq.2.invariance-specific}) 定义下的正交变换下是不变的。
+上述讨论表明，尽管离域基与局域基并不等同；但复合物 $AB$ 的能量，在相同能级轨道的式 (\ref{eq.2.invariance-specific}) 定义下的正交变换下是不变的。
 
 尽管我们仅仅针对式 (\ref{eq.2.invariance-specific}) 的特殊情况，作正交不变性的说明；但可以预期，若针对因等同分离体系而简并的占据或非占轨道，作式 (\ref{eq.2.invariance-general}) 下各种角度 $\theta$ 的正交变换，相关能 $E_\textmt{c} (AB)$ 仍然不变。
 
@@ -1093,7 +1098,7 @@ MP2/cr 缩放比例 $N_{ij}$ 定义式在 (\ref{eq.2.Nij-MP2cr}) 已有表述。
   \label{fig.2.invar-sep-N2-2}
 \end{figure}
 
-如 Szabo 与 Ostlund 在 5.1.1 小节中对模型体系的讨论\cite{Szabo-Ostlund.Dover.1996}，影响 IEPA 方法正交变换误差，受轨道能量差与双电子积分的共同影响。其中，轨道能差的影响较为关键；且被变换轨道与分子的 HOMO 或 LUMO 越接近，正交变换的误差就越大。对于两个 \ce{Ne} 原子体系而言，$2p$ 轨道的能级相比于 $2s$ 更高、与 LUMO 能级更接近，因此有更大的正交变换误差。从图 \ref{fig.2.invar-sep-N2-1} 与图 \ref{fig.2.invar-sep-N2-2} 上可以看出，对于两个 \ce{N2} 原子体系，若对其 HOMO 轨道 ($1 \symup{\Pi}_u$) 作正交变换，该情形更为明显。当 \ce{N2} 键长较短时，IEPA 的正交变换误差是较小的 $-0.019$ eV；但当 \ce{N2} 键长较长时，IEPA 的正交变换误差是较大的 $-0.635$ eV。同时，键长较长时，由于 HOMO/LUMO gap 也同时较小；因此 sIEPA 不再与 MP2 有相似的数值，从而显现出较大的正交变换误差。
+如 Szabo 与 Ostlund 在 5.1.1 小节中对模型体系的讨论\cite{Szabo-Ostlund.Dover.1996}，影响 IEPA 方法的正交变换误差，受轨道能量差与双电子积分的共同影响。其中，轨道能差的影响较为关键；被变换轨道与分子的 HOMO 或 LUMO 越接近，正交变换的误差就越大。对于两个 \ce{Ne} 原子体系而言，$2p$ 轨道的能级相比于 $2s$ 更高、与 LUMO 能级更接近，因此有更大的正交变换误差。从图 \ref{fig.2.invar-sep-N2-1} 与图 \ref{fig.2.invar-sep-N2-2} 上可以看出，对于两个 \ce{N2} 原子体系，若对其 HOMO 轨道 ($1 \symup{\Pi}_u$) 作正交变换，该情形更为明显。当 \ce{N2} 键长较短时，IEPA 的正交变换误差是较小的 $-0.019$ eV；但当 \ce{N2} 键长较长时，IEPA 的正交变换误差是较大的 $-0.635$ eV。同时，键长较长时，由于 HOMO/LUMO gap 较小，因此 sIEPA 不再与 MP2 有相似的数值，从而 sIEPA 显现出较大的正交变换误差。
 
 \subsection{因点群对称性而简并的轨道下正交不变性}
 
