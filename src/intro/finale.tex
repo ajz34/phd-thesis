@@ -15,20 +15,20 @@
 
 弱相互作用问题通常也称为动态相关问题 (部分讨论该问题的综述如 \citenum{Cremer-Cremer.MP.2001, Cohen-Handy.MP.2001, Handy-Cohen.MP.2001})。由于波函数理论中，MP2 方法通常认为可以有效处理动态相关；而 MP2 相关能在密度泛函中的引入确实有效地解决了弱相互作用计算问题。因此，尽管在 2005 年前后，弱相互作用仍然是具有挑战性的问题；但从现在的眼光来看，该问题至少有了定量的解决方案。
 
-当然，这样的解决方案是否是最优的，这个问题仍然是值得争辩的。MP2 的计算量尽管对于小体系确实可以接受，但对于原子数过百的体系仍然会是负担 (特别是内存开销上)。以低阶泛函结合 DFT-D\cite{Grimme-Krieg.JCP.2010, Smith-Sherrill.JPCL.2016, Caldeweyher-Grimme.JCP.2019}、MBD\cite{Tkatchenko-Scheffler.PRL.2009, Tkatchenko-Scheffler.PRL.2012}、VV10\cite{Vydrov-VanVoorhis.JCP.2010} 为代表的计算量较低的弥散矫正方法也对部分弱相互作用问题有良好的表现；这类方法近年仍然有长足的进步，涌现出不少出色的工作\cite{Kirkpatrick-Cohen.S.2021, Liu-He.NCS.2022}。但到目前为止，在以 GMTKN55 为代表的数据集上，这些模型仍然在 WTMAD-2 等测评标准下尚未达到小于 \SI{3}{kcal.mol^{-1}} 的误差。因此，传统的低阶密度泛函以及弥散矫正方法，仍然有发展的空间和需求。
+当然，这样的解决方案是否是最优的，这个问题仍然是值得争辩的。MP2 的计算量尽管对于小体系确实可以接受，但对于原子数过百的体系仍然会是负担 (特别是内存开销上)。以低阶泛函结合 DFT-D\cite{Grimme-Krieg.JCP.2010, Smith-Sherrill.JPCL.2016, Caldeweyher-Grimme.JCP.2019}、MBD\cite{Tkatchenko-Scheffler.PRL.2009, Tkatchenko-Scheffler.PRL.2012}、VV10\cite{Vydrov-VanVoorhis.JCP.2010} 为代表的计算量较低的弥散矫正方法也对部分弱相互作用问题有良好的表现 (尽管或许 VV10 在体系较大时才能体现相对较小的计算代价)；这类方法近年仍然有长足的进步，涌现出不少出色的工作\cite{Kirkpatrick-Cohen.S.2021, Liu-He.NCS.2022}。但到目前为止，在以 GMTKN55 为代表的数据集上，这些模型仍然在 WTMAD-2 等测评标准下尚未达到小于 \SI{3}{kcal.mol^{-1}} 的误差。因此，传统的低阶密度泛函以及弥散矫正方法，仍然有发展的空间和需求。
 
 但强相互作用问题，有时也称为静态相关问题\cite{Cremer-Cremer.MP.2001}、左右相关问题\cite{Handy-Cohen.MP.2001, Cohen-Handy.MP.2001}，或化归为分数电荷与自旋问题\cite{Cohen-Yang.S.2008, Cohen-Yang.JCP.2008, Mori-Sanchez-Yang.PRL.2009}，迄今为止尽管有许多模型上的尝试与理论框架的搭建\cite{Hesselmann-Goerling.PRL.2011, Lan-Yanai.JCP.2013, Mezei-Kallay.JCTC.2015, Zhang-Scheffler.NJP.2016, Goerling-Goerling.PRB.2019, Shee-Head-Gordon.JPCL.2021, Zhang-Xu.JPCL.2021, Kirkpatrick-Cohen.S.2021, Santra-Martin.JPCL.2022}；但就我局限的认知，目前还没有一类完美地满足下述所有条件的方法：
 \begin{enumerate}[nosep]
     \item 在主要测评集上有良好表现、GMTKN55 数据集的 WTMAD-2 误差小于 \SI{3}{kcal.mol^{-1}}；
     \item 在分子解离问题上，以闭壳层的波函数限制下，不仅可以正确描述近解离趋势、同时在分子解离到无限远处也能给出定量上正确的趋势；
     \item 不直接引入多参考方法，且方法是黑箱的、不需要用户手动指定诸如活性轨道等参数；若要引入多参考信息，其计算复杂度不能是活性轨道数的阶乘或幂次；
-    \item 满足正交不变性；
+    \item 满足正交不变性，不具有自相互作用误差；
     \item 计算量上不显著超过 RI-MP2、且不引入轨道优化 (即不能直接是 OO-MP2 或 CC2 的衍生方法)；
     \item 可以实现梯度性质、并有良好的测评表现。
 \end{enumerate}
 除此之外，大小一致性必须得到满足。这里 Monte Carlo 方法也算作多参考方法。
 
-以本工作的 XYG6+1/cr 为例，上述第 1 点尽管比较乐观，但目前还未完整地经受其他数据集下完整的测评；第 2 点就算是对普通双杂化或低阶泛函有少许改进，但显然不算达成了目标；第 4 点上正交不变性也有少许缺陷；第 6 点尽管也相对乐观，但 MP2 衍生方法经常不满足正交不变性，而这又进一步地会遇到轨道近简并情况下梯度数值不稳定的问题 (即附录 \alertref{sec.3.non-canonical-mp2-gradient} 的结论与程序实现策略无法适用于 MP2/cr 或 IEPA 等方法；数值梯度也可能会遇到问题)。
+以本工作的 XYG6+1/cr 为例。上述第 1 点尽管比较乐观，但目前还未完整地经受 GMTKN55 以外数据集下完整的测评。第 2 点就算是对普通双杂化或低阶泛函有少许改进，但显然不算达成了目标。第 4 点上正交不变性也有少许缺陷；自相互作用误差不可能严格为零，但由于 $E_\textmt{x}^\textmt{exact}$ 在 XYG6+1/cr 中占比为相当大的 0.85、而 MP2/cr 与 MP2 作为相关能也都不具有自相互误差，因此预期自相互作用误差较小。第 6 点尽管也相对乐观，但 MP2 衍生方法经常不满足正交不变性，而这又进一步地会遇到轨道近简并情况下梯度数值不稳定的问题 (即附录 \alertref{sec.3.non-canonical-mp2-gradient} 的结论与程序实现策略无法适用于 MP2/cr 或 IEPA 等方法；数值梯度也可能会遇到问题)。
 
 除了上述的困难，准确参考值数据的获得也存在一些困难。多参考方法被认为可以很好地解决静态相关问题，但同时其动态相关的描述存在困难、或者程序实现存在一定的不稳定性。多参考方法本身的计算复杂度已经很高，在其之上的微扰理论的计算代价更是一般有机化学体系难以接受的\cite{Finley-Serrano-Andres.CPL.1998, Angeli-Malrieu.JCP.2001, Angeli-Malrieu.CPL.2001, Malmqvist-Gagliardi.JCP.2008, Pulay-Pulay.IJQC.2011}。即使是相当高精度的多参考方法，也可能对一些简单的模型体系无法很好地正常描述\cite{Vancoillie-Veryazov.JCTC.2016}。在计算设备沿着 Moore 定律发展的今天，也有科研工作者看到多参考方法应用于实际问题的希望，在降低计算量、拓展多参考方法应用场景上\cite{Ren-Shuai.WCMS.2022, Li-Chen.PRR.2022, Xiang-Li.JCTC.2024}，或对多参考方法引入动态相关的方式上作改进\cite{Mitra-Gagliardi.JCTC.2023, Feng-Xu.chemRxiv.2023}，有不少出色的工作。
 
