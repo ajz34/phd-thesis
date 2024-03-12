@@ -1636,7 +1636,7 @@ MP2 相关能对轨道系数的梯度相关量写为 (乘以 $C_{\mu p}$ 是因�
 \end{equation*}
 但该表达式会比较复杂；在程序实现中，将使用下述方式给出激发张量全导数。
 
-现在将轨道系数 $\mathbf{C}$ 与性质量 $\mathbf{A}$ 耦合；那么辅助函数将写为 $\symbfscr{H} (\mathbb{A}, \mathbf{t}) = 0$。仿照式 (\ref{eq.3.auxfunc-pdA}) 附近的推导；但同时注意到不同于 skeleton 导数的情形，$\frac{\mathrm{d}}{\mathrm{d} \mathbb{A}} (ia|jb)$ 作为全导数是非零的；那么容易得到
+现在将轨道系数 $\mathbf{C}$ 与性质量 $\mathbb{A}$ 耦合；那么辅助函数将写为 $\symbfscr{H} (\mathbb{A}, \mathbf{t}) = 0$。仿照式 (\ref{eq.3.auxfunc-pdA}) 附近的推导；但同时注意到不同于 skeleton 导数的情形，$\frac{\mathrm{d}}{\mathrm{d} \mathbb{A}} (ia|jb)$ 作为全导数是非零的；那么容易得到
 \begin{equation}
     \label{eq.3.pdA-tijab}
     \frac{\mathrm{d} t_{ij}^{ab}}{\mathrm{d} \mathbb{A}} = \frac{1}{D_{ij}^{ab}} \left(

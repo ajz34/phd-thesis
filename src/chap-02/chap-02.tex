@@ -27,20 +27,20 @@
 对于求取过程方便、但需要借助于形式未知普适泛函 $F[\rho]$ 的 Kohn-Sham 波函数，与计算量巨大、但可以严格逼近确切值求得的真实波函数，绝热路径理论可以通过耦合常数 $\lambda$ 将两种波函数联系起来。该耦合常数 $\lambda$，以及其对应的 Hamiltonian 量定义如下：
 \begin{equation}
   \label{eq.2.H-lambda-ac}
-  \hat H_\lambda = \hat T + \lambda \hat V_\mathrm{ee} + \sum_i^{n_\mathrm{elec}} v_{\lambda}(\bm{r}_i)
+  \hat H_\lambda = \hat T + \lambda \hat V_\textmt{ee} + \sum_i^{n_\mathrm{elec}} v_{\lambda}(\bm{r}_i)
 \end{equation}
 其中，$v_{\lambda}(\bm{r})$ 是随耦合常数 $\lambda$ 改变而不同的势函数；其作用是用于保持在不同的 $\lambda$ 下，$\hat H_\lambda$ 所给出波函数的密度都等同于真实体系密度 $\rho(\bm{r})$。
 
 如同波函数理论从 Hartree-Fock 波函数出发，经过微扰处理可以得到精确波函数；依耦合常数 $\lambda$ 展开的绝热路径上的微扰，也可以得到精确波函数。后者也称为 G\"orling-Levy 微扰框架\cite{Goerling-Levy.PRB.1993, Goerling-Levy.PRA.1994}。在该微扰框架下，定义 $\hat H_\lambda$ 对应的本征态为 $| \Psi_\lambda \rangle$；作为特例，真实波函数为 $| \Psi_{\lambda = 1} \rangle$，Kohn-Sham 波函数为 $| \Psi_{\lambda = 0} \rangle$；这两个波函数成功地通过耦合常数 $\lambda$ 得以联系。定义绝热路径上的被积函数
 \begin{align}
   \label{eq.2.adiabatic-curve-w}
-  \mathcal{W}_{\lambda} [\rho] &= \langle \Psi_\lambda | \hat V_\mathrm{ee} | \Psi_\lambda \rangle \\
-  \mathcal{W}_{\textmt{c}, \lambda} [\rho] &= \mathcal{W}_{\lambda} [\rho] - E_\textmt{x}^\textmt{exact} [\rho] = \mathcal{W}_{\lambda} [\rho] - \langle \Psi_{\lambda = 0} | \hat V_\mathrm{ee} | \Psi_{\lambda = 0} \rangle
+  \mathcal{W}_{\lambda} [\rho] &= \langle \Psi_\lambda | \hat V_\textmt{ee} | \Psi_\lambda \rangle \\
+  \mathcal{W}_{\textmt{c}, \lambda} [\rho] &= \mathcal{W}_{\lambda} [\rho] - E_\textmt{x}^\textmt{exact} [\rho] = \mathcal{W}_{\lambda} [\rho] - \langle \Psi_{\lambda = 0} | \hat V_\textmt{ee} | \Psi_{\lambda = 0} \rangle
 \end{align}
 依上述定义，普适泛函 $F[\rho]$ 中唯一无法由 Kohn-Sham 波函数简单给出的相关能 $E_\textmt{c} [\rho] = E_{\textmt{c}, \lambda=1} [\rho]$，则由 Hellmann-Feynman 定理可以展开为对耦合常数 $\lambda$ 的积分
 \begin{equation}
   \label{eq.2.Ec-lambda-integral}
-  E_{\textmt{c}, \lambda} [\rho] = \int_0^\lambda \mathcal{W}_{\textmt{c}, \lambda} [\rho] \, \mathrm{d} \bm{r}
+  E_{\textmt{c}, \lambda} [\rho] = \int_0^\lambda \mathcal{W}_{\textmt{c}, \lambda} [\rho] \, \mathrm{d} \lambda
 \end{equation}
 
 假使 $E_{\textmt{c}, \lambda} [\rho]$ 在以 $\lambda=0$ 为中心的邻域 $(0, 1]$ 下 Taylor 级数收敛，那么我们用下述记号表示该 Taylor 展开：
@@ -79,7 +79,7 @@
 
 理论上，我们可以获得依式 (\ref{eq.2.e-c-lambda}) 定义的 $\lambda=0$ 处各阶微扰能量；从而在 $\lambda$ 的级数收敛区间内给出最终的 $E_{\textmt{c}, \lambda} [\rho]$。显然，若可以求得更高阶数的 G\"orling-Levy 微扰能 $E_\textmt{GL}^{(n)}$ ($n > 2$)，那么相关能的结果就更为精确。但如果对 G\"orling-Levy 微扰作更多分析，那么算符 $\hat H_\lambda$ 对耦合常数 $\lambda$ 的展开表达式为
 \begin{equation}
-  \hat H_\lambda = \left( \hat T - \sum_i^{n_\mathrm{elec}} v_\textmt{s} (\bm{r}_i) \right) + \lambda \left( \hat V_\mathrm{ee} - \sum_i^{n_\mathrm{elec}} \big( v_\textmt{J} (\bm{r}_i) + v_\textmt{x} (\bm{r}_i) \big) \right) - \sum_{n=2}^\infty \lambda^n \sum_{i}^{n_\mathrm{elec}} v_\textmt{c}^{(n)} (\bm{r}_i)
+  \hat H_\lambda = \left( \hat T - \sum_i^{n_\mathrm{elec}} v_\textmt{s} (\bm{r}_i) \right) + \lambda \left( \hat V_\textmt{ee} - \sum_i^{n_\mathrm{elec}} \big( v_\textmt{J} (\bm{r}_i) + v_\textmt{x} (\bm{r}_i) \big) \right) - \sum_{n=2}^\infty \lambda^n \sum_{i}^{n_\mathrm{elec}} v_\textmt{c}^{(n)} (\bm{r}_i)
 \end{equation}
 其中，上式中出现的势函数是一些能量项对密度的函数变分：
 \begin{equation*}
@@ -88,7 +88,7 @@
   v_\textmt{x} (\bm{r}) = \frac{\delta E_\textmt{x}^\textmt{exact} [\rho]}{\delta \rho(\bm{r})}, \;
   v_\textmt{c}^{(n)} (\bm{r}) = \frac{\delta E_\textmt{GL}^{(n)} [\rho]}{\delta \rho (\bm{r})}
 \end{equation*}
-由于在算符 $\hat H_\lambda$ 中存在算符 $\hat V_\mathrm{ee}$，因此，$n$ 阶的 G\"orling-Levy 计算量至少不会低于 M\o{}ller-Plesset 对应 $n$ 阶的微扰。
+由于在算符 $\hat H_\lambda$ 中存在算符 $\hat V_\textmt{ee}$，因此，$n$ 阶的 G\"orling-Levy 计算量至少不会低于 M\o{}ller-Plesset 对应 $n$ 阶的微扰。
 
 可以预见，G\"orling-Levy 微扰的计算代价是相当高的。但也需要指出，由于近年来近似算法 (特别是 RI 近似算法)、以及计算硬件 (特别是 DRAM 内存容量) 发展，MP2 相关能的计算在数十原子体系以内耗时不多于引入交换效应的 Kohn-Sham 自洽场计算；因此，对于 $n = 2$ 阶 G\"orling-Levy 微扰即 GLPT2，若近似为 MP2 相关则不会增加太多计算资源负担。而对于 $n = 3$ 阶的情形，现在确实有针对 MP3 相关能的计算所提出或适用的近似算法；这类算法通常基于 THC 或其它张量分解与缩并方法\cite{Hohenstein-Martinez.JCP.2012, Parrish-Sherrill.JCP.2012, Lee-Head-Gordon.JCTC.2020, Matthews-Matthews.JCTC.2020}，但目前的效率仍然无法达到与自洽场计算齐平的程度\cite{Matthews-Matthews.JCP.2021}。考虑到杂化密度泛函近似近年来的巨大成功，得益于可以在较低自洽场级别的计算代价下获得相对精确的结果；其中计算代价小是非常重要的因素。因此，若 MP3 相关能的计算效率难以进一步提升，那么在可见的未来，基于 G\"orling-Levy 微扰理论所开发的实用的密度泛函，很可能不会引入\textbf{完整的} $n = 3$ 阶或更高阶微扰能量。
 
@@ -132,7 +132,7 @@
 \end{equation*}
 事实上，在 xDH@B3LYP 模型下的诸多泛函的参数优化结果印证了这个结论\cite{Zhang-Xu.JPCL.2021}。因此，要求 $c_\textmt{c}, c_\textmt{c}^\textmt{low-rung}$ 等相关能参数之和小于 1，是其中一种引入 GLPT2 相关能以构造双杂化泛函的限制条件。
 
-同时，G\"orling-Levy 微扰理论本身是类似于波函数方法、通过微扰阶数增加而逐步逼近真实泛函的理论框架；因为微扰阶数的增加会导致计算资源的巨量消耗，现在的密度泛函近似避免使用更高阶的 G\"orling-Levy 微扰相关能而仅考虑 GLPT2。但注意到波函数理论中存在一些近似方法：它们在 M\o{}ller-Plesset 微扰或耦合簇理论的框架下，基于较低阶的近似，引入一部分计算量较小的高阶贡献。对应于 MP2 的计算消耗，介于 MP2 到 CCSD 的经典波函数方法有 IEPA\cite{Sinanoǧlu-Sinanoǧlu.ACP.1964, Nesbet-Nesbet.ACP.1965}、MP2/cr\cite{Dykstra-Davidson.IJQC.2000}、CC2\cite{Christiansen-Joergensen.CPL.1995} 等。在下一节中，我们将会回顾 IEPA 与 MP2/cr 方法，并表明这类方法的相关能将大于 MP2 的相关能。由于 GLPT2 相关能通常近似为基于 Kohn-Sham 轨道行列式的 MP2 相关能，而 GLPT2 相关能相对于真实体系的相关能 $E_{\textmt{c}, \lambda=1}$ 总是负误差；同时，由于 G\"orling-Levy 微扰中包含 $\hat V_\mathrm{ee}$ 算符，因而一部分表达式预期与 M\o{}ller-Plesset 微扰有着同样的结构，在能量计算中引入高阶的基于 Kohn-Sham 轨道行列式的 M\o{}ller-Plesset 微扰能量是合理的。因此，在双杂化泛函近似中引入 IEPA 或 MP2/cr 等相关能，预期一定程度上可以化解 GLPT2 的负误差，并且是理论上合理的。
+同时，G\"orling-Levy 微扰理论本身是类似于波函数方法、通过微扰阶数增加而逐步逼近真实泛函的理论框架；因为微扰阶数的增加会导致计算资源的巨量消耗，现在的密度泛函近似避免使用更高阶的 G\"orling-Levy 微扰相关能而仅考虑 GLPT2。但注意到波函数理论中存在一些近似方法：它们在 M\o{}ller-Plesset 微扰或耦合簇理论的框架下，基于较低阶的近似，引入一部分计算量较小的高阶贡献。对应于 MP2 的计算消耗，介于 MP2 到 CCSD 的经典波函数方法有 IEPA\cite{Sinanoǧlu-Sinanoǧlu.ACP.1964, Nesbet-Nesbet.ACP.1965}、MP2/cr\cite{Dykstra-Davidson.IJQC.2000}、CC2\cite{Christiansen-Joergensen.CPL.1995} 等。在下一节中，我们将会回顾 IEPA 与 MP2/cr 方法，并表明这类方法的相关能将大于 MP2 的相关能。由于 GLPT2 相关能通常近似为基于 Kohn-Sham 轨道行列式的 MP2 相关能，而 GLPT2 相关能相对于真实体系的相关能 $E_{\textmt{c}, \lambda=1}$ 总是负误差；同时，由于 G\"orling-Levy 微扰中包含 $\hat V_\textmt{ee}$ 算符，因而一部分表达式预期与 M\o{}ller-Plesset 微扰有着同样的结构，在能量计算中引入高阶的基于 Kohn-Sham 轨道行列式的 M\o{}ller-Plesset 微扰能量是合理的。因此，在双杂化泛函近似中引入 IEPA 或 MP2/cr 等相关能，预期一定程度上可以化解 GLPT2 的负误差，并且是理论上合理的。
 
 \subsection{电子对方法}
 \label{sec.3.ep}
@@ -296,7 +296,7 @@
 
 双杂化能量泛函的计算使用 \textsc{dh} 程序 v0.1.9 与 commit 80ca9e8；该程序的基础框架是 \textsc{PySCF} (ver 2.2.1)。在正文中出现的计算任务没有使用波函数稳定性分析，所有自旋投影 $S_z$ 为零的体系使用限制性 Kohn-Sham 轨道、而 $S_z$ 非零的体系使用非限制性 Kohn-Sham 轨道进行计算。
 
-GMTKN55 数据集计算选用的基组列于表 \ref{tab.2.basis-gmtkn55}。GMTKN55 计算所选用的冻核近似规则列于表 \ref{tab.2.fc-gmtkn55}。Minnesota 2015 数据集所选用的基组是 def2-QZVPP，冻核近似规则为表 \ref{tab.2.fc-gmtkn55} 中的 FC-2 规则。
+GMTKN55 数据集计算选用的基组列于表 \ref{tab.2.basis-gmtkn55}。GMTKN55 计算所选用的冻核近似规则列于表 \ref{tab.2.fc-gmtkn55}\footnote{冻核近似对于少部分数据子集，特别是 HEAVY28 和 HAL59 等有较为重要的影响；不同的冻核策略，可能产生 WTMAD-2 量标 \SI{0.2}{kcal.mol^{-1}} 的波动\cite{Santra-Martin.JPCA.2019}。由于不同软件与计算环境存在细微的差异，因此我们目前无法完全肯定这里的冻核策略是否是最佳的实践方式，或是否严格复现了 \citenum{Goerigk-Grimme.PCCP.2017}、\citenum{Santra-Martin.JPCA.2019} 或 \citenum{Zhang-Xu.JPCL.2021} 等文献的冻核近似细节；但同时，我们也认为当前工作的计算数据是有效的。}。Minnesota 2015 数据集所选用的基组是 def2-QZVPP，冻核近似规则为表 \ref{tab.2.fc-gmtkn55} 中的 FC-2 规则。
 
 本工作选用 \textsc{SciPy} 进行泛函参数的优化。优化算法选用 L-BFGS-B 算法\cite{Byrd-Zhu.SJSC.1995}，收敛判标是参数梯度模长 (\verb|gtol|) 小于 $10^{-5}$。本工作没有进行严格的全局优化；对于后文表 \ref{tab.2.coeff-xyg6-1-weighted-error} 的参数，优化过程是非对电子能矫正项以 XYG6 的参数、对电子能占比微扰能比例以 0.7 作为初始参数；对于 \ref{sec.2.proportion-iepa-like}、\ref{sec.2.proportion-exchange}、\ref{sec.2.propotion-dataset} 等小节中的参数优化问题与图像绘制过程，则以其对应的原始泛函参数、或图中相邻的数据点作为初始参数优化。
 
