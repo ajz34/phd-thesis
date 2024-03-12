@@ -1,4 +1,4 @@
-% !TEX root=./draft.tex
+% !TEX root=./blind.tex
 
 \input{../marco.tex}
 
@@ -18,17 +18,17 @@
         % declaration-page = {declaration.pdf},
         % 插入扫描版的声明页 PDF 文档
         % 默认使用预定义的声明页，但不带签名
-        auto-make-cover = true,
+        auto-make-cover = false,
         % 是否自动生成论文封面（封一）、指导小组成员名单（封二）和声明页（封三）
         % 除非特殊需要（e.g. 不要封面），否则不建议设为 false
     },
     %
     % info 类用于录入论文信息
     info = {
-    title = {双杂化密度泛函分子能量与性质\\计算方法进展与测评\\(草稿 v1.1)},
+    title = {双杂化密度泛函分子能量与性质\\计算方法进展与测评},
     title* = {
         Recent Progress on Computational Method and Benchmark
-        on Molecular Energy and Property of Doubly Hybrid Functional Approximations\\(Draft v1.1)},
+        on Molecular Energy and Property of Doubly Hybrid Functional Approximations},
     % 英文标题
     %
     author = {祝震予},
@@ -64,7 +64,7 @@
 }
 
 \renewcommand{\alertref}[1]{\ref{#1}}
-\renewcommand{\blindproof}[1]{#1}
+\renewcommand{\blindproof}[1]{}
 
 \begin{document}
 
