@@ -1,0 +1,273 @@
+% !TEX root=toc-of-thesis.tex
+
+\input{../marco.tex}
+
+\fdusetup{
+    style = {
+        font = libertinus,
+        cjk-font = founder,
+        font-size = -4,
+        fullwidth-stop = mapping,
+        % footnote-style = xits,
+        hyperlink = color,
+        hyperlink-color = default,
+        bib-backend = bibtex,
+        bib-resource = {../thesis.bib},
+        % bib-style = achemso,
+        % cite-style = numerical,
+        % declaration-page = {declaration.pdf},
+        % 插入扫描版的声明页 PDF 文档
+        % 默认使用预定义的声明页，但不带签名
+        auto-make-cover = false,
+        % 是否自动生成论文封面（封一）、指导小组成员名单（封二）和声明页（封三）
+        % 除非特殊需要（e.g. 不要封面），否则不建议设为 false
+    },
+    %
+    % info 类用于录入论文信息
+    info = {
+    title = {双杂化密度泛函分子能量与性质\\计算方法进展与测评},
+    title* = {
+        Recent Progress on Computational Method and Benchmark
+        on Molecular Energy and Property of Doubly Hybrid Functional Approximations},
+    % 英文标题
+    %
+    author = {祝震予},
+    supervisor = {徐\quad 昕\quad 教授},
+    major = {物理化学},
+    degree = academic,
+    department = {化学系},
+    student-id = {17110220038},
+    % date = {2023 年 1 月 1 日},
+    % 日期
+    % 注释掉表示使用编译日期
+    instructors = {
+        {　徐　昕 　 　教　授　},
+        {　张　颖 　 　教　授　},
+        {　段　赛 　 青年研究员},
+        {　郑　晓 　 　教　授　},
+    },
+    % 指导小组成员
+    % 使用英文逗号 “,” 分隔
+    % 如有需要，可以用 \quad 手工对齐
+    %
+    keywords = {密度泛函理论, 双杂化泛函, 电子云密度, 解析梯度性质, 静态极化率},
+    % 中文关键词
+    % 使用英文逗号 “,” 分隔
+    %
+    keywords* = {density functional theory, doubly hybrid functional, electron density, analytical derivative property, static polarizability},
+    % 英文关键词
+    % 使用英文逗号 “,” 分隔
+    %
+    clc = {O641.12},
+    % 中图分类号
+    }
+}
+
+\begin{document}
+
+\chapter*{论文大纲}
+
+\begin{center}
+    \bfseries
+    祝震予　17110220038 \\
+    导师：徐昕　教授
+\end{center}
+{\bfseries 论文题目：双杂化密度泛函分子能量与性质计算方法进展与测评}
+
+\makeatletter
+% === 前导 === %
+\contentsline {chapter}{\normalfont \sffamily 目录}{i}{chapter*.1}%
+\contentsline {chapter}{\normalfont \sffamily 插图目录}{vii}{chapter*.2}%
+\contentsline {chapter}{\normalfont \sffamily 表格目录}{xi}{chapter*.3}%
+\contentsline {chapter}{\normalfont \sffamily 摘要}{xiii}{chapter*.4}%
+\contentsline {chapter}{\normalfont \sffamily Abstract}{xv}{chapter*.5}%
+\contentsline {chapter}{\normalfont \sffamily 术语缩写对照表}{xix}{chapter*.6}%
+
+% === 第 1 章 === %
+\contentsline {chapter}{\normalfont \sffamily \numberline {第1章}绪论}{1}{chapter.1}%
+本章对双杂化泛函的背景和发展作介绍。双杂化泛函的理论基础是 Kohn-Sham 框架，在 G{\"o}rling-Levy 等理论下引入了占据轨道与非占轨道等细致的电子结构信息，理论上其泛函形式更严格。从实用的实现与测评角度出发，目前发展的双杂化泛函组合了多种物理或化学直觉上更合理、或有更高计算性价比的表达形式；以 XYG3 型框架发展衍生的泛函在包括反应能量、分子性质等众多测评中表现出色。为进一步测评与发展双杂化泛函，本工作从能量表现、程序与计算方法效率、性质测评三方面作深入研究。
+\contentsline {section}{\numberline {1.1}密度泛函理论}{1}{section.1.1}%
+\contentsline {subsection}{\fdu@kai \numberline {1.1.1}Schr\"o\-dinger方程}{1}{subsection.1.1.1}%
+\contentsline {subsection}{\fdu@kai \numberline {1.1.2}Hohenberg-Kohn 定理}{3}{subsection.1.1.2}%
+\contentsline {subsection}{\fdu@kai \numberline {1.1.3}Kohn-Sham 方程}{4}{subsection.1.1.3}%
+\contentsline {subsection}{\fdu@kai \numberline {1.1.4}Kohn-Sham 框架与“Jacob 阶梯”}{5}{subsection.1.1.4}%
+\contentsline {section}{\numberline {1.2}双杂化泛函方法}{8}{section.1.2}%
+\contentsline {section}{\numberline {1.3}MP2 型双杂化泛函的测评表现}{11}{section.1.3}%
+\contentsline {section}{\numberline {1.4}本文研究思路与主要工作}{14}{section.1.4}%
+
+\newpage
+
+% === 第 2 章 === %
+\contentsline {chapter}{\normalfont \sffamily \numberline {第2章}基于成对电子方法的双杂化能量泛函实现与测评}{17}{chapter.2}%
+MP2 型相关能的双杂化泛函在一般主族化学和弱相互作用问题下有很好的表现；但在 HOMO/LUMO gap 较小的体系、以及被认为具有多参考效应的体系下，存在较严重的数值偏差。针对该问题，本工作基于 Görling-Levy 微扰理论并参考波函数理论，在不增加大量计算开销的前提下，于双杂化泛函中引入了成对电子型相关能作为微扰相关能。本工作提出 7 参数泛函框架 XYG6+1，并基于 GMTKN55 集与部分 Minnesota 2015 子集作参数优化。测评结果与参数优化分析表明，成对电子型相关能的引入，确实有助于更好地处理 HOMO/LUMO gap 较小或具有多参考效应的体系，且仍能良好地描述一般主族化学和弱相互作用。但同时，XYG6+1 框架的成对电子型的双杂化泛函对更具有挑战性的分子解离问题的描述还存在一定的困难；该参数模型也容易随被拟合数据的变化而波动，并不非常稳健。我们相信 XYG6+1 框架的泛函向真实泛函迈进了一小步，但仍有很大的提升空间。
+\contentsline {section}{\numberline {2.1}引言}{17}{section.2.1}%
+\contentsline {section}{\numberline {2.2}理论背景}{18}{section.2.2}%
+\contentsline {subsection}{\fdu@kai \numberline {2.2.1}GLPT2 的理论框架}{18}{subsection.2.2.1}%
+\contentsline {subsection}{\fdu@kai \numberline {2.2.2}GLPT2 与双杂化泛函}{20}{subsection.2.2.2}%
+\contentsline {subsection}{\fdu@kai \numberline {2.2.3}电子对方法}{23}{subsection.2.2.3}%
+\contentsline {section}{\numberline {2.3}实现细节}{25}{section.2.3}%
+\contentsline {subsection}{\fdu@kai \numberline {2.3.1}数据集与误差量标}{25}{subsection.2.3.1}%
+\contentsline {subsection}{\fdu@kai \numberline {2.3.2}数据集计算细节}{28}{subsection.2.3.2}%
+\contentsline {subsection}{\fdu@kai \numberline {2.3.3}解离曲线计算细节}{29}{subsection.2.3.3}%
+\contentsline {section}{\numberline {2.4}结果与讨论}{30}{section.2.4}%
+\contentsline {subsection}{\fdu@kai \numberline {2.4.1}XYG6+1 模型双杂化近似泛函的参数优化}{30}{subsection.2.4.1}%
+\contentsline {subsection}{\fdu@kai \numberline {2.4.2}XYG6+1 模型泛函测评表现}{32}{subsection.2.4.2}%
+\contentsline {subsection}{\fdu@kai \numberline {2.4.3}参数优化讨论：EP 型相关能占比}{33}{subsection.2.4.3}%
+\contentsline {subsection}{\fdu@kai \numberline {2.4.4}参数优化讨论：严格交换能占比}{35}{subsection.2.4.4}%
+\contentsline {subsection}{\fdu@kai \numberline {2.4.5}参数优化讨论：数据集的影响}{37}{subsection.2.4.5}%
+\contentsline {subsection}{\fdu@kai \numberline {2.4.6}XYG6+1 模型泛函在分子解离曲线问题的表现}{38}{subsection.2.4.6}%
+\contentsline {section}{\numberline {2.5}本章小结}{41}{section.2.5}%
+\contentsline {section}{\numberline {2.6}附录：补充数据}{43}{section.2.6}%
+\contentsline {section}{\numberline {2.7}附录：电子对方法不具有正交不变性的说明}{51}{section.2.7}%
+\contentsline {subsection}{\fdu@kai \numberline {2.7.1}MP2/cr 方法在完全分离体系下的正交变换不变性}{52}{subsection.2.7.1}%
+\contentsline {subsubsection}{MP2/cr 方法因完全分离体系而简并的轨道下正交不变性}{52}{subsubsection*.52}%
+\contentsline {subsubsection}{接近完全分离体系的正交变换误差数值表现}{56}{subsubsection*.53}%
+\contentsline {subsection}{\fdu@kai \numberline {2.7.2}因点群对称性而简并的轨道下正交不变性}{58}{subsection.2.7.2}%
+\contentsline {subsubsection}{MP2/cr 该情形下正交不变性的简要说明}{58}{subsubsection*.57}%
+\contentsline {subsubsection}{点群对称性下简并轨道正交变换误差数值表现}{59}{subsubsection*.58}%
+\contentsline {subsection}{\fdu@kai \numberline {2.7.3}偶然能级简并的正交不变性}{60}{subsection.2.7.3}%
+
+\newpage
+
+% === 第 3 章 === %
+\contentsline {chapter}{\normalfont \sffamily \numberline {第3章}双杂化泛函原子体系电子云密度与能量测评}{61}{chapter.3}%
+密度泛函作为电子云密度到基态能量的映射，一个好的近似应当能同时描述好电子云密度与能量两者。Medvedev 等 (\emph{Science}, 355, 49--52) 指出，近期发展的部分密度泛函近似，尽管对基态能量有较好的描述，但对原子体系的电子云密度描述欠佳。Medvedev 等人的工作详尽地测评了“Jacob 阶梯”上低阶泛函的电子云密度，悲观地指出最近发展的部分密度泛函近似并未走在正确的道路上。本工作对 Medvedev 等人的工作进行拓展，测评“Jacob 阶梯”最高阶的双杂化泛函。测评结果表明，双杂化泛函在原子体系的电子云密度上显著优于低阶泛函；同时原子体系能量的表现也相当优异。相比于其他双杂化泛函，xDH 型泛函有更为出色的表现。从原子体系的电子云密度与能量的角度来看，双杂化泛函仍然沿着“Jacob 阶梯”，切实地逼近真实泛函。
+\contentsline {section}{\numberline {3.1}引言}{61}{section.3.1}%
+\contentsline {section}{\numberline {3.2}实现细节}{63}{section.3.2}%
+\contentsline {subsection}{\fdu@kai \numberline {3.2.1}计算体系与方法}{63}{subsection.3.2.1}%
+\contentsline {subsection}{\fdu@kai \numberline {3.2.2}径向函数与密度测评标准定义}{64}{subsection.3.2.2}%
+\contentsline {section}{\numberline {3.3}测评结果}{65}{section.3.3}%
+\contentsline {subsection}{\fdu@kai \numberline {3.3.1}依年代发展的总体表现}{65}{subsection.3.3.1}%
+\contentsline {subsection}{\fdu@kai \numberline {3.3.2}具体测评表现}{67}{subsection.3.3.2}%
+\contentsline {section}{\numberline {3.4}讨论与本章小结}{69}{section.3.4}%
+\contentsline {section}{\numberline {3.5}附录}{72}{section.3.5}%
+\contentsline {subsection}{\fdu@kai \numberline {3.5.1}密度径向函数的 RI 近似误差}{72}{subsection.3.5.1}%
+\contentsline {subsection}{\fdu@kai \numberline {3.5.2}电离能的 RI 近似误差}{73}{subsection.3.5.2}%
+\contentsline {subsection}{\fdu@kai \numberline {3.5.3}密度径向函数测评的基组依赖性}{74}{subsection.3.5.3}%
+\contentsline {subsection}{\fdu@kai \numberline {3.5.4}其他补充数据}{76}{subsection.3.5.4}%
+
+\newpage
+
+% === 第 4 章 === %
+\contentsline {chapter}{\normalfont \sffamily \numberline {第4章}高精度基组外推方法在 CCSD(T) 静态极化率计算上的应用}{93}{chapter.4}%
+本章内容将支撑第 5 章测评。一般认为，CCSD(T) 方法结合 4-ζ 基组的 CBS 外推能比较准确地描述静态极化率；但 CCSD(T)/4-ζ 对于中等大小体系在现有算力下难以实现。这也使得目前高质量的、高精度的静态极化率参考值较少；即使存在，也不超过 7 原子或 3 重原子 (HH132 数据集)。为解决中等大小体系高精度静态极化率参考值计算，本工作发展了 FPA 策略。该策略合理组合高精度小基组和低精度大基组方法计算结果，以较小误差为代价，有效降低静态极化率计算开销。在此基础上，本工作对 HR46 与 T144 数据集 (最大体系原子数 15) 的各向同性极化率 $\alpha$ 与各向异性极化率 $\gamma$ 参考值，从 CCSD/aug-cc-pVTZ 或 CCSD(T)/aug-cc-pVTZ 更新到更高精度的 CCSD(T)/CBS 级别。
+\contentsline {section}{\numberline {4.1}引言}{93}{section.4.1}%
+\contentsline {section}{\numberline {4.2}具体方法与实现细节}{95}{section.4.2}%
+\contentsline {subsection}{\fdu@kai \numberline {4.2.1}误差测评标准}{95}{subsection.4.2.1}%
+\contentsline {subsection}{\fdu@kai \numberline {4.2.2}电子结构方法与软件}{95}{subsection.4.2.2}%
+\contentsline {subsection}{\fdu@kai \numberline {4.2.3}数据集}{97}{subsection.4.2.3}%
+\contentsline {subsection}{\fdu@kai \numberline {4.2.4}基组与 RI 近似}{98}{subsection.4.2.4}%
+\contentsline {subsection}{\fdu@kai \numberline {4.2.5}数值极化率}{98}{subsection.4.2.5}%
+\contentsline {subsection}{\fdu@kai \numberline {4.2.6}CBS 外推}{99}{subsection.4.2.6}%
+\contentsline {subsection}{\fdu@kai \numberline {4.2.7}FPA 策略}{99}{subsection.4.2.7}%
+\contentsline {section}{\numberline {4.3}结论与讨论}{101}{section.4.3}%
+\contentsline {subsection}{\fdu@kai \numberline {4.3.1}RI 误差与数值差分误差}{101}{subsection.4.3.1}%
+\contentsline {subsection}{\fdu@kai \numberline {4.3.2}小体系的同性极化率基组收敛性}{101}{subsection.4.3.2}%
+\contentsline {subsection}{\fdu@kai \numberline {4.3.3}自旋非极化小体系的异性极化率基组收敛性}{104}{subsection.4.3.3}%
+\contentsline {subsection}{\fdu@kai \numberline {4.3.4}极化率参考值的更新}{106}{subsection.4.3.4}%
+\contentsline {subsection}{\fdu@kai \numberline {4.3.5}对 HF、MP2 与 CCSD 的极化率简要测评}{107}{subsection.4.3.5}%
+\contentsline {section}{\numberline {4.4}本章小结}{109}{section.4.4}%
+\contentsline {section}{\numberline {4.5}附录}{110}{section.4.5}%
+\contentsline {subsection}{\fdu@kai \numberline {4.5.1}HR46 与 T144 数据集分子结构}{110}{subsection.4.5.1}%
+\contentsline {subsection}{\fdu@kai \numberline {4.5.2}体系名称的更改}{116}{subsection.4.5.2}%
+\contentsline {subsection}{\fdu@kai \numberline {4.5.3}CCSD 方法下不同 FPA 模型之间的相对误差}{116}{subsection.4.5.3}%
+\contentsline {subsection}{\fdu@kai \numberline {4.5.4}对有限差分误差的分析}{116}{subsection.4.5.4}%
+\contentsline {subsection}{\fdu@kai \numberline {4.5.5}异性极化率 $\mitgamma $ 在不同基组下的绝对值方均根误差分析}{117}{subsection.4.5.5}%
+\contentsline {subsection}{\fdu@kai \numberline {4.5.6}$\symup {\mitDelta } \mitalpha _\textsf {D(T)}$ 对体系 \ce {^3O2}, \ce {^3SO}, \ce {Cl2} 计算结果的基组收敛趋势}{118}{subsection.4.5.6}%
+\contentsline {subsection}{\fdu@kai \numberline {4.5.7}$\symup {\mitDelta } \mitgamma _\textsf {D(T)}$ 对体系 \ce {^3O2}, \ce {^3SO}, \ce {HCHS}, \ce {Cl2} 计算结果的基组收敛趋势}{121}{subsection.4.5.7}%
+\contentsline {subsection}{\fdu@kai \numberline {4.5.8}更新后的 HR46 与 T144 极化率参考值}{123}{subsection.4.5.8}%
+
+\newpage
+
+% === 第 5 章 === %
+\contentsline {chapter}{\normalfont \sffamily \numberline {第5章}双杂化泛函的静态极化率测评}{137}{chapter.5}%
+静态极化率对光学、分子相互作用、Raman 光谱活性的描述至关重要，是计算化学所关心的重要性质。本工作对参考值达到或接近于 CCSD(T)/CBS 的极化率数据集 HR46, T144 作各向同性极化率 $\alpha$ 与各向异性极化率 $\gamma$，对数据集 HH101 作各向同性极化率 $\alpha$ 与极化率分量 $\alpha_{xx}, \alpha_{yy}, \alpha_{zz}$ 的系统测评。测评结果表明，以 XYGJ-OS、XYG6、DSD-PBEPBE-D3BJ 为代表的双杂化泛函极化率误差显著小于低阶泛函的误差。这些双杂化泛函精度不亚于 CCSD 方法，展现出相当高的计算开销与误差精度的性价比。但相比于实验误差精度 0.5\%，双杂化泛函仍然有一定差距。本工作还发现，依据极化率测评表现对双杂化泛函参数进行优化，通常会显现同自旋二阶微扰贡献项较小的趋势。我们主张，双杂化泛函、特别是 xDH 型双杂化在静态极化率上良好的表现，与其对电子云密度的描述的良好表现有所关联；对能量与密度都有良好描述的前提下，对各类分子性质的良好结果应是可以期待的。
+\contentsline {section}{\numberline {5.1}引言}{137}{section.5.1}%
+\contentsline {section}{\numberline {5.2}实现细节}{138}{section.5.2}%
+\contentsline {subsection}{\fdu@kai \numberline {5.2.1}数据集}{138}{subsection.5.2.1}%
+\contentsline {subsection}{\fdu@kai \numberline {5.2.2}电子结构计算}{138}{subsection.5.2.2}%
+\contentsline {subsection}{\fdu@kai \numberline {5.2.3}误差测评标准}{139}{subsection.5.2.3}%
+\contentsline {subsection}{\fdu@kai \numberline {5.2.4}泛函参数优化}{141}{subsection.5.2.4}%
+\contentsline {section}{\numberline {5.3}典型双杂化泛函静态极化率基组误差分析}{141}{section.5.3}%
+\contentsline {subsection}{\fdu@kai \numberline {5.3.1}HR46 与 T144 数据集分析}{141}{subsection.5.3.1}%
+\contentsline {subsection}{\fdu@kai \numberline {5.3.2}HH101 数据集分析}{144}{subsection.5.3.2}%
+\contentsline {subsection}{\fdu@kai \numberline {5.3.3}基组误差分析小结}{145}{subsection.5.3.3}%
+\contentsline {section}{\numberline {5.4}密度泛函的静态极化率测评}{146}{section.5.4}%
+\contentsline {subsection}{\fdu@kai \numberline {5.4.1}总体误差测评与讨论}{147}{subsection.5.4.1}%
+\contentsline {subsection}{\fdu@kai \numberline {5.4.2}双杂化泛函误差测评与讨论}{148}{subsection.5.4.2}%
+\contentsline {section}{\numberline {5.5}xDH@B3LYP 模型静态极化率参数优化}{149}{section.5.5}%
+\contentsline {section}{\numberline {5.6}本章小结}{152}{section.5.6}%
+\contentsline {section}{\numberline {5.7}附录}{152}{section.5.7}%
+\contentsline {subsection}{\fdu@kai \numberline {5.7.1}对 HH132 数据集自旋极化体系准确性的讨论}{152}{subsection.5.7.1}%
+\contentsline {subsubsection}{对称性破缺}{153}{subsubsection*.133}%
+\contentsline {subsubsection}{MP2 极化率复现问题}{154}{subsubsection*.136}%
+\contentsline {subsubsection}{其他双杂化泛函复现或数值问题}{155}{subsubsection*.141}%
+\contentsline {subsection}{\fdu@kai \numberline {5.7.2}HH101 数据集下 B2PLYP 极化率分量的相对误差分析}{157}{subsection.5.7.2}%
+\contentsline {subsection}{\fdu@kai \numberline {5.7.3}极化率基组不完备性补充推测与推论}{158}{subsection.5.7.3}%
+\contentsline {subsubsection}{aCV$\symbfit {X}$Z 与 apc$\symbfit {n}$ 基组函数构成的比较。}{160}{subsubsection*.150}%
+\contentsline {subsubsection}{B2PLYP 同性极化率中自洽场泛函部分 $\mitalpha _\textsf {SCF}$ 的收敛趋势}{160}{subsubsection*.153}%
+\contentsline {subsubsection}{B2PLYP 同性极化率二阶微扰部分 $\symup {\mitDelta } \mitalpha _\textsf {PT2}$ 的收敛趋势}{163}{subsubsection*.156}%
+\contentsline {subsubsection}{BSIE 误差的推测}{164}{subsubsection*.159}%
+\contentsline {subsection}{\fdu@kai \numberline {5.7.4}其他补充数据}{166}{subsection.5.7.4}%
+
+\newpage
+
+% === 附录 A === %
+\contentsline {chapter}{\normalfont \sffamily \numberline {附录 A}双杂化泛函的电性质梯度理论与程序实现}{173}{appendix.A}%
+本章内容的程序实现将支撑第 3 章测评过程中的弛豫密度生成、第 4 章 5-ζ 大基组下 MP2 静态极化率的计算、第 5 章 4-ζ 高通量大规模杂化与双杂化密度泛函静态极化率测评。双杂化泛函由于包含 MP2 相关能，其计算复杂度是 $O(N^5)$，通常被认为相比于杂化泛函极其昂贵。但尽管 RI 算法近似的 MP2 仍然有 $O(N^5)$ 的计算复杂度，其能量计算的耗时在中等原子数体系下少于、或未明显超过杂化泛函的自洽场计算。基于此前提，我们认为实现并充分优化 RI-MP2 计算效率，是有所价值的工作。同时，考虑到密度泛函的发展，正在从早期的单一结构，向多元化的结构迈进；(以 RPA 型相关能为典型的) ACFD 理论衍生泛函从计算量与测评结果上，也逐渐与 MP2 型相关能的双杂化泛函相竞争。同时，Laplace Transform、ISDF、DLPNO 等更深入的近似策略在能量计算上有令人鼓舞的效率提升；但这些近似在性质的计算上仍然有待发展。若要为未来的双杂化泛函搭建完整的、高效的、可扩展的程序框架，并相应地实现结构优化、电性质等计算，则有必要重新梳理现有的梯度计算理论。
+
+本章工作是一些初步成果。作为非变分方法的典型，对于双杂化泛函，我们首先梳理了梯度性质的公式推演；这部分的推演将是方法非依赖的，从而可以期待在公式框架上可以容纳近未来将要发展的杂化或双杂化密度泛函。随后，针对 MP2 型相关能的双杂化泛函，我们具体地展开了梯度性质的贡献分量具体计算过程，并对先前工作的记号作大幅简化。初步的程序实现完全基于 Python；合理地调用高效程序库，当前计算静态极化率的程序效率已不低于计算化学程序。
+\contentsline {section}{\numberline {A.1}引言}{173}{section.A.1}%
+\contentsline {section}{\numberline {A.2}记号}{174}{section.A.2}%
+\contentsline {subsection}{\fdu@kai \numberline {A.2.1}约定俗成}{174}{subsection.A.2.1}%
+\contentsline {subsubsection}{字母记号}{174}{subsubsection*.164}%
+\contentsline {subsubsection}{特殊符号}{175}{subsubsection*.167}%
+\contentsline {subsubsection}{数量记号}{176}{subsubsection*.168}%
+\contentsline {subsubsection}{其他记号规则}{176}{subsubsection*.169}%
+\contentsline {subsection}{\fdu@kai \numberline {A.2.2}变种的 Einstein 求和记号}{176}{subsection.A.2.2}%
+\contentsline {section}{\numberline {A.3}基础公式与定义}{178}{section.A.3}%
+\contentsline {subsection}{\fdu@kai \numberline {A.3.1}电子积分}{178}{subsection.A.3.1}%
+\contentsline {subsection}{\fdu@kai \numberline {A.3.2}轨道系数及其导出量}{179}{subsection.A.3.2}%
+\contentsline {subsection}{\fdu@kai \numberline {A.3.3}密度泛函近似的泛函核与其导数}{182}{subsection.A.3.3}%
+\contentsline {subsection}{\fdu@kai \numberline {A.3.4}双杂化自洽场泛函与能量泛函}{183}{subsection.A.3.4}%
+\contentsline {subsection}{\fdu@kai \numberline {A.3.5}导数记号与耦合微扰}{184}{subsection.A.3.5}%
+\contentsline {section}{\numberline {A.4}偶极矩与极化率}{185}{section.A.4}%
+\contentsline {section}{\numberline {A.5}双杂化泛函电性质解析梯度}{187}{section.A.5}%
+\contentsline {subsection}{\fdu@kai \numberline {A.5.1}正交条件、SCF 条件与自洽场泛函对密度矩阵的依赖关系}{187}{subsection.A.5.1}%
+\contentsline {subsection}{\fdu@kai \numberline {A.5.2}一阶梯度：轨道系数随外场的变化}{189}{subsection.A.5.2}%
+\contentsline {subsection}{\fdu@kai \numberline {A.5.3}一阶梯度：U 矩阵占据-占据和非占-非占部分}{191}{subsection.A.5.3}%
+\contentsline {subsection}{\fdu@kai \numberline {A.5.4}一阶梯度：能量泛函导数}{193}{subsection.A.5.4}%
+\contentsline {subsection}{\fdu@kai \numberline {A.5.5}一阶梯度：约化密度矩阵}{194}{subsection.A.5.5}%
+\contentsline {subsection}{\fdu@kai \numberline {A.5.6}一阶梯度：Z-Vector 方法与弛豫密度}{195}{subsection.A.5.6}%
+\contentsline {subsection}{\fdu@kai \numberline {A.5.7}二阶梯度：二阶能量泛函导数}{196}{subsection.A.5.7}%
+\contentsline {subsection}{\fdu@kai \numberline {A.5.8}二阶梯度：Z 矩阵导数与交换定理}{197}{subsection.A.5.8}%
+\contentsline {subsection}{\fdu@kai \numberline {A.5.9}总结}{198}{subsection.A.5.9}%
+\contentsline {section}{\numberline {A.6}闭壳层 MP2 型双杂化泛函解析极化率程序化}{199}{section.A.6}%
+\contentsline {subsection}{\fdu@kai \numberline {A.6.1}记号定义与补充说明}{199}{subsection.A.6.1}%
+\contentsline {subsection}{\fdu@kai \numberline {A.6.2}A 张量：问题背景}{200}{subsection.A.6.2}%
+\contentsline {subsection}{\fdu@kai \numberline {A.6.3}A 张量：ERI 贡献部分与密度矩阵缩并实现策略}{201}{subsection.A.6.3}%
+\contentsline {subsection}{\fdu@kai \numberline {A.6.4}A 张量：ERI 贡献部分与分子轨道基下缩并实现策略}{202}{subsection.A.6.4}%
+\contentsline {subsection}{\fdu@kai \numberline {A.6.5}A 张量：DFA 贡献部分}{203}{subsection.A.6.5}%
+\contentsline {subsection}{\fdu@kai \numberline {A.6.6}MP2 激发张量及相关项}{204}{subsection.A.6.6}%
+\contentsline {subsection}{\fdu@kai \numberline {A.6.7}MP2 与 DH 的 Laplacian 与 Z 矩阵}{205}{subsection.A.6.7}%
+\contentsline {subsection}{\fdu@kai \numberline {A.6.8}MP2 激发张量的偶极电场梯度及其相关量}{206}{subsection.A.6.8}%
+\contentsline {subsection}{\fdu@kai \numberline {A.6.9}$\symbfscr {R}^{\symbb {B}}$ 的实现}{207}{subsection.A.6.9}%
+\contentsline {subsection}{\fdu@kai \numberline {A.6.10}DH 电性质二阶梯度}{209}{subsection.A.6.10}%
+\contentsline {subsection}{\fdu@kai \numberline {A.6.11}A 张量性质梯度的缩并计算}{210}{subsection.A.6.11}%
+\contentsline {section}{\numberline {A.7}程序效率简要测评}{210}{section.A.7}%
+\contentsline {section}{\numberline {A.8}附录：非正则 MP2 相关能及其梯度}{212}{section.A.8}%
+\contentsline {subsection}{\fdu@kai \numberline {A.8.1}非正则 MP2 相关能}{212}{subsection.A.8.1}%
+\contentsline {subsection}{\fdu@kai \numberline {A.8.2}电性质一阶梯度：MP2 相关能对性质的 skeleton 导数}{213}{subsection.A.8.2}%
+\contentsline {subsection}{\fdu@kai \numberline {A.8.3}电性质一阶梯度：MP2 相关能对轨道系数的导数}{214}{subsection.A.8.3}%
+\contentsline {subsection}{\fdu@kai \numberline {A.8.4}电性质一阶梯度：MP2 激发张量全导数}{217}{subsection.A.8.4}%
+\contentsline {chapter}{\normalfont \sffamily \numberline {附录 B}原子轨道基组与程序}{219}{appendix.B}%
+\contentsline {section}{\numberline {B.1}原子轨道基组}{219}{section.B.1}%
+\contentsline {section}{\numberline {B.2}软件与程序}{220}{section.B.2}%
+\contentsline {chapter}{\normalfont \sffamily \numberline {附录 C}波函数方法表}{223}{appendix.C}%
+\contentsline {chapter}{\normalfont \sffamily \numberline {附录 D}密度泛函方法表}{225}{appendix.D}%
+\contentsline {chapter}{\normalfont \sffamily 参考文献}{233}{appendix*.192}%
+\contentsline {chapter}{\normalfont \sffamily 后记}{277}{appendix*.193}%
+
+\makeatother
+
+\end{document}
