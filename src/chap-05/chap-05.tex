@@ -101,7 +101,7 @@ RelRMSD 误差多大，才认为是可以被接受或容许的范围？首先，
 \end{equation}
 作为物理上可观测的量，本工作着重测评同性极化率 $\alpha$\footnote{通过非加粗的标量记号表示，用以区分作为矩阵的极化率张量 $\bm{\alpha}$。}和异性极化率 $\gamma$：
 \begin{align}
-    \alpha &= \frac{1}{3} \left( \alpha_{xx} + \alpha_{yy} + \alpha_zz \right) = \mathrm{tr} (\bm{\alpha}) \\
+    \alpha &= \frac{1}{3} \left( \alpha_{xx} + \alpha_{yy} + \alpha_{zz} \right) = \mathrm{tr} (\bm{\alpha}) \\
     \gamma &= \frac{1}{\sqrt{2}} \left( (\alpha_{xx} - \alpha_{yy})^2 + (\alpha_{yy} - \alpha_{zz})^2 + (\alpha_{zz} - \alpha_{xx})^2 + 6 (\alpha_{xy}^2 + \alpha_{yz}^2 + \alpha_{zx}^2) \right)^{1/2}
 \end{align}
 对于数值极化率的求取过程，对角元部分 $\alpha_{tt}$ ($t \in \{ x, y, z \}$) 通过线性的三点格式作数值导数给出：
@@ -222,7 +222,7 @@ CBS 外推方法通常被认为在计算资源不足、以及有限基组不充�
 
 综上所述，我们建议对同性极化率使用的 FPA 模型是
 \begin{equation}
-    \label{eq.fpa-alpha}
+    \label{eq.5.fpa-alpha}
     \alpha_{\text{FPA-aV[}XY\text{]Z}} = \alpha_{\textsf{HF}/\text{aCV5Z}} + \symup{\Delta} \alpha_{\textsf{(2)}/\text{aCV[Q5]Z}} + \symup{\Delta} \alpha_{\textsf{D(T)}/\text{aV[}XY\text{]Z}}
 \end{equation}
 其中，$[XY]$ 依据分子大小可以取为 $\mathrm{[DT], [TQ], [Q5]}$。相对于最佳的理论计算模型 $\alpha_{\text{FPA-aCV[Q5]Z}}$，$\alpha_{\text{FPA-aV[}XY\text{]Z}}$ 的误差来源仅出现在 $\symup{\Delta} \tilde \alpha_\textsf{D(T)}$ 的基组不完备程度。因此，从表 \ref{tab.5.2} 的数据来看，FPA-aV[DT]Z、FPA-aV[TQ]Z、FPA-aV[Q5]Z 在计算同性极化率时的相对方均根误差分别是 0.144\%、0.086\%、0.017\%。这些 FPA 模型的误差都明显小于我们的目标精度 0.5\%。我们期待这些 FPA 模型应用于更大体系、如 HR46 或 T144 中更大的分子时，计算精度可以与 HH132 的参考值相比较。
@@ -277,7 +277,7 @@ CBS 外推方法通常被认为在计算资源不足、以及有限基组不充�
 
 综上所述，我们建议对自旋非极化的异性极化率使用的 FPA 模型，与同性极化率的情形 (\ref{eq.5.fpa-alpha}) 相同：
 \begin{equation}
-    \label{eq.fpa-gamma}
+    \label{eq.5.fpa-gamma}
     \gamma_{\text{FPA-aV[}XY\text{]Z}} = \gamma_{\textsf{HF}/\text{aCV5Z}} + \symup{\Delta} \alpha_{\textsf{(2)}/\text{aCV[Q5]Z}} + \symup{\Delta} \gamma_{\textsf{D(T)}/\text{aV[}XY\text{]Z}}
 \end{equation}
 从表 \ref{tab.5.3} 与上述讨论中，我们认为对于各种 FPA-aV[$XY$]Z 模型，其误差相比于作为最精确结果的 FPA-aCV[Q5]Z，应会小于 0.3\%。我们也期待这些 FPA 模型可以应用到更大体系的计算，并且由于基组不完备而引起的误差不会超过实验误差精度 0.5\%。
@@ -405,7 +405,7 @@ CBS 外推方法通常被认为在计算资源不足、以及有限基组不充�
 
 \section{本章小结}
 
-本工作的目标是提升 HR46 与 T144 数据集参考值同性极化率的精度、并且给出异性极化率的高精度结果。为此，我们对 CCSD(T) 到 HF 之间的各级波函数方法的基组收敛性、相关效应的 CBS 外推误差作分析，并确定与 CCSD(T)/CBS 精度匹配、但计算代价上更可接受的 FPA 模型。我们确认了在使用 ETB 辅助基，且数值差分所引入外加偶极电场强度为 $h = 0.004 \, \text{au}$ 时，RI 误差与数值差分误差几乎不会干扰极化率的计算精度。在 RI 近似下，HR46 与 T144 的所有分子，对于大基组 MP2 的极化率计算，其代价是可接受的；因此，我们总是使用高度精确的 aCV[Q5]Z 给出 MP2 极化率的相关效应。在此前提下，更高阶的相关效应 (CCSD 或 CCSD(T) 与 MP2 之间的差距)，其对基组的敏感性较低、可以使用如 aV[DT]Z 等较小基组的 CBS 外推模型而不致产生严重精度损耗。基于这个推断，三个 FPA 模型 FPA-aV[$XY$]Z ($[XY] = \mathrm{[DT], [TQ], [Q5]}$) 得以提出，其定义也在表达式 (\ref{eq.fpa-alpha}, \ref{eq.fpa-gamma}) 给出。通过 14 个小体系数据集对各 FPA 模型作测评，我们认为相比于 HH132 所采用的精确的 FPA-aCV[Q5]Z 模型，三个 FPA-aV[$XY$]Z 在同性极化率 $\alpha$ 上的误差普遍小于 0.2\%、在自旋非极化的异性极化率 $\gamma$ 上的误差普遍小于 0.3\%。因此，我们认为这些情形下 FPA 模型的误差小于实验精度的 0.5\%；这些模型用于数据集参考值的计算是误差可接受、且计算代价可承受的。
+本工作的目标是提升 HR46 与 T144 数据集参考值同性极化率的精度、并且给出异性极化率的高精度结果。为此，我们对 CCSD(T) 到 HF 之间的各级波函数方法的基组收敛性、相关效应的 CBS 外推误差作分析，并确定与 CCSD(T)/CBS 精度匹配、但计算代价上更可接受的 FPA 模型。我们确认了在使用 ETB 辅助基，且数值差分所引入外加偶极电场强度为 $h = 0.004 \, \text{au}$ 时，RI 误差与数值差分误差几乎不会干扰极化率的计算精度。在 RI 近似下，HR46 与 T144 的所有分子，对于大基组 MP2 的极化率计算，其代价是可接受的；因此，我们总是使用高度精确的 aCV[Q5]Z 给出 MP2 极化率的相关效应。在此前提下，更高阶的相关效应 (CCSD 或 CCSD(T) 与 MP2 之间的差距)，其对基组的敏感性较低、可以使用如 aV[DT]Z 等较小基组的 CBS 外推模型而不致产生严重精度损耗。基于这个推断，三个 FPA 模型 FPA-aV[$XY$]Z ($[XY] = \mathrm{[DT], [TQ], [Q5]}$) 得以提出，其定义也在表达式 (\ref{eq.5.fpa-alpha}, \ref{eq.5.fpa-gamma}) 给出。通过 14 个小体系数据集对各 FPA 模型作测评，我们认为相比于 HH132 所采用的精确的 FPA-aCV[Q5]Z 模型，三个 FPA-aV[$XY$]Z 在同性极化率 $\alpha$ 上的误差普遍小于 0.2\%、在自旋非极化的异性极化率 $\gamma$ 上的误差普遍小于 0.3\%。因此，我们认为这些情形下 FPA 模型的误差小于实验精度的 0.5\%；这些模型用于数据集参考值的计算是误差可接受、且计算代价可承受的。
 
 作为 FPA 模型的应用，我们对 HR46 与 T144 的极化率参考值作计算。目前这些参考值的精度应当可以与 HH132 数据集的参考值 aCV[Q5]Z 级别精度相媲美；而同时，HR46 与 T144 的分子大小扩张到 15 原子左右，即本工作增加了 aCV[Q5]Z 级别精度的数据数量和体系大小。我们也对 HF、MP2、CCSD 作为电子结构的方法精度作简要测评。我们认为，作为波函数方法，MP2 从精度与效率上看，适合应用于自旋非极化体系的极化率计算。
 
@@ -544,7 +544,7 @@ T144 数据集中，我们依据 TABS 数据库所提供的分子坐标文件，
 \widetabular{
     \begin{tabular}{ccccccc}
     \toprule
-    & \multicolumn{2}{c}{$\alpha_\textsf{MP2}$ / \%\tnote{b}} & \multicolumn{2}{l}{$\alpha_\textsf{HF}$ / \%\tnote{c}} & \multicolumn{2}{l}{$\symup{\Delta} \alpha_\textsf{(2)}$ / \%\tnote{d}} \\
+    & \multicolumn{2}{c}{$\alpha_\textsf{MP2}$ / \%\tnote{b}} & \multicolumn{2}{c}{$\alpha_\textsf{HF}$ / \%\tnote{c}} & \multicolumn{2}{c}{$\symup{\Delta} \alpha_\textsf{(2)}$ / \%\tnote{d}} \\
     \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
     外场强度 $h$ / au & loose\tnote{e}         & tight\tnote{f}        & loose\tnote{e}        & tight\tnote{f}        & loose\tnote{e}         & tight\tnote{f}         \\
     \midrule
@@ -697,7 +697,7 @@ T144 数据集中，我们依据 TABS 数据库所提供的分子坐标文件，
 
 \subsection{更新后的 HR46 与 T144 极化率参考值}
 
-更新后的 HR46 与 T144 极化率参考值数据列于表 \ref{tab.5.s1}, \ref{tab.5.s2}, \ref{tab.5.s3}, \ref{tab.5.s4}。对于同性极化率，HF 方法极化率以 $\alpha_{\textsf{HF}/\text{aCV5Z}}$ 计算，MP2 方法极化率以 $\alpha_{\textsf{HF}/\text{aCV5Z}} + \symup{\Delta} \alpha_{\textsf{(2)}/\text{aCV[Q5]Z}}$ 计算。CCSD 与 CCSD(T) 依照不同分子大小划分不同的子集；每个子集使用其对应的 FPA 模型。对于异性极化率 $\gamma$ 同样如此。上述记号在表 \ref{tab.5.1} 中定义，FPA 模型的计算方式在式 (\ref{eq.fpa-alpha}, \ref{eq.fpa-gamma}) 定义，数据子集及其对应 FPA 模型在表 \ref{tab.5.4} 给出。
+更新后的 HR46 与 T144 极化率参考值数据列于表 \ref{tab.5.s1}, \ref{tab.5.s2}, \ref{tab.5.s3}, \ref{tab.5.s4}。对于同性极化率，HF 方法极化率以 $\alpha_{\textsf{HF}/\text{aCV5Z}}$ 计算，MP2 方法极化率以 $\alpha_{\textsf{HF}/\text{aCV5Z}} + \symup{\Delta} \alpha_{\textsf{(2)}/\text{aCV[Q5]Z}}$ 计算。CCSD 与 CCSD(T) 依照不同分子大小划分不同的子集；每个子集使用其对应的 FPA 模型。对于异性极化率 $\gamma$ 同样如此。上述记号在表 \ref{tab.5.1} 中定义，FPA 模型的计算方式在式 (\ref{eq.5.fpa-alpha}, \ref{eq.5.fpa-gamma}) 定义，数据子集及其对应 FPA 模型在表 \ref{tab.5.4} 给出。
 
 \begingroup
 \setlength{\LTleft}{-20cm plus -1fill}
