@@ -294,11 +294,39 @@ B2PLYP 是典型的双杂化泛函；其他各式各色双杂化泛函的严格�
 \end{equation}
 其中 $F_{\mu \nu}^{\mathcal{E}_t}$ 作为电性质 Skeleton 导数，也仅与分子结构有关，而与电子结构无关。因而，可以左右计算电子结构在偶极矩计算问题上计算表现的唯一变量，是该方法的弛豫密度矩阵 $D_{\mu \nu}^\textsf{DH}$。作为密度矩阵的导出量，第 \alertref{sec.4.title} 章的测评已经表明双杂化泛函的密度 $\rho^\textsf{DH} (\bm{r}) = D_{\mu \nu}^\textsf{DH} \phi_\mu (\bm{r}) \phi_\nu (\bm{r})$ 及其关于空间坐标的梯度，有良好的表现；而在 Hait 与 Head-Gordon 的工作\cite{Hait-Head-Gordon.JCTC.2018}中，双杂化泛函也有良好的偶极矩测评结果。
 
-极化率分量 $t, s \in \{ x, y, z \}$ 则是偶极矩在偶极外场下的梯度：
-\begin{equation*}
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[
+    nonterminal/.style={rounded corners, very thick, draw=msblue},
+    >={Stealth[round, harpoon]},
+    every new ->/.style={shorten >=1pt},
+]
+    \node (p1) at (0, 0) [nonterminal] {$\rho$ (or $\mathbf{D}$)};
+    \node (p2) at (4, 0) [nonterminal] {$E[\mathbf{D}]$};
+    \node (p3) at (2, 1.7) [nonterminal] {$\alpha[\mathbf{D}]$};
+    
+    \begin{scope}[transform canvas={yshift=1pt}]
+        \draw (p1) edge[->] node[midway,above] {} (p2);
+    \end{scope}
+
+    \begin{scope}[transform canvas={yshift=-1pt}]
+        \draw (p2) edge[->] node[midway,below] {} (p1);
+    \end{scope}
+    
+    \draw [arrows={-Stealth[round]}] (p1) -- node[midway, left] {evaluation} (p3);
+    \draw [arrows={-Stealth[round]}] (p2) -- node[midway, right] {derivative} (p3);
+\end{tikzpicture}
+\caption[能量、密度与性质的关系]{能量 $E$、密度 $\rho$ 或密度矩阵 $\mathbf{D}$、以极化率 $\alpha$ 为代表的性质的相互关系。}
+\label{fig.6.rel-eng-dm-prop}
+\end{figure}
+
+结合第 \alertref{sec.4.title} 章的讨论，我们将能量、密度与性质的关系表述为图 \ref{fig.6.rel-eng-dm-prop}。尽管该图并不严格适用于所有泛函\footnote{双杂化泛函可以描述为密度矩阵 $\mathbf{D}$ 的泛函，如附录 \alertref{sec.3.non-canonical-mp2-gradient} 节所隐含的意义；但通常更习惯认为双杂化泛函是轨道系数 $\mathbf{C}$ 的泛函。另外，从严格的 Kohn-Sham 方程角度来看，泛函及其性质必须是密度 $\rho$、而非密度矩阵 $\mathbf{D}$ 的泛函；如果杂化泛函或双杂化泛函要纳入 Kohn-Sham 的体系，则需要通过 OEP 等策略重新构建密度 $\rho$ 与高阶泛函能量 $E$ 的映射关系。}，但该图希望表达的意义或主张是比较明确的：分子性质是密度或能量的导出关系。如果密度泛函近似仅仅在能量上有良好的描述，那么它确实可能依照梯度的通路，给出良好的性质。但也需要指出，目前评价泛函能量描述是否准确，通常仅仅考察反应能等性质，而较少考察外加外场情况下的能量表现；因此，仅仅从无外场能量测评良好的表现，通常难以推知性质计算也会有好的表现。
+
+但从另一个角度看图 \ref{fig.6.rel-eng-dm-prop}，密度 (或密度矩阵) 的良好描述，往往也意味着性质计算良好的表现。密度与性质的关系更为紧密。对于极化率计算，具体来说，其分量 $t, s \in \{ x, y, z \}$ 则是偶极矩在偶极外场下的梯度：
+\begin{equation}
     \alpha_{ts} = - \partial_{\mathcal{E}_s} \partial_{\mathcal{E}_t} E^\textsf{DH} = - \big( \partial_{\mathcal{E}_s} D_{\mu \nu}^\textsf{DH} \big) F_{\mu \nu}^{\mathcal{E}_t}
-\end{equation*}
-因此，与偶极矩类似地，可以左右计算电子结构在极化率计算问题上计算表现的唯一变量，是该方法弛豫密度矩阵在偶极电场下的微扰响应 $\partial_{\mathcal{E}_s} D_{\mu \nu}^\textsf{DH}$。因此，我们认为双杂化泛函在极化率计算问题上有良好的表现，其根本的原因是对 $\partial_{\mathcal{E}_s} D_{\mu \nu}^\textsf{DH}$ 有成功的描述。
+\end{equation}
+因此，与偶极矩类似地，可以左右计算电子结构在极化率计算问题上计算表现的唯一变量，是该方法弛豫密度矩阵在偶极电场下的微扰响应 $\partial_{\mathcal{E}_s} D_{\mu \nu}^\textsf{DH}$。因此，我们认为双杂化泛函，特别是 xDH 型泛函，在极化率计算问题上有良好的表现，其根本的原因是对 $\partial_{\mathcal{E}_s} D_{\mu \nu}^\textsf{DH}$ 有成功的描述。
 
 \subsection{双杂化泛函误差测评与讨论}
 
@@ -381,7 +409,7 @@ B2PLYP 是典型的双杂化泛函；其他各式各色双杂化泛函的严格�
     \item 在放开同自旋二阶微扰贡献项 $E_\textmt{c}^\textmt{SS-PT}$ 的 $a_7$ 参数模型中 (XYG5, XYG6, XYG7 三种模型)，所有优化得到的 $a_7$ 参数接近零值 (均小于 0.12)。而若将 $a_7$ 参数置零，如 XYG-OS5 模型之于 XYG6 模型，误差不会显著地提升。而对比 XYG3 模型与 XYG-OS3 模型，可以发现同样为三参数模型，XYG-OS3 模型静默 $a_7$ 参数的 WTRE 误差 0.41 明显小于 XYG3 模型的 0.47。因此，限制 $E_\textmt{c}^\textmt{SS-PT}$ 的贡献、或合理地分离二阶微扰的两种自旋贡献 $E_\textmt{c}^\textmt{OS-PT}$ 与 $E_\textmt{c}^\textmt{SS-PT}$，可以有效地提升极化率测评表现。
 \end{itemize}
 
-\section{本章小结}
+\section{讨论与本章小结}
 
 基于对双杂化泛函极化率测评的目的，本章展开了一系列分析、验证与测评工作。
 

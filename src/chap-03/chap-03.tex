@@ -3,6 +3,10 @@
 \chapter{双杂化泛函的电性质梯度理论与程序实现}
 \label{sec.3.title}
 
+\section*{工作独创性声明}
+
+本工作一部分程序实现 (\ref{sec.3.program}、\ref{sec.3.efficiency} 节) 内容是独创性工作；理论推演部分是前人工作的重新推演与整理，{\color{red}\textbf{并非独创性工作}}。
+
 \section{引言}
 
 表征技术是实验科学问题的重要分支之一。对于化学而言，经典的 IR、UV-Vis、Raman、NMR 等表征手段被合称为“四大光谱”\footnote{“四大光谱”的说法并不是正式的。也有将其中一类谱替换为 MS 或 XRD 等。正文中说道计算化学对谱学问题有所帮助；但并不是所有谱学问题都与电子结构有紧密的关系、基于第一性的计算化学也未必能解决或解释所有谱学问题。例如 MS 与分子构型关联度更大、XRD 与晶格本身更有关、通过计算化学难以给出色谱的保留时间等。}，在以有机化学为代表的分支学科中是必要的佐证手段。近年来，STM、\emph{in situ} IR、SERS、SEM 等众多新兴表征手段兴起。由于其中的许多表征问题可以归结为电子结构或分子振动效应，因此可以或有希望通过第一性的计算化学方法计算得到，从而实验与理论或计算可以相互印证，推动化学学科的发展。
@@ -15,7 +19,7 @@
 
 双杂化泛函的梯度性质已经有先驱性的程序实现与测评\cite{Neese-Grimme.JCP.2007, Biczysko-Barone.JCTC.2010, Su-Xu.JCC.2013, Stoychev-Neese.JCTC.2018, Yan-Xu.JCTC.2022}\blindproof{Gu-Xu.JCTC.2021 需要引入}。这些工作表明，双杂化泛函，特别是 xDH 型泛函，在分子振动、NMR 光谱预测等问题上有优异的表现。但目前的程序在计算双杂化解析梯度问题上，效率还一定提升空间。同时，考虑到双杂化泛函除了 MP2 型相关能外还有其它的杂化可能性；在理论推导与程序化过程中，也应尽量留出空间以容纳其它杂化形式。
 
-基于前人的工作\cite{Gerratt-Mills.JCP.1968, Gerratt-Mills.JCP.1968a, Pople-Binkley.IJQC.1979, Dykstra-Jasien.CPL.1984, Handy-Schaefer.JCP.1984, Handy-Simandiras.CPL.1985, Pulay-Saeboe.TCA.1986, Trucks-Bartlett.CPL.1988, Frisch-Pople.CP.1990, Frisch-Pople.CPL.1990, Frisch-Pople.CPL.1990a, Gauss-Bartlett.JCP.1992, Stanton-Bartlett.CPL.1992, Johnson-Frisch.CPL.1993, Head-Gordon-Head-Gordon.CPL.1994, Yamaguchi-Schaefer.Oxford.1994, Weigend-Haeser.TCA.1997, Aikens-Gordon.TCA.2003, Cammi-Frisch.TCA.2004, Distasio-Head-Gordon.JCC.2007, Neese-Grimme.JCP.2007, Biczysko-Barone.JCTC.2010, Su-Xu.JCC.2013, Ji-Jung.JCTC.2013, Bykov-Neese.MP.2015, Stoychev-Neese.JCTC.2018, Yan-Xu.JCTC.2022}\blindproof{Gu-Xu.JCTC.2021 需要引入}，将以电性质外场微扰为前提下，进行双杂化二阶梯度梯度的理论推演、与基于原子轨道基的程序化。本章节的内容自成完整的篇章。本章的理论推演部分是其他科研工作者已有成果的总结与重新复述，\textbf{并非独创性工作}；程序编写在 \textsc{PySCF} 程序的基础上独立完成。为清晰地表述程序实现思路与原则，在复述电性质二阶梯度理论时，本文着重于
+基于前人的工作\cite{Gerratt-Mills.JCP.1968, Gerratt-Mills.JCP.1968a, Pople-Binkley.IJQC.1979, Dykstra-Jasien.CPL.1984, Handy-Schaefer.JCP.1984, Handy-Simandiras.CPL.1985, Pulay-Saeboe.TCA.1986, Trucks-Bartlett.CPL.1988, Frisch-Pople.CP.1990, Frisch-Pople.CPL.1990, Frisch-Pople.CPL.1990a, Gauss-Bartlett.JCP.1992, Stanton-Bartlett.CPL.1992, Johnson-Frisch.CPL.1993, Head-Gordon-Head-Gordon.CPL.1994, Yamaguchi-Schaefer.Oxford.1994, Weigend-Haeser.TCA.1997, Aikens-Gordon.TCA.2003, Cammi-Frisch.TCA.2004, Distasio-Head-Gordon.JCC.2007, Neese-Grimme.JCP.2007, Biczysko-Barone.JCTC.2010, Su-Xu.JCC.2013, Ji-Jung.JCTC.2013, Bykov-Neese.MP.2015, Stoychev-Neese.JCTC.2018, Yan-Xu.JCTC.2022}\blindproof{Gu-Xu.JCTC.2021 需要引入}，将以电性质外场微扰为前提下，进行双杂化二阶梯度梯度的理论推演、与基于原子轨道基的程序化。本章节的内容自成完整的篇章。为清晰地表述程序实现思路与原则，在复述电性质二阶梯度理论时，本文着重于
 \begin{itemize}[nosep]
     \item 一般不使用波函数，避免大量使用矩阵或张量记号、尽量使用展开了指标的矩阵或张量元素记号 (同时参见文献 \citenum{Aikens-Gordon.TCA.2003})，并一定程度地规范指标记号 (参见 \ref{sec.3.notations} 节)；
     \item 对于 DFT 格点计算，也尽量使用张量记号展开密度在空间坐标上的数值；
@@ -232,7 +236,7 @@ ERI 的 Cholesky 分解，可以用于对 4c-2e ERI 作 RI-V 近似：
     \hat g^\textmt{LR} &= \mathrm{erf} (\mu r_{12}) / r_{12} \\
     \hat g^\textmt{SR} &= \mathrm{erfc} (\mu r_{12}) / r_{12} \\
     \hat g^\textmt{Yukawa} &= \exp (- \mu r_{12}) / r_{12} \\
-    \hat g^\textmt{terf} &= \mathrm{terf} (r_{12}, r_0)
+    \hat g^\textmt{terf} &= \mathrm{terf} (r_{12}, r_0) / r_{12}
 \end{alignat}
 \end{subequations}
 Yukawa 衰减形式由文献 \citenum{Savin-Flad.IJQC.1995} 给出；terf 衰减形式由文献 \citenum{Goldey-Head-Gordon.PCCP.2013} 给出。\textsc{Libcint} 已经实现了 $\hat g, \hat g^\textmt{LR}, \hat g^\textmt{SR}$ 的 ERI 计算，因此我们的程序也可以对应地给出包括 ωB97X-2、RS-PBE-PBE、lrc-XYG3 等目前常见的长短程分离泛函的能量结果。
@@ -291,7 +295,7 @@ Yukawa 衰减形式由文献 \citenum{Savin-Flad.IJQC.1995} 给出；terf 衰减
     \label{eq.3.def.eri}
     E^\textmt{ERI} [\mathbf{D}] \coloneq E^\textmt{J} [\mathbf{D}] + c_\textmt{x} E_\textmt{x}^\textmt{exact} [\mathbf{D}]
 \end{equation}
-其中，$E^\textmt{J} [\mathbf{D}]$ 是库伦能\footnote{事实上，尽管本工作对双电子积分 $(\mu \nu | \kappa \lambda)$ 作近似；但该近似是 RI 近似，它使用了计算复杂度为 $O(n_\mathrm{basis}^2 n_\mathrm{aux}) \sim O(N^3)$ 的三中心双电子积分 $(\mu \nu | P)$，因而在实际程序中仍然使用密度矩阵 $\mathbf{D}$ 描述库伦能。库伦能在程序实现上，确实可以通过密度格点 $\rho$ 而非具有更多细节的密度矩阵 $\mathbf{D}$ 计算实现、且计算复杂度为更小的 $O(N^2)$\cite{Toivanen-Sundholm.PCCP.2015}；但我们的主要研究对象是双杂化泛函，在交换能 $E_\textmt{x}^\textmt{exact}$ 与微扰能 $E_\textmt{c}^\textmt{PT}$ 难以使用密度格点 $\rho$ 进行计算、或交换能在较小体系下使用密度格点的计算代价较大\cite{IZSAK-NEESE.JCP.2011}的情况下，在程序实现中使用密度矩阵 $\mathbf{D}$ 以描述库伦能相信是可以接受的。}
+其中，$E^\textmt{J} [\mathbf{D}]$ 是库伦能\footnote{本文段不考虑电子积分的稀疏化。事实上，尽管本工作对双电子积分 $(\mu \nu | \kappa \lambda)$ 作近似；但该近似是 RI 近似，它使用了计算复杂度为 $O(n_\mathrm{basis}^2 n_\mathrm{aux}) \sim O(N^3)$ 的三中心双电子积分 $(\mu \nu | P)$，因而在实际程序中仍然使用密度矩阵 $\mathbf{D}$ 描述库伦能。库伦能在程序实现上，确实可以通过密度格点 $\rho$ 而非具有更多细节的密度矩阵 $\mathbf{D}$ 计算实现、且计算复杂度为更小的 $O(N^2)$\cite{Toivanen-Sundholm.PCCP.2015}；但我们的主要研究对象是双杂化泛函，在交换能 $E_\textmt{x}^\textmt{exact}$ 与微扰能 $E_\textmt{c}^\textmt{PT}$ 难以使用密度格点 $\rho$ 进行计算、或交换能在较小体系下使用密度格点的计算代价较大\cite{IZSAK-NEESE.JCP.2011}的情况下，在程序实现中使用密度矩阵 $\mathbf{D}$ 以描述库伦能相信是可以接受的。}
 \begin{equation}
     E^\textmt{J} [\mathbf{D}] = J[\rho] \coloneq \frac{1}{2} D_{\mu \nu} (\mu \nu | \kappa \lambda) D_{\kappa \lambda}
 \end{equation}
@@ -1531,9 +1535,9 @@ $D_{ij}^{ab}$ 定义见式 (\ref{eq.3.def.d-ijab})。从而，对 $F_{ij}^{ab}$ 
 MP2 相关能对轨道系数的梯度相关量写为 (乘以 $C_{\mu p}$ 是因为方便在分子轨道基下进行讨论)
 \begin{equation}
     \label{eq.3.def-fock-cmp2}
-    F_{mp}^\textmt{(2)} \coloneq C_{\mu m} \frac{\mathrm{d} E_\textmt{c}^\textmt{(2)}}{\mathrm{d} C_{\mu p}} = T_{ij}^{ab} C_{\mu m} \frac{\mathrm{d} g_{ij}^{ab}}{\mathrm{d} C_{\mu p}} + C_{\mu m} \frac{\mathrm{d} t_{ij}^{ab}}{\mathrm{d} C_{\mu p}} G_{ij}^{ab}
+    \symscr{F}_{mp}^\textmt{(2)} \coloneq C_{\mu m} \frac{\mathrm{d} E_\textmt{c}^\textmt{(2)}}{\mathrm{d} C_{\mu p}} = T_{ij}^{ab} C_{\mu m} \frac{\mathrm{d} g_{ij}^{ab}}{\mathrm{d} C_{\mu p}} + C_{\mu m} \frac{\mathrm{d} t_{ij}^{ab}}{\mathrm{d} C_{\mu p}} G_{ij}^{ab}
 \end{equation}
-上式定义了 $F_{mp}^\textmt{(2)}$ 即 MP2 相关能对广义 Fock 矩阵的贡献。
+上式定义了 $\symscr{F}_{mp}^\textmt{(2)}$ 即 MP2 相关能对广义 Fock 矩阵的贡献。
 
 其中，ERI $g_{ij}^{ab}$ 的导数比较容易求得：
 \begin{equation}
@@ -1541,19 +1545,19 @@ MP2 相关能对轨道系数的梯度相关量写为 (乘以 $C_{\mu p}$ 是因�
 \end{equation}
 从而，ERI 导数总相关能导数的贡献是
 \begin{align}
-    F_{mp}^\textmt{(2)} \leftarrow T_{ij}^{ab} C_{\mu m} \frac{\mathrm{d} g_{ij}^{ab}}{\mathrm{d} C_{\mu p}} &= T_{ij}^{ab} \big( g_{mj}^{ab} \delta_{pi} + g_{im}^{ab} \delta_{pj} + g_{ij}^{mb} \delta_{pa} + g_{ij}^{am} \delta_{pb} \big) \notag\\
+    \symscr{F}_{mp}^\textmt{(2)} \leftarrow T_{ij}^{ab} C_{\mu m} \frac{\mathrm{d} g_{ij}^{ab}}{\mathrm{d} C_{\mu p}} &= T_{ij}^{ab} \big( g_{mj}^{ab} \delta_{pi} + g_{im}^{ab} \delta_{pj} + g_{ij}^{mb} \delta_{pa} + g_{ij}^{am} \delta_{pb} \big) \notag\\
     &= 2 T_{ij}^{ab} g_{mj}^{ab} \delta_{pi} + 2 T_{ij}^{ab} g_{ij}^{mb} \delta_{pa}
 \end{align}
 上式含 $\delta_{pj}$、$\delta_{pb}$ 的项在指标求和的前提下，可以分别归并到 $\delta_{pi}$、$\delta_{pa}$ 的项；以 $\delta_{pj}$ 为例，
 \begin{align*}
-    F_{mp}^\textmt{(2)} \leftarrow T_{ij}^{ab} g_{im}^{ab} \delta_{pj} = T_{ji}^{ba} g_{jm}^{ba} \delta_{pi} = T_{ij}^{ab} g_{mj}^{ab} \delta_{pi}
+    \symscr{F}_{mp}^\textmt{(2)} \leftarrow T_{ij}^{ab} g_{im}^{ab} \delta_{pj} = T_{ji}^{ba} g_{jm}^{ba} \delta_{pi} = T_{ij}^{ab} g_{mj}^{ab} \delta_{pi}
 \end{align*}
 上式推导的第一个等号利用 $i, j$ 与 $a, b$ 指标求和时交换、第二个等号利用张量对称性。由于使用 Kronecker delta 记号比较臃肿，我们也可以对 $p$ 是否为占据轨道或非占轨道进行分类讨论：
 \begin{align}
     \label{eq.3.fock-cmp2-part1-mi}
-    F_{mi}^\textmt{(2)} &\leftarrow 2 T_{ij}^{ab} g_{mj}^{ab} \\
+    \symscr{F}_{mi}^\textmt{(2)} &\leftarrow 2 T_{ij}^{ab} g_{mj}^{ab} \\
     \label{eq.3.fock-cmp2-part1-ma}
-    F_{ma}^\textmt{(2)} &\leftarrow 2 T_{ij}^{ab} g_{ij}^{mb}
+    \symscr{F}_{ma}^\textmt{(2)} &\leftarrow 2 T_{ij}^{ab} g_{ij}^{mb}
 \end{align}
 
 激发张量对轨道系数 $\partial_\mathbf{C} \mathbf{t}$ 的求取稍复杂。出于辅助函数 $\symbfscr{H} (\mathbb{A}, \mathbf{C}, \mathbf{t}) = \bm{0}$、以及外加微扰 $\mathbb{A}$ 在讨论轨道系数导数时不发生变化，因此，
@@ -1601,10 +1605,10 @@ MP2 相关能对轨道系数的梯度相关量写为 (乘以 $C_{\mu p}$ 是因�
 \begin{subequations}
 \begin{align}
     \label{eq.3.fock-cmp2-part2-mk}
-    F_{mk}^\textmt{(2)} &\leftarrow C_{\mu m} \frac{\mathrm{d} t_{ij}^{ab}}{\mathrm{d} C_{\mu k}} G_{ij}^{ab} = - C_{\mu m} \frac{\partial \symscr{H}_{ij}^{ab}}{\partial C_{\mu k}} T_{ij}^{ab} \notag\\
+    \symscr{F}_{mk}^\textmt{(2)} &\leftarrow C_{\mu m} \frac{\mathrm{d} t_{ij}^{ab}}{\mathrm{d} C_{\mu k}} G_{ij}^{ab} = - C_{\mu m} \frac{\partial \symscr{H}_{ij}^{ab}}{\partial C_{\mu k}} T_{ij}^{ab} \notag\\
     &= - 4 \delta_{mi} \varepsilon_i T_{kj}^{ab} t_{ij}^{ab} + 2 T_{kj}^{ab} g_{mj}^{ab} - 2 A_{mk, il} T_{ij}^{ab} t_{lj}^{ab} + 2 A_{mk, ac} T_{ij}^{ab} t_{ij}^{cb} \\
     \label{eq.3.fock-cmp2-part2-mc}
-    F_{mc}^\textmt{(2)} &\leftarrow C_{\mu m} \frac{\mathrm{d} t_{ij}^{ab}}{\mathrm{d} C_{\mu c}} G_{ij}^{ab} = - C_{\mu m} \frac{\partial \symscr{H}_{ij}^{ab}}{\partial C_{\mu c}} T_{ij}^{ab} \notag\\
+    \symscr{F}_{mc}^\textmt{(2)} &\leftarrow C_{\mu m} \frac{\mathrm{d} t_{ij}^{ab}}{\mathrm{d} C_{\mu c}} G_{ij}^{ab} = - C_{\mu m} \frac{\partial \symscr{H}_{ij}^{ab}}{\partial C_{\mu c}} T_{ij}^{ab} \notag\\
     &= 4 \delta_{ma} \varepsilon_a T_{ij}^{cb} t_{ij}^{ab} + 2 T_{ij}^{ca} g_{ij}^{mb}
 \end{align}
 \end{subequations}
