@@ -35,12 +35,12 @@
 \begin{align}
   \hat T &= - \frac{1}{2} \sum_i^{n_\mathrm{elec}} \nabla_i^2 \\
   \hat V_\textmt{ee} &= \frac{1}{2} \sum_{i \neq j}^{n_\mathrm{elec}} \frac{1}{| \bm{r}_i - \bm{r}_j |} \\
-  \hat V_\textmt{ext} &= \sum_{i}^{n_\mathrm{elec}} v (\bm{r}_i) \\
-  \hat V_\textmt{non-elec} &= \frac{1}{2} \sum_{A \neq B}^{n_\mathrm{atom}} \frac{Z_A Z_B}{| \bm{R}_A  - \bm{R}_B |} \quad \text{(无其它外势)}
+  \hat V_\textmt{ext} &= \sum_{i}^{n_\mathrm{elec}} v (\bm{r}_i) \quad \text{(no other external fields)} \\
+  \hat V_\textmt{non-elec} &= \frac{1}{2} \sum_{A \neq B}^{n_\mathrm{atom}} \frac{Z_A Z_B}{| \bm{R}_A  - \bm{R}_B |}
 \end{align}
 上式中，外势函数为
 \begin{equation}
-  v (\bm{r}) = - \sum_{A}^{n_\mathrm{atom}} \frac{Z_A}{| \bm{r} - \bm{R}_A |} \quad \text{(无其它外势)}
+  v (\bm{r}) = - \sum_{A}^{n_\mathrm{atom}} \frac{Z_A}{| \bm{r} - \bm{R}_A |} \quad \text{(no other external fields)}
 \end{equation}
 其中，$Z_A$ 是原子 $A$ 的核电荷数、$\bm{R}_A$ 是原子 $A$ 的核坐标、$n_\mathrm{atom}$ 是分子的原子数。
 
@@ -49,7 +49,7 @@
   \label{eq.1.dipole-v-r}
   v (\bm{r}) &= - \sum_{A}^{n_\mathrm{atom}} \frac{Z_A}{| \bm{r} - \bm{R}_A |} - \mathbfcal{E}^\dagger \bm{r} \quad \text{(dipole field)} \\
   \label{eq.1.dipole-nonelec-r}
-  \hat V_\textmt{non-elec} &= \frac{1}{2} \sum_{A \neq B}^{n_\mathrm{atom}} \frac{Z_A Z_B}{| \bm{R}_A  - \bm{R}_B |} + \sum_{A}^{n_\mathrm{atom}} Z_A \mathbfcal{E}^\dagger \bm{R}_A \quad \text{(dipole field)}
+  \hat V_\textmt{ext} &= \frac{1}{2} \sum_{A \neq B}^{n_\mathrm{atom}} \frac{Z_A Z_B}{| \bm{R}_A  - \bm{R}_B |} + \sum_{A}^{n_\mathrm{atom}} Z_A \mathbfcal{E}^\dagger \bm{R}_A \quad \text{(dipole field)}
 \end{align}
 
 定态 \Schrodinger 方程求解的困难至少来自于两方面。一者，从应用的角度，计算化学对精度的要求非常高。以化学反应为例，若速率方程满足 Arrhenius 公式 $k = A \exp \big( - \frac{E_\textmt{a}}{R T} \big)$，又自由能 $E_\textmt{a}$ 计算若存在 1 kcal/mol 的误差，那么反应速率 $k$ 在 298 K 下就会有约 5 倍的误差。而目前即使是表现最优异的密度泛函，其声称的最佳精度也有 1.2 -- 2.0 kcal/mol 的误差\cite{Zhang-Xu.JPCL.2021, Santra-Martin.JPCL.2021}，还有可以提升的空间。二者，从表达式来看，由于库伦排斥算符 $\hat V_\textmt{ee}$ 的存在，无法通过变量分离等技巧快速求解 \Schrodinger 方程。
@@ -70,7 +70,7 @@
     \label{eq.1.true-system-variation}
     E[v] = \min_\Psi \langle \Psi | \hat H | \Psi \rangle
   \end{equation}
-  而又由于外势 $v(\bm{r})$ 与基态电子云密度 $\rho(\bm{r})$ 有一一对应关系，因此基态能量 $E[v]$ 是关于基态电子云密度 $\rho(\bm{r})$ 的泛函，即几台能量也可以以记号 $E[\rho]$ 表示。该理论因此得名为密度泛函理论。
+  而又由于外势 $v(\bm{r})$ 与基态电子云密度 $\rho(\bm{r})$ 有一一对应关系，因此基态能量 $E[v]$ 是关于基态电子云密度 $\rho(\bm{r})$ 的泛函，即基态能量也可以以记号 $E[\rho]$ 表示。该理论因此得名为密度泛函理论。
   
   \item 对于特定外势 $v(\bm{r})$ 下的体系，若令其基态波函数为 $\Psi_0$，那么能量泛函可以展开为四部分：
   \begin{align*}
@@ -113,7 +113,7 @@ Hohenberg-Kohn 定理的提出，标志着密度泛函理论成为了一个原�
 \begin{equation}
   \delta \left( E_{v}[\rho] - \mu \int \rho(\bm{r}) \, \mathrm{d} \bm{r} - \sum_{ij} \varepsilon_{ij} \int \phi_i^*(\bm{r}) \phi_j(\bm{r})  \, \mathrm{d} \bm{r} \right) = 0
 \end{equation}
-将上式应用于对单电子轨道函数基复共轭 $\{\phi_i^*(\bm{r})\}$ 的变分，并利用基变换使正交归一条件的 Lagrange 乘子 $\varepsilon_{ij}$ 的矩阵对角化，可以得到关于轨道指标 $i$ 的 Euler 方程组
+将上式应用于对单电子轨道函数基复共轭 $\{\phi_i^*(\bm{r})\}$ 的变分，并利用正交变换使正交归一条件的 Lagrange 乘子 $\varepsilon_{ij}$ 的矩阵对角化，可以得到关于轨道指标 $i$ 的 Euler 方程组
 \begin{equation}
   \label{eq.1.frac-ks}
   \left( \frac{\delta F[\rho]}{\delta \rho} + v(\bm{r}) - \mu \right) n_i \phi_i (\bm{r}) = \varepsilon_i \phi_i (\bm{r})
@@ -239,7 +239,7 @@ xDH 型泛函的能量泛函是第五阶泛函，相比于杂化泛函包含更�
 
 除了这些主流的框架外，目前也有许多泛函在理论或经验形式上有改进。这些改进包括但不限于
 \begin{itemize}[nosep]
-  \item \textbf{引入弥散矫正。}MP2 型相关能处理非共价、氢键等弱相互作用体系有一定优势，但一般的双杂化泛函包含的 MP2 型相关能并不是一整份；因此在描述弱相互作用时仍然改善的空间。类如 DFT-D3\cite{Grimme-Goerigk.JCC.2011, Smith-Sherrill.JPCL.2016}、DFT-D4\cite{Caldeweyher-Grimme.JCP.2019}、VV10\cite{Vydrov-VanVoorhis.JCP.2010} 等分子力场型或密度泛函型弥散矫正在处理弱相互作用体系时有较好的表现；引入这类弥散矫正对杂化泛函或更低阶的泛函测评表现有显著的提升\cite{Goerigk-Grimme.PCCP.2017}。对于一部分双杂化泛函，引入这类弥散矫正确实可以对非共价测评集有良好的表现\cite{Grimme-Goerigk.JCC.2011, Santra-Martin.JPCA.2019}。除此之外，尽管一般不称长程分离矫正的 MP2 型相关能为弥散矫正，但类如 lrc-XYG3 等泛函引入长程矫正相关能的目的与其它弥散矫正相近，在非共价体系上有很好的测评结果\cite{Zhang-Xu.JPCL.2013}。但对于以 B88 与 LYP 为基础的 xDH 型泛函，如果放开参数拟合限制，不引入弥散矫正所造成的测评误差并不很大\cite{Zhang-Xu.JPCL.2021, Santra-Martin.JPCL.2021}。在特定的反应种类与双杂化泛函下，引入弥散矫正反而可能导致测评结果变差\cite{Bremond-Adamo.JCP.2022}。因此对于双杂化泛函而言，弥散矫正是否真正地改善了泛函测评表现，仍然是值得待进一步讨论的。
+  \item \textbf{引入弥散矫正。}MP2 型相关能处理非共价、氢键等弱相互作用体系有一定优势，但一般的双杂化泛函包含的 MP2 型相关能并不是一整份；因此在描述弱相互作用时仍然有改善的空间。类如 DFT-D3\cite{Grimme-Goerigk.JCC.2011, Smith-Sherrill.JPCL.2016}、DFT-D4\cite{Caldeweyher-Grimme.JCP.2019}、VV10\cite{Vydrov-VanVoorhis.JCP.2010} 等分子力场型或密度泛函型弥散矫正在处理弱相互作用体系时有较好的表现；引入这类弥散矫正对杂化泛函或更低阶的泛函测评表现有显著的提升\cite{Goerigk-Grimme.PCCP.2017}。对于一部分双杂化泛函，引入这类弥散矫正确实可以对非共价测评集有良好的表现\cite{Grimme-Goerigk.JCC.2011, Santra-Martin.JPCA.2019}。除此之外，尽管一般不称长程分离矫正的 MP2 型相关能为弥散矫正，但类如 lrc-XYG3 等泛函引入长程矫正相关能的目的与其它弥散矫正相近，在非共价体系上有很好的测评结果\cite{Zhang-Xu.JPCL.2013}。但对于以 B88 与 LYP 为基础的 xDH 型泛函，如果放开参数拟合限制，不引入弥散矫正所造成的测评误差并不很大\cite{Zhang-Xu.JPCL.2021, Santra-Martin.JPCL.2021}。在特定的反应种类与双杂化泛函下，引入弥散矫正反而可能导致测评结果变差\cite{Bremond-Adamo.JCP.2022}。因此对于双杂化泛函而言，弥散矫正是否真正地改善了泛函测评表现，仍然是值得待进一步讨论的。
   
   \item \textbf{对自旋相同与自旋相反 MP2 型相关能的分离与参数化。}基于 SCS 在 MP2 方法应用上的成功 \cite{Grimme-Grimme.JCP.2003}，大量实用的经验参数化双杂化泛函使用该方法计算 G\"{o}rling-Levy 微扰相关能。Head-Gordon 课题组以 B97 泛函作为基础进行多参数优化，得到 ωB97X-2 与 ωB97M(2)。Martin 课题组进一步引入弥散矫正，发展了一系列参数化的 DSD 泛函，并对基底泛函的组成作了大量系统性地测评；提出了 DSD-PBEP86-D3BJ 等双杂化泛函。徐昕课题组对以 B3LYP 为基底的 XYG3 泛函作更为仔细的参数优化，提出了 XYG7 等双杂化泛函。由于对大多数计算化学软件来说容易实现、同时在主族化学与主流测评集上有良好的表现，这类泛函是目前应用最广泛的双杂化泛函。除此之外，OS-MP2 的计算量在 Laplace-Transform 近似下比 MP2 本身要小一个数量级\cite{Almloef-Almloef.CPL.1991}，这也意味着例如 XYGJ-OS、xDH-PBE0 为代表的 OS-MP2 型泛函在计算量上小于一般的双杂化泛函。这些泛函的测评结果并不明显劣于其它 MP2 型泛函；在本工作中，我们还会表明 OS-MP2 型泛函在极化率性质上的计算表现经常优于其它双杂化泛函。因此，这类泛函兼备良好精度与高效率。
   
@@ -272,7 +272,7 @@ xDH 型泛函的能量泛函是第五阶泛函，相比于杂化泛函包含更�
   \label{fig.1.xdh-solid}
 \end{figure}
 
-\textbf{分子几何结构}。图 \ref{fig.1.xdh-pbe0-bond} 中，苏乃强等对包括 xDH 型双杂化泛函的部分杂化、双杂化泛函作分子几何结构的测评\cite{Su-Xu.SCC.2013}。为了方便比较测评结果，选取了缩放的 s-MAD (即以 XYG3 为单位测评结果作为 1 进行缩放的平均绝对值误差) 作为测评依据。其中，Cov 测试集包括 63 种共价分子与离子体系、NBI 测试集选用了 6 种小分子的二聚体结构用于测评非共价相互作用下的键长表现、TS 测试集收录了 12 个过渡态结构信息。可以看到，作为“Jacob 阶梯”第 5 阶的双杂化泛函的总体表现明显由于第 4 阶的 B3LYP 与 PBE0。除了 xDH-PBE0 在非键作用体系有待改进外，xDH 型泛函在各个数据集上的表现也明显优于 B2PLYP 或 MP2。
+\textbf{分子几何结构}。图 \ref{fig.1.xdh-pbe0-bond} 中，苏乃强等对包括 xDH 型双杂化泛函的部分杂化、双杂化泛函作分子几何结构的测评\cite{Su-Xu.SCC.2013}。为了方便比较测评结果，选取了缩放的 s-MAD (即以 XYG3 为单位测评结果作为 1 进行缩放的平均绝对值误差) 作为测评依据。其中，Cov 测试集包括 63 种共价分子与离子体系、NBI 测试集选用了 6 种小分子的二聚体结构用于测评非共价相互作用下的键长表现、TS 测试集收录了 12 个过渡态结构信息。可以看到，作为“Jacob 阶梯”第 5 阶的双杂化泛函的总体表现明显优于第 4 阶的 B3LYP 与 PBE0。除了 xDH-PBE0 在非键作用体系有待改进外，xDH 型泛函在各个数据集上的表现也明显优于 B2PLYP 或 MP2。
 
 \begin{figure}[h]
   \centering
