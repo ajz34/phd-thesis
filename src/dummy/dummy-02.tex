@@ -1,4 +1,4 @@
-% !TEX root=./dummy-05.tex
+% !TEX root=dummy-02.tex
 \input{../marco.tex}
 
 \begin{document}
@@ -9,9 +9,17 @@
 
 %---------正  文  区----------
 
-\setcounter{chapter}{4}
+\setcounter{chapter}{1}
 
-\input{./chap-05.tex}
+\graphicspath{{../chap-02/}}
+\input{../chap-02/chap-02.tex}
+
+\appendix
+
+\chapter{补充内容}
+
+\graphicspath{{../chap-02/}}
+\input{../chap-02/appendix-02.tex}
 
 % 后置部分包含参考文献、声明页（自动生成）等
 \backmatter
