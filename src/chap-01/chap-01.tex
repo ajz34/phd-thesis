@@ -203,7 +203,7 @@ Hohenberg-Kohn 定理的提出，标志着密度泛函理论成为了一个原�
 
 自第一个提出双杂化概念的方法在 2004 年提出起\cite{Zhao-Truhlar.JPCA.2004}，双杂化泛函经历大约 20 年的发展，已然成为庞大的密度泛函近似谱系的一个重要且粗壮的分支。这里对双杂化泛函的发展历程与大致分类作说明。
 
-作为“Jacob 阶梯”的第五阶泛函，双杂化密度泛函引入了部分严格相关能；而这类型相关能通常显式地依赖于非占轨道。非占轨道的引入方式可以有多种策略，且经常是 post-SCF 近似应用于 Kohn-Sham 轨道的结果。依照理论框架的不同，双杂化泛函大体分为两类。第一类是在 G\"{o}rling-Levy 微扰框架\cite{Goerling-Levy.PRB.1993, Goerling-Levy.PRA.1994}下引入 MP2 型相关能；这类泛函目前已经广泛应用于具体的计算化学应用、以及机器学习。这类泛函的典型是 B2PLYP\cite{Grimme-Grimme.JCP.2006}、XYG3\cite{Zhang-Goddard.PNAS.2009}、ωB97M(2)\cite{Mardirossian-Head-Gordon.JCP.2018} 等。第二类泛函在绝热路径上的涨落耗散框架\cite{Langreth-Perdew.SSC.1975, Langreth-Perdew.PRB.1977, Goerling-Goerling.PRB.2019}下引入 RPA 型相关能；这类泛函的典型是 dRPA75\cite{Mezei-Kallay.JCTC.2015}、scsRPA\cite{Zhang-Xu.JPCL.2019}、$\sigma$-functional\cite{Trushin-Goerling.JCP.2021}等。在本工作中，我们仅考察与测评以 G\"{o}rling-Levy 微扰为框架的泛函；我们也称其为 MP2 型泛函。MP2 型相关能表达式如下：
+作为“Jacob 阶梯”的第五阶泛函，双杂化密度泛函引入了部分严格相关能；而这类型相关能通常显式地依赖于非占轨道。非占轨道的引入方式可以有多种策略，且经常是 post-SCF 近似应用于 Kohn-Sham 轨道的结果。依照理论框架的不同，双杂化泛函大体分为两类。第一类是在 G\"{o}rling-Levy 微扰框架\cite{Goerling-Levy.PRB.1993, Goerling-Levy.PRA.1994}下引入 MP2 型相关能；这类泛函目前已经广泛应用于具体的计算化学应用、以及机器学习。这类泛函的典型是 B2PLYP\cite{Grimme-Grimme.JCP.2006}、XYG3\cite{Zhang-Goddard.PNAS.2009}、ωB97M(2)\cite{Mardirossian-Head-Gordon.JCP.2018} 等。第二类泛函在绝热路径上的涨落耗散框架\cite{Langreth-Perdew.SSC.1975, Langreth-Perdew.PRB.1977, Goerling-Goerling.PRB.2019}下引入 RPA 型相关能；这类泛函的典型是 dRPA75\cite{Mezei-Kallay.JCTC.2015}、scsRPA\cite{Zhang-Xu.JPCL.2019}、$\sigma$-functional\cite{Trushin-Goerling.JCP.2021}等。在本工作中，我们仅考察与测评以 G\"{o}rling-Levy 微扰为框架的泛函。MP2 型相关能表达式如下：
 \begin{equation}
   E_\textmt{c}^\textmt{MP2} = \frac{1}{4} \sum_{ijab} \frac{\big| \langle ij \Vert ab \rangle \big|^2}{\varepsilon_i + \varepsilon_j - \varepsilon_a - \varepsilon_b}
 \end{equation}
@@ -215,33 +215,37 @@ $i, j$ 是 Kohn-Sham 单电子占据轨道角标、$a, b$ 是非占轨道角标�
 
 最早期具有双杂化概念的方法 MC3BB 由赵焱、Lynch 与 Truhlar 提出\cite{Zhao-Truhlar.JPCA.2004}。其灵感来自于 Gaussian-3\cite{Curtiss-Pople.JCP.1998, Curtiss-Pople.JCP.2000} 的组合系数方法、理论基础是相关能系数缩放\cite{Gordon-Truhlar.JACS.1986}。它以 Hartree-Fock 为参考态计算 MP2 能量，并部分地杂糅在密度泛函的计算结果中：
 \begin{equation}
-  E_\textmt{xc}^\textmt{MC3BB} = a_2 (E_\textmt{x}^\textmt{exact} + a_1 E_\textmt{c}^\textmt{MP2}) + (1 - a_2) E^\textmt{low-rung}
+  E_\textmt{xc}^\textmt{MC3BB} = a_2 (E_\textmt{x}^\textmt{exact} + a_1 E_\textmt{c}^\textmt{MP2}) + (1 - a_2) E_\textmt{xc}^\textmt{low-rung}
 \end{equation}
 该方法提及其与绝热路径理论有所关联，因此它也可以看作是 G\"{o}rling-Levy 微扰框架衍生的方法。但该方法需要计算两种不同的自洽场，计算量较大是其缺点之一。另外，该方法使用了 Hartree-Fock 轨道而非 Kohn-Sham 轨道用于计算严格交换能与部分严格相关能；这与 G\"{o}rling-Levy 微扰理论并不一致。因此，相比于密度泛函近似，MC3BB 具有更强的组合方法的特征。
 
 首个明确以 G\"{o}rling-Levy 微扰为理论依据的双杂化泛函 B2PLYP 由 Grimme 提出\cite{Grimme-Grimme.JCP.2006}。以该泛函为代表的 bDH 型泛函，是现今双杂化泛函的一种基本范式：自洽场部分泛函为
 \begin{equation}
-  E_\textmt{xc}^{\textmt{bDH}, \textmt{s}} = c_\textmt{x} E_\textmt{x}^\textmt{exact} + (1 - c_\textmt{x}) E_\textmt{x}^\textmt{low-rung} + (1 - c_\textmt{c}) E_\textmt{c}^\textmt{low-rung}
+  E_\textmt{xc}^{\textmt{bDH}, \textmt{SCF}} = c_\textmt{x} E_\textmt{x}^\textmt{exact} + (1 - c_\textmt{x}) E_\textmt{x}^\textmt{low-rung} + (1 - c_\textmt{c}) E_\textmt{c}^\textmt{low-rung}
 \end{equation}
 而总能量泛函是在自洽场泛函的基础上引入 MP2 型相关能：
 \begin{equation}
-  E_\textmt{xc}^\textmt{bDH} = E_\textmt{xc}^{\textmt{bDH}, \textmt{s}} + c_\textmt{c} E_\textmt{c}^\textmt{MP2}
+  E_\textmt{xc}^\textmt{bDH} = E_\textmt{xc}^{\textmt{bDH}, \textmt{SCF}} + c_\textmt{c} E_\textmt{c}^\textmt{MP2}
 \end{equation}
 但需要注意到，bDH 型泛函的自洽场部分并不是完整的相关能。从这个角度来说，bDH 型泛函自洽场所得的轨道是真实的 Kohn-Sham 轨道缺失了部分相关效应的近似替代；而 G\"{o}rling-Levy 微扰框架则是基于完整的 Kohn-Sham 轨道发展而来的。
 
-徐昕课题组发展的 xDH 型泛函，是现今双杂化泛函的另一种基本范式。其自洽场部分的泛函使用有完整交换与相关的、表现良好的泛函 (如 B3LYP、PBE0 等)，导出优质的 (Generalized) Kohn-Sham 轨道。而能量的计算则引入 MP2 型相关能：
+徐昕课题组发展的 xDH 型泛函，是现今双杂化泛函的另一种基本范式。其自洽场部分的泛函使用有完整交换与相关的、表现良好的泛函 (如 B3LYP、PBE0、ωB97M-V 等)，导出优质的 (Generalized) Kohn-Sham 轨道：
+\begin{equation}
+  E_\textmt{xc}^{\textmt{xDH}, \textmt{SCF}} = E_\textmt{xc}^\textsf{low-rung} \text{ of B3LYP, PBE0, ωB97M-V, etc.}
+\end{equation}
+而能量的计算则引入 MP2 型相关能：
 \begin{equation}
   E_\textmt{xc}^\textmt{xDH} = c_\textmt{x} E_\textmt{x}^\textmt{exact} + (1 - c_\textmt{x}) E_\textmt{x}^\textmt{low-rung} + (1 - c_\textmt{c}) E_\textmt{c}^\textmt{low-rung} + c_\textmt{c} E_\textmt{c}^\textmt{MP2}
 \end{equation}
-xDH 型泛函的能量泛函是第五阶泛函，相比于杂化泛函包含更多物理信息。而在单电子轨道的获取上，相比于 bDH 型泛函，xDH 型泛函使用了从 G\"{o}rling-Levy 微扰框架的角度看更合理的、经过广泛测评而效果优异的杂化泛函；这既保证了单电子轨道的精度，同时也没有因为引入高阶泛函而引起计算量的暴增，从而在精度与效率上达到良好的平衡。同时拥有良好的单电子轨道与能量泛函，为 xDH 方法在各种化学反应与性质上良好的表现提供了原理上的保证。
+xDH 型泛函的能量泛函是第五阶泛函，相比于杂化泛函包含更多物理信息。而在单电子轨道的获取上，相比于 bDH 型泛函，xDH 型泛函使用了从 G\"{o}rling-Levy 微扰框架的角度看更合理的、经过广泛测评而效果优异的杂化泛函；这既保证了单电子轨道的精度，同时也没有因为引入高阶泛函而引起计算量的暴增，从而在精度与效率上达到良好的平衡。同时拥有良好的单电子轨道与能量泛函，为 xDH 方法在各种化学反应与性质上良好的表现提供了原理上的保证。而从表达式的形式上看，xDH 型泛函相比于 bDH 型泛函更为灵活：当 $E_\textmt{xc}^{\textmt{xDH}, \textmt{SCF}}$ 是 $E_\textmt{xc}^\textmt{xDH}$ 的低阶部分 (不包含 $E_\textmt{c}^\textmt{MP2}$ 的部分) 时，xDH 型泛函就退化到 bDH 型泛函。若少量经验参数化优化泛函不至于造成严重的过拟合，那么在相同的参数拟合条件下，xDH 型泛函必然相比于 bDH 型泛函有更好的表现。
 
 理论上而言，单电子轨道的导出、与能量计算的两种泛函应同为真实泛函；但不论是 MC3BB，还是 bDH 型或 xDH 型泛函，都在处理单电子轨道与能量计算时使用了不同的泛函。为了避免单电子轨道与能量计算泛函的不自洽，轨道优化双杂化泛函得以提出\cite{Hait-Head-Gordon.JCP.2018}。这类泛函有希望对静态相关性质等困难的问题给出比一般双杂化泛函更好的计算结果；但由于轨道优化需要调用多次自洽场与非正则 MP2 型弛豫密度计算，计算量消耗非常大，因此其使用尚未普及。
 
 除了这些主流的框架外，目前也有许多泛函在理论或经验形式上有改进。这些改进包括但不限于
 \begin{itemize}[nosep]
-  \item \textbf{引入弥散矫正。}MP2 型相关能处理非共价、氢键等弱相互作用体系有一定优势，但一般的双杂化泛函包含的 MP2 型相关能并不是一整份；因此在描述弱相互作用时仍然有改善的空间。类如 DFT-D3\cite{Grimme-Goerigk.JCC.2011, Smith-Sherrill.JPCL.2016}、DFT-D4\cite{Caldeweyher-Grimme.JCP.2019}、VV10\cite{Vydrov-VanVoorhis.JCP.2010} 等分子力场型或密度泛函型弥散矫正在处理弱相互作用体系时有较好的表现；引入这类弥散矫正对杂化泛函或更低阶的泛函测评表现有显著的提升\cite{Goerigk-Grimme.PCCP.2017}。对于一部分双杂化泛函，引入这类弥散矫正确实可以对非共价测评集有良好的表现\cite{Grimme-Goerigk.JCC.2011, Santra-Martin.JPCA.2019}。除此之外，尽管一般不称长程分离矫正的 MP2 型相关能为弥散矫正，但类如 lrc-XYG3 等泛函引入长程矫正相关能的目的与其它弥散矫正相近，在非共价体系上有很好的测评结果\cite{Zhang-Xu.JPCL.2013}。但对于以 B88 与 LYP 为基础的 xDH 型泛函，如果放开参数拟合限制，不引入弥散矫正所造成的测评误差并不很大\cite{Zhang-Xu.JPCL.2021, Santra-Martin.JPCL.2021}。在特定的反应种类与双杂化泛函下，引入弥散矫正反而可能导致测评结果变差\cite{Bremond-Adamo.JCP.2022}。因此对于双杂化泛函而言，弥散矫正是否真正地改善了泛函测评表现，仍然是值得待进一步讨论的。
+  \item \textbf{引入色散矫正。}MP2 型相关能处理非共价、氢键等弱相互作用体系有一定优势，但一般的双杂化泛函包含的 MP2 型相关能并不是一整份；因此在描述弱相互作用时仍然有改善的空间。类如 DFT-D3\cite{Grimme-Goerigk.JCC.2011, Smith-Sherrill.JPCL.2016}、DFT-D4\cite{Caldeweyher-Grimme.JCP.2019}、VV10\cite{Vydrov-VanVoorhis.JCP.2010} 等分子力场型或密度泛函型色散矫正在处理弱相互作用体系时有较好的表现；引入这类色散矫正对杂化泛函或更低阶的泛函测评表现有显著的提升\cite{Goerigk-Grimme.PCCP.2017}。对于一部分双杂化泛函，引入这类色散矫正确实可以对非共价测评集有良好的表现\cite{Grimme-Goerigk.JCC.2011, Santra-Martin.JPCA.2019}。除此之外，尽管一般不称长程分离矫正的 MP2 型相关能为色散矫正，但类如 lrc-XYG3 等泛函引入长程矫正相关能的目的与其它色散矫正相近，在非共价体系上有很好的测评结果\cite{Zhang-Xu.JPCL.2013}。但对于以 B88 与 LYP 为基础的 xDH 型泛函，如果放开参数拟合限制，不引入色散矫正所造成的测评误差并不很大\cite{Zhang-Xu.JPCL.2021, Santra-Martin.JPCL.2021}。在特定的反应种类与双杂化泛函下，引入色散矫正反而可能导致测评结果变差\cite{Bremond-Adamo.JCP.2022}。因此对于双杂化泛函而言，色散矫正是否真正地改善了泛函测评表现，仍然是值得待进一步讨论的。
   
-  \item \textbf{对自旋相同与自旋相反 MP2 型相关能的分离与参数化。}基于 SCS 在 MP2 方法应用上的成功 \cite{Grimme-Grimme.JCP.2003}，大量实用的经验参数化双杂化泛函使用该方法计算 G\"{o}rling-Levy 微扰相关能。Head-Gordon 课题组以 B97 泛函作为基础进行多参数优化，得到 ωB97X-2 与 ωB97M(2)。Martin 课题组进一步引入弥散矫正，发展了一系列参数化的 DSD 泛函，并对基底泛函的组成作了大量系统性地测评；提出了 DSD-PBEP86-D3BJ 等双杂化泛函。徐昕课题组对以 B3LYP 为基底的 XYG3 泛函作更为仔细的参数优化，提出了 XYG7 等双杂化泛函。由于对大多数计算化学软件来说容易实现、同时在主族化学与主流测评集上有良好的表现，这类泛函是目前应用最广泛的双杂化泛函。除此之外，OS-MP2 的计算量在 Laplace-Transform 近似下比 MP2 本身要小一个数量级\cite{Almloef-Almloef.CPL.1991}，这也意味着例如 XYGJ-OS、xDH-PBE0 为代表的 OS-MP2 型泛函在计算量上小于一般的双杂化泛函。这些泛函的测评结果并不明显劣于其它 MP2 型泛函；在本工作中，我们还会表明 OS-MP2 型泛函在极化率性质上的计算表现经常优于其它双杂化泛函。因此，这类泛函兼备良好精度与高效率。
+  \item \textbf{对自旋相同与自旋相反 MP2 型相关能的分离与参数化。}基于 SCS 在 MP2 方法应用上的成功 \cite{Grimme-Grimme.JCP.2003}，大量实用的经验参数化双杂化泛函使用该方法计算 G\"{o}rling-Levy 微扰相关能。Head-Gordon 课题组以 B97 泛函作为基础进行多参数优化，得到 ωB97X-2 与 ωB97M(2)。Martin 课题组进一步引入色散矫正，发展了一系列参数化的 DSD 泛函，并对基底泛函的组成作了大量系统性地测评；提出了 DSD-PBEP86-D3BJ 等双杂化泛函。徐昕课题组对以 B3LYP 为基底的 XYG3 泛函作更为仔细的参数优化，提出了 XYG7 等双杂化泛函。由于对大多数计算化学软件来说容易实现、同时在主族化学与主流测评集上有良好的表现，这类泛函是目前应用最广泛的双杂化泛函。除此之外，OS-MP2 的计算量在 Laplace-Transform 近似下比 MP2 本身要小一个数量级\cite{Almloef-Almloef.CPL.1991}，这也意味着例如 XYGJ-OS、xDH-PBE0 为代表的 OS-MP2 型泛函在计算量上小于一般的双杂化泛函。这些泛函的测评结果并不明显劣于其它 MP2 型泛函；在本工作中，我们还会表明 OS-MP2 型泛函在极化率性质上的计算表现经常优于其它双杂化泛函。因此，这类泛函兼备良好精度与高效率。
   
   \item \textbf{少参数化的泛函。}多参数的泛函通常是针对特定的反应与性质数据集进行优化的。一般来说，参数越多，过拟合的情况会越严重、在拟合集之外的反应与性质表现上越有可能产生不可预料的误差\cite{Medvedev-Lyssenko.S.2017}。以 Adamo 课题组代表的研究者，基于绝热路径提出了 PBE0-DH 等无参数优化的泛函。这些泛函通过理论推导或验证泛函参数、特别是交换系数 $c_\textmt{x}$ 与相关系数 $c_\textmt{c}$ 的数值范围，避免了重度经验参数拟合泛函所可能产生的问题。
   
@@ -320,7 +324,7 @@ xDH 型泛函的能量泛函是第五阶泛函，相比于杂化泛函包含更�
 
 xDH 型泛函构造的理论框架搭建在绝热路径与 G\"{o}rling-Levy 微扰之上，使用较好的单电子轨道作为基础，并在能量计算中追求“Jacob 阶梯”上更高、更精确的阶梯，有着良好的理论基础。xDH 型双杂化泛函在分子能量与性质计算上，其精度水平代表了目前密度泛函方法的最高水准。对于类如 MP2 与 RPA 等相近计算量或计算标度的 post-SCF 方法而言，双杂化泛函的精度通常也更为优异。近年来发展的 xDH 泛函在主族化学反应的能量的表现，已经在切实地逼近 1 kcal/mol 的化学精度；而其它性质的测评工作也表明，xDH 型泛函不仅在能量，还在分子几何结构、振动频率、核磁屏蔽常数等问题上有令人鼓舞的表现。而这些良好的数值结果，也印证了 xDH 型泛函良好的理论框架的重要性。但也需要指出，目前发展的大多数 xDH 型泛函近似的具体实现，依赖于 (Generalized) Kohn-Sham 框架导出的轨道、以及 MP2 型相关能；这两者存在的问题，也可能会反映到 xDH 型双杂化泛函、以及作为退化形式的 bDH 型双杂化泛函的测评表现中。
 
-除了精度上双杂化泛函仍然有发展空间外，其在应用的推广也是重要的课题。在双杂化泛函刚提出的 2004--2010 年代，由于大多数计算化学软件在处理 MP2 型相关能时的计算量很大；即使测评结果较好，也难以推广到实际的应用中。随着一系列针对相关能以及双电子积分计算近似方法、算法与程序的发展，在处理 20 原子以下的分子体系时，MP2 相关能的计算耗时经常少于自洽场的计算耗时，使得双杂化泛函在能量计算问题上不再有严重的效率瓶颈。而对于更大的计算体系，ONIOM 或 XO 等组合化学方法通常可以有效地拆分问题而不严重影响计算精度\cite{Guo-Xu.JCC.2012, Chen-Xu.JCTC.2020, Chen-Xu.NC.2023}。因此，在可见的未来内，在分子体系的计算问题上，双杂化密度泛函的主要应用会集中在数十个原子左右尺度的问题上。
+除了精度上双杂化泛函仍然有发展空间外，其在应用的推广也是重要的课题。在双杂化泛函刚提出的 2004--2010 年代，由于大多数计算化学软件在处理 MP2 型相关能时的计算量很大；即使测评结果较好，也难以推广到实际的应用中。随着一系列针对相关能以及双电子积分计算近似方法、算法与程序的发展，在处理 20 原子以下的分子体系时，MP2 相关能的计算耗时经常少于自洽场的计算耗时，使得双杂化泛函在能量计算问题上不再有严重的效率瓶颈。而对于更大的计算体系，ONIOM 或 XO 等组合化学方法通常可以有效地拆分问题而不严重影响计算精度\cite{Guo-Xu.JCC.2012, Chen-Xu.JCTC.2020, Chen-Xu.NC.2023}。因此，在可见的未来内，在分子体系的计算问题上，双杂化密度泛函的主要应用会集中在数十个原子左右尺度、或基于该尺度分块的大体系计算上。
 
 基于以上的研究思路和认识，本文的主要工作从以下五个方面展开。
 \begin{enumerate}[nosep]

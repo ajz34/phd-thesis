@@ -150,7 +150,7 @@
     \Rightarrow
     \rho_g = D_{\mu \nu} \phi_{g \mu} \phi_{g \nu}
 \end{equation}
-该式等式左右都包含代表空间位置的指标 $g$；该指标在等式右边被数乘，而没有最终被求和。由于 $g$ 指标并非在对偶空间中，因此若不将 $g$ 看做指标，那么在通常的 Einstein 求和下应写为
+该式等式左右都包含代表空间位置的指标 $g$；该指标在等式右边被数乘，而没有最终被求和。由于 $g$ 指标并非在对偶空间中，因此若不将 $g$ 看作指标，那么在通常的 Einstein 求和下应写为
 \begin{equation*}
     \rho_g = (\phi_g)_\mu D^\mu_\nu (\phi_g)^\nu
 \end{equation*}
@@ -1179,7 +1179,7 @@ $A_{\mu \nu, \kappa \lambda}^\textmt{DFA}$ 与密度矩阵 $X_{\kappa \lambda}$ 
     G_{ia, P} &\coloneq T_{ij}^{ab} Y_{jb, P} &\quad& O(n_\mathrm{occ}^2 n_\mathrm{vir}^2 n_\mathrm{aux})
 \end{alignat}
 \end{subequations}
-上述计算过程的最终导出量是 $t_{ij}^{ab}$, $E_\textmt{c}^\textmt{(2)}$, $D_{pq}^{\textmt{(2)}, \textmt{RDM}}$, $G_{ia, P}$。上述计算过程的共同特征是，指标 $i$ 是可以拆分的；即上述计算可以对指标 $i$ 作简单循环，从而将内存消耗控制在 $(n_\mathrm{occ} n_\mathrm{vir}^2)$ 量级。同时，如果只考虑一阶梯度问题，$t_{kj}^{ab}$ ($k \neq i$) 不影响涉及 $t_{ij}^{ab}$ 的计算，因此张量 $t_{ij}^{ab}$ 不需要保存 (但二阶梯度问题，目前的程序实现任然需要该张量)。
+上述计算过程的最终导出量是 $t_{ij}^{ab}$, $E_\textmt{c}^\textmt{(2)}$, $D_{pq}^{\textmt{(2)}, \textmt{RDM}}$, $G_{ia, P}$。上述计算过程的共同特征是，指标 $i$ 是可以拆分的；即上述计算可以对指标 $i$ 作简单循环，从而将内存消耗控制在 $(n_\mathrm{occ} n_\mathrm{vir}^2)$ 量级。同时，如果只考虑一阶梯度问题，$t_{kj}^{ab}$ ($k \neq i$) 不影响涉及 $t_{ij}^{ab}$ 的计算，因此张量 $t_{ij}^{ab}$ 不需要保存 (但二阶梯度问题，目前的程序实现仍然需要该张量)。
 
 \subsection{MP2 与 DH 的 Laplacian 与 Z 矩阵}
 
